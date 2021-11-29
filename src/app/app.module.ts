@@ -17,6 +17,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DeleteComponent } from './partial/dialogs/delete/delete.component';
+
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
+    DeleteComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +38,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     NgxSelectModule,
     HttpClientModule,
+    MatDialogModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       closeButton: true,
