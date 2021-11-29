@@ -1,1 +1,58 @@
-<p>login works!</p>
+<nav class="navbar navbar-dark bg-main fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-main" href="#">
+            <i class="fas fa-vote-yea me-2"></i>
+            Election Management
+        </a>
+        <div class="d-flex ms-auto">
+            <button class="btn btn-light btn-sm" type="submit">Home</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container" id="login">
+    <div class="row justify-content-center">
+        <div class="col-sm-9">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 p-5 d-none d-sm-none d-lg-block">
+                            <img src="assets/images/login-img.jpg" class="img-fluid">
+                        </div>
+                        <div class="col-sm-6 p-5">
+                            <h3>Sign Up</h3>
+                            <div class="form-container">
+                                <div class="mb-3">
+                                    <label class="form-label">User Name <span class="text-danger">*</span></label>
+                                    <input type="text" placeholder="UserName" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="password" placeholder="Password" class="form-control">
+                                        <button class="btn btn-light bg-transparent">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="chkRemember">
+                                        <label class="form-check-label" for="chkRemember">
+                                            Remember Me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-main px-4 py-2" type="button">
+                                        Log In
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

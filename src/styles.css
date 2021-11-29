@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+body{
+    font-family: 'Rubik', sans-serif;
+    background-color: #7289da1a;
+}
+:root{
+    /* --main-color:#005b96; */
+    /* --main-color:#2114E2; */
+    --main-color:#463AFD;
+}
+.bg-main {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+.text-main {
+    color: var(--main-color);
+}
+.btn-main {
+    background-color: var(--main-color);
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.btn-main:hover {
+    background-color: var(--main-color);
+    color: #fff;
+}
+.form-container .form-label {
+    font-size: .75rem;
+    margin-bottom: 5px;
+    color: #757575
+}
+
+.form-container .form-select,
+.form-container .form-control,
+.form-container .form-data,
+.form-container .form-check {
+    font-size: .85rem;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-container .form-data {
+    font-weight: 500
+}
+
+.form-container .btn {
+    font-size: .85rem
+}
+.form-container .input-group{
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+.form-container .input-group .form-control{
+    border: none;
+    font-size: .85rem;
+    outline: none;
+    box-shadow: none;
+}
