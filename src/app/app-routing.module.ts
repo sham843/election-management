@@ -12,8 +12,8 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), data: { title: 'Login' }, canActivate: [NoAuthGuardService] },
   {
     path: '',
-    // canActivate: [AuthGuard],
-    // canActivateChild: [AuthorizationGuard],
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthorizationGuard],
     component: PartialComponent, children: [
       //Ele manag
       { path: 'create-elections', loadChildren: () => import('./partial/election-management/create-elections/create-elections.module').then(m => m.CreateElectionsModule), data: { title: 'Dashboard', allowedRoles: ['1'] }},

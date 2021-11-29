@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { CreateElectionsRoutingModule } from './create-elections-routing.module';
 import { CreateElectionsComponent } from './create-elections.component';
+import { NgxSelectModule } from 'ngx-select-ex';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 @NgModule({
@@ -11,7 +15,11 @@ import { CreateElectionsComponent } from './create-elections.component';
   ],
   imports: [
     CommonModule,
-    CreateElectionsRoutingModule
+    CreateElectionsRoutingModule,
+    NgxSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule
   ]
 })
 export class CreateElectionsModule { }
