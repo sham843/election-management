@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSelectModule } from 'ngx-select-ex';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { NgxSelectModule } from 'ngx-select-ex';
     NgxSpinnerModule,
     ReactiveFormsModule,
     NgxSelectModule,
+    HttpClientModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       closeButton: true,
