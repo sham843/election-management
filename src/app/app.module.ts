@@ -12,7 +12,10 @@ import { PartialComponent } from './partial/partial.component';
 import { FooterComponent } from './partial/template/footer/footer.component';
 import { HeaderComponent } from './partial/template/header/header.component';
 import { SidebarComponent } from './partial/template/sidebar/sidebar.component';
-// import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSelectModule } from 'ngx-select-ex';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,16 @@ import { SidebarComponent } from './partial/template/sidebar/sidebar.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxSpinnerModule
+    BrowserAnimationsModule,
+    NgxSpinnerModule,
+    ReactiveFormsModule,
+    NgxSelectModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      closeButton: true,
+      progressBar:true,
+      preventDuplicates: true,
+    }),
   ],
   providers: [DatePipe, AuthorizationService, NoAuthGuardService, AuthGuard],
   bootstrap: [AppComponent]

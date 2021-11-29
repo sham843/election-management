@@ -29,5 +29,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 <!-- added packages  by sham j
     npm i ngx-spinner@11.0.1 
     npm i ng-connection-service
-
+    npm i ngx-toastr
+    npm i ngx-select-ex
     -->
