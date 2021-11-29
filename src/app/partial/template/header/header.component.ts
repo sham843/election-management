@@ -96,7 +96,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   getProfileData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_GetUserprofile_1_0?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'ncpServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_GetUserprofile_1_0?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   getDistrict() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_GetDistrict_1_0?StateId=' + 1, false, false, false, 'ncpServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_GetDistrict_1_0?StateId=' + 1, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -135,7 +135,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   getTaluka(districtId: any) {
-    this.callAPIService.setHttp('get', 'Web_GetTaluka_1_0?DistrictId=' + districtId, false, false, false, 'ncpServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_GetTaluka_1_0?DistrictId=' + districtId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -163,7 +163,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     let appendString = "";
     selType == 'Village' ? appendString = 'Web_GetVillage_1_0?talukaid=' + talukaID : appendString = 'Web_GetCity_1_0?DistrictId=' + this.editProfileForm.value.DistrictId;
-    this.callAPIService.setHttp('get', appendString, false, false, false, 'ncpServiceForWeb');
+    this.callAPIService.setHttp('get', appendString, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -250,7 +250,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       }
       fromData.append('IsPhotoChange', this.profilePhotoChange);
 
-      this.callAPIService.setHttp('Post', 'Web_Update_UserProfile_1_0', false, fromData, false, 'ncpServiceForWeb');
+      this.callAPIService.setHttp('Post', 'Web_Update_UserProfile_1_0', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.profilePhotoChange = null;
@@ -359,7 +359,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
           return
         }
         let obj= 'UserId=' + this.commonService.loggedInUserId() + '&OldPassword=' + this.changePasswordForm.value.oldPassword + '&NewPassword=' + this.changePasswordForm.value.newPassword
-        this.callAPIService.setHttp('get','Web_Update_Password?' + obj, false, false, false, 'ncpServiceForWeb');
+        this.callAPIService.setHttp('get','Web_Update_Password?' + obj, false, false, false, 'electionServiceForWeb');
         this.callAPIService.getHttp().subscribe((res: any) => {
           if (res.data1[0].Id!== 0) {
            this.toastrService.success(res.data1[0].Msg)
