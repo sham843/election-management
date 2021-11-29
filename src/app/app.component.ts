@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import { Component,  ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { filter, map } from 'rxjs/operators';
+import { Subject } from "rxjs";
+import { Router, NavigationEnd, ActivatedRoute, NavigationStart } from '@angular/router';
+// import { NgxSpinnerService } from 'ngx-spinner';
+// import { ConnectionService } from 'ng-connection-service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +12,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'election-management';
+  status = 'ONLINE';
+  isConnected = true;
+  @ViewChild('openModal') openModal: any;
+  @ViewChild('close') close: any;
+
+
+
+
 }
