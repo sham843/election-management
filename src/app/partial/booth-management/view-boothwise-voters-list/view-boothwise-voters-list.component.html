@@ -1,1 +1,544 @@
-<p>view-boothwise-voters-list works!</p>
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-3">
+            <span class="page-name">View Booth Voters
+            </span>
+        </div>
+        <div class="col-sm-9 text-end">
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <select class="form-select">
+                        <option value="">Select Candidate</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-select">
+                        <option value="">Select Election</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-select">
+                        <option value="">Select Constituency</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Search..." />
+                        <button class="btn btn-light btn-sm text-dark" type="button"><i
+                                class="fas fa-times"></i></button>
+                        <button class="btn btn-light btn-sm text-dark" type="button"><i
+                                class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="dash-stats">
+        <div class="col-sm-2">
+            <div class="card card-body bg-cyan">
+                <i class="fas fa-person-booth"></i>
+                <p>Booths</p>
+                <h3>567</h3>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card card-body bg-green">
+                <i class="fas fa-users"></i>
+                <p>Voters</p>
+                <h3>656775</h3>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card card-body bg-blue">
+                <i class="fas fa-house-user"></i>
+                <p>Families</p>
+                <h3>234</h3>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card card-body bg-gold">
+                <i class="fas fa-plane-departure"></i>
+                <p>Migrated</p>
+                <h3>237</h3>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card card-body bg-red">
+                <i class="fas fa-star-half-alt"></i>
+                <p>Fill / Pending</p>
+                <h3>3456 / 15442</h3>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card card-body bg-voilet">
+                <i class="fas fa-user-cog"></i>
+                <p>Agents</p>
+                <h3>345</h3>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-start">
+                        <div class="col-sm-3" id="boothlist">
+                            <div class="mb-3 form-container">
+                                <select class="form-select">
+                                    <option value="">Select Village</option>
+                                </select>
+                            </div>
+                            <div class="list-group">
+                                <a 
+                                    class="list-group-item d-flex justify-content-between align-items-start active"
+                                    aria-current="true">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">325 - Kailash Nagar</div>
+                                        <small>Village, Taluka, District</small>
+                                    </div>
+                                    <span class="badge bg-light text-dark rounded-pill">23414</span>
+                                </a>
+                                <a  class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">325 - Kailash Nagar</div>
+                                        <small>Village, Taluka, District</small>
+                                    </div>
+                                    <span class="badge bg-light text-dark rounded-pill">3214</span>
+                                </a>
+                                <a  class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">325 - Kailash Nagar</div>
+                                        <small>Village, Taluka, District</small>
+                                    </div>
+                                    <span class="badge bg-light text-dark rounded-pill">114</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" id="boothdetails">
+                            <div class="card shadow-none border">
+                                <div class="card-header p-0">
+                                    <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="pills-analytics-tab"
+                                                data-bs-toggle="pill" data-bs-target="#pills-analytics" type="button"
+                                                role="tab" aria-controls="pills-analytics" aria-selected="true">
+                                                <h5 class="mb-0"><i class="far fa-chart-bar"></i></h5>
+                                                Booth Analytics
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-voters" type="button" role="tab"
+                                                aria-controls="pills-voters" aria-selected="false">
+                                                <h5 class="mb-0">68721</h5>
+                                                Voters
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-family" type="button" role="tab"
+                                                aria-controls="pills-family" aria-selected="false">
+                                                <h5 class="mb-0">721</h5>
+                                                Families
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-migrated" type="button" role="tab"
+                                                aria-controls="pills-migrated" aria-selected="true">
+                                                <h5 class="mb-0">721</h5>
+                                                Migrated
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-pending" type="button" role="tab"
+                                                aria-controls="pills-pending" aria-selected="false">
+                                                <h5 class="mb-0">7321</h5>
+                                                Pending
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-agents" type="button" role="tab"
+                                                aria-controls="pills-agents" aria-selected="false">
+                                                <h5 class="mb-0">71</h5>
+                                                Agents
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-analytics" role="tabpanel"
+                                            aria-labelledby="pills-analytics-tab">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="card shadow-none border">
+                                                    <div class="card-header pb-0">Area</div>
+                                                    <div class="card-body checkBox py-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                              Default checkbox
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                              Disabled checkbox
+                                                            </label>
+                                                          </div>
+                                                    </div>
+                                                    <div class="card-header pb-0">Religion</div>
+                                                    <div class="card-body checkBox py-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                              Default checkbox
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                              Disabled checkbox
+                                                            </label>
+                                                          </div>
+                                                    </div>
+                                                    <div class="card-header pb-0">Caste</div>
+                                                    <div class="card-body checkBox py-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                              Default checkbox
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                              Disabled checkbox
+                                                            </label>
+                                                          </div>
+                                                    </div>
+                                                    <div class="card-header pb-0">Migrated</div>
+                                                    <div class="card-body checkBox py-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                              Default checkbox
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                              Disabled checkbox
+                                                            </label>
+                                                          </div>
+                                                    </div>
+                                                    <div class="card-header pb-0">Gender</div>
+                                                    <div class="card-body checkBox py-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                              Default checkbox
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                              Disabled checkbox
+                                                            </label>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                asdf
+                                            </div>
+                                        </div>
+                                        
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-voters" role="tabpanel"
+                                            aria-labelledby="pills-voters-tab">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr. No.</th>
+                                                        <th>Voters Full Name</th>
+                                                        <th>Voter ID</th>
+                                                        <th>Gender</th>
+                                                        <th>Contact No</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-family" role="tabpanel"
+                                            aria-labelledby="pills-family-tab">family</div>
+                                        <div class="tab-pane fade" id="pills-migrated" role="tabpanel"
+                                            aria-labelledby="pills-migrated-tab">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr. No.</th>
+                                                        <th>Voters Full Name</th>
+                                                        <th>Voter ID</th>
+                                                        <th>Gender</th>
+                                                        <th>Contact No</th>
+                                                        <th>Migrated To</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                        <td>Mumbai</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                        <td>Bangalore, Karnataka</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                        <td>New York, United States</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-pending" role="tabpanel"
+                                            aria-labelledby="pills-pending-tab">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr. No.</th>
+                                                        <th>Voters Full Name</th>
+                                                        <th>Voter ID</th>
+                                                        <th>Gender</th>
+                                                        <th>Contact No</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>Male</td>
+                                                        <td>97643156132</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-agents" role="tabpanel"
+                                            aria-labelledby="pills-agents-tab">
+                                            <div class="mb-1 text-end">
+                                                <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal"
+                                                    data-bs-target="#AddAgentModal">
+                                                    Add Agents
+                                                </button>
+                                            </div>
+
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr. No.</th>
+                                                        <th>Agents Name</th>
+                                                        <th>Contact No</th>
+                                                        <th>Voters</th>
+                                                        <th>Filled</th>
+                                                        <th>Pending</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>2232</td>
+                                                        <td>342</td>
+                                                        <td>342</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-light" type="button"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#ViewVotersModal"><i
+                                                                    class="fas fa-eye"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>2232</td>
+                                                        <td>342</td>
+                                                        <td>342</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-light" type="button"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#ViewVotersModal"><i
+                                                                    class="fas fa-eye"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>Kailash Rajendra Sanap</td>
+                                                        <td>132034645</td>
+                                                        <td>2232</td>
+                                                        <td>342</td>
+                                                        <td>342</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-light" type="button"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#ViewVotersModal"><i
+                                                                    class="fas fa-eye"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal to show voters list -->
+<div class="modal fade" id="ViewVotersModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="ViewVotersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title mb-0" id="ViewVotersModalLabel">Voters List</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Voter Name</th>
+                            <th>Voter ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Ravikumar Rajesh Wadekar</td>
+                            <td>1234567</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add agents -->
+<div class="modal fade" id="AddAgentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="AddAgentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddAgentModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body chartbox">
+                <div class="form-container">
+                    <div class="row mb-3 g-2">
+                        <div class="col-sm-4">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" placeholder="First Name" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" placeholder="Middle Name" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Last Name" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact No.</label>
+                        <input type="text" class="form-control" placeholder="Contact No." />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" placeholder="Address" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" id="flexCheckDefault" class="form-check-input">
+                            <label for="flexCheckDefault" class="form-check-label"> Allow Sub Member </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-sm-6 text-end">
+                            <button type="button" class="btn btn-main">Add Agent</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
