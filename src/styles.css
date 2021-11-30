@@ -407,3 +407,43 @@ body{
  ::-webkit-scrollbar-thumb:hover {
     background-color: #999;
 }
+.invalid-feedback{
+    position: absolute;
+    margin-top: -1px;
+    width: auto;
+    font-size: 70%;
+    color: #dc3545;
+    display: flex;
+    margin-top: 0;
+}
+.ngx-select__toggle,
+.ngx-select input,
+.ngx-select__toggle {
+    font-size: 0.8rem !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: 1px solid #ced4da;
+}
+
+.ngx-select,
+.ngx-select__item,
+.ngx-select__clear,
+.ngx-select__selected-plural {
+    font-size: 0.8rem !important;
+    box-shadow: none;
+}
+
+.ngx-select__item {
+    color: #000 !important;
+}
+
+.ngx-select_multiple .ngx-select__clear {
+    color: #fff !important;
+    opacity: 0.9;
+}
+
+.ngx-select__item_active {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+    box-shadow: none;
+}
