@@ -162,7 +162,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        this.votersTotal = res.data2[0].TotalCount;
       } else {
         this.spinner.hide();
       }
@@ -255,7 +254,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.boothVoterListArray = res.data1;
-        console.log(this.boothVoterListArray);
+        this.votersTotal = res.data2[0].TotalCount;
       } else {
         this.spinner.hide();
       }
@@ -269,7 +268,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   onClickPagintionVoters(pageNo:any){
     this.votersPaginationNo = pageNo;
-    // this.boothVoterList();
+    this.boothVoterList(this.globalboothVoterData);
   }
 
   onKeyUpFilterVoters(){
