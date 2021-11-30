@@ -31,9 +31,11 @@ const routes: Routes = [
       { path: 'booth-dashboard', loadChildren: () => import('./partial/booth-management/booth-dashboard/booth-dashboard.module').then(m => m.BoothDashboardModule),data:{ title:'Booth Dashboard',allowedRoles:['1','2'] } },
       { path: 'candidate-registration', loadChildren: () => import('./partial/booth-management/candidate-registration/candidate-registration.module').then(m => m.CandidateRegistrationModule),data:{ title:'Candidate Registration',allowedRoles:['1','2'] } },
       { path: 'view-boothwise-voters-list', loadChildren: () => import('./partial/booth-management/view-boothwise-voters-list/view-boothwise-voters-list.module').then(m => m.ViewBoothwiseVotersListModule),data:{ title:'View Booth Wise Voters List',allowedRoles:['1','2'] } },
+      { path: 'voters-profile', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) },
     ]
   },
   { path: '500', component: ServerErrorComponent },
+ 
   { path: '**', component: PageNotFoundComponent },
 ];
 
