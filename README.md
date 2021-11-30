@@ -32,3 +32,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
     npm i ngx-toastr
     npm i ngx-select-ex
     -->
+
+<!-- Added By prasad
+    npm i ng2-search-filter
+ -->
