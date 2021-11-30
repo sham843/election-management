@@ -1,0 +1,45 @@
+.list-group-item {
+    padding-block: 10px;
+}
+
+.list-group-item.hover,
+.list-group-item.active {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+}
+
+.left-count {
+    background: #fafafa;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    margin-inline: 2px;
+    color: #000;
+}
+
+#boothlist .list-group .list-group-item{
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-radius: 0;
+}
+#boothdetails .nav-pills .nav-link{
+    color: #aaa;
+    border-bottom:solid 4px #eee ;
+    border-radius: 0;
+}
+#boothdetails .nav-pills .nav-link.active{
+    background-color: transparent;
+    border-bottom: solid 4px var(--main-color);
+    color: #000;
+}
+#boothdetails .card-header{
+    line-height: unset;
+    font-size: 0.8rem;
+}
+#boothdetails .form-check-label{
+    font-size: 0.8rem;
+}
+.checkBox{
+    max-height: 200px;
+    overflow-y: auto;
+}

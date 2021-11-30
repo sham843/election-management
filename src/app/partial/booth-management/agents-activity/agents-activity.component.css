@@ -1,0 +1,23 @@
+.profile-info img{
+    width: 150px;
+    margin: 0 auto;
+    display: flex;
+    border-radius: 50%;
+}
+.profile-info h5{
+    text-align: center;
+    color: var(--main-color);
+}
+.profile-info .contact{
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+}
+.profile-info .area{
+    font-size: 0.9rem;
+}
+.profile-info .card-text{
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+}
