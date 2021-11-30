@@ -313,6 +313,36 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
     // ------------------------------------------  global uses end here   ------------------------------------------//
-
+    expandContent = true;
+    data1:any = [{
+      'srno': '1',
+      'votername': 'Shalan Chavan',
+      'age': '52',
+      'mobileno': '9876543210',
+      'emailid': 'shalanchavan@gmail.com',
+      'occupation': 'Service',
+      'qualification': 'BE',
+      'migrated': 'Yes'
+    }, {
+      'srno': '2',
+      'votername': 'Shalan Chavan',
+      'age': '52',
+      'mobileno': '9876543210',
+      'emailid': 'shalanchavan@gmail.com',
+      'occupation': 'Service',
+      'qualification': 'BE',
+      'migrated': 'Yes'
+    }, {
+      'srno': '3',
+      'votername': 'Shalan Chavan',
+      'age': '52',
+      'mobileno': '9876543210',
+      'emailid': 'shalanchavan@gmail.com',
+      'occupation': 'Service',
+      'qualification': 'BE',
+      'migrated': 'Yes'
+    }
+    ]
+    
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 }
