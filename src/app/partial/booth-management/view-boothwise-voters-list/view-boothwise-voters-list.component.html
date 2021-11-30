@@ -115,7 +115,7 @@
                             <div class="card shadow-none border">
                                 <div class="card-header p-0">
                                     <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item" role="presentation"   (click)="boothVoterList()">
                                             <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-voters" type="button" role="tab"
                                                 aria-controls="pills-voters" aria-selected="false">
@@ -131,7 +131,7 @@
                                                 Families
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item" role="presentation"  (click)="boothMigratedList()">
                                             <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-migrated" type="button" role="tab"
                                                 aria-controls="pills-migrated" aria-selected="true">
@@ -139,7 +139,7 @@
                                                 Migrated
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item" role="presentation" (click)="boothPendingList()">
                                             <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-pending" type="button" role="tab"
                                                 aria-controls="pills-pending" aria-selected="false">
@@ -147,7 +147,7 @@
                                                 Pending
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item" role="presentation" (click)="boothAgentList()">
                                             <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-agents" type="button" role="tab"
                                                 aria-controls="pills-agents" aria-selected="false">
@@ -203,6 +203,17 @@
                                             aria-labelledby="pills-family-tab">family</div>
                                         <div class="tab-pane fade" id="pills-migrated" role="tabpanel"
                                             aria-labelledby="pills-migrated-tab">
+                                            <div class="col-sm-3">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" placeholder="Search..."
+                                                        [formControl]="searchMigrated" (keyup)="onKeyUpFilterMigrated()" />
+                                                    <button type="button" class="btn btn-light border btn-sm" (click)="clearFiltersBooth('clearFiltersMigrated')" *ngIf="searchMigrated.value"><i
+                                                            class="fas fa-times"></i></button>
+                                                    <button type="button" *ngIf="!searchMigrated.value"
+                                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                            <!-- Migrated  table start here  -->
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -215,35 +226,36 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
-                                                        <td>Mumbai</td>
+                                                    <tr *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
+                                                        <td>{{MigratedList?.SrNo}}</td>
+                                                        <td>{{MigratedList?.EnglishName}}</td>
+                                                        <td>{{MigratedList?.VoterNo}}</td>
+                                                        <td>{{MigratedList?.Gender}}</td>
+                                                        <td>{{MigratedList?.MobileNo1}}</td>
+                                                        <td>{{MigratedList?.MigratedCity}}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
-                                                        <td>Bangalore, Karnataka</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
-                                                        <td>New York, United States</td>
-                                                    </tr>
+                                                    
                                                 </tbody>
                                             </table>
+                                            <div class="mt-2 text-end" *ngIf="boothMigratedListArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                            </div>
+                                            <pagination-controls  id="migratedPagination"  *ngIf="boothMigratedListArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintionMigrated(votersPageSize = $event)"> </pagination-controls>
+                                            <!-- Migrated  table end here  -->
                                         </div>
                                         <div class="tab-pane fade" id="pills-pending" role="tabpanel"
                                             aria-labelledby="pills-pending-tab">
+                                            <div class="col-sm-3">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" placeholder="Search..."
+                                                        [formControl]="searchPending" (keyup)="onKeyUpFilterPending()" />
+                                                    <button type="button" class="btn btn-light border btn-sm" (click)="clearFiltersBooth('clearFiltersPending')" *ngIf="searchPending.value"><i
+                                                            class="fas fa-times"></i></button>
+                                                    <button type="button" *ngIf="!searchPending.value"
+                                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                            <!-- pending table start here  -->
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -255,39 +267,43 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
+                                                    <tr *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
+                                                        <td>{{PendingList?.SrNo}}</td>
+                                                        <td>{{PendingList?.EnglishName}}</td>
+                                                        <td>{{PendingList?.VoterNo}}</td>
+                                                        <td>{{PendingList?.Gender}}</td>
+                                                        <td>{{PendingList?.MobileNo1}}</td>
+                                                        <td>{{PendingList?.MigratedCity}}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
-                                                    </tr>
+                                                    
+                                                    
                                                 </tbody>
                                             </table>
+                                            <!-- pending table end here  -->
+                                            <div class="mt-2 text-end" *ngIf="boothPendingListArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                            </div>
+                                            <pagination-controls  id="pendingPagination"  *ngIf="boothPendingListArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintionPending(pendingPageSize  = $event)"> </pagination-controls>
                                         </div>
                                         <div class="tab-pane fade" id="pills-agents" role="tabpanel"
                                             aria-labelledby="pills-agents-tab">
                                             <div class="mb-1 text-end">
+                                                <div class="col-sm-3">
+                                                    <div class="input-group">
+                                                        <input class="form-control" type="text" placeholder="Search..."
+                                                            [formControl]="searchAgent" (keyup)="onKeyUpFilterAgent()" />
+                                                        <button type="button" class="btn btn-light border btn-sm" (click)="clearFiltersBooth('clearFiltersAgent')" *ngIf="searchAgent.value"><i
+                                                                class="fas fa-times"></i></button>
+                                                        <button type="button" *ngIf="!searchAgent.value"
+                                                            class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                                    </div>
+                                                </div>
                                                 <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal"
                                                     data-bs-target="#AddAgentModal">
                                                     Add Agents
                                                 </button>
                                             </div>
-
+                                            <!-- Agents table start here  -->
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -301,7 +317,15 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                    <tr *ngFor="let agentList of boothAgentListArray">
+                                                        <td>{{agentList?.SrNo}}</td>
+                                                        <td>{{agentList?.FullName}}</td>
+                                                        <td>{{agentList?.MobileNo}}</td>
+                                                        <td>{{agentList?.TotalVoter}}</td>
+                                                        <td>{{agentList?.TotalFilled}}</td>
+                                                        <td>{{agentList?.TotalFilled}}</td>
+                                                    </tr>
+                                                    <!-- <tr>
                                                         <td>1</td>
                                                         <td>Kailash Rajendra Sanap</td>
                                                         <td>132034645</td>
@@ -314,37 +338,15 @@
                                                                 data-bs-target="#ViewVotersModal"><i
                                                                     class="fas fa-eye"></i></button>
                                                         </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>2232</td>
-                                                        <td>342</td>
-                                                        <td>342</td>
-                                                        <td>
-                                                            <button class="btn btn-sm btn-light" type="button"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#ViewVotersModal"><i
-                                                                    class="fas fa-eye"></i></button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>2232</td>
-                                                        <td>342</td>
-                                                        <td>342</td>
-                                                        <td>
-                                                            <button class="btn btn-sm btn-light" type="button"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#ViewVotersModal"><i
-                                                                    class="fas fa-eye"></i></button>
-                                                        </td>
-                                                    </tr>
+                                                    </tr> -->
+                                                    
                                                 </tbody>
                                             </table>
+                                            <div class="mt-2 text-end" *ngIf="boothAgentListArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                            </div>
+                                            
+                                             <!-- Agents table start here  -->
                                         </div>
                                     </div>
                                 </div>

@@ -32,15 +32,36 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   selVillage = new FormControl(0);
   clickBoothListArray: any;
   voterListFlag = 1;
-  boothVoterListArray:any;
-  HighlightRow:any = 0;
-  globalboothVoterData:any;
+  boothVoterListArray: any;
+  HighlightRow: any = 0;
+  globalboothVoterData: any;
   searchVoters = new FormControl('');
+  searchMigrated = new FormControl('');
+  searchPending = new FormControl('');
+  searchAgent = new FormControl('');
+  searchFamily = new FormControl('');
 
   votersPaginationNo = 1;
-  votersPageSize : number = 10;
-  votersTotal : any;
-  
+  votersPageSize: number = 10;
+  votersTotal: any;
+
+  boothMigratedListArray: any;
+  migratedPaginationNo = 1;
+  migratedPageSize: number = 10;
+  migratedTotal: any;
+
+  boothPendingListArray: any;
+  pendingPaginationNo = 1;
+  pendingPageSize: number = 10;
+  pendingTotal: any;
+
+  boothAgentListArray: any;
+
+  boothFamilyListArray: any;
+  familyPaginationNo = 1;
+  familyPageSize: number = 10;
+  familyTotal: any;
+
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -56,6 +77,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.defaultFilterForm();
     this.getClientName();
     this.searchVotersFilters('false');
+    this.searchMigratedFilters('false');
+    this.searchPendingFilters('false');
+    this.searchAgentFilters('false');
+    this.searchFamilyFilters('false');
   }
 
   defaultFilterForm() {
@@ -221,6 +246,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   clickBoothList(data: any) {
+    this.globalboothVoterData = data;
     this.HighlightRow = data?.BoothId;
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + data?.BoothId;
     this.spinner.show();
@@ -232,7 +258,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       } else {
         this.spinner.hide();
       }
-      this.boothVoterList(data);
+      this.boothVoterList();
     }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
@@ -242,11 +268,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
-
-  boothVoterList(data:any) {
-    this.globalboothVoterData = data;
+  boothVoterList() {
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
-    '&AssemblyId='+this.globalboothVoterData.AssemblyId+'&flag='+this.voterListFlag+'&Search='+this.searchVoters.value+'&nopage='+this.votersPaginationNo;
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo;
 
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList?' + obj, false, false, false, 'electionServiceForWeb');
@@ -267,12 +291,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     })
   }
 
-  onClickPagintionVoters(pageNo:any){
+  onClickPagintionVoters(pageNo: any) {
     this.votersPaginationNo = pageNo;
-    this.boothVoterList(this.globalboothVoterData);
+    this.boothVoterList();
   }
 
-  onKeyUpFilterVoters(){
+  onKeyUpFilterVoters() {
     this.subject.next();
   }
 
@@ -288,31 +312,240 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       .subscribe(() => {
         this.searchVoters.value;
         this.votersPaginationNo = 1;
-        this.boothVoterList(this.globalboothVoterData);
+        this.boothVoterList();
+      }
+      );
+  }
+  // ------------------------------------------  vooter list with filter end here ------------------------------------------//
+
+  // ------------------------------------------  Family list with filter end here ------------------------------------------//
+  boothFamilyList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchFamily.value + '&nopage=' + this.familyPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Familly_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothFamilyListArray = res.data1;
+        this.votersTotal = res.data2[0].TotalCount;
+      } else {
+        this.boothFamilyListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  
+  onClickPagintionFamily(pageNo: any) {
+    this.familyPaginationNo = pageNo;
+    this.boothFamilyList();
+  }
+
+  onKeyUpFilterFamily() {
+    this.subject.next();
+  }
+
+  searchFamilyFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchFamily.value == "" || this.searchFamily == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchFamily.value;
+        this.familyPaginationNo = 1;
+        this.boothFamilyList();
+      }
+      );
+  }
+  // ------------------------------------------  Family list with filter end here ------------------------------------------//
+
+  // ------------------------------------------  Migrated  list with filter start here  ------------------------------------------//
+
+  boothMigratedList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchMigrated.value + '&nopage=' + this.migratedPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Migrated_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothMigratedListArray = res.data1;
+        this.migratedTotal = res.data2[0].TotalCount;
+      } else {
+        this.boothMigratedListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionMigrated(pageNo: any) {
+    this.migratedPaginationNo = pageNo;
+    this.boothMigratedList();
+  }
+
+  onKeyUpFilterMigrated() {
+    this.subject.next();
+  }
+
+  searchMigratedFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchMigrated.value == "" || this.searchMigrated == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchMigrated.value;
+        this.migratedPaginationNo = 1;
+        this.boothMigratedList();
+      }
+      );
+  }
+  // ------------------------------------------  Migrated  list with filter end here  ------------------------------------------//
+
+  // ------------------------------------------  Pending  list with filter start here  ------------------------------------------//
+  boothPendingList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchPending.value + '&nopage=' + this.pendingPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Pending_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothPendingListArray = res.data1;
+        this.pendingTotal = res.data2[0].TotalCount;
+      } else {
+        this.boothPendingListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionPending(pageNo: any) {
+    this.pendingPaginationNo = pageNo;
+    this.boothPendingList();
+  }
+
+  onKeyUpFilterPending() {
+    this.subject.next();
+  }
+
+  searchPendingFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchPending.value == "" || this.searchPending == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchPending.value;
+        this.pendingPaginationNo = 1;
+        this.boothPendingList();
       }
       );
   }
 
-  // ------------------------------------------  vooter list with filter end here ------------------------------------------//
+  // ------------------------------------------  Pending  list with filter start here  ------------------------------------------//
 
+  // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
+  boothAgentList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchAgent.value;
 
-   // ------------------------------------------  global uses start here   ------------------------------------------//
-  clearFiltersBooth(flag:any){
-    if(flag == 'clearSearchVoters'){
-      this.searchVoters.setValue('');
-    }
-    this.boothVoterList(this.globalboothVoterData);
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_AgentList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothAgentListArray = res.data1;
+        //this.pendingTotal  = res.data2[0].TotalCount;
+      } else {
+        this.boothAgentListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
   }
 
-  getIsSubEleAppId(eleId:any){
-    this.electionNameArray.filter((item:any)=>{
-      if(item.ElectionId == eleId){
+  onKeyUpFilterAgent() {
+    this.subject.next();
+  }
+
+  searchAgentFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchAgent.value == "" || this.searchAgent == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchAgent.value;
+        this.boothAgentList();
+      }
+      );
+  }
+  // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
+
+  // ------------------------------------------  global uses start here   ------------------------------------------//
+  clearFiltersBooth(flag: any) {
+    if (flag == 'clearSearchVoters') {
+      this.searchVoters.setValue('');
+      this.boothVoterList();
+    } else if (flag == 'clearFiltersMigrated') {
+      this.searchMigrated.setValue('');
+      this.boothMigratedList();
+    } else if (flag == 'clearFiltersPending') {
+      this.searchPending.setValue('');
+      this.boothPendingList();
+    } else if (flag == 'clearFiltersAgent') {
+      this.searchAgent.setValue('');
+      this.boothAgentList();
+
+    }
+  }
+
+  getIsSubEleAppId(eleId: any) {
+    this.electionNameArray.filter((item: any) => {
+      if (item.ElectionId == eleId) {
         this.IsSubElectionApplicable = item.IsSubElectionApplicable;
       }
     })
   }
 
-    // ------------------------------------------  global uses end here   ------------------------------------------//
+  // ------------------------------------------  global uses end here   ------------------------------------------//
 
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 }
