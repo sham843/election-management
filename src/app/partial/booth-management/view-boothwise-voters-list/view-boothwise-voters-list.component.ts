@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,6 @@ import { CommonService } from 'src/app/services/common.service';
 export class ViewBoothwiseVotersListComponent implements OnInit {
 
   clientNameArray: any;
-  // viewBoothVotersForm!:FormGroup;
   filterForm!: FormGroup;
   electionNameArray: any;
   constituencyNameArray: any;
@@ -24,7 +23,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   pageSize: number = 10;
   total: any;
   subject: Subject<any> = new Subject();
-  selectCloseFlag: boolean = true;
   clientWiseBoothListArray: any;
   IsSubElectionApplicable: any;
   villageDropdown: any;
@@ -61,7 +59,17 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   familyPaginationNo = 1;
   familyPageSize: number = 10;
   familyTotal: any;
+  boothFamilyDetailsArray: any;
+  divHide: boolean = false;
+  dataNotFound: boolean = false;
 
+  clientIdFlag: boolean = true;
+  electionFlag: boolean = true;
+  constituencyFlag: boolean = true;
+
+  assignAgentForm!: FormGroup;
+  submitted = false;
+  btnText = 'Assign Booths';
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -81,6 +89,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.searchPendingFilters('false');
     this.searchAgentFilters('false');
     this.searchFamilyFilters('false');
+    this.agentForm();
   }
 
   defaultFilterForm() {
@@ -99,7 +108,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientNameArray = res.data1;
-        this.clientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.clientNameArray[0].id }), this.getElectionName(), this.selectCloseFlag = false) : '';
+        this.clientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.clientNameArray[0].id }), this.getElectionName(), this.clientIdFlag = false) : '';
       } else {
         this.spinner.hide();
       }
@@ -118,7 +127,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.electionNameArray = res.data1;
-        this.electionNameArray.length == 1 ? (this.filterForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId }), this.IsSubElectionApplicable = this.electionNameArray[0].IsSubElectionApplicable, this.getConstituencyName(), this.selectCloseFlag = false) : '';
+        this.electionNameArray.length == 1 ? (this.filterForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId }), this.IsSubElectionApplicable = this.electionNameArray[0].IsSubElectionApplicable, this.getConstituencyName(), this.electionFlag = false) : '';
       } else {
         this.spinner.hide();
         this.electionNameArray = [];
@@ -138,8 +147,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
-        this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
-        this.constituencyNameArray.length == 1 ? (this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.selectCloseFlag = false) : '';
+        // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
+        this.getIsSubEleAppId(this.filterForm.value.ElectionId);
+        this.constituencyNameArray.length == 1 ? (this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false) : '';
         this.boothSummary();
       } else {
         this.constituencyNameArray = [];
@@ -155,6 +165,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
 
   boothSummary() {
+    debugger;
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
     this.spinner.show();
@@ -164,8 +175,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.spinner.hide();
         this.cardData = res.data1[0];
         this.villageDropdown = res.data2;
+        this.divHide = true;
         this.ClientWiseBoothList();
       } else {
+        this.divHide = false;
         this.villageDropdown = [];
         this.spinner.hide();
       }
@@ -178,6 +191,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   ClientWiseBoothList() {
+    this.HighlightRow = 0;
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.selVillage.value
     this.spinner.show();
@@ -186,9 +200,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
+        this.dataNotFound = true;
       } else {
         this.clientWiseBoothListArray = [];
         this.spinner.hide();
+        this.dataNotFound = false;
       }
     }, (error: any) => {
       this.spinner.hide();
@@ -204,15 +220,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   clearFilter(flag: any) {
     if (flag == 'clientId') {
-      this.filterForm.controls['ClientId'].setValue(0);
+      this.filterForm.reset()
     } else if (flag == 'electionId') {
-      this.filterForm.controls['ElectionId'].setValue('');
-    } else if (flag == 'constituencyId') {
-      this.filterForm.controls['ConstituencyId'].setValue('');
-    } else if (flag == 'search') {
-      this.filterForm.controls['Search'].setValue('');
+      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId })
     }
-    this.paginationNo = 1;
+    this.divHide = false;
+    // this.paginationNo = 1;
     // this.getClientAgentWithBooths();
   }
 
@@ -329,7 +342,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.boothFamilyListArray = res.data1;
-        this.votersTotal = res.data2[0].TotalCount;
+        this.familyTotal = res.data2[0].TotalCount;
       } else {
         this.boothFamilyListArray = [];
         this.spinner.hide();
@@ -342,7 +355,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     })
   }
 
-  
+
   onClickPagintionFamily(pageNo: any) {
     this.familyPaginationNo = pageNo;
     this.boothFamilyList();
@@ -367,6 +380,26 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.boothFamilyList();
       }
       );
+  }
+
+  familyDetails(ParentVoterId: any) {
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + this.filterForm.value.ClientId + '&Search=';
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothFamilyDetailsArray = res.data1;
+      } else {
+        this.boothFamilyDetailsArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
   }
   // ------------------------------------------  Family list with filter end here ------------------------------------------//
 
@@ -524,6 +557,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     if (flag == 'clearSearchVoters') {
       this.searchVoters.setValue('');
       this.boothVoterList();
+    } else if (flag == 'clearFamilyVoters') {
+      this.searchFamily.setValue('');
+      this.boothFamilyList();
     } else if (flag == 'clearFiltersMigrated') {
       this.searchMigrated.setValue('');
       this.boothMigratedList();
@@ -533,7 +569,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'clearFiltersAgent') {
       this.searchAgent.setValue('');
       this.boothAgentList();
-
+    } else if (flag == 'village') {
+      this.selVillage.setValue(0);
+      this.ClientWiseBoothList();
     }
   }
 
@@ -546,6 +584,61 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   // ------------------------------------------  global uses end here   ------------------------------------------//
+
+  //  ------------------------------------------   Add Agent modal function's start here  ------------------------------------------ //
+  agentForm() {
+    this.assignAgentForm = this.fb.group({
+      Id: [0],
+      ClientId: [''],
+      FullName: [''],
+      FName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
+      MName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
+      LName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
+      Address: [''],
+      MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      IsMemberAddAllow: [''],
+      CreatedBy: ['']
+    })
+  }
+
+  get f() { return this.assignAgentForm.controls };
+
+  addAgent() {
+    this.submitted = true;
+    if (this.assignAgentForm.invalid) {
+      this.spinner.hide();
+      return;
+    }
+    else {
+      this.spinner.show();
+      let data = this.assignAgentForm.value;
+      data.IsMemberAddAllow == true ? data.IsMemberAddAllow = 1 : data.IsMemberAddAllow = 0 //only assign true = 1 & false = 0
+      let FullName = data.FName + " " + data.MName + " " + data.LName;
+      data.FullName = FullName;
+
+      let obj = data.Id + '&FullName=' + data.FullName + '&MobileNo=' + data.MobileNo
+        + '&FName=' + data.FName + '&MName=' + data.MName + '&LName=' + data.LName + '&Address=' + data.Address
+        + '&IsMemberAddAllow=' + data.IsMemberAddAllow + '&ClientId=' + this.filterForm.value.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId()
+
+      this.callAPIService.setHttp('get', 'Web_Client_InsertBoothAgent?Id=' + obj, false, false, false, 'electionServiceForWeb');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.data == 0) {
+          this.spinner.hide();
+          this.toastrService.success(res.data1[0].Msg);
+          this.boothAgentList();
+        } else {
+          this.spinner.hide();
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        if (error.status == 500) {
+          this.router.navigate(['../500'], { relativeTo: this.route });
+        }
+      })
+    }
+  }
+
+  //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 }

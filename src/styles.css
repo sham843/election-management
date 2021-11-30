@@ -447,3 +447,11 @@ body{
     color: #fff !important;
     box-shadow: none;
 }
+
+.required-field::after {
+    content: "*";
+    color: #dc3545!important;
+    font-size: 18px;
+    margin-left: 2px;
+    line-height: 21px;
+}

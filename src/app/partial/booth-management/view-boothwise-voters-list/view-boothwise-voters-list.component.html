@@ -1,27 +1,28 @@
 <div class="container-fluid">
-    <div class="row mx-0 px-0" id="pageheader">
+    <div class="row mx-0 px-0">
         <div class="col-sm-3">
             <span class="page-name">View Booth Voters
             </span>
         </div>
+        <!-- id="pageheader" -->
         <div class="col-sm-9 text-end">
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm-4">
-                        <ngx-select [allowClear]="selectCloseFlag" [items]="clientNameArray" formControlName="ClientId"
+                        <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
                             (remove)="clearFilter('clientId')" (select)="getElectionName()" optionValueField="id"
                             optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm-4">
-                        <ngx-select [allowClear]="selectCloseFlag" [items]="electionNameArray"
+                        <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
                             (remove)="clearFilter('electionId')" (select)="getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
-                            [disabled]="!this.filterForm.value.ClientId" placeholder="Select Election">
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0" placeholder="Select Election">
                         </ngx-select>
                     </div>
                     <div class="col-sm-4">
-                        <ngx-select [allowClear]="selectCloseFlag" [items]="constituencyNameArray"
+                        <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
                             (remove)="clearFilter('constituencyId')" formControlName="ConstituencyId"
                             optionValueField="ConstituencyId" optionTextField="ConstituencyName"
                             [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
@@ -42,7 +43,7 @@
             </form>
         </div>
     </div>
-
+    <ng-container *ngIf="dataNotFound">
     <div class="row" id="dash-stats">
         <div class="col-sm-2">
             <div class="card card-body bg-cyan">
@@ -97,7 +98,7 @@
                         <div class="col-sm-3" id="boothlist">
                             <div class="mb-3 form-container">
                                 <ngx-select [allowClear]="true" [items]="villageDropdown"
-                                    (remove)="clearFilter('constituencyId')" [formControl]="selVillage"
+                                    (remove)="clearFiltersBooth('village')" [formControl]="selVillage" (select)="ClientWiseBoothList()"
                                     optionValueField="VillageId" optionTextField="VillageName"
                                     placeholder="Select Village">
                                 </ngx-select>
@@ -127,7 +128,7 @@
                                                 Voters
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item" role="presentation" (click)="boothFamilyList()">
                                             <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-family" type="button" role="tab"
                                                 aria-controls="pills-family" aria-selected="false">
@@ -212,41 +213,53 @@
                                         <!-- family table start here   -->
                                         <div class="tab-pane fade" id="pills-family" role="tabpanel"
                                             aria-labelledby="pills-family-tab">
+                                            <div class="col-sm-3">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" placeholder="Search..."
+                                                        [formControl]="searchFamily" (keyup)="onKeyUpFilterFamily()" />
+                                                    <button type="button" class="btn btn-light border btn-sm"
+                                                        (click)="clearFiltersBooth('clearFamilyVoters')"
+                                                        *ngIf="searchFamily.value"><i class="fas fa-times"></i></button>
+                                                    <button type="button" *ngIf="!searchFamily.value"
+                                                        class="btn btn-sm border btn-light"><i
+                                                            class="fas fa-search"></i></button>
+                                                </div>
+                                            </div>
                                             <table class="table">
                                                 <thead class="bg-light">
                                                     <tr>
                                                         <th> Sr. No </th>
                                                         <th> Voter Name </th>
-                                                        <th> Age </th>
+                                                        <!-- <th> Age </th> -->
                                                         <th> Mobile No</th>
-                                                        <th> Email ID </th>
+                                                        <!-- <th> Email ID </th>
                                                         <th> Occupation </th>
                                                         <th>Qualification</th>
-                                                        <th> Migration </th>
+                                                        <th> Migration </th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <ng-container *ngFor="let data of data1">
-                                                        <tr (click)="data.expanded = !data.expanded">
-                                                            <td> {{data.srno}} </td>
-                                                            <td> {{data.votername }} </td>
-                                                            <td> {{data.age}} </td>
-                                                            <td> {{data.mobileno}} </td>
-                                                            <td> {{data.emailid}} </td>
-                                                            <td>{{data.occupation}}</td>
-                                                            <td> {{data.qualification}} </td>
-                                                            <td>{{data.migrated}}</td>
+                                                    <ng-container *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal};">
+                                                        <tr (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                            <td> {{boothFamilyList.SrNo}} </td>
+                                                            <td> {{boothFamilyList.Family }} </td>
+                                                            <td> {{boothFamilyList.MobileNo1}} </td>
+                                                            <!-- <td> {{boothFamilyList.mobileno}} </td>
+                                                            <td> {{boothFamilyList.emailid}} </td>
+                                                            <td> {{boothFamilyList.occupation}}</td>
+                                                            <td> {{boothFamilyList.qualification}} </td>
+                                                            <td> {{boothFamilyList.migrated}}</td> -->
                                                         </tr>
 
-                                                        <ng-container *ngIf="data.expanded">
-                                                            <tr>
+                                                      <ng-container *ngIf="boothFamilyList.expanded" >
+                                                              <tr>
                                                                 <td colspan="8" class="px-0">
                                                                     <table class="table mb-0">
                                                                         <thead class="bg-light">
                                                                             <tr>
                                                                                 <th class="text-center"> Sr. No </th>
                                                                                 <th> Voter Name </th>
-                                                                                <th> Age </th>
+                                                                                <!-- <th> Age </th> -->
                                                                                 <th> Mobile No</th>
                                                                                 <th> Email ID </th>
                                                                                 <th> Occupation </th>
@@ -255,15 +268,14 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            <tr>
-                                                                                <td> {{data.srno}} </td>
-                                                                                <td> {{data.votername }} </td>
-                                                                                <td> {{data.age}} </td>
-                                                                                <td> {{data.mobileno}} </td>
-                                                                                <td> {{data.emailid}} </td>
-                                                                                <td>{{data.occupation}}</td>
-                                                                                <td> {{data.qualification}} </td>
-                                                                                <td>{{data.migrated}}</td>
+                                                                            <tr *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                                                <td>{{boothFamilyDetails?.Family}}</td>
+                                                                                <td>{{boothFamilyDetails?.MobileNo1}}</td>
+                                                                                <td>{{boothFamilyDetails?.Email}}</td>
+                                                                                <td>{{boothFamilyDetails?.Occupation}}</td>
+                                                                                <td>{{boothFamilyDetails?.Qualification}}</td>
+                                                                                <td>{{boothFamilyDetails?.Migrated}}</td>
+                                                                                <!-- <td>{{boothFamilyDetails?.Address}}</td> -->
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
@@ -273,6 +285,13 @@
                                                     </ng-container>
                                                 </tbody>
                                             </table>
+                                            <div class="mt-2 text-end" *ngIf="boothFamilyListArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                            </div>
+                                            <pagination-controls id="familyPagination"
+                                                *ngIf="boothFamilyListArray?.length != 0" previousLabel="" nextLabel=""
+                                                (pageChange)="onClickPagintionFamily(familyPageSize = $event)">
+                                            </pagination-controls>
                                         </div>
                                         <!-- migrated tab start here   -->
                                         <div class="tab-pane fade" id="pills-migrated" role="tabpanel"
@@ -433,6 +452,10 @@
             </div>
         </div>
     </div>
+</ng-container>
+<ng-container *ngIf="!dataNotFound">
+    <div class="alert alert-danger text-center py-2">No Data Found..!</div> 
+</ng-container>
 </div>
 
 
@@ -473,49 +496,89 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddAgentModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="AddAgentModalLabel">Add Agent</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body chartbox">
-                <div class="form-container">
-                    <div class="row mb-3 g-2">
-                        <div class="col-sm-4">
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control" placeholder="First Name" />
+                <form [formGroup]="assignAgentForm">
+                    <div class="form-container">
+
+                        <div class="row mb-3 g-2">
+                            <div class="col-sm-4">
+                                <label class="form-label required-field">First Name</label>
+                                <input type="text" class="form-control" formControlName="FName" placeholder="First Name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                                <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.FName.errors.required">First name is required
+                                    </div>
+                                    <div *ngIf="f.FName.errors.pattern">First name can not contain space</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="txtFullName" class="form-label required-field">Middle Name</label>
+                                <input type="text" class="form-control" formControlName="MName"
+                                    placeholder="Middle Name" [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                                <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.MName.errors.required">Middle name is required
+                                    </div>
+                                    <div *ngIf="f.MName.errors.pattern">Middle name can not contain space</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="txtFullName" class="form-label required-field">Last Name</label>
+                                <input type="text" class="form-control" formControlName="LName" placeholder="Last Name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                                <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.LName.errors.required">Last name is required
+                                    </div>
+                                    <div *ngIf="f.LName.errors.pattern">Last name can not contain space</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                            <label class="form-label">Middle Name</label>
-                            <input type="text" class="form-control" placeholder="Middle Name" />
+    
+                        <div class="row mb-3">
+                            <div class="col-sm-12">
+                                <label for="txtContactNo" class="form-label required-field">Contact No.</label>
+                                <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
+                                    formControlName="MobileNo" placeholder="Contact No."
+                                    [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                                <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                    <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
+                                    <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-control" placeholder="Last Name" />
+                        <div class="mb-3">
+                            <label for="Address1" class="form-label">Address</label>
+                            <textarea class="form-control" id="txtAddress" formControlName="Address"
+                                placeholder="Address"
+                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
+                            <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                <div *ngIf="f.Address.errors.required">Address is required</div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="IsMemberAddAllow"
+                                    value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Allow Sub Member
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                    (click)="agentForm()">Clear</button>
+                            </div>
+                            <div class="col-sm-6 text-end">
+                                <button type="button" class="btn btn-primary btn-main btn-sm"
+                                    (click)="addAgent()">{{btnText}}</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Contact No.</label>
-                        <input type="text" class="form-control" placeholder="Contact No." />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <textarea class="form-control" placeholder="Address" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" id="flexCheckDefault" class="form-check-input">
-                            <label for="flexCheckDefault" class="form-check-label"> Allow Sub Member </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-outline-secondary btn-sm"
-                                data-bs-dismiss="modal">Close</button>
-                        </div>
-                        <div class="col-sm-6 text-end">
-                            <button type="button" class="btn btn-main">Add Agent</button>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
 
         </div>
