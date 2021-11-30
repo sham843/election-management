@@ -5,32 +5,41 @@
             </span>
         </div>
         <div class="col-sm-9 text-end">
-            <div class="row g-2">
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Candidate</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Election</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Constituency</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Search..." />
-                        <button class="btn btn-light btn-sm text-dark" type="button"><i
-                                class="fas fa-times"></i></button>
-                        <button class="btn btn-light btn-sm text-dark" type="button"><i
-                                class="fas fa-search"></i></button>
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm-4">
+                        <ngx-select [allowClear]="selectCloseFlag" [items]="clientNameArray" formControlName="ClientId"
+                            (remove)="clearFilter('clientId')" (select)="getElectionName()" optionValueField="id"
+                            optionTextField="Fullname" placeholder="Select Client">
+                        </ngx-select>
                     </div>
+                    <div class="col-sm-4">
+                        <ngx-select [allowClear]="selectCloseFlag" [items]="electionNameArray"
+                            (remove)="clearFilter('electionId')" (select)="getConstituencyName()"
+                            formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                            [disabled]="!this.filterForm.value.ClientId" placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-4">
+                        <ngx-select [allowClear]="selectCloseFlag" [items]="constituencyNameArray"
+                            (remove)="clearFilter('constituencyId')" formControlName="ConstituencyId"
+                            optionValueField="ConstituencyId" optionTextField="ConstituencyName"
+                            [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
+                        </ngx-select>
+                    </div>
+                    <!-- <div class="col-sm-3">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Search..."
+                            formControlName="Search" (keyup)="onKeyUpFilter()" />
+                        <button type="button" class="btn btn-light border btn-sm"
+                            *ngIf="filterForm.value.Search" (click)="clearFilter('search')"><i
+                                _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                        <button type="button" (click)="searchFilter('true')" *ngIf="!filterForm.value.Search"
+                            class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                    </div>
+                </div> -->
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -39,42 +48,42 @@
             <div class="card card-body bg-cyan">
                 <i class="fas fa-person-booth"></i>
                 <p>Booths</p>
-                <h3>567</h3>
+                <h3>{{cardData?.TotalBooths}}</h3>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="card card-body bg-green">
                 <i class="fas fa-users"></i>
                 <p>Voters</p>
-                <h3>656775</h3>
+                <h3>{{cardData?.TotalVoters}}</h3>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="card card-body bg-blue">
                 <i class="fas fa-house-user"></i>
                 <p>Families</p>
-                <h3>234</h3>
+                <h3>{{cardData?.TotalFamilies}}</h3>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="card card-body bg-gold">
                 <i class="fas fa-plane-departure"></i>
                 <p>Migrated</p>
-                <h3>237</h3>
+                <h3>{{cardData?.TotalMigrated}}</h3>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="card card-body bg-red">
                 <i class="fas fa-star-half-alt"></i>
                 <p>Fill / Pending</p>
-                <h3>3456 / 15442</h3>
+                <h3>{{cardData?.TotalFilled}} / {{cardData?.TotalPending}}</h3>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="card card-body bg-voilet">
                 <i class="fas fa-user-cog"></i>
                 <p>Agents</p>
-                <h3>345</h3>
+                <h3>{{cardData?.TotalAgents}}</h3>
             </div>
         </div>
     </div>
@@ -87,33 +96,22 @@
                     <div class="row align-items-start">
                         <div class="col-sm-3" id="boothlist">
                             <div class="mb-3 form-container">
-                                <select class="form-select">
-                                    <option value="">Select Village</option>
-                                </select>
+                                <ngx-select [allowClear]="true" [items]="villageDropdown"
+                                    (remove)="clearFilter('constituencyId')" [formControl]="selVillage"
+                                    optionValueField="VillageId" optionTextField="VillageName"
+                                    placeholder="Select Village">
+                                </ngx-select>
                             </div>
                             <div class="list-group">
-                                <a 
-                                    class="list-group-item d-flex justify-content-between align-items-start active"
-                                    aria-current="true">
+                                <a class="list-group-item d-flex justify-content-between align-items-start"
+                                    aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"
+                                    (click)="clickBoothList(boothList)"
+                                    [class.active]="boothList.BoothId == HighlightRow">
                                     <div class="ms-2 me-auto">
-                                        <div class="fw-bold">325 - Kailash Nagar</div>
-                                        <small>Village, Taluka, District</small>
+                                        <div class="fw-bold">{{boothList?.BoothNickName}}</div>
+                                        <small *ngIf="boothList?.Villagename">{{boothList?.Villagename}}</small>
                                     </div>
-                                    <span class="badge bg-light text-dark rounded-pill">23414</span>
-                                </a>
-                                <a  class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        <div class="fw-bold">325 - Kailash Nagar</div>
-                                        <small>Village, Taluka, District</small>
-                                    </div>
-                                    <span class="badge bg-light text-dark rounded-pill">3214</span>
-                                </a>
-                                <a  class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        <div class="fw-bold">325 - Kailash Nagar</div>
-                                        <small>Village, Taluka, District</small>
-                                    </div>
-                                    <span class="badge bg-light text-dark rounded-pill">114</span>
+                                    <span class="badge bg-light text-dark rounded-pill">{{boothList?.VoterCount}}</span>
                                 </a>
                             </div>
                         </div>
@@ -122,18 +120,10 @@
                                 <div class="card-header p-0">
                                     <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="pills-analytics-tab"
-                                                data-bs-toggle="pill" data-bs-target="#pills-analytics" type="button"
-                                                role="tab" aria-controls="pills-analytics" aria-selected="true">
-                                                <h5 class="mb-0"><i class="far fa-chart-bar"></i></h5>
-                                                Booth Analytics
-                                            </button>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-voters" type="button" role="tab"
                                                 aria-controls="pills-voters" aria-selected="false">
-                                                <h5 class="mb-0">68721</h5>
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalVoters}}</h5>
                                                 Voters
                                             </button>
                                         </li>
@@ -141,7 +131,7 @@
                                             <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-family" type="button" role="tab"
                                                 aria-controls="pills-family" aria-selected="false">
-                                                <h5 class="mb-0">721</h5>
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalFamilies}}</h5>
                                                 Families
                                             </button>
                                         </li>
@@ -149,7 +139,7 @@
                                             <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-migrated" type="button" role="tab"
                                                 aria-controls="pills-migrated" aria-selected="true">
-                                                <h5 class="mb-0">721</h5>
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalMigrated}}</h5>
                                                 Migrated
                                             </button>
                                         </li>
@@ -157,7 +147,7 @@
                                             <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-pending" type="button" role="tab"
                                                 aria-controls="pills-pending" aria-selected="false">
-                                                <h5 class="mb-0">7321</h5>
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalPending}}</h5>
                                                 Pending
                                             </button>
                                         </li>
@@ -165,7 +155,7 @@
                                             <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-agents" type="button" role="tab"
                                                 aria-controls="pills-agents" aria-selected="false">
-                                                <h5 class="mb-0">71</h5>
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalAgents}}</h5>
                                                 Agents
                                             </button>
                                         </li>
@@ -173,96 +163,21 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="tab-content" id="pills-tabContent">
-                                        <div class="tab-pane fade show active" id="pills-analytics" role="tabpanel"
-                                            aria-labelledby="pills-analytics-tab">
-                                        <div class="row">
+                                        <!-- Voters tab start here   -->
+                                        <div class="tab-pane fade active" id="pills-voters" role="tabpanel"
+                                            aria-labelledby="pills-voters-tab">
                                             <div class="col-sm-3">
-                                                <div class="card shadow-none border">
-                                                    <div class="card-header pb-0">Area</div>
-                                                    <div class="card-body checkBox py-2">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                                            <label class="form-check-label" for="defaultCheck1">
-                                                              Default checkbox
-                                                            </label>
-                                                          </div>
-                                                          <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                                            <label class="form-check-label" for="defaultCheck2">
-                                                              Disabled checkbox
-                                                            </label>
-                                                          </div>
-                                                    </div>
-                                                    <div class="card-header pb-0">Religion</div>
-                                                    <div class="card-body checkBox py-2">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                                            <label class="form-check-label" for="defaultCheck1">
-                                                              Default checkbox
-                                                            </label>
-                                                          </div>
-                                                          <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                                            <label class="form-check-label" for="defaultCheck2">
-                                                              Disabled checkbox
-                                                            </label>
-                                                          </div>
-                                                    </div>
-                                                    <div class="card-header pb-0">Caste</div>
-                                                    <div class="card-body checkBox py-2">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                                            <label class="form-check-label" for="defaultCheck1">
-                                                              Default checkbox
-                                                            </label>
-                                                          </div>
-                                                          <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                                            <label class="form-check-label" for="defaultCheck2">
-                                                              Disabled checkbox
-                                                            </label>
-                                                          </div>
-                                                    </div>
-                                                    <div class="card-header pb-0">Migrated</div>
-                                                    <div class="card-body checkBox py-2">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                                            <label class="form-check-label" for="defaultCheck1">
-                                                              Default checkbox
-                                                            </label>
-                                                          </div>
-                                                          <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                                            <label class="form-check-label" for="defaultCheck2">
-                                                              Disabled checkbox
-                                                            </label>
-                                                          </div>
-                                                    </div>
-                                                    <div class="card-header pb-0">Gender</div>
-                                                    <div class="card-body checkBox py-2">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                                            <label class="form-check-label" for="defaultCheck1">
-                                                              Default checkbox
-                                                            </label>
-                                                          </div>
-                                                          <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                                            <label class="form-check-label" for="defaultCheck2">
-                                                              Disabled checkbox
-                                                            </label>
-                                                          </div>
-                                                    </div>
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" placeholder="Search..."
+                                                        [formControl]="searchVoters" (keyup)="onKeyUpFilterVoters()" />
+                                                    <button type="button" class="btn btn-light border btn-sm"
+                                                        (click)="clearFiltersBooth('clearSearchVoters')"
+                                                        *ngIf="searchVoters.value"><i class="fas fa-times"></i></button>
+                                                    <button type="button" *ngIf="!searchVoters.value"
+                                                        class="btn btn-sm border btn-light"><i
+                                                            class="fas fa-search"></i></button>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-9">
-                                                asdf
-                                            </div>
-                                        </div>
-                                        
-                                        </div>
-                                        <div class="tab-pane fade" id="pills-voters" role="tabpanel"
-                                            aria-labelledby="pills-voters-tab">
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -274,32 +189,92 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
+                                                    <tr
+                                                        *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
+                                                        <td>{{boothVoterList?.SrNo}}</td>
+                                                        <td>{{boothVoterList?.EnglishName}}</td>
+                                                        <td>{{boothVoterList?.VoterNo}}</td>
+                                                        <td>{{boothVoterList?.Gender}}</td>
+                                                        <td>{{boothVoterList?.MobileNo1}}</td>
                                                     </tr>
+
+                                                </tbody>
+                                            </table>
+                                            <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                            </div>
+                                            <pagination-controls id="voterPagination"
+                                                *ngIf="boothVoterListArray?.length != 0" previousLabel="" nextLabel=""
+                                                (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                                            </pagination-controls>
+                                            <!-- Voters table end here  -->
+                                        </div>
+                                        <!-- family table start here   -->
+                                        <div class="tab-pane fade" id="pills-family" role="tabpanel"
+                                            aria-labelledby="pills-family-tab">
+                                            <table class="table">
+                                                <thead class="bg-light">
                                                     <tr>
-                                                        <td>2</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
+                                                        <th> Sr. No </th>
+                                                        <th> Voter Name </th>
+                                                        <th> Age </th>
+                                                        <th> Mobile No</th>
+                                                        <th> Email ID </th>
+                                                        <th> Occupation </th>
+                                                        <th>Qualification</th>
+                                                        <th> Migration </th>
                                                     </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Kailash Rajendra Sanap</td>
-                                                        <td>132034645</td>
-                                                        <td>Male</td>
-                                                        <td>97643156132</td>
-                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container *ngFor="let data of data1">
+                                                        <tr (click)="data.expanded = !data.expanded">
+                                                            <td> {{data.srno}} </td>
+                                                            <td> {{data.votername }} </td>
+                                                            <td> {{data.age}} </td>
+                                                            <td> {{data.mobileno}} </td>
+                                                            <td> {{data.emailid}} </td>
+                                                            <td>{{data.occupation}}</td>
+                                                            <td> {{data.qualification}} </td>
+                                                            <td>{{data.migrated}}</td>
+                                                        </tr>
+
+                                                        <ng-container *ngIf="data.expanded">
+                                                            <tr>
+                                                                <td colspan="8" class="px-0">
+                                                                    <table class="table mb-0">
+                                                                        <thead class="bg-light">
+                                                                            <tr>
+                                                                                <th class="text-center"> Sr. No </th>
+                                                                                <th> Voter Name </th>
+                                                                                <th> Age </th>
+                                                                                <th> Mobile No</th>
+                                                                                <th> Email ID </th>
+                                                                                <th> Occupation </th>
+                                                                                <th>Qualification</th>
+                                                                                <th> Migration </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td> {{data.srno}} </td>
+                                                                                <td> {{data.votername }} </td>
+                                                                                <td> {{data.age}} </td>
+                                                                                <td> {{data.mobileno}} </td>
+                                                                                <td> {{data.emailid}} </td>
+                                                                                <td>{{data.occupation}}</td>
+                                                                                <td> {{data.qualification}} </td>
+                                                                                <td>{{data.migrated}}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                            </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </ng-container>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="tab-pane fade" id="pills-family" role="tabpanel"
-                                            aria-labelledby="pills-family-tab">family</div>
+                                        <!-- migrated tab start here   -->
                                         <div class="tab-pane fade" id="pills-migrated" role="tabpanel"
                                             aria-labelledby="pills-migrated-tab">
                                             <table class="table table-hover mb-0">
@@ -341,6 +316,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <!-- Pending tab start here   -->
                                         <div class="tab-pane fade" id="pills-pending" role="tabpanel"
                                             aria-labelledby="pills-pending-tab">
                                             <table class="table table-hover mb-0">
@@ -378,6 +354,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <!-- Agents tab start here   -->
                                         <div class="tab-pane fade" id="pills-agents" role="tabpanel"
                                             aria-labelledby="pills-agents-tab">
                                             <div class="mb-1 text-end">
