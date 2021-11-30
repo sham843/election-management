@@ -35,11 +35,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   boothVoterListArray:any;
   HighlightRow:any = 0;
   globalboothVoterData:any;
-  searchVoters = new FormControl();
+  searchVoters = new FormControl('');
 
   votersPaginationNo = 1;
   votersPageSize : number = 10;
   votersTotal : any;
+  
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -54,7 +55,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   ngOnInit(): void {
     this.defaultFilterForm();
     this.getClientName();
-    this.searchFilter('false');
+    this.searchVotersFilters('false');
   }
 
   defaultFilterForm() {
@@ -113,7 +114,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
         this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
-        debugger;
         this.constituencyNameArray.length == 1 ? (this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.selectCloseFlag = false) : '';
         this.boothSummary();
       } else {
@@ -130,7 +130,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
 
   boothSummary() {
-    debugger;
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
     this.spinner.show();
@@ -163,6 +162,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
       } else {
+        this.clientWiseBoothListArray = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -246,7 +246,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   boothVoterList(data:any) {
     this.globalboothVoterData = data;
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
-    '&AssemblyId='+this.globalboothVoterData.AssemblyId+'&flag='+this.voterListFlag+'&Search=&nopage='+this.votersPaginationNo;
+    '&AssemblyId='+this.globalboothVoterData.AssemblyId+'&flag='+this.voterListFlag+'&Search='+this.searchVoters.value+'&nopage='+this.votersPaginationNo;
 
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList?' + obj, false, false, false, 'electionServiceForWeb');
@@ -256,6 +256,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.boothVoterListArray = res.data1;
         this.votersTotal = res.data2[0].TotalCount;
       } else {
+        this.boothVoterListArray = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -272,7 +273,24 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterVoters(){
+    this.subject.next();
+  }
 
+  searchVotersFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchVoters.value == "" || this.searchVoters == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchVoters.value;
+        this.votersPaginationNo = 1;
+        this.boothVoterList(this.globalboothVoterData);
+      }
+      );
   }
 
   // ------------------------------------------  vooter list with filter end here ------------------------------------------//
@@ -281,12 +299,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
    // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag:any){
     if(flag == 'clearSearchVoters'){
-
+      this.searchVoters.setValue('');
     }
+    this.boothVoterList(this.globalboothVoterData);
   }
 
   getIsSubEleAppId(eleId:any){
-    debugger;
     this.electionNameArray.filter((item:any)=>{
       if(item.ElectionId == eleId){
         this.IsSubElectionApplicable = item.IsSubElectionApplicable;

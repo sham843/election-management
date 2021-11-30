@@ -116,7 +116,7 @@
                                 <div class="card-header p-0">
                                     <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="pills-voters-tab" data-bs-toggle="pill"
+                                            <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-voters" type="button" role="tab"
                                                 aria-controls="pills-voters" aria-selected="false">
                                                 <h5 class="mb-0">{{clickBoothListArray?.TotalVoters}}</h5>
@@ -159,17 +159,16 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="tab-content" id="pills-tabContent">
-                                        <div class="tab-pane fade" id="pills-voters" role="tabpanel"
+                                        <div class="tab-pane fade active" id="pills-voters" role="tabpanel"
                                             aria-labelledby="pills-voters-tab">
                                             <!-- Voters table start here   -->
                                             <div class="col-sm-3">
                                                 <div class="input-group">
                                                     <input class="form-control" type="text" placeholder="Search..."
                                                         [formControl]="searchVoters" (keyup)="onKeyUpFilterVoters()" />
-                                                    <button type="button" class="btn btn-light border btn-sm"
-                                                        *ngIf="filterForm.value.Search" (click)="clearFiltersBooth('clearSearchVoters')"><i
+                                                    <button type="button" class="btn btn-light border btn-sm" (click)="clearFiltersBooth('clearSearchVoters')" *ngIf="searchVoters.value"><i
                                                             class="fas fa-times"></i></button>
-                                                    <button type="button" (click)="searchFilter('true')" *ngIf="!filterForm.value.Search"
+                                                    <button type="button" *ngIf="!searchVoters.value"
                                                         class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
                                                 </div>
                                             </div>
@@ -184,17 +183,21 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr *ngFor="let boothVoterList of boothVoterListArray  | paginate: { itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
+                                                    <tr *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                         <td>{{boothVoterList?.SrNo}}</td>
                                                         <td>{{boothVoterList?.EnglishName}}</td>
                                                         <td>{{boothVoterList?.VoterNo}}</td>
                                                         <td>{{boothVoterList?.Gender}}</td>
                                                         <td>{{boothVoterList?.MobileNo1}}</td>
                                                     </tr>
+                                                    
                                                 </tbody>
                                             </table>
-                                            <pagination-controls id="pagination1" previousLabel="" nextLabel="" (pageChange)="onClickPagintionVoters(votersPageSize = $event)"> </pagination-controls>
-                                            <!-- Voters table end here  
+                                            <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                            </div>
+                                            <pagination-controls  id="voterPagination"  *ngIf="boothVoterListArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintionVoters(votersPageSize = $event)"> </pagination-controls>
+                                            <!-- Voters table end here  -->
                                         </div>
                                         <div class="tab-pane fade" id="pills-family" role="tabpanel"
                                             aria-labelledby="pills-family-tab">family</div>
