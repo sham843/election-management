@@ -205,3 +205,205 @@ body{
     border-radius: 4px;
     font-size: 0.8rem;
 }
+.chartbox .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px #dfdfdf
+}
+
+.chartbox .card .card-header {
+    background-color: transparent;
+    border-bottom: none;
+    font-size: .85rem;
+    font-weight: 600;
+    line-height: 34px
+}
+
+.chartbox .card .card-header a {
+    color: var(--main-color);
+    margin-left: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+.chartbox .card .card-header .form-control,
+.chartbox .card .card-header .form-select,
+.chartbox .card .card-body .list-group-item {
+    font-size: .85rem;
+    box-shadow: none;
+    border: 1px solid #ced4da;
+}
+
+.chartbox .card .card-header .input-group .form-control {
+    border-right: none;
+}
+
+.chartbox .card .card-header .input-group .btn {
+    background-color: transparent;
+    border: 1px solid #ced4da;
+    border-left: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.chartbox .card .card-header .form-check-input[type=radio] {
+    margin-top: 10px
+}
+
+.chartbox .activity-item {
+    margin-bottom: 18px;
+    /*border-radius: 5px;
+    padding: 8px 10px; */
+    font-size: .85rem;
+    transition: all .25s ease-in;
+    display: block;
+    text-decoration: none;
+    color: #000;
+    align-items: center;
+}
+
+.chartbox .table {
+    font-size: .8rem
+}
+
+.chartbox .table thead th {
+    background-color: #f5f5f5;
+    border-bottom: solid 1px #aaa;
+    border-top: solid 1px #eee;
+    font-weight: 500
+}
+
+.chartbox .table th,
+.chartbox .table td {
+    vertical-align: middle
+}
+
+.chartbox .table td .form-check-input[type="checkbox"] {
+    width: 32px;
+    height: 18px;
+}
+
+.chartbox .table td .form-check-input:checked {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.chartbox .table td .btn {
+    font-size: .65rem;
+    box-shadow: none;
+    outline: none;
+    padding: 5px 7px
+}
+
+.chartbox .table td a {
+    text-decoration: none
+}
+
+.chartbox .table td a:hover {
+    text-decoration: underline
+}
+
+.chartbox .table img {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    /* border: solid 1px #aaa; */
+    margin-right: 2px;
+    padding: 2px;
+    object-fit: contain
+}
+
+.chartbox .table .prophoto {
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    border: none;
+    padding: 0;
+    object-fit: cover;
+    object-position: top;
+}
+.modal .modal-header,
+.modal-header {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+}
+
+.modal-title {
+    font: inherit !important;
+    margin: 0 !important;
+}
+
+.modal .modal-content,
+.modal-content {
+    border: none
+}
+
+.modal .modal-body,
+.modal p {
+    font-size: .85rem
+}
+
+.modal .table {
+    font-size: .8rem
+}
+
+.modal .table thead th {
+    background-color: #f5f5f5;
+    border-bottom: solid 1px #aaa;
+    border-top: solid 1px #eee
+}
+
+.modal button.btn-close,
+.btn-close {
+    background-color: #fff !important;
+    border-radius: 50% !important;
+    box-shadow: none !important;
+}
+.modal-body svg {
+    width: 100px !important;
+    display: block !important;
+    margin: 0px auto !important;
+}
+::-webkit-scrollbar {
+    background: transparent;
+    overflow: visible;
+    width: 14px;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: solid #fff;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+ ::-webkit-scrollbar-thumb:horizontal {
+    border-width: 4px 6px;
+    min-width: 40px;
+}
+
+ ::-webkit-scrollbar-thumb:vertical {
+    border-width: 6px 4px;
+    min-height: 40px;
+}
+
+ ::-webkit-scrollbar-track-piece {
+    background-color: #fff;
+}
+
+ ::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background-color: #ADADAD;
+    -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.10), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+    box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.10), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+}
