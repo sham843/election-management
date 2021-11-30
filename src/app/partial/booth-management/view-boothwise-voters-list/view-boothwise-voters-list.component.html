@@ -6,26 +6,28 @@
         </div>
         <div class="col-sm-9 text-end">
             <form [formGroup]="filterForm">
-            <div class="row g-2">
-                <div class="col-sm-4">
-                    <ngx-select [allowClear]="selectCloseFlag" [items]="clientNameArray" formControlName="ClientId"
-                    (remove)="clearFilter('clientId')"  (select)="getElectionName()"
-                    optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
-                </ngx-select>
-                </div>
-                <div class="col-sm-4">
-                    <ngx-select [allowClear]="selectCloseFlag" [items]="electionNameArray"
-                    (remove)="clearFilter('electionId')" (select)="getConstituencyName()" formControlName="ElectionId"
-                    optionValueField="ElectionId" optionTextField="ElectionName" [disabled]="!this.filterForm.value.ClientId" placeholder="Select Election">
-                </ngx-select>
-                </div>
-                <div class="col-sm-4">
-                    <ngx-select [allowClear]="selectCloseFlag" [items]="constituencyNameArray"
-                    (remove)="clearFilter('constituencyId')"  formControlName="ConstituencyId" 
-                    optionValueField="ConstituencyId" optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
-                </ngx-select>
-                </div>
-                <!-- <div class="col-sm-3">
+                <div class="row g-2">
+                    <div class="col-sm-4">
+                        <ngx-select [allowClear]="selectCloseFlag" [items]="clientNameArray" formControlName="ClientId"
+                            (remove)="clearFilter('clientId')" (select)="getElectionName()" optionValueField="id"
+                            optionTextField="Fullname" placeholder="Select Client">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-4">
+                        <ngx-select [allowClear]="selectCloseFlag" [items]="electionNameArray"
+                            (remove)="clearFilter('electionId')" (select)="getConstituencyName()"
+                            formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                            [disabled]="!this.filterForm.value.ClientId" placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-4">
+                        <ngx-select [allowClear]="selectCloseFlag" [items]="constituencyNameArray"
+                            (remove)="clearFilter('constituencyId')" formControlName="ConstituencyId"
+                            optionValueField="ConstituencyId" optionTextField="ConstituencyName"
+                            [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
+                        </ngx-select>
+                    </div>
+                    <!-- <div class="col-sm-3">
                     <div class="input-group">
                         <input class="form-control" type="text" placeholder="Search..."
                             formControlName="Search" (keyup)="onKeyUpFilter()" />
@@ -36,7 +38,7 @@
                             class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
                     </div>
                 </div> -->
-            </div>
+                </div>
             </form>
         </div>
     </div>
@@ -95,14 +97,16 @@
                         <div class="col-sm-3" id="boothlist">
                             <div class="mb-3 form-container">
                                 <ngx-select [allowClear]="true" [items]="villageDropdown"
-                                (remove)="clearFilter('constituencyId')"  [formControl]="selVillage" 
-                                optionValueField="VillageId" optionTextField="VillageName"  placeholder="Select Village">
-                            </ngx-select>
+                                    (remove)="clearFilter('constituencyId')" [formControl]="selVillage"
+                                    optionValueField="VillageId" optionTextField="VillageName"
+                                    placeholder="Select Village">
+                                </ngx-select>
                             </div>
                             <div class="list-group">
-                                <a 
-                                    class="list-group-item d-flex justify-content-between align-items-start"
-                                    aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"  (click)="clickBoothList(boothList)"  [class.active]="boothList.BoothId == HighlightRow">
+                                <a class="list-group-item d-flex justify-content-between align-items-start"
+                                    aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"
+                                    (click)="clickBoothList(boothList)"
+                                    [class.active]="boothList.BoothId == HighlightRow">
                                     <div class="ms-2 me-auto">
                                         <div class="fw-bold">{{boothList?.BoothNickName}}</div>
                                         <small *ngIf="boothList?.Villagename">{{boothList?.Villagename}}</small>
@@ -159,17 +163,19 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="tab-content" id="pills-tabContent">
+                                        <!-- Voters tab start here   -->
                                         <div class="tab-pane fade active" id="pills-voters" role="tabpanel"
                                             aria-labelledby="pills-voters-tab">
-                                            <!-- Voters table start here   -->
                                             <div class="col-sm-3">
                                                 <div class="input-group">
                                                     <input class="form-control" type="text" placeholder="Search..."
                                                         [formControl]="searchVoters" (keyup)="onKeyUpFilterVoters()" />
-                                                    <button type="button" class="btn btn-light border btn-sm" (click)="clearFiltersBooth('clearSearchVoters')" *ngIf="searchVoters.value"><i
-                                                            class="fas fa-times"></i></button>
+                                                    <button type="button" class="btn btn-light border btn-sm"
+                                                        (click)="clearFiltersBooth('clearSearchVoters')"
+                                                        *ngIf="searchVoters.value"><i class="fas fa-times"></i></button>
                                                     <button type="button" *ngIf="!searchVoters.value"
-                                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                                        class="btn btn-sm border btn-light"><i
+                                                            class="fas fa-search"></i></button>
                                                 </div>
                                             </div>
                                             <table class="table table-hover mb-0">
@@ -183,24 +189,92 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
+                                                    <tr
+                                                        *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                         <td>{{boothVoterList?.SrNo}}</td>
                                                         <td>{{boothVoterList?.EnglishName}}</td>
                                                         <td>{{boothVoterList?.VoterNo}}</td>
                                                         <td>{{boothVoterList?.Gender}}</td>
                                                         <td>{{boothVoterList?.MobileNo1}}</td>
                                                     </tr>
-                                                    
+
                                                 </tbody>
                                             </table>
                                             <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
                                                 <div class="alert alert-danger text-center py-2">No Data Found..!</div>
                                             </div>
-                                            <pagination-controls  id="voterPagination"  *ngIf="boothVoterListArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintionVoters(votersPageSize = $event)"> </pagination-controls>
+                                            <pagination-controls id="voterPagination"
+                                                *ngIf="boothVoterListArray?.length != 0" previousLabel="" nextLabel=""
+                                                (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                                            </pagination-controls>
                                             <!-- Voters table end here  -->
                                         </div>
+                                        <!-- family table start here   -->
                                         <div class="tab-pane fade" id="pills-family" role="tabpanel"
-                                            aria-labelledby="pills-family-tab">family</div>
+                                            aria-labelledby="pills-family-tab">
+                                            <table class="table">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th> Sr. No </th>
+                                                        <th> Voter Name </th>
+                                                        <th> Age </th>
+                                                        <th> Mobile No</th>
+                                                        <th> Email ID </th>
+                                                        <th> Occupation </th>
+                                                        <th>Qualification</th>
+                                                        <th> Migration </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container *ngFor="let data of data1">
+                                                        <tr (click)="data.expanded = !data.expanded">
+                                                            <td> {{data.srno}} </td>
+                                                            <td> {{data.votername }} </td>
+                                                            <td> {{data.age}} </td>
+                                                            <td> {{data.mobileno}} </td>
+                                                            <td> {{data.emailid}} </td>
+                                                            <td>{{data.occupation}}</td>
+                                                            <td> {{data.qualification}} </td>
+                                                            <td>{{data.migrated}}</td>
+                                                        </tr>
+
+                                                        <ng-container *ngIf="data.expanded">
+                                                            <tr>
+                                                                <td colspan="8" class="px-0">
+                                                                    <table class="table mb-0">
+                                                                        <thead class="bg-light">
+                                                                            <tr>
+                                                                                <th class="text-center"> Sr. No </th>
+                                                                                <th> Voter Name </th>
+                                                                                <th> Age </th>
+                                                                                <th> Mobile No</th>
+                                                                                <th> Email ID </th>
+                                                                                <th> Occupation </th>
+                                                                                <th>Qualification</th>
+                                                                                <th> Migration </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td> {{data.srno}} </td>
+                                                                                <td> {{data.votername }} </td>
+                                                                                <td> {{data.age}} </td>
+                                                                                <td> {{data.mobileno}} </td>
+                                                                                <td> {{data.emailid}} </td>
+                                                                                <td>{{data.occupation}}</td>
+                                                                                <td> {{data.qualification}} </td>
+                                                                                <td>{{data.migrated}}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                            </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- migrated tab start here   -->
                                         <div class="tab-pane fade" id="pills-migrated" role="tabpanel"
                                             aria-labelledby="pills-migrated-tab">
                                             <div class="col-sm-3">
@@ -243,6 +317,7 @@
                                             <pagination-controls  id="migratedPagination"  *ngIf="boothMigratedListArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintionMigrated(votersPageSize = $event)"> </pagination-controls>
                                             <!-- Migrated  table end here  -->
                                         </div>
+                                        <!-- Pending tab start here   -->
                                         <div class="tab-pane fade" id="pills-pending" role="tabpanel"
                                             aria-labelledby="pills-pending-tab">
                                             <div class="col-sm-3">
@@ -285,6 +360,7 @@
                                             </div>
                                             <pagination-controls  id="pendingPagination"  *ngIf="boothPendingListArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintionPending(pendingPageSize  = $event)"> </pagination-controls>
                                         </div>
+                                        <!-- Agents tab start here   -->
                                         <div class="tab-pane fade" id="pills-agents" role="tabpanel"
                                             aria-labelledby="pills-agents-tab">
                                             <div class="mb-1 text-end">
