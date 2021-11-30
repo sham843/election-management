@@ -20,13 +20,16 @@
                                     <input type="text" class="form-control" formControlName="FName" placeholder="First Name" [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
                                     <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
                                         <div *ngIf="f.FName.errors.required">First Name is required</div>
+                                        <div *ngIf="f.FName.errors.pattern">First Name can not contain space</div>
+                                        <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <label class="form-label required-field">Middle Name</label>
+                                    <label class="form-label">Middle Name</label>
                                     <input type="text" class="form-control" formControlName="MName" placeholder="Middle Name" [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
                                     <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
-                                        <div *ngIf="f.MName.errors.required">Middle Name is required</div>
+                                        <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space</div>
+                                        <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -34,6 +37,8 @@
                                     <input type="text" class="form-control" formControlName="LName" placeholder="Last Name" [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
                                     <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
                                         <div *ngIf="f.LName.errors.required">Last Name is required</div>
+                                        <div *ngIf="f.LName.errors.pattern">Last Name can not contain space</div>
+                                        <div *ngIf="f.LName.errors.onlyEnglish">Use English Language</div>
                                     </div>
                                 </div>
                             </div>
@@ -253,9 +258,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <!-- <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

@@ -41,6 +41,7 @@ export class CreateElectionsComponent implements OnInit {
   SubElectionDisabled = true;
   HighlightRow: any;
    subEleArray:any
+  prevArrayData: any;
 
 
    constructor(
@@ -86,9 +87,11 @@ export class CreateElectionsComponent implements OnInit {
   subElectionRadiobtn(subEleId: any) {
     if (subEleId == 1) {
       this.subElectionDivHide = true;
-      this.addSubElectionArray = [];
+      this.subElecTableHide = true;
+      this.prevArrayData.length != 0 ? this.addSubElectionArray = this.prevArrayData : this.addSubElectionArray = [];
     } else {
       this.createElectionForm.controls.SubElectionId.reset();
+      this.prevArrayData = this.addSubElectionArray;
       this.subElectionDivHide = false;
       this.addSubElectionArray = [];
       this.subElecTableHide = false;
@@ -383,5 +386,4 @@ export class CreateElectionsComponent implements OnInit {
       }
       );
   }
-
 }
