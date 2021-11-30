@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row mx-0 px-0" id="pageheader">
         <div class="col-sm-4">
-            <span class="page-name">Add Elections to Leader</span>
+            <span class="page-name">Assign Elections to Regional Leader</span>
         </div>
     </div>
 
@@ -96,7 +96,7 @@
                     <form [formGroup]="filterForm">
                         <div class="row g-2">
                             <div class="offset-8 col-sm-4">
-                                <ngx-select [allowClear]="true" [items]="getClientName" formControlName="ClientId" (select)="filterData()" optionValueField="id" optionTextField="Fullname" placeholder="Select Client Name" (remove)="clearFilter('ClientId')">
+                                <ngx-select [allowClear]="true" [items]="getClientName" formControlName="ClientId" (select)="filterData()" optionValueField="id" optionTextField="Fullname" placeholder="Select Leader Name" (remove)="clearFilter('ClientId')">
                                 </ngx-select>
                             </div>
                             <!-- <div class="col-sm-4">
@@ -118,7 +118,7 @@
                         <thead>
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Clients Name</th>
+                                <th>Leaders Name</th>
                                 <th>Election(Constituency)</th>
                                 <th></th>
                             </tr>
