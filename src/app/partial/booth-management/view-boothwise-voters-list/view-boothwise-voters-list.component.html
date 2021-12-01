@@ -279,7 +279,9 @@
                                                                     </div>
                                                                     <div class="col-sm-3">{{boothFamilyList.Family }}
                                                                     </div>
-                                                                    <div class="col-sm-2">{{boothFamilyList.MobileNo1}}
+                                                                    <div class="col-sm-2">
+                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
+                                                                        <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                                                                     </div>
                                                                     <div class="col-sm-2">{{boothFamilyList.occupation}}
                                                                     </div>
