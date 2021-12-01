@@ -60,8 +60,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   familyPageSize: number = 10;
   familyTotal: any;
   boothFamilyDetailsArray: any;
-  divHide: boolean = false;
   dataNotFound: boolean = false;
+  boothDataHide: boolean = false;
 
   clientIdFlag: boolean = true;
   electionFlag: boolean = true;
@@ -174,10 +174,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.spinner.hide();
         this.cardData = res.data1[0];
         this.villageDropdown = res.data2;
-        this.divHide = true;
+        this.dataNotFound = true;
         this.ClientWiseBoothList();
       } else {
-        this.divHide = false;
+        this.dataNotFound = false;
         this.villageDropdown = [];
         this.spinner.hide();
       }
@@ -223,7 +223,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'electionId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId })
     }
-    this.divHide = false;
+    this.dataNotFound = false;
     // this.paginationNo = 1;
     // this.getClientAgentWithBooths();
   }
@@ -265,9 +265,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothDetails?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
+        this.boothDataHide = true;
         this.spinner.hide();
         this.clickBoothListArray = res.data1[0];
+        setTimeout(() => { this.defaultShowVoterList();}, 100);
       } else {
+        this.boothDataHide = false;
         this.spinner.hide();
       }
       this.boothVoterList();
@@ -582,6 +585,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     })
   }
 
+  defaultShowVoterList() {
+    // let defualt click voters tab 
+    let clickOnVoterTab: any = document.getElementById('pills-voters-tab');
+    clickOnVoterTab.click();
+  }
   // ------------------------------------------  global uses end here   ------------------------------------------//
 
   //  ------------------------------------------   Add Agent modal function's start here  ------------------------------------------ //
