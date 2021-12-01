@@ -16,11 +16,11 @@
 
                             <div class="row mb-3">
                                 <div class="col-sm-6">
-                                    <label class="form-label required-field">Select Client</label>
+                                    <label class="form-label required-field">Select Leader</label>
                                     <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                         [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
                                         (select)=" getClientAgentListddl();clearAggentToBooth('agentName')"
-                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Client"
+                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Leader"
                                         (remove)="clearAggentToBooth('clientName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.ClientId.errors" class="invalid-feedback">
@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf="submitted && f.assembly.errors" class="invalid-feedback">
+                                    <div *ngIf="aAsubmitted && f.assembly.errors" class="invalid-feedback">
                                         <div *ngIf="f.assembly.errors.required">Assembly is required</div>
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@
                                                 <input type="text" formControlName="boothId" placeholder="Search Booths"
                                                     [(ngModel)]="searchboothList"
                                                     class="form-control border-0 form-control-sm"
-                                                    [ngClass]="{ 'is-invalid': submitted && f.boothList.errors}">
+                                                    [ngClass]="{ 'is-invalid': aAsubmitted && f.boothList.errors}">
                                             </div>
                                             <div class="card-body py-2 checkBox"
                                                 *ngIf="( boothListMergeArray | filter:searchboothList ) as boothResult">
@@ -151,8 +151,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <div class="row">
                                 <div class="col-sm-3">
@@ -175,7 +173,7 @@
                             <div class="offset-2 col-sm-5">
                                 <ngx-select [allowClear]="true" [items]="clientNameArray" optionValueField="id"
                                     (remove)="clearFilter('clientName')" (select)="filterData()"
-                                    optionTextField="Fullname" placeholder="Select Client" formControlName="ClientId">
+                                    optionTextField="Fullname" placeholder="Select Leader" formControlName="ClientId">
                                 </ngx-select>
 
                             </div>
