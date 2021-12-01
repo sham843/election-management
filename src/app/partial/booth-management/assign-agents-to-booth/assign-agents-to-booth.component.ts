@@ -61,6 +61,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   ConstituencyId: any;
   ConstituencyIdArray: any = [];
   globalEditObj:any;
+  // clientIdAgent: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -156,7 +157,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getClientAgentListddl() {
-    
+    debugger;
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId='+this.globalClientId+'&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -430,6 +431,10 @@ export class AssignAgentsToBoothComponent implements OnInit {
     })
   }
 
+  clientIdGet(clientId:any){
+    this.assAgentToBoothForm.controls['ClientId'].setValue(clientId);
+  }
+
   insertBoothAgent() {
     this.submitted = true;
     if (this.assignAgentForm.invalid) {
@@ -443,7 +448,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
       let FullName = data.FName + " " + data.MName + " " + data.LName;
       data.FullName = FullName;
       this.globalClientId = this.assAgentToBoothForm.value.ClientId;
-      alert(this.globalClientId)
 
       let obj = data.Id + '&FullName=' + data.FullName + '&MobileNo=' + data.MobileNo
         + '&FName=' + data.FName + '&MName=' + data.MName + '&LName=' + data.LName + '&Address=' + data.Address
