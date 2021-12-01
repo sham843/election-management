@@ -518,3 +518,16 @@ tr.active {
     font-size: 0.85rem;
     margin-bottom:0;
 }
+
+label.form-label.is-invalid {
+    color: #dc3545 !important;
+}
+
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+    background-image: none;
+}
+
+ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
+    border-color: #dc3545 !important;
+}
