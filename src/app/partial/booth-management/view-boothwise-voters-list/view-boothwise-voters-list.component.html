@@ -197,7 +197,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sr. No.</th>
-                                                            <th>Voters Full Name</th>
+                                                            <th>Voters Name</th>
                                                             <th>Voter ID</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
@@ -209,10 +209,20 @@
                                                             <td>{{boothVoterList?.SrNo}}</td>
                                                             <td>{{boothVoterList?.EnglishName}}</td>
                                                             <td>{{boothVoterList?.VoterNo}}</td>
-                                                            <td>{{boothVoterList?.Gender}}</td>
-                                                            <td>{{boothVoterList?.MobileNo1}}</td>
-                                                        </tr>
 
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="boothVoterList?.Gender == 'M'">Male</div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.MobileNo1"><a
+                                                                        class="calltomember"
+                                                                        href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a>
+                                                                </div>
+                                                                <div *ngIf="!boothVoterList?.MobileNo1">-</div>
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                                 <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
@@ -258,76 +268,68 @@
                                                         <div class="col-sm-1">Migration</div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
-                                                    <div class="accordion-item"> 
-                                                        <div class="accordion-header familytree-row">
-                                                            <div class="row">
-                                                                <div class="col-sm-1">1</div>
-                                                                <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
-                                                                <div class="col-sm-2">9876543210</div>
-                                                                <div class="col-sm-2">Service</div>
-                                                                <div class="col-sm-2">BE Computer</div>
-                                                                <div class="col-sm-1">Yes</div>
-                                                                <div class="col-sm-1">
-                                                                    <a class="accordion-button collapsed"
-                                                                        data-bs-toggle="collapse"
-                                                                        data-bs-target="#flush-collapseOne"
-                                                                        aria-expanded="false" aria-controls="flush-collapseOne">
-                                                                    </a>
-                                                                </div>
+                                                    <div class="accordion-item">
+                                                        <ng-container
+                                                            *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
 
+                                                            <div class="accordion-header familytree-row">
+                                                                <div class="row"
+                                                                    (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                    <div class="col-sm-1">{{boothFamilyList.SrNo}}
+                                                                    </div>
+                                                                    <div class="col-sm-3">{{boothFamilyList.Family }}
+                                                                    </div>
+                                                                    <div class="col-sm-2">
+                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
+                                                                        <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
+                                                                    </div>
+                                                                    <div class="col-sm-2">{{boothFamilyList.occupation}}
+                                                                    </div>
+                                                                    <div class="col-sm-2">
+                                                                        {{boothFamilyList.qualification}}</div>
+                                                                    <div class="col-sm-1">{{boothFamilyList.migrated}}
+                                                                    </div>
+                                                                    <div class="col-sm-1">
+                                                                        <a class="accordion-button collapsed"
+                                                                            data-bs-toggle="collapse"
+                                                                            [attr.data-bs-target]="'#flush-collapseOne'+i"
+                                                                            aria-expanded="false"
+                                                                            [attr.aria-controls]="'flush-collapseOne'+i">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                                            aria-labelledby="family-1"
-                                                            data-bs-parent="#familytreeaccordion">
-                                                            <div class="accordion-body p-0">
-                                                                <div class="row familytree-details">
-                                                                    <div class="col-sm-1">1</div>
-                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
-                                                                    <div class="col-sm-2">9876543210</div>
-                                                                    <div class="col-sm-2">Service</div>
-                                                                    <div class="col-sm-2">BE Computer</div>
-                                                                    <div class="col-sm-1">Yes</div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div> 
-                                                                <div class="row familytree-details">
-                                                                    <div class="col-sm-1">1</div>
-                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
-                                                                    <div class="col-sm-2">9876543210</div>
-                                                                    <div class="col-sm-2">Service</div>
-                                                                    <div class="col-sm-2">BE Computer</div>
-                                                                    <div class="col-sm-1">Yes</div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div> 
-                                                                <div class="row familytree-details">
-                                                                    <div class="col-sm-1">1</div>
-                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
-                                                                    <div class="col-sm-2">9876543210</div>
-                                                                    <div class="col-sm-2">Service</div>
-                                                                    <div class="col-sm-2">BE Computer</div>
-                                                                    <div class="col-sm-1">Yes</div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div> 
-                                                                <div class="row familytree-details">
-                                                                    <div class="col-sm-1">1</div>
-                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
-                                                                    <div class="col-sm-2">9876543210</div>
-                                                                    <div class="col-sm-2">Service</div>
-                                                                    <div class="col-sm-2">BE Computer</div>
-                                                                    <div class="col-sm-1">Yes</div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div> 
-                                                                <div class="row familytree-details">
-                                                                    <div class="col-sm-1">1</div>
-                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
-                                                                    <div class="col-sm-2">9876543210</div>
-                                                                    <div class="col-sm-2">Service</div>
-                                                                    <div class="col-sm-2">BE Computer</div>
-                                                                    <div class="col-sm-1">Yes</div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div> 
+
+                                                            <div id="flush-collapseOne{{i}}"
+                                                                class="accordion-collapse collapse"
+                                                                aria-labelledby="family-1"
+                                                                data-bs-parent="#familytreeaccordion">
+                                                                <div class="accordion-body p-0">
+
+                                                                    <ng-container *ngIf="boothFamilyList.expanded">
+                                                                        <div class="row familytree-details"
+                                                                            *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.SrNo}}</div>
+                                                                            <div class="col-sm-3">
+                                                                                {{boothFamilyDetails?.Family}}</div>
+                                                                            <div class="col-sm-2">
+                                                                                <div *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a> </div>
+                                                                                <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                {{boothFamilyDetails?.Occupation}}</div>
+                                                                            <div class="col-sm-2">
+                                                                                {{boothFamilyDetails?.Qualification}}
+                                                                            </div>
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.Migrated}}</div>
+                                                                            <div class="col-sm-1"></div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </ng-container>
                                                     </div>
                                                 </div>
 
@@ -440,7 +442,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sr. No.</th>
-                                                            <th>Voters Full Name</th>
+                                                            <th>Voters Name</th>
                                                             <th>Voter ID</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
@@ -453,8 +455,17 @@
                                                             <td>{{MigratedList?.SrNo}}</td>
                                                             <td>{{MigratedList?.EnglishName}}</td>
                                                             <td>{{MigratedList?.VoterNo}}</td>
-                                                            <td>{{MigratedList?.Gender}}</td>
-                                                            <td>{{MigratedList?.MobileNo1}}</td>
+                                                            <td>
+                                                                <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="MigratedList?.Gender == 'M'">Male</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="MigratedList?.MobileNo1"><a
+                                                                        class="calltomember"
+                                                                        href="tel:{{MigratedList?.MobileNo1}}">{{MigratedList?.MobileNo1}}</a>
+                                                                </div>
+                                                                <div *ngIf="!MigratedList?.MobileNo1">-</div>
+                                                            </td>
                                                             <td>{{MigratedList?.MigratedCity}}</td>
                                                         </tr>
 
@@ -499,7 +510,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sr. No.</th>
-                                                            <th>Voters Full Name</th>
+                                                            <th>Voters Name</th>
                                                             <th>Voter ID</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
@@ -512,8 +523,17 @@
                                                             <td>{{PendingList?.SrNo}}</td>
                                                             <td>{{PendingList?.EnglishName}}</td>
                                                             <td>{{PendingList?.VoterNo}}</td>
-                                                            <td>{{PendingList?.Gender}}</td>
-                                                            <td>{{PendingList?.MobileNo1}}</td>
+                                                            <td>
+                                                                <div *ngIf="PendingList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="PendingList?.Gender == 'M'">Male</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="PendingList?.MobileNo1"><a
+                                                                        class="calltomember"
+                                                                        href="tel:{{PendingList?.MobileNo1}}">{{PendingList?.MobileNo1}}</a>
+                                                                </div>
+                                                                <div *ngIf="!PendingList?.MobileNo1">-</div>
+                                                            </td>
                                                             <td>{{PendingList?.MigratedCity}}</td>
                                                         </tr>
 
@@ -579,7 +599,12 @@
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
                                                             <td>{{agentList?.FullName}}</td>
-                                                            <td>{{agentList?.MobileNo}}</td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.MobileNo"><a class="calltomember"
+                                                                        href="tel:{{agentList?.MobileNo}}">{{agentList?.MobileNo}}</a>
+                                                                </div>
+                                                                <div *ngIf="!agentList?.MobileNo">-</div>
+                                                            </td>
                                                             <td>{{agentList?.TotalVoter}}</td>
                                                             <td>{{agentList?.TotalFilled}}</td>
                                                             <td>{{agentList?.TotalMigrated}}</td>
