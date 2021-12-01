@@ -7,11 +7,6 @@
         </div>
         <div class="col-sm-10 text-end">
             <div class="row g-2">
-                <div class="col-sm-auto">
-                    <span class="badge bg-danger py-2 fw-normal rounded-pill px-4 mt-1">
-                        This Agent is Blocked
-                    </span>
-                </div>
                 <div class="col-sm">
                     <input type="date" class="form-control">
                 </div>
@@ -39,10 +34,19 @@
             <div class="card">
                 <div class="card-body">
                     <div class="profile-info">
-                        <img src="assets/images/Profile-Photo.jpg">
-                        <h5>Agent Middle Name</h5>
-                        <p class="contact">+91-9876543210</p>
-                        <p class="contact">Address</p>
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="assets/images/Profile-Photo.jpg">
+                            </div>
+                            <div class="flex-grow-1 ms-3 pt-2">
+                                <h5>Agent Middle Name</h5>
+                                <p class="contact">+91-9876543210</p>
+                                <p class="contact">Address</p>
+                                <span class="badge bg-danger py-1 fw-normal rounded-pill px-3 mt-1">
+                                    This Agent is Blocked
+                                </span>
+                            </div>
+                          </div>                        
                         <div class="mb-3">
                             <small class="text-muted">Booths(s) Assigned :</small>
                             <p class="area">Bibwewadi, Kondhwa, Pune</p>
@@ -154,7 +158,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body profile-info">
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm-2">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> Families </p>
+                            </a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> Voters </p>
+                            </a>
+                        </div>
+                    </div>
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
@@ -177,9 +195,7 @@
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Kailash Rajendra Sanap
-                                    <img src="assets/images/new.gif">
-                                </td>
+                                <td>Kailash Rajendra Sanap</td>
                                 <td>12:35:25 PM</td>
                                 <td>132034645</td>
                                 <td>Male</td>
@@ -195,7 +211,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </div>
 
             <div class="card">
