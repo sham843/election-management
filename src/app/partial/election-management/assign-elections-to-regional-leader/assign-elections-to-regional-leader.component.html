@@ -14,7 +14,7 @@
                         <div class="form-container">
                             <div class="mb-3">
                                 <label class="form-label required-field">Select Leader Name</label>
-                                <ngx-select [allowClear]="true" [items]="getClientName" formControlName="ClientId" optionValueField="id" optionTextField="Fullname" placeholder="Select Leader Name" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                                <ngx-select [allowClear]="true" [items]="getClientName" formControlName="ClientId" optionValueField="id" optionTextField="Fullname" placeholder="Select Leader Name" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }" (remove)="clearForm()">
                                 </ngx-select>
                                 <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
                                     <div *ngIf="f.ClientId.errors.required">Leader Name is required</div>
@@ -48,7 +48,7 @@
                                     <button class="btn btn-outline-primary btn-sm" type="button" (click)="addSubConstituency()" [disabled]="(!assignElectionForm.value.ElectionId || !assignElectionForm.value.strConstituency) ? true : false">Add</button>
                                 </div>
                                 <hr>
-                                <table class="table table-hover" *ngIf="addSubConstituencyArray != 0 ">
+                                <table class="table table-hover" *ngIf="addSubConstituencyArray.length != 0 ">
                                     <thead>
                                         <tr>
                                             <th>Sr. No.</th>
