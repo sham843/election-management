@@ -10,13 +10,13 @@
                 <div class="row g-2">
                     <div class="col-sm-4">
                         <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-                            (remove)="clearFilter('clientId')" (select)="getElectionName()" optionValueField="id"
+                            (remove)="clearFilter('clientId')" (select)="boothDataHide =false; getElectionName()" optionValueField="id"
                             optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm-4">
                         <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
-                            (remove)="clearFilter('electionId')" (select)="getConstituencyName()"
+                            (remove)="clearFilter('electionId')" (select)="boothDataHide =false;  getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0" placeholder="Select Election">
                         </ngx-select>
@@ -120,7 +120,7 @@
                             <div class="card shadow-none border">
                                 <div class="card-header p-0">
                                     <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
-                                        <li class="nav-item" role="presentation"   (click)="votersPaginationNo = 1; boothVoterList();">
+                                        <li class="nav-item" role="presentation"   (click)="votersPaginationNo = 1; this.searchVoters.setValue(''); boothVoterList();">
                                             <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-voters" type="button" role="tab"
                                                 aria-controls="pills-voters" aria-selected="false">
@@ -128,7 +128,7 @@
                                                 Voters 
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation" (click)="familyPaginationNo = 1;boothFamilyList()">
+                                        <li class="nav-item" role="presentation" (click)="familyPaginationNo = 1; this.searchFamily.setValue(''); boothFamilyList()">
                                             <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-family" type="button" role="tab"
                                                 aria-controls="pills-family" aria-selected="false">
@@ -136,7 +136,7 @@
                                                 Families
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation"  (click)="migratedPaginationNo = 1;boothMigratedList()">
+                                        <li class="nav-item" role="presentation"  (click)="migratedPaginationNo = 1; this.searchMigrated.setValue(''); boothMigratedList()">
                                             <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-migrated" type="button" role="tab"
                                                 aria-controls="pills-migrated" aria-selected="true">
@@ -144,7 +144,7 @@
                                                 Migrated
                                             </button>
                                         </li>
-                                        <li class="nav-item" role="presentation" (click)="pendingPaginationNo = 1;boothPendingList()">
+                                        <li class="nav-item" role="presentation" (click)="pendingPaginationNo = 1; this.searchPending.setValue(''); boothPendingList()">
                                             <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-pending" type="button" role="tab"
                                                 aria-controls="pills-pending" aria-selected="false">
@@ -269,6 +269,7 @@
                                                                         </thead>
                                                                         <tbody>
                                                                             <tr *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                                                <td>{{boothFamilyDetails?.SrNo}}</td>
                                                                                 <td>{{boothFamilyDetails?.Family}}</td>
                                                                                 <td>{{boothFamilyDetails?.MobileNo1}}</td>
                                                                                 <td>{{boothFamilyDetails?.Email}}</td>
@@ -418,7 +419,7 @@
                                                         <td>{{agentList?.MobileNo}}</td>
                                                         <td>{{agentList?.TotalVoter}}</td>
                                                         <td>{{agentList?.TotalFilled}}</td>
-                                                        <td>{{agentList?.TotalFilled}}</td>
+                                                        <td>{{agentList?.Pending}}</td>
                                                     </tr>
                                                     <!-- <tr>
                                                         <td>1</td>
@@ -497,7 +498,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="AddAgentModalLabel">Add Agent</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="this.submitted=false"></button>
             </div>
             <div class="modal-body chartbox">
                 <form [formGroup]="assignAgentForm">
@@ -570,7 +571,7 @@
                         <div class="row mb-3">
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-outline-secondary btn-sm"
-                                    (click)="agentForm()">Clear</button>
+                                    (click)="this.submitted=false; agentForm()">Clear</button>
                             </div>
                             <div class="col-sm-6 text-end">
                                 <button type="button" class="btn btn-primary btn-main btn-sm"

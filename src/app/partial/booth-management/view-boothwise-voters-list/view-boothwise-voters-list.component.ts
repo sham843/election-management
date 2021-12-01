@@ -69,7 +69,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   assignAgentForm!: FormGroup;
   submitted = false;
-  btnText = 'Assign Booths';
+  btnText = 'Add Agent';
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -575,6 +575,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       this.selVillage.setValue(0);
       this.ClientWiseBoothList();
     }
+    this.boothDataHide =false;
   }
 
   getIsSubEleAppId(eleId: any) {
