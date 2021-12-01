@@ -466,6 +466,9 @@ body{
 .ngx-pagination {
     padding: 0 !important;
     margin-top: 10px;
+    display:flex;
+    justify-content: end;
+    margin-bottom:0 !important;
 }
 
 .ngx-pagination .current {
