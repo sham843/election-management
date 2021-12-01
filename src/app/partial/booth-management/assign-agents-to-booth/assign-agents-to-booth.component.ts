@@ -107,9 +107,9 @@ export class AssignAgentsToBoothComponent implements OnInit {
       Id: [0],
       ClientId: [''],
       FullName: [''],
-      FName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
-      MName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
-      LName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
+      FName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      MName: ['',Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       Address: ['', Validators.required],
       MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
       IsMemberAddAllow: [''],
@@ -311,7 +311,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.boothListArray = res.data1;
         this.boothListArray.map((ele: any) => {
           if (this.assemblyCheckBoxCheck) {
-            this.boothListMergeArray.unshift(ele);
+            this.boothListMergeArray.push(ele);
           }
         });
         if (this.btnText == 'Update Booths') {
