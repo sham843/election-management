@@ -113,7 +113,7 @@ body{
     font-weight: 400 !important;
     text-align: left;
     margin-bottom: 0;
-    font-size: 1.7rem !important;
+    font-size: 1.35rem !important;
 }
 
 #dash-stats .bg-cyan {
@@ -199,20 +199,20 @@ body{
 }
 
 #pageheader .btn {
-    /* width: 34px; */
-    height: 34px;
+    /* width: 34px; 
+    height: 34px;*/
     box-shadow: none;
     outline: none;
 }
 
-#pageheader a {
+/* #pageheader a {
     background-color: var(--main-color);
     color: #fff;
     padding: 5px 10px;
     text-decoration: none;
     border-radius: 4px;
     font-size: 0.8rem;
-}
+} */
 .chartbox .card {
     border: none;
     border-radius: 10px;

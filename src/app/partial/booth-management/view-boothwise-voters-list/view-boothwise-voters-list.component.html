@@ -45,7 +45,7 @@
         </div>
     </div>
     <ng-container *ngIf="dataNotFound">
-        <div class="row" id="dash-stats">
+        <div class="row g-2" id="dash-stats">
             <div class="col-sm-2">
                 <div class="card card-body bg-cyan">
                     <i class="fas fa-person-booth"></i>
@@ -78,7 +78,7 @@
                 <div class="card card-body bg-red">
                     <i class="fas fa-star-half-alt"></i>
                     <p>Fill / Pending</p>
-                    <h3>{{cardData?.TotalFilled}} / {{cardData?.TotalPending}}</h3>
+                    <h3>{{cardData?.TotalFilled}}/{{cardData?.TotalPending}}</h3>
                 </div>
             </div>
             <div class="col-sm-2">
@@ -248,17 +248,100 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <table class="table">
+                                                <div class="accordion accordion-flush" id="familytreeaccordion">
+                                                    <div class="row familytree-header">
+                                                        <div class="col-sm-1">Sr. No.</div>
+                                                        <div class="col-sm-3">Voter Name</div>
+                                                        <div class="col-sm-2">Mobile No.</div>
+                                                        <div class="col-sm-2">Occupation</div>
+                                                        <div class="col-sm-2">Qualification</div>
+                                                        <div class="col-sm-1">Migration</div>
+                                                        <div class="col-sm-1"></div>
+                                                    </div>
+                                                    <div class="accordion-item"> 
+                                                        <div class="accordion-header familytree-row">
+                                                            <div class="row">
+                                                                <div class="col-sm-1">1</div>
+                                                                <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
+                                                                <div class="col-sm-2">9876543210</div>
+                                                                <div class="col-sm-2">Service</div>
+                                                                <div class="col-sm-2">BE Computer</div>
+                                                                <div class="col-sm-1">Yes</div>
+                                                                <div class="col-sm-1">
+                                                                    <a class="accordion-button collapsed"
+                                                                        data-bs-toggle="collapse"
+                                                                        data-bs-target="#flush-collapseOne"
+                                                                        aria-expanded="false" aria-controls="flush-collapseOne">
+                                                                    </a>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                                            aria-labelledby="family-1"
+                                                            data-bs-parent="#familytreeaccordion">
+                                                            <div class="accordion-body p-0">
+                                                                <div class="row familytree-details">
+                                                                    <div class="col-sm-1">1</div>
+                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
+                                                                    <div class="col-sm-2">9876543210</div>
+                                                                    <div class="col-sm-2">Service</div>
+                                                                    <div class="col-sm-2">BE Computer</div>
+                                                                    <div class="col-sm-1">Yes</div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div> 
+                                                                <div class="row familytree-details">
+                                                                    <div class="col-sm-1">1</div>
+                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
+                                                                    <div class="col-sm-2">9876543210</div>
+                                                                    <div class="col-sm-2">Service</div>
+                                                                    <div class="col-sm-2">BE Computer</div>
+                                                                    <div class="col-sm-1">Yes</div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div> 
+                                                                <div class="row familytree-details">
+                                                                    <div class="col-sm-1">1</div>
+                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
+                                                                    <div class="col-sm-2">9876543210</div>
+                                                                    <div class="col-sm-2">Service</div>
+                                                                    <div class="col-sm-2">BE Computer</div>
+                                                                    <div class="col-sm-1">Yes</div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div> 
+                                                                <div class="row familytree-details">
+                                                                    <div class="col-sm-1">1</div>
+                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
+                                                                    <div class="col-sm-2">9876543210</div>
+                                                                    <div class="col-sm-2">Service</div>
+                                                                    <div class="col-sm-2">BE Computer</div>
+                                                                    <div class="col-sm-1">Yes</div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div> 
+                                                                <div class="row familytree-details">
+                                                                    <div class="col-sm-1">1</div>
+                                                                    <div class="col-sm-3">ढेंबरे पूजा किरण (17)</div>
+                                                                    <div class="col-sm-2">9876543210</div>
+                                                                    <div class="col-sm-2">Service</div>
+                                                                    <div class="col-sm-2">BE Computer</div>
+                                                                    <div class="col-sm-1">Yes</div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- <table class="table">
                                                     <thead class="bg-light">
                                                         <tr>
                                                             <th> Sr. No </th>
                                                             <th> Voter Name </th>
-                                                            <!-- <th> Age </th> -->
+                                                            <th> Age </th>
                                                             <th> Mobile No</th>
-                                                            <!-- <th> Email ID </th>
-                                                        <th> Occupation </th>
-                                                        <th>Qualification</th>
-                                                        <th> Migration </th> -->
+                                                            <th> Email ID </th>
+                                                            <th> Occupation </th>
+                                                            <th>Qualification</th>
+                                                            <th> Migration </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -269,13 +352,12 @@
                                                                 <td> {{boothFamilyList.SrNo}} </td>
                                                                 <td> {{boothFamilyList.Family }} </td>
                                                                 <td> {{boothFamilyList.MobileNo1}} </td>
-                                                                <!-- <td> {{boothFamilyList.mobileno}} </td>
-                                                            <td> {{boothFamilyList.emailid}} </td>
-                                                            <td> {{boothFamilyList.occupation}}</td>
-                                                            <td> {{boothFamilyList.qualification}} </td>
-                                                            <td> {{boothFamilyList.migrated}}</td> -->
+                                                                <td> {{boothFamilyList.mobileno}} </td>
+                                                                <td> {{boothFamilyList.emailid}} </td>
+                                                                <td> {{boothFamilyList.occupation}}</td>
+                                                                <td> {{boothFamilyList.qualification}} </td>
+                                                                <td> {{boothFamilyList.migrated}}</td>
                                                             </tr>
-
                                                             <ng-container *ngIf="boothFamilyList.expanded">
                                                                 <tr>
                                                                     <td colspan="8" class="px-0">
@@ -285,7 +367,7 @@
                                                                                     <th class="text-center"> Sr. No
                                                                                     </th>
                                                                                     <th> Voter Name </th>
-                                                                                    <!-- <th> Age </th> -->
+                                                                                    <th> Age </th>
                                                                                     <th> Mobile No</th>
                                                                                     <th> Email ID </th>
                                                                                     <th> Occupation </th>
@@ -310,7 +392,6 @@
                                                                                     </td>
                                                                                     <td>{{boothFamilyDetails?.Migrated}}
                                                                                     </td>
-                                                                                    <!-- <td>{{boothFamilyDetails?.Address}}</td> -->
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -319,7 +400,7 @@
                                                             </ng-container>
                                                         </ng-container>
                                                     </tbody>
-                                                </table>
+                                                </table> -->
                                                 <div class="mt-2 text-end" *ngIf="boothFamilyListArray?.length == 0">
                                                     <div class="alert alert-danger text-center py-2">No Data Found..!
                                                     </div>
@@ -490,8 +571,8 @@
                                                             <th>Migrated</th>
                                                             <th>Families</th>
                                                             <th>Pending</th>
-                                                        
-                                                           
+
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
