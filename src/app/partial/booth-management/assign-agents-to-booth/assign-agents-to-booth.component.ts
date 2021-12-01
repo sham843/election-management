@@ -442,7 +442,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
       data.IsMemberAddAllow == true ? data.IsMemberAddAllow = 1 : data.IsMemberAddAllow = 0 //only assign true = 1 & false = 0
       let FullName = data.FName + " " + data.MName + " " + data.LName;
       data.FullName = FullName;
-      this.globalClientId = (this.assAgentToBoothForm.value.ClientId);
+      this.globalClientId = this.assAgentToBoothForm.value.ClientId;
+      alert(this.globalClientId)
 
       let obj = data.Id + '&FullName=' + data.FullName + '&MobileNo=' + data.MobileNo
         + '&FName=' + data.FName + '&MName=' + data.MName + '&LName=' + data.LName + '&Address=' + data.Address
