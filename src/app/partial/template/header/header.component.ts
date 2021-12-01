@@ -228,7 +228,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   logOut() {
     sessionStorage.clear();
-    this.router.navigate(['/home'], { relativeTo: this.route })
+    this.router.navigate(['/login'], { relativeTo: this.route })
   }
 
   updateProfile() {
