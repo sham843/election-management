@@ -264,7 +264,8 @@ export class CreateElectionsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.electionDetailsArray = res.data1[0];
-        this.addSubElectionArray = res.data2; // same array name add and edit record
+        res.data2 == "" || res.data2 == null || res.data2 == undefined ? this.addSubElectionArray = [] : this.addSubElectionArray = res.data2;
+        // this.addSubElectionArray = res.data2; // same array name add and edit record
         this.patchElectionRecord();
       } else {
         //this.toastrService.error("Data is not available");
