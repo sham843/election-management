@@ -1,14 +1,31 @@
 <div class="container-fluid">
     <div class="row mx-0 px-0" id="pageheader">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <span class="page-name">
                 Agent Activity
             </span>
         </div>
-        <div class="col-sm-8 text-end">
-            <span class="badge bg-danger py-0 fw-normal rounded-pill px-4">
-                This Agent is Blocked
-            </span>
+        <div class="col-sm-10 text-end">
+            <div class="row g-2">
+                <div class="col-sm">
+                    <input type="date" class="form-control">
+                </div>
+                <div class="col-sm">
+                    <select class="form-select">
+                        <option value="">Select Agent</option>
+                    </select>
+                </div>
+                <div class="col-sm">
+                    <select class="form-select">
+                        <option value="">Select Area Agent</option>
+                    </select>
+                </div>
+                <div class="col-sm">
+                    <select class="form-select">
+                        <option value="">Select Booth</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -17,10 +34,19 @@
             <div class="card">
                 <div class="card-body">
                     <div class="profile-info">
-                        <img src="assets/images/Profile-Photo.jpg">
-                        <h5>Agent Middle Name</h5>
-                        <p class="contact">+91-9876543210</p>
-                        <p class="contact">Address</p>
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="assets/images/Profile-Photo.jpg">
+                            </div>
+                            <div class="flex-grow-1 ms-3 pt-2">
+                                <h5>Agent Middle Name</h5>
+                                <p class="contact">+91-9876543210</p>
+                                <p class="contact">Address</p>
+                                <span class="badge bg-danger py-1 fw-normal rounded-pill px-3 mt-1">
+                                    This Agent is Blocked
+                                </span>
+                            </div>
+                          </div>                        
                         <div class="mb-3">
                             <small class="text-muted">Booths(s) Assigned :</small>
                             <p class="area">Bibwewadi, Kondhwa, Pune</p>
@@ -28,7 +54,7 @@
                         <div class="row row-cols-1 row-cols-md-3 g-2 mb-3">
                             <div class="col">
                                 <div class="card shadow-none border">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">7212</h5>
                                         <p class="card-text">
                                             Total Voters
@@ -38,7 +64,7 @@
                             </div>
                             <div class="col">
                                 <div class="card shadow-none border">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">2426</h5>
                                         <p class="card-text">
                                             Data Filled
@@ -48,7 +74,7 @@
                             </div>
                             <div class="col">
                                 <div class="card shadow-none border">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">5541</h5>
                                         <p class="card-text">
                                             Date Pending
@@ -58,7 +84,7 @@
                             </div>
                             <div class="col">
                                 <div class="card shadow-none border">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">7212</h5>
                                         <p class="card-text">
                                             Total Migrated
@@ -68,7 +94,7 @@
                             </div>
                             <div class="col">
                                 <div class="card shadow-none border">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">2426</h5>
                                         <p class="card-text">
                                             Total Families
@@ -78,7 +104,7 @@
                             </div>
                             <div class="col">
                                 <div class="card shadow-none border">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">5541</h5>
                                         <p class="card-text">
                                             New Voters
@@ -89,7 +115,8 @@
                         </div>
 
                         <div class="card card-body shadow-none border mb-3">
-                            Pie chart for above boxes
+                            Pie chart<br>
+                            total x family count x pending count
                         </div>
 
                         <div class="row justify-content-end">
@@ -105,7 +132,7 @@
         </div>
         <div class="col-sm-8">
             <div class="card mb-3">
-                <div class="card-header">
+                <!-- <div class="card-header">
                     <div class="row justify-content-end">
                         <div class="col-sm">
                             <div class="form-check">
@@ -114,9 +141,6 @@
                                     Show New Voters
                                 </label>
                             </div>
-                            <!-- <button class="btn btn-sm btn-light text-main">
-                                <i class="fas fa-map"></i>
-                            </button> -->
                         </div>
                         <div class="col-sm-auto">
                             <div class="form-check">
@@ -130,8 +154,40 @@
                             <input type="date" class="form-control">
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
+                </div> -->
+                <div class="card-body profile-info">
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> Families </p>
+                            </a>
+                        </div>
+                        <div class="col-sm">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> Voters </p>
+                            </a>
+                        </div>
+                        <div class="col-sm">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> Pending </p>
+                            </a>
+                        </div>
+                        <div class="col-sm">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> Filled </p>
+                            </a>
+                        </div>
+                        <div class="col-sm">
+                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">2426</h5>
+                                <p class="card-text"> New Voters </p>
+                            </a>
+                        </div>
+                    </div>
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
@@ -154,9 +210,7 @@
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Kailash Rajendra Sanap
-                                    <img src="assets/images/new.gif">
-                                </td>
+                                <td>Kailash Rajendra Sanap</td>
                                 <td>12:35:25 PM</td>
                                 <td>132034645</td>
                                 <td>Male</td>
@@ -172,7 +226,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </div>
 
             <div class="card">
@@ -180,7 +234,7 @@
                     Agent Performance
                 </div>
                 <div class="card-body">
-                    day vs activity graph
+                    day vs activity graph (family & individual voter)
                 </div>
             </div>
         </div>

@@ -65,7 +65,7 @@ export class CreateRegionalLeaderComponent implements OnInit {
       FName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       MName: ['',Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-      Address: ['', Validators.required],
+      Address: ['', [Validators.required,Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
       Gender: ['', Validators.required],
       MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
       ContactNo2: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],

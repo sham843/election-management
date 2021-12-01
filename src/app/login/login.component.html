@@ -30,9 +30,9 @@
                                 <div class="mb-3">
                                     <label class="form-label">Password <span class="text-danger">*</span></label>
                                     <div class="input-group">
-                                        <input type="password" placeholder="Password" class="form-control" formControlName="Password" [ngClass]="{ 'is-invalid': submitted && f.Password.errors }">
-                                        <button type="button" class="btn btn-light bg-transparent">
-                                            <i class="fas fa-eye"></i>
+                                        <input autocomplete="off" [type]="show_button ? 'text' : 'password'" class="form-control" placeholder="Password" formControlName="Password" [ngClass]="{ 'is-invalid': submitted && f.Password.errors }">
+                                        <button type="button" class="btn btn-light bg-transparent" (click)="showPassword()">
+                                            <i class="eye-icon-pos" [class]="show_eye ? 'fa fa-eye' : 'fa fa-eye-slash'"> </i>
                                         </button>
                                     </div>
                                 </div>

@@ -138,6 +138,7 @@
                                 <textarea class="form-control" id="txtAddress" formControlName="Address" placeholder="Address" [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
                                 <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
                                     <div *ngIf="f.Address.errors.required">Address is required</div>
+                                    <div *ngIf="f.Address.errors.pattern">Address can not contain space</div>
                                 </div>
                             </div>
                             <div class="row mt-4">
