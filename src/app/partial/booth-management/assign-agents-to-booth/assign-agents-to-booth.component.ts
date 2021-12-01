@@ -99,8 +99,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
   get a() { return this.assAgentToBoothForm.controls };
 
   clearAgentToBoothForm() {
-    this.submitted = false;
-    this.AgentForm();
+    this.aAsubmitted = false;
+    this.AgentToBoothForm();
   }
 
   AgentForm() {
@@ -351,10 +351,12 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
     if (this.assAgentToBoothForm.invalid) {
       this.spinner.hide();
-    }else if (this.AssemblyBoothArray.length == 0  ||  this.AssemblyBoothArray.length == 0){
-      this.toastrService.error("Assembly Or Booth is required");
       return;
     }
+    // else if (this.AssemblyBoothArray.length == 0  ||  this.AssemblyBoothArray.length == 0){
+    //   this.toastrService.error("Assembly Or Booth is required");
+    //   return;
+    // }
       else {
       this.spinner.show();
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);

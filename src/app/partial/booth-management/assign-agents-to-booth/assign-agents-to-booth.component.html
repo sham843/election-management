@@ -13,7 +13,15 @@
                 <div class="card-body">
                     <div class="form-container">
                         <form [formGroup]="assAgentToBoothForm" (ngSubmit)="onSubmitAssAgentToBoothForm()">
-
+                            <!-- <div class="mb-2">
+                                <label for="txtConstituencyName" class="form-label required-field">Constituency Name</label>
+                                <input type="text" class="form-control" 
+                                    placeholder="Constituency Name" formControlName="ConstituencyName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.ConstituencyName.errors }">
+                                <div *ngIf="submitted && f.ConstituencyName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.ConstituencyName.errors.required">Constituency Name is required</div>
+                                </div>
+                            </div> -->
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Leader</label>
@@ -117,9 +125,9 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf="aAsubmitted && f.assembly.errors" class="invalid-feedback">
-                                        <div *ngIf="f.assembly.errors.required">Assembly is required</div>
-                                    </div>
+                                    <!-- <div *ngIf="aAsubmitted && a.assembly.errors" class="invalid-feedback">
+                                        <div *ngIf="a.assembly.errors.required">Assembly is required</div>
+                                    </div> -->
                                 </div>
 
                                 <div class="col-sm-6">
@@ -154,7 +162,7 @@
 
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <button type="button" class="btn btn-secondary btn-sm">Clear</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="clearAgentToBoothForm()">Clear</button>
                                 </div>
                                 <div class="col-sm-9 text-end">
                                     <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
