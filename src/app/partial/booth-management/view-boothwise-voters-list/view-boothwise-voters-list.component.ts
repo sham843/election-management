@@ -574,8 +574,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'village') {
       this.selVillage.setValue(0);
       this.ClientWiseBoothList();
+      this.boothDataHide =false;
     }
-    this.boothDataHide =false;
+ 
   }
 
   getIsSubEleAppId(eleId: any) {

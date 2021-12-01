@@ -108,7 +108,7 @@
                                 <div class="list-group">
                                     <a class="list-group-item d-flex justify-content-between align-items-start"
                                         aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"
-                                        (click)="clickBoothList(boothList); boothVoterList()"
+                                        (click)="this.searchVoters.setValue('');clickBoothList(boothList); boothVoterList()"
                                         [class.active]="boothList.BoothId == HighlightRow">
                                         <div class="ms-2 me-auto">
                                             <div class="fw-bold">{{boothList?.BoothNickName}}</div>
@@ -487,9 +487,11 @@
                                                             <th>Contact No</th>
                                                             <th>Voters</th>
                                                             <th>Filled</th>
-                                                            <th>Pending</th>
-                                                            <th>Families</th>
                                                             <th>Migrated</th>
+                                                            <th>Families</th>
+                                                            <th>Pending</th>
+                                                        
+                                                           
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -499,9 +501,9 @@
                                                             <td>{{agentList?.MobileNo}}</td>
                                                             <td>{{agentList?.TotalVoter}}</td>
                                                             <td>{{agentList?.TotalFilled}}</td>
-                                                            <td>{{agentList?.Pending}}</td>
-                                                            <td>{{agentList?.TotalFamily}}</td>
                                                             <td>{{agentList?.TotalMigrated}}</td>
+                                                            <td>{{agentList?.TotalFamily}}</td>
+                                                            <td>{{agentList?.Pending}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

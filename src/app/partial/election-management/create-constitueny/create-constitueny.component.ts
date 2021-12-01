@@ -296,6 +296,7 @@ export class CreateConstituenyComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
+        debugger;
         this.constituencyDetailsArray = res.data1[0];
         this.addSubConstituencyArray = res.data2;
         this.patchCreateConstituency(this.constituencyDetailsArray);
@@ -358,9 +359,9 @@ export class CreateConstituenyComponent implements OnInit {
   }
 
   subConstArrayCheck(eleName: any, subEleCostName: any) {
-    return this.addSubConstituencyArray.some((el: any) => {
-      return el.SubElectionId === eleName && el.SubConstituencyId === subEleCostName;
-    });
+      return this.addSubConstituencyArray.some((el: any) => {
+        return el.SubElectionId === eleName && el.SubConstituencyId === subEleCostName;
+      });
   }
 
   selMembers(id: any) {
