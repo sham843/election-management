@@ -296,9 +296,8 @@ export class CreateConstituenyComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        debugger;
         this.constituencyDetailsArray = res.data1[0];
-        this.addSubConstituencyArray = res.data2;
+        res.data2 == "" || res.data2 == null || res.data2 == undefined ? this.addSubConstituencyArray = [] : this.addSubConstituencyArray = res.data2;
         this.patchCreateConstituency(this.constituencyDetailsArray);
       } else {
         this.spinner.hide();
