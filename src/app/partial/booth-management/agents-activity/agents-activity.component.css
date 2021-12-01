@@ -1,18 +1,16 @@
 .profile-info img{
-    width: 150px;
+    width: 90px;
     margin: 0 auto;
     display: flex;
     border-radius: 50%;
 }
 .profile-info h5{
-    text-align: center;
     color: var(--main-color);
 }
 .profile-info .contact{
-    text-align: center;
     color: #888;
     font-size: 0.85rem;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 .profile-info .area{
     font-size: 0.9rem;
@@ -20,5 +18,15 @@
 .profile-info .card-text{
     font-size: 0.8rem;
     color: #888;
-    text-align: center;
+}
+.profile-info .box-link{
+    text-decoration: none;
+}
+.profile-info .box-link:hover{
+    text-decoration: none;
+    background-color: var(--main-color);
+}
+.profile-info .box-link:hover .card-title,
+.profile-info .box-link:hover .card-text{
+    color: #fff;
 }
