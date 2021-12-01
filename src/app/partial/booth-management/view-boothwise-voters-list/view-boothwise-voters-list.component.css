@@ -1,13 +1,3 @@
-.list-group-item {
-    padding-block: 10px;
-}
-
-.list-group-item.hover,
-.list-group-item.active {
-    background-color: var(--main-color) !important;
-    color: #fff !important;
-}
-
 .left-count {
     background: #fafafa;
     padding: 10px;
@@ -21,6 +11,17 @@
     border: none;
     border-bottom: 1px solid rgba(0,0,0,.125);
     border-radius: 0;
+    padding-block: 10px;
+}
+#boothlist .list-group-item:hover,
+#boothlist .list-group-item.active {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+    cursor: pointer;
+}
+#boothlist .list-group{
+    overflow-y: auto;
+    height: 77vh;
 }
 #boothdetails .nav-pills .nav-link{
     color: #aaa;

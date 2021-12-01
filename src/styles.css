@@ -73,6 +73,13 @@ body{
     outline: none;
     box-shadow: none;
 }
+.form-container .input-group .btn{
+    border: none !important;
+    font-size: .85rem;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent;
+}
 #dash-stats {
     margin-bottom: 15px
 }
@@ -145,16 +152,17 @@ body{
     padding: 5px 10px
 }
 
-#pageheader span {
+/* #pageheader span {
     line-height: 34px
-}
+} */
 
 #pageheader .page-name {
     font-weight: 600;
     color: var(--main-color);
     font-size: .85rem;
     text-transform: uppercase;
-    letter-spacing: 1px
+    letter-spacing: 1px;
+    line-height: 34px;
 }
 
 #pageheader .form-control,
@@ -191,7 +199,7 @@ body{
 }
 
 #pageheader .btn {
-    width: 34px;
+    /* width: 34px; */
     height: 34px;
     box-shadow: none;
     outline: none;
@@ -458,4 +466,55 @@ body{
 
 tr.active {
     background: whitesmoke;
+}
+.ngx-pagination {
+    padding: 0 !important;
+    margin-top: 10px;
+    display:flex;
+    justify-content: end;
+    margin-bottom:0 !important;
+}
+
+.ngx-pagination .current {
+    padding: 6px 12px !important; 
+    background: var(--main-color)!important;
+    border: solid 1px var(--main-color) !important;
+    font-size: .7rem; 
+}
+
+.ngx-pagination .disabled,
+.ngx-pagination a,
+.ngx-pagination button {
+    padding: 6px 12px !important; 
+    text-decoration: none;
+    font-size: .7rem; 
+    
+}
+
+.ngx-pagination li {
+    display: inline-block;
+    border: solid 1px #bbb !important;
+    margin: 0 !important;
+    font-size: 0.85rem;
+}
+
+.ngx-pagination .pagination-next a::after,
+.ngx-pagination .pagination-next.disabled::after,
+.ngx-pagination .pagination-previous a::before,
+.ngx-pagination .pagination-previous.disabled::before {
+    margin: 0 !important;
+}
+
+.ngx-pagination .pagination-previous {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.ngx-pagination .pagination-next {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.alert{
+    font-size: 0.85rem;
+    margin-bottom:0;
 }
