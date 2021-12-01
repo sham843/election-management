@@ -311,7 +311,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.boothListArray = res.data1;
         this.boothListArray.map((ele: any) => {
           if (this.assemblyCheckBoxCheck) {
-            this.boothListMergeArray.unshift(ele);
+            this.boothListMergeArray.push(ele);
           }
         });
         if (this.btnText == 'Update Booths') {
