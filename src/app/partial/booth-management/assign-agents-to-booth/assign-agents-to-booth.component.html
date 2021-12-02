@@ -367,9 +367,12 @@
                                         <td>
                                             <button type="button" class="btn btn-light text-edit btn-sm me-1" (click)="editAgent(agentList)"><i
                                                     class="fas fa-pen"></i></button>
-                                            <button type="button" class="btn btn-light text-danger btn-sm"
+                                            <!-- <button type="button" class="btn btn-light text-danger btn-sm"
                                                 (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
-                                                    class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button> -->
+                                                    <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':agentList?.IsUserBlock == 0 , 'text-main' :agentList?.IsUserBlock == 1}" (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)" >
+                                                   {{agentList?.IsUserBlock == 0 ? 'Blocked' : 'Active'}}
+                                               </button>
                                         </td>
                                     </tr>
                                     <tr>

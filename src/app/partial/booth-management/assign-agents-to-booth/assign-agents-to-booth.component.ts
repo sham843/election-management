@@ -582,6 +582,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
           this.clientAgentListFlag = true;
           this.spinner.hide();
           this.toastrService.success(res.data1[0].Msg);
+          this.resetAgentForm();
+          this.Client_AgentList();
         } else {
           this.spinner.hide();
         }
@@ -594,25 +596,28 @@ export class AssignAgentsToBoothComponent implements OnInit {
     }
   }
   editAgent(data:any){
+    this.btnText = 'Update Agent';
+    this.assignAgentForm.patchValue({
+      Id: data.UserId,
+      FName: data.FName,
+      MName: data.MName,
+      LName: data.LName,
+      Address: data.Address,
+      MobileNo: data.MobileNo,
+      IsMemberAddAllow: data.IsMemberAddAllow,
+      CreatedBy: this.commonService.loggedInUserId()
+    })
+  }
 
-    console.log(data);
-    // let FullName = data.FName + " " + data.MName + " " + data.LName;
-
-    // this.assignAgentForm.patchValue({
-    //   Id: data.UserId,
-    //   FullName: FullName,
-    //   FName: data.FName,
-    //   MName: data.MName,
-    //   LName: data.LName,
-    //   Address: ['', Validators.required],
-    //   MobileNo: data.MobileNo,
-    //   IsMemberAddAllow: [data.IsMemberAddAllow],
-    //   CreatedBy: [this.commonService.loggedInUserId()]
-    // })
+  resetAgentForm(){
+      this.agentForm();
+      this.btnText = 'Add Agent';
+      this.submitted = false;
   }
   //------------------------------------------   assign booth list modal end here  -------------------------------------------- //
 
   blockUser(userId:any,ClientId:any, blogStatus:any){
+    debugger;
     let checkBlogStatus :any;
     blogStatus == 0  ? checkBlogStatus = 1 : checkBlogStatus = 0;
     
@@ -623,6 +628,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
         this.getClientAgentWithBooths();
+        this.Client_AgentList();
         this.spinner.hide();
       } else {
         this.spinner.hide();
