@@ -217,7 +217,7 @@
                                     <p class="mb-0 text-muted">{{clientABooths.MobileNo}}</p>
                                 </td>
                                 <td>
-                                    <a  data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
+                                    <a   data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
                                         (click)="assignedBoothModel(clientABooths)">
                                         {{clientABooths.TotalBooths}}
                                     </a>
@@ -236,12 +236,10 @@
                                             (click)="patchAssBoothElection(clientABooths.HeaderId)" title="Edit Client">
                                             <i class="fas fa-pen"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
-                                            title="Remove Client"
-                                            [ngClass]="{'text-danger':clientABooths?.Isblock == 0 , 'text-main' :clientABooths?.Isblock == 1}"
-                                            [disabled]="clientABooths?.Isblock == 0 ? true :false"
-                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
-                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId">
+                                        <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
+                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':clientABooths?.Isblock == 0 , 'text-main' :clientABooths?.Isblock == 1}"
+                                             data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; clientABooths?.Isblock == 0 ? modalTextChange ='Active' : modalTextChange ='Block'">
                                             {{clientABooths?.Isblock == 0 ? 'Blocked' : 'Active'}}
                                         </button>
                                     </div>
@@ -437,7 +435,7 @@
             </div>
             <div class="modal-body chartbox text-center">
                 <i class="far fa-question-circle fa-5x text-success mb-3"></i>
-                <h5 class="mb-3">Do you really want to block this user?</h5>
+                <h5 class="mb-3">Do you really want to {{modalTextChange}} this user?</h5>
                 <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
                     aria-label="Close">No</button>
                 <button (click)="blockUser(userId,ClientId)" type="button" class="btn btn-sm btn-main px-4">Yes</button>
