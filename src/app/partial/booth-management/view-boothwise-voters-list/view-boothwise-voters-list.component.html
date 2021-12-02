@@ -175,14 +175,10 @@
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
                                                 <div class="row justify-content-end mb-3">
-
-                                                    <!--[checked]="model.property" (change)="model.property = !model.consent_obtained_ind" -->
-                                                    <!-- <div>
-                                                        <input type="checkbox">
-                                                        <label class="form-check-label" for="flexCheckDefault"> </label>
-                                                    </div> -->
-
-
+                                                    <div class="col-sm-auto pt-1">
+                                                        <input class="form-check-input me-1" [formControl]="isChecked" (change)="onCheckFillData($event)" type="checkbox">
+                                                        <label class="form-check-label" for="flexCheckDefault"> Data Filled</label>
+                                                    </div>
                                                     <div class="col-sm-3">
                                                         <div class="form-container">
                                                             <div class="input-group">
@@ -224,10 +220,10 @@
                                                             </td>
 
                                                             <td>
-                                                                <div *ngIf="boothVoterList?.MobileNo1"><a
-                                                                        class="calltomember"
-                                                                        href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a>
-                                                                </div>
+                                                                <div *ngIf="boothVoterList?.MobileNo1"><a class="calltomember" href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a></div>
+                                                                <!-- <div *ngIf="boothVoterList?.MobileNo1">
+                                                                    {{boothVoterList?.MobileNo1}}
+                                                                </div> -->
                                                                 <div *ngIf="!boothVoterList?.MobileNo1">-</div>
                                                             </td>
                                                         </tr>
