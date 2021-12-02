@@ -562,7 +562,10 @@
                                                                 </div>
                                                                 <div *ngIf="!agentList?.MobileNo">-</div>
                                                             </td>
-                                                            <td>{{agentList?.Area}}</td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.Area">{{agentList?.Area}}</div>
+                                                                <div *ngIf="!agentList?.Area">-</div>
+                                                            </td>
                                                             <td>{{agentList?.TotalVoter}}</td>
                                                             <td>{{agentList?.TotalFilled}}</td>
                                                             <td>{{agentList?.TotalMigrated}}</td>
