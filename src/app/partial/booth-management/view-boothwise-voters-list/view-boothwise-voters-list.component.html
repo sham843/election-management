@@ -239,6 +239,7 @@
                                             <!-- family table start here   -->
                                             <div class="tab-pane fade" id="pills-family" role="tabpanel"
                                                 aria-labelledby="pills-family-tab">
+                                                <ng-container *ngIf="boothFamilyListArray?.length != 0">
                                                 <div class="row justify-content-end mb-3">
                                                     <div class="col-sm-3">
                                                         <div class="form-container">
@@ -268,34 +269,35 @@
                                                         <div class="col-sm-1">Migration</div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
-                                                    <div class="accordion-item">
-                                                        <ng-container
-                                                            *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
-
+                                                    <div class="accordion-item"  *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
+                                                        
                                                             <div class="accordion-header familytree-row">
-                                                                <div class="row"
-                                                                    (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                <div class="row" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                [attr.data-bs-target]="'#flush-collapseOne'+i"
+                                                                aria-expanded="false"
+                                                                aria-controls="flush-collapseOne" (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
                                                                     <div class="col-sm-1">{{boothFamilyList.SrNo}}
                                                                     </div>
-                                                                    <div class="col-sm-3">{{boothFamilyList.Family }}
+                                                                    <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}
                                                                     </div>
                                                                     <div class="col-sm-2">
                                                                         <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
                                                                         <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                                                                     </div>
-                                                                    <div class="col-sm-2">{{boothFamilyList.occupation}}
+                                                                    <div class="col-sm-2">{{boothFamilyList.occupation | titlecase}}
                                                                     </div>
                                                                     <div class="col-sm-2">
                                                                         {{boothFamilyList.qualification}}</div>
-                                                                    <div class="col-sm-1">{{boothFamilyList.migrated}}
+                                                                    <div class="col-sm-1">{{boothFamilyList.migrated | titlecase}}
                                                                     </div>
                                                                     <div class="col-sm-1">
-                                                                        <a class="accordion-button collapsed"
+                                                                        <!-- <a class="accordion-button collapsed"
                                                                             data-bs-toggle="collapse"
                                                                             [attr.data-bs-target]="'#flush-collapseOne'+i"
                                                                             aria-expanded="false"
-                                                                            [attr.aria-controls]="'flush-collapseOne'+i">
-                                                                        </a>
+                                                                            aria-controls="flush-collapseOne" (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                        </a> -->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -305,8 +307,8 @@
                                                                 aria-labelledby="family-1"
                                                                 data-bs-parent="#familytreeaccordion">
                                                                 <div class="accordion-body p-0">
-
-                                                                    <ng-container *ngIf="boothFamilyList.expanded">
+                                                                    <!-- *ngIf="boothFamilyList.expanded" -->
+                                                                    <ng-container>
                                                                         <div class="row familytree-details"
                                                                             *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
                                                                             <div class="col-sm-1">
@@ -318,91 +320,26 @@
                                                                                 <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
                                                                             </div>
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.Occupation}}</div>
+                                                                                {{boothFamilyDetails?.Occupation | titlecase}}</div>
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.Qualification}}
+                                                                                {{boothFamilyDetails?.Qualification | titlecase}}
                                                                             </div>
                                                                             <div class="col-sm-1">
-                                                                                {{boothFamilyDetails?.Migrated}}</div>
+                                                                                {{boothFamilyDetails?.Migrated | titlecase}}</div>
                                                                             <div class="col-sm-1"></div>
                                                                         </div>
+                                                                        <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
+                                                                            <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                                            </div>
+                                                                        </div>
+                                                                        
                                                                     </ng-container>
                                                                 </div>
                                                             </div>
-                                                        </ng-container>
+                                                       
                                                     </div>
                                                 </div>
-
-                                                <!-- <table class="table">
-                                                    <thead class="bg-light">
-                                                        <tr>
-                                                            <th> Sr. No </th>
-                                                            <th> Voter Name </th>
-                                                            <th> Age </th>
-                                                            <th> Mobile No</th>
-                                                            <th> Email ID </th>
-                                                            <th> Occupation </th>
-                                                            <th>Qualification</th>
-                                                            <th> Migration </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <ng-container
-                                                            *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal};">
-                                                            <tr
-                                                                (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
-                                                                <td> {{boothFamilyList.SrNo}} </td>
-                                                                <td> {{boothFamilyList.Family }} </td>
-                                                                <td> {{boothFamilyList.MobileNo1}} </td>
-                                                                <td> {{boothFamilyList.mobileno}} </td>
-                                                                <td> {{boothFamilyList.emailid}} </td>
-                                                                <td> {{boothFamilyList.occupation}}</td>
-                                                                <td> {{boothFamilyList.qualification}} </td>
-                                                                <td> {{boothFamilyList.migrated}}</td>
-                                                            </tr>
-                                                            <ng-container *ngIf="boothFamilyList.expanded">
-                                                                <tr>
-                                                                    <td colspan="8" class="px-0">
-                                                                        <table class="table mb-0">
-                                                                            <thead class="bg-light">
-                                                                                <tr>
-                                                                                    <th class="text-center"> Sr. No
-                                                                                    </th>
-                                                                                    <th> Voter Name </th>
-                                                                                    <th> Age </th>
-                                                                                    <th> Mobile No</th>
-                                                                                    <th> Email ID </th>
-                                                                                    <th> Occupation </th>
-                                                                                    <th>Qualification</th>
-                                                                                    <th> Migration </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr
-                                                                                    *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
-                                                                                    <td>{{boothFamilyDetails?.SrNo}}
-                                                                                    </td>
-                                                                                    <td>{{boothFamilyDetails?.Family}}
-                                                                                    </td>
-                                                                                    <td>{{boothFamilyDetails?.MobileNo1}}
-                                                                                    </td>
-                                                                                    <td>{{boothFamilyDetails?.Email}}
-                                                                                    </td>
-                                                                                    <td>{{boothFamilyDetails?.Occupation}}
-                                                                                    </td>
-                                                                                    <td>{{boothFamilyDetails?.Qualification}}
-                                                                                    </td>
-                                                                                    <td>{{boothFamilyDetails?.Migrated}}
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </ng-container>
-                                                        </ng-container>
-                                                    </tbody>
-                                                </table> -->
+                                            </ng-container>
                                                 <div class="mt-2 text-end" *ngIf="boothFamilyListArray?.length == 0">
                                                     <div class="alert alert-danger text-center py-2">No Data Found..!
                                                     </div>
