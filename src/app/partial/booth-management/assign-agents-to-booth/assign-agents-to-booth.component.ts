@@ -62,6 +62,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   ConstituencyIdArray: any = [];
   globalEditObj: any;
   modalTextChange :any;
+  agentBlogStatus :any
   // clientIdAgent: any;
 
   constructor(
@@ -100,6 +101,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   get a() { return this.assAgentToBoothForm.controls };
 
   resetAssignAgentForm() {
+    this.btnText = 'Add Agent';
     this.submitted = false;
     this.agentToBoothForm();
     this.clearAssemblyBooth();
@@ -173,6 +175,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getElectionName() {
+    this.btnText == 'Update agent' ?  this.clearAssemblyBooth() : '';
+
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.assAgentToBoothForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -590,27 +594,31 @@ export class AssignAgentsToBoothComponent implements OnInit {
     }
   }
   editAgent(data:any){
-    let formData = data;
-    console.log(formData);
+
+    console.log(data);
+    // let FullName = data.FName + " " + data.MName + " " + data.LName;
+
     // this.assignAgentForm.patchValue({
-    //   Id: [0],
-    //   ClientId: [''],
-    //   FullName: [''],
-    //   FName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-    //   MName: ['',Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-    //   LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+    //   Id: data.UserId,
+    //   FullName: FullName,
+    //   FName: data.FName,
+    //   MName: data.MName,
+    //   LName: data.LName,
     //   Address: ['', Validators.required],
-    //   MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
-    //   IsMemberAddAllow: [''],
-    //   CreatedBy: ['']
+    //   MobileNo: data.MobileNo,
+    //   IsMemberAddAllow: [data.IsMemberAddAllow],
+    //   CreatedBy: [this.commonService.loggedInUserId()]
     // })
   }
   //------------------------------------------   assign booth list modal end here  -------------------------------------------- //
 
-  blockUser(userId:any,ClientId:any){
+  blockUser(userId:any,ClientId:any, blogStatus:any){
+    let checkBlogStatus :any;
+    blogStatus == 0  ? checkBlogStatus = 1 : checkBlogStatus = 0;
+    
     this.spinner.show();
     let data = this.assAgentToBoothForm.value;
-    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId='+userId+'&ClientId='+ClientId + '&CreatedBy=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId='+userId+'&ClientId='+ClientId + '&CreatedBy=' + this.commonService.loggedInUserId()+'&IsBlock='+checkBlogStatus, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);

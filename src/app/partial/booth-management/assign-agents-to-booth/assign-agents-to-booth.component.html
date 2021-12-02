@@ -239,7 +239,7 @@
                                         <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
                                         <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':clientABooths?.Isblock == 0 , 'text-main' :clientABooths?.Isblock == 1}"
                                              data-bs-toggle="modal" data-bs-target="#agentBlock"
-                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; clientABooths?.Isblock == 0 ? modalTextChange ='Active' : modalTextChange ='Block'">
+                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Active' : modalTextChange ='Block'">
                                             {{clientABooths?.Isblock == 0 ? 'Blocked' : 'Active'}}
                                         </button>
                                     </div>
@@ -368,7 +368,7 @@
                                             <button type="button" class="btn btn-light text-edit btn-sm me-1" (click)="editAgent(agentList)"><i
                                                     class="fas fa-pen"></i></button>
                                             <button type="button" class="btn btn-light text-danger btn-sm"
-                                                (click)="blockUser(agentList.ClientId,agentList.UserId)"><i
+                                                (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
                                                     class="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
@@ -438,7 +438,8 @@
                 <h5 class="mb-3">Do you really want to {{modalTextChange}} this user?</h5>
                 <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
                     aria-label="Close">No</button>
-                <button (click)="blockUser(userId,ClientId)" type="button" class="btn btn-sm btn-main px-4">Yes</button>
+                <button (click)="blockUser(userId,ClientId, agentBlogStatus)" type="button" class="btn btn-sm btn-main px-4" data-bs-dismiss="modal"
+                aria-label="Close">Yes</button>
             </div>
         </div>
     </div>
