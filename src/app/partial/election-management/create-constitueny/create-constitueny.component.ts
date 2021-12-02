@@ -465,6 +465,7 @@ export class CreateConstituenyComponent implements OnInit {
     }
     this.paginationNo = 1;
     this.getConstituency();
+    this.resetConstituencyName()
   }
 
   onKeyUpFilter() {
