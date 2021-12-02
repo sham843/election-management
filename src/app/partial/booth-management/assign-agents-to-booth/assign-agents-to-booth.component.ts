@@ -102,6 +102,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   resetAssignAgentForm() {
     this.submitted = false;
     this.agentToBoothForm();
+    this.clearAssemblyBooth();
   }
 
   getClientName() {
@@ -485,6 +486,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   //------------------------------------------   pagination start here  -------------------------------------------- //
 
   onClickPagintion(pageNo: number) {
+    this.clearAssemblyBooth();
     this.agentToBoothForm();
     this.paginationNo = pageNo;
     this.getClientAgentWithBooths();
@@ -492,6 +494,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   //------------------------------------------ edit Assign Booth Election form   ------------------------------------------  //
   patchAssBoothElection(HeaderId: any) {
+    this.clearAssemblyBooth();
     this.btnText = 'Update agent';
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Election_GetBoothToAgentDetails?HeaderId=' + HeaderId, false, false, false, 'electionServiceForWeb');
@@ -550,7 +553,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.assBoothObjData = assBoothObj;
   }
 
-  insertBoothAgent() {
+  addAgent() {
     this.submitted = true;
     if (this.assignAgentForm.invalid) {
       this.spinner.hide();
@@ -585,6 +588,22 @@ export class AssignAgentsToBoothComponent implements OnInit {
         }
       })
     }
+  }
+  editAgent(data:any){
+    let formData = data;
+    console.log(formData);
+    // this.assignAgentForm.patchValue({
+    //   Id: [0],
+    //   ClientId: [''],
+    //   FullName: [''],
+    //   FName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+    //   MName: ['',Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+    //   LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+    //   Address: ['', Validators.required],
+    //   MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+    //   IsMemberAddAllow: [''],
+    //   CreatedBy: ['']
+    // })
   }
   //------------------------------------------   assign booth list modal end here  -------------------------------------------- //
 
