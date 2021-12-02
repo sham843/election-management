@@ -360,6 +360,7 @@ export class CreateElectionsComponent implements OnInit {
     }
     this.paginationNo = 1;
     this.getElectionMaster();
+    this.clearForm();
   }
 
   filterData() {
