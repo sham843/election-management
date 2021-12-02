@@ -260,8 +260,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   clickBoothList(data: any) {
+    // Start Data Filled Filed Checkbox code
     this.isChecked.setValue(false);
     this.fillDataId = 0;
+    this.votersPaginationNo = 1;
+    //End Data Filled Filed Checkbox code
+
     this.globalboothVoterData = data;
     this.HighlightRow = data?.BoothId;
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + data?.BoothId;
