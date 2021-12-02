@@ -551,6 +551,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     if (this.assignAgentForm.invalid) {
       this.spinner.hide();
       return;
+      
     }
     else {
       this.spinner.show();
