@@ -213,7 +213,7 @@
                             <tr *ngFor="let clientABooths of clientAgentWithBoothArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
                                 [class.active]="clientABooths.HeaderId == HighlightRow">
                                 <td>{{clientABooths.SrNo}}</td>
-                                <td>{{clientABooths.FullName}}
+                                <td>{{clientABooths.FullName | titlecase}}
                                     <p class="mb-0 text-muted">{{clientABooths.MobileNo}}</p>
                                 </td>
                                 <td>
