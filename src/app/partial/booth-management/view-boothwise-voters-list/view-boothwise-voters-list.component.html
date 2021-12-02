@@ -521,7 +521,15 @@
                                                     </div>
                                                 </div>
                                                 <!-- Agents table start here  -->
-                                                <table class="table table-hover mb-0">
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span class="text-main me-3">
+                                                            <i class="fas fa-star me-1"></i> Indicates Booth Agent
+                                                        </span>
+                                                        <span class="text-dark">
+                                                            <i class="far fa-star me-1"></i> Indicates Area Agent
+                                                        </span>
+                                                    </caption>
                                                     <thead>
                                                         <tr>
                                                             <th>Sr. No.</th>
@@ -533,14 +541,21 @@
                                                             <th>Migrated</th>
                                                             <th>Families</th>
                                                             <th>Pending</th>
-
-
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
-                                                            <td>{{agentList?.FullName}}</td>
+                                                            <td>
+                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main">
+                                                                    <i class="fas fa-star me-1"></i>
+                                                                    {{agentList?.FullName}}
+                                                                </span>
+                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-dark">
+                                                                    <i class="far fa-star me-1"></i>
+                                                                    {{agentList?.FullName}}
+                                                                </span>                                                                
+                                                            </td>
                                                             <td>
                                                                 <div *ngIf="agentList?.MobileNo"><a class="calltomember"
                                                                         href="tel:{{agentList?.MobileNo}}">{{agentList?.MobileNo}}</a>
