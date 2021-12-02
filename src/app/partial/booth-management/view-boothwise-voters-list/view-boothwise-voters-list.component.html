@@ -272,11 +272,7 @@
                                                     <div class="accordion-item"  *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
                                                         
                                                             <div class="accordion-header familytree-row">
-                                                                <div class="row" class="accordion-button collapsed"
-                                                                data-bs-toggle="collapse"
-                                                                [attr.data-bs-target]="'#flush-collapseOne'+i"
-                                                                aria-expanded="false"
-                                                                aria-controls="flush-collapseOne" (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                <div class="row">
                                                                     <div class="col-sm-1">{{boothFamilyList.SrNo}}
                                                                     </div>
                                                                     <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}
@@ -292,12 +288,12 @@
                                                                     <div class="col-sm-1">{{boothFamilyList.migrated | titlecase}}
                                                                     </div>
                                                                     <div class="col-sm-1">
-                                                                        <!-- <a class="accordion-button collapsed"
+                                                                        <a class="accordion-button collapsed"
                                                                             data-bs-toggle="collapse"
                                                                             [attr.data-bs-target]="'#flush-collapseOne'+i"
                                                                             aria-expanded="false"
                                                                             aria-controls="flush-collapseOne" (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
-                                                                        </a> -->
+                                                                        </a>
                                                                     </div>
                                                                 </div>
                                                             </div>
