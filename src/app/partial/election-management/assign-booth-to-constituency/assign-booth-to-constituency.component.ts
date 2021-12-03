@@ -131,7 +131,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
   onSubmitElection() {
     this.submitted = true;
     let formData = this.assignBoothForm.value;
-
+    debugger;
     if (this.assignBoothForm.invalid) {
       this.spinner.hide();
     }else if (this.AssemblyBoothArray.length == 0  ||  this.AssemblyBoothArray.length == 0){
@@ -139,7 +139,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
       return;
     }
     else {
-      debugger;
+    
       this.spinner.show();
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
       let id;
@@ -351,13 +351,13 @@ export class AssignBoothToConstituencyComponent implements OnInit {
 
   editAssemblyBoothArray() {
     let boothArray = this.selBoothId.split(',');
-    this.boothListMergeArray.find((ele: any) => {
-      boothArray.find((el: any) => {
-        if (ele.Id == Number(el)) {
-          this.AssemblyBoothArray.push({ 'AssemblyId': ele.AssemblyId, 'BoothId': ele.Id });
-        }
-      })
-    });
+   this.boothListMergeArray.find((ele: any) => { 
+        boothArray.find((el: any) => {
+          if (ele.Id == Number(el)) {
+            this.AssemblyBoothArray.push({ 'AssemblyId': ele.AssemblyId, 'BoothId': ele.Id });
+          }
+        })
+      });
   }
 
   checkBoxCehckAssemblyArray(ConstituencyId: any) {

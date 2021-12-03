@@ -629,6 +629,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.toastrService.success(res.data1[0].Msg);
         this.getClientAgentWithBooths();
         this.Client_AgentList();
+        this.getClientAgentList();
         this.spinner.hide();
       } else {
         this.spinner.hide();
