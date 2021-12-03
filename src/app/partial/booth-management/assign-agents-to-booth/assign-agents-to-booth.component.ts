@@ -63,7 +63,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
   globalEditObj: any;
   modalTextChange :any;
   agentBlogStatus :any
-  // clientIdAgent: any;
+  agentwiseAssigBoothArray: any = [];
+  agentwiseAssigBoothHide : boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -150,7 +151,37 @@ export class AssignAgentsToBoothComponent implements OnInit {
     })
   }
 
+  getAgentwiseAssignedBooth() {//getAgentwiseAssigBooth
+    this.spinner.show();
+    this.agentwiseAssigBoothArray = [];
+    let data = this.assAgentToBoothForm.value;
+    this.callAPIService.setHttp('get', 'Web_get_Agentwise_AssignedBooth?AgentId=' + data.UserId + '&ClientId=' + data.ClientId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        let agentwiseAssigBoothArray = res.data1;
+        this.agentwiseAssigBoothHide = true;
+        agentwiseAssigBoothArray.map((ele:any)=>{
+          if(ele.BoothName){
+            let eleBoothData = ele.BoothName;
+            this.agentwiseAssigBoothArray.push(eleBoothData);
+          } 
+        })
+      } else {
+        this.agentwiseAssigBoothArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
   getClientAgentList() {
+    this.agentwiseAssigBoothArray = [];
+    this.agentwiseAssigBoothHide = false;
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + this.globalClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -175,8 +206,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getElectionName() {
+    this.getAgentwiseAssignedBooth();
     this.btnText == 'Update agent' ?  this.clearAssemblyBooth() : '';
-
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.assAgentToBoothForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -444,11 +475,15 @@ export class AssignAgentsToBoothComponent implements OnInit {
     if (flag == 'clientName') {
       this.clearAssemblyBooth();
       this.agentToBoothForm();
+      this.agentwiseAssigBoothArray = [];
+      this.agentwiseAssigBoothHide = false;
     } else if (flag == 'agentName') {
       this.assAgentToBoothForm.controls['UserId'].setValue(0);
       this.assAgentToBoothForm.controls['ElectionId'].setValue(0);
       this.assAgentToBoothForm.controls['ConstituencyId'].setValue(0);
       this.clearAssemblyBooth();
+      this.agentwiseAssigBoothArray = [];
+      this.agentwiseAssigBoothHide = false;
     }
     else if (flag == 'electionName') {
       this.assAgentToBoothForm.controls['ElectionId'].setValue(0);

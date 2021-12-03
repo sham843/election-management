@@ -56,7 +56,7 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="row mb-3">
+                            <div class="row mb-3" *ngIf="agentwiseAssigBoothHide">
                                 <div class="col-sm-12">
                                     <div class="card card-body shadow-none border py-2">
                                         <p class="text-main fw-bold mb-1">
@@ -66,19 +66,12 @@
                                         <div class="form-container">
                                             <label class="form-label">Booths Assigned</label>
                                             <ul class="list-column">
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">{{agentwiseAssigBooth}}</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
 
 
