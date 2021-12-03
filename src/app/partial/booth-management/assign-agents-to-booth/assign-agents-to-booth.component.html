@@ -60,13 +60,13 @@
                                 <div class="col-sm-12">
                                     <div class="card card-body shadow-none border py-2">
                                         <p class="text-main fw-bold mb-1">
-                                            Election Name
-                                            <small class="text-muted">[Constituency Name]</small>
+                                            {{agentwiseAssigBoothArray[0].ElectionName}}
+                                            <small class="text-muted">[{{agentwiseAssigBoothArray[0].ConstituencyName}}]</small>
                                         </p>
                                         <div class="form-container">
                                             <label class="form-label">Booths Assigned</label>
                                             <ul class="list-column">
-                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">{{agentwiseAssigBooth}}</li>
+                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">{{agentwiseAssigBooth.BoothName}}</li>
                                             </ul>
                                         </div>
                                     </div>

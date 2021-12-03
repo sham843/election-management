@@ -106,6 +106,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.submitted = false;
     this.agentToBoothForm();
     this.clearAssemblyBooth();
+    this.agentwiseAssigBoothArray = [];
+    this.agentwiseAssigBoothHide = false;
   }
 
   getClientName() {
@@ -162,9 +164,11 @@ export class AssignAgentsToBoothComponent implements OnInit {
         let agentwiseAssigBoothArray = res.data1;
         this.agentwiseAssigBoothHide = true;
         agentwiseAssigBoothArray.map((ele:any)=>{
-          if(ele.BoothName){
-            let eleBoothData = ele.BoothName;
-            this.agentwiseAssigBoothArray.push(eleBoothData);
+          if(ele.BoothName || ele.ElectionName || ele.ConstituencyName){
+            let BoothName = ele.BoothName;
+            let ElecName = ele.ElectionName;
+            let ConstituencyName = ele.ConstituencyName;
+            this.agentwiseAssigBoothArray.push({'BoothName':BoothName,'ElectionName':ElecName,'ConstituencyName':ConstituencyName});
           } 
         })
       } else {
