@@ -1,3 +1,5 @@
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
 body{
     font-family: 'Rubik', sans-serif;
     background-color: #7289da1a;
@@ -582,3 +584,48 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     font-size: 0.85rem;
     margin:0;
 }
+
+/* date time range picker css start here  */
+
+.owl-dt-timer {
+    padding: 0;
+    height: 5.0em;
+}
+
+.owl-dt-timer-box {
+    height: 80%;
+}
+
+.owl-dt-container-buttons {
+    font-size: 12px;
+    color: var(--theme-color);
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+    background-color: var(--theme-color);
+}
+
+.owl-dt-inline-container,
+.owl-dt-popup-container {
+    width: 16em;
+}
+
+.owl-dt-inline-container .owl-dt-calendar,
+.owl-dt-popup-container .owl-dt-calendar {
+    height: 18em;
+}
+
+.owl-dt-timer-content {
+    margin: 0;
+}
+
+owl-date-time-timer.owl-dt-container-row.ng-tns-c96-1.owl-dt-timer.ng-star-inserted {
+    display: none !important;
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+    color: rgba(255, 255, 255, .85);
+    background-color: #3f51b5 !important;
+}
+
+/* date time range picker css start here  */

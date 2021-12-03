@@ -30,3 +30,8 @@
 .profile-info .box-link:hover .card-text{
     color: #fff;
 }
+
+/* .box-link.active {
+    background: var(--main-color);
+    color: #fff !important;
+} */
