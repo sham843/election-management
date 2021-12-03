@@ -36,3 +36,18 @@
     height:250px;
     object-fit: fill;
 }
+.voter-repeat{
+    font-size: 0.85rem;
+}
+.voter-repeat small{
+    font-size: 0.7rem;
+}
+.voter-repeat p{
+    font-size: 0.85rem;
+}
+.voter-repeat .btn:hover,
+.voter-repeat .btn-check:checked+.btn-outline-secondary{
+    background-color: var(--main-color);
+    color: #fff;
+    box-shadow: none;
+}
