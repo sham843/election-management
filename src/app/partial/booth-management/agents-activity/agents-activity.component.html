@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-sm">
                     <ngx-select  [allowClear]="true" [items]="allSubAgentsByAgentId" formControlName="BoothId"
-                         optionValueField="BoothId" (select)="allSubAgentsByAgentId();" optionTextField="BoothName" placeholder="Select Booth"
+                         optionValueField="BoothId" (select)="selBothId($event);" optionTextField="BoothName" placeholder="Select Booth"
                         (remove)="clearFilter('Booth')" >
                         </ngx-select>
                     
@@ -138,7 +138,7 @@
             </div>
         </div>
         <div class="col-sm-8">
-            <div class="card mb-3">
+            <div class="card mb-3" *ngIf="defaultVaoterListFlag">
                 <div class="card-header">
                     <div class="row justify-content-end">
                         <!-- <div class="col-sm">
@@ -160,21 +160,21 @@
                             <form [formGroup]="voterProfilefilterForm">
                                 <div class="row g-1 mb-2 border-bottom pb-2">
                                     <div class="offset-sm-4 col-sm-4">
-                                        <!-- <div class="input-group">
-                                            <input [owlDateTime]="dt3" (remove)="clearFilterVoter('dateRangePicker')" formControlName="fromTo" [selectMode]="'range'" (dateTimeChange)="voterDateRangeSelect()" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date">
-                                            <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3">
+                                        <div class="input-group">
+                                            <input [owlDateTime]="dt3"  formControlName="weekRangePicker"   [selectMode]="'range'"  (dateTimeChange)="voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker)" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date">
+                                            <button class="btn btn-light border btn-sm" type="button" *ngIf="this.voterProfilefilterForm.value.weekRangePicker" [owlDateTimeTrigger]="dt3">
                                                 <i class="fas fa-calendar-alt"></i></button>
-                                            <button class="btn btn-light border btn-sm" type="button" *ngIf="defaultCloseBtn" (click)="clearFilter('dateRangePIcker')">
+                                            <button class="btn btn-light border btn-sm" type="button"  *ngIf="!this.voterProfilefilterForm.value.weekRangePicker"  (click)="clearFilterVoter('dateRangePIcker')">
                                                 <i class="fas fa-times"></i></button>
                                         </div>
-                                        <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time> -->
+                                        <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="input-group">
                                             <input type="text" class="form-control" formControlName="Search" placeholder="Search..." (keyup)="onKeyUpSearchFilter()" />
                                             <button type="button" class="btn btn-light border btn-sm" (click)="clearFilterVoter('search')" *ngIf="voterProfilefilterForm.value.Search" ><i
                                                   class="fas fa-times"></i></button>
-                                            <button type="button" *ngIf="!voterProfilefilterForm.value.Search" class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                            <button type="button" *ngIf="!voterProfilefilterForm.value.Search" class="btn btn-sm border btn-light" (click)="searchVoterFilter(true)"><i class="fas fa-search"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -184,14 +184,14 @@
                 <div class="card-body profile-info">
                     <div class="row g-2 mb-3">
                         <div class="col-sm">
-                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
-                                <h5 class="card-title">2426</h5>
+                            <a (click)="getClientBoothAgentVoterList()" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">{{this.votersCardData?.TotalVoters}}</h5>
                                 <p class="card-text"> Voters </p>
                             </a>
                         </div>
                         <div class="col-sm">
-                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
-                                <h5 class="card-title">2426</h5>
+                            <a (click)="clickOnFamiliyCard()"   class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">{{this.votersCardData?.TotalFamiliy}}</h5>
                                 <p class="card-text"> Families </p>
                             </a>
                         </div>
@@ -208,8 +208,8 @@
                             </a>
                         </div> -->
                         <div class="col-sm">
-                            <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
-                                <h5 class="card-title">2426</h5>
+                            <a (click)="clickOnNewVotersCard()" class="card p-2 card-body shadow-none border box-link">
+                                <h5 class="card-title">{{this.votersCardData?.NewVoters}}</h5>
                                 <p class="card-text"> New Voters </p>
                             </a>
                         </div>
@@ -236,32 +236,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Kailash Rajendra Sanap</td>
-                                <td>12:35:25 PM</td>
-                                <td>132034645</td>
-                                <td>Male</td>
-                                <td>97643156132</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Kailash Rajendra Sanap</td>
-                                <td>12:35:25 PM</td>
-                                <td>132034645</td>
-                                <td>Male</td>
-                                <td>97643156132</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Kailash Rajendra Sanap</td>
-                                <td>12:35:25 PM</td>
-                                <td>132034645</td>
-                                <td>Male</td>
-                                <td>97643156132</td>
+                            <tr *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
+                                <td>{{clientBooth?.SrNo}}</td>
+                                <td>{{clientBooth?.EnglishName | titlecase}}</td>
+                                <td>{{clientBooth?.SurveyDate}}</td>
+                                <td>{{clientBooth?.VoterNo}}</td>
+                                <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                <td>{{clientBooth?.MobileNo1}} {{clientBooth?.MobileNo2}}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <pagination-controls
+                    *ngIf="clientBoothAgentVoterList?.length != 0" previousLabel=""
+                    nextLabel=""
+                    (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                </pagination-controls>
                 </div>
             </div>
 
