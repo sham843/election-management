@@ -27,8 +27,8 @@
                                     <label class="form-label required-field">Select Leader</label>
                                     <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                         [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
-                                        (select)=" getClientAgentList();"
-                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Leader"
+                                        (select)=" getClientAgentList();" optionValueField="id"
+                                        optionTextField="Fullname" placeholder="Select Leader"
                                         (remove)="clearAggentToBooth('clientName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.ClientId.errors" class="invalid-feedback">
@@ -42,8 +42,7 @@
                                         formControlName="UserId" optionValueField="AgentId"
                                         [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
                                         class="w-75" (select)="getElectionName()" placeholder="Select Agent"
-                                        (remove)="clearAggentToBooth('agentName')"
-                                       >
+                                        (remove)="clearAggentToBooth('agentName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
                                         <div *ngIf="a.UserId.errors.required">Agent is required</div>
@@ -56,6 +55,33 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+                                    <div class="card card-body shadow-none border py-2">
+                                        <p class="text-main fw-bold mb-1">
+                                            Election Name
+                                            <small class="text-muted">[Constituency Name]</small>
+                                        </p>
+                                        <div class="form-container">
+                                            <label class="form-label">Booths Assigned</label>
+                                            <ul class="list-column">
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                                <li>भैरवनाथ मंदीर प्राथमिक शाळा</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
 
                             <div class="row mb-3">
                                 <div class="col-sm-6">
@@ -137,8 +163,8 @@
                                             <div class="card-header border-bottom p-0 py-1">
                                                 <!--  -->
                                                 <input type="text" formControlName="boothId" placeholder="Search Booths"
-                                                [(ngModel)]="searchboothList"
-                                                    class="form-control border-0 form-control-sm" >
+                                                    [(ngModel)]="searchboothList"
+                                                    class="form-control border-0 form-control-sm">
                                             </div>
                                             <div class="card-body py-2 checkBox"
                                                 *ngIf="( boothListMergeArray | filter:searchboothList ) as boothResult">
@@ -162,7 +188,8 @@
 
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="resetAssignAgentForm()">Clear</button>
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                        (click)="resetAssignAgentForm()">Clear</button>
                                 </div>
                                 <div class="col-sm-9 text-end">
                                     <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
@@ -217,7 +244,7 @@
                                     <p class="mb-0 text-muted">{{clientABooths.MobileNo}}</p>
                                 </td>
                                 <td>
-                                    <a   data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
+                                    <a data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
                                         (click)="assignedBoothModel(clientABooths)">
                                         {{clientABooths.TotalBooths}}
                                     </a>
@@ -237,8 +264,9 @@
                                             <i class="fas fa-pen"></i>
                                         </button>
                                         <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
-                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':clientABooths?.Isblock == 0 , 'text-main' :clientABooths?.Isblock == 1}"
-                                             data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
+                                            [ngClass]="{'text-danger':clientABooths?.Isblock == 0 , 'text-main' :clientABooths?.Isblock == 1}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
                                             (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Active' : modalTextChange ='Block'">
                                             {{clientABooths?.Isblock == 0 ? 'Blocked' : 'Active'}}
                                         </button>
@@ -273,7 +301,8 @@
             <form [formGroup]="assignAgentForm">
                 <div class="modal-header">
                     <h5 class="modal-title" id="AddAgentsToBoothModalLabel">Add Agent</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearAggentForm()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        (click)="clearAggentForm()"></button>
                 </div>
                 <div class="modal-body chartbox">
                     <div class="form-container">
@@ -285,8 +314,8 @@
                                     [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
                                 <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
                                     <div *ngIf="f.FName.errors.required">First Name is required</div>
-                                        <div *ngIf="f.FName.errors.pattern">First Name can not contain space</div>
-                                        <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
+                                    <div *ngIf="f.FName.errors.pattern">First Name can not contain space</div>
+                                    <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -365,14 +394,16 @@
                                         <td>{{agentList.SrNo}}</td>
                                         <td>{{agentList.FullName}} <small> {{agentList?.MobileNo}}</small></td>
                                         <td>
-                                            <button type="button" class="btn btn-light text-edit btn-sm me-1" (click)="editAgent(agentList)"><i
-                                                    class="fas fa-pen"></i></button>
+                                            <button type="button" class="btn btn-light text-edit btn-sm me-1"
+                                                (click)="editAgent(agentList)"><i class="fas fa-pen"></i></button>
                                             <!-- <button type="button" class="btn btn-light text-danger btn-sm"
                                                 (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
                                                     class="fas fa-trash-alt"></i></button> -->
-                                                    <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':agentList?.IsUserBlock == 0 , 'text-main' :agentList?.IsUserBlock == 1}" (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)" >
-                                                   {{agentList?.IsUserBlock == 0 ? 'Blocked' : 'Active'}}
-                                               </button>
+                                            <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
+                                                [ngClass]="{'text-danger':agentList?.IsUserBlock == 0 , 'text-main' :agentList?.IsUserBlock == 1}"
+                                                (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)">
+                                                {{agentList?.IsUserBlock == 0 ? 'Blocked' : 'Active'}}
+                                            </button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -441,8 +472,8 @@
                 <h5 class="mb-3">Do you really want to {{modalTextChange}} this user?</h5>
                 <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
                     aria-label="Close">No</button>
-                <button (click)="blockUser(userId,ClientId, agentBlogStatus)" type="button" class="btn btn-sm btn-main px-4" data-bs-dismiss="modal"
-                aria-label="Close">Yes</button>
+                <button (click)="blockUser(userId,ClientId, agentBlogStatus)" type="button"
+                    class="btn btn-sm btn-main px-4" data-bs-dismiss="modal" aria-label="Close">Yes</button>
             </div>
         </div>
     </div>

@@ -573,5 +573,12 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
     opacity: 1;
 }
-
 /* add material dialog css  */
+.list-column{
+    column-count:2;
+    -webkit-columns:2;
+    -moz-columns:2;
+    column-gap:10px;
+    font-size: 0.85rem;
+    margin:0;
+}
