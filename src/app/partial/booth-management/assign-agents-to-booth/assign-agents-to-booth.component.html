@@ -237,10 +237,10 @@
                                             <i class="fas fa-pen"></i>
                                         </button>
                                         <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
-                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':clientABooths?.Isblock == 0 , 'text-main' :clientABooths?.Isblock == 1}"
+                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':clientABooths?.Isblock == 1 , 'text-main' :clientABooths?.Isblock == 0}"
                                              data-bs-toggle="modal" data-bs-target="#agentBlock"
-                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Active' : modalTextChange ='Block'">
-                                            {{clientABooths?.Isblock == 0 ? 'Blocked' : 'Active'}}
+                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
+                                            {{clientABooths?.Isblock == 1 ? 'Blocked' : 'Active'}}
                                         </button>
                                     </div>
                                 </td>
@@ -370,8 +370,8 @@
                                             <!-- <button type="button" class="btn btn-light text-danger btn-sm"
                                                 (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
                                                     class="fas fa-trash-alt"></i></button> -->
-                                                    <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':agentList?.IsUserBlock == 0 , 'text-main' :agentList?.IsUserBlock == 1}" (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)" >
-                                                   {{agentList?.IsUserBlock == 0 ? 'Blocked' : 'Active'}}
+                                                    <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':agentList?.IsUserBlock == 1 , 'text-main' :agentList?.IsUserBlock == 0}" (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)" >
+                                                   {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
                                                </button>
                                         </td>
                                     </tr>

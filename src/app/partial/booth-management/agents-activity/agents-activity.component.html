@@ -55,7 +55,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">7212</h5>
+                                        <h5 class="card-title">{{agentProfileData?.TotalVoter}}</h5>
                                         <p class="card-text">
                                             Total Voters
                                         </p>
@@ -65,7 +65,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">2426</h5>
+                                        <h5 class="card-title">{{agentProfileData?.TotalFilled}}</h5>
                                         <p class="card-text">
                                             Data Filled
                                         </p>
@@ -75,7 +75,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">5541</h5>
+                                        <h5 class="card-title">{{agentProfileData?.Pending}}</h5>
                                         <p class="card-text">
                                             Date Pending
                                         </p>
@@ -85,7 +85,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">7212</h5>
+                                        <h5 class="card-title">{{agentProfileData?.TotalMigrated}}</h5>
                                         <p class="card-text">
                                             Total Migrated
                                         </p>
@@ -95,7 +95,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">2426</h5>
+                                        <h5 class="card-title">{{agentProfileData?.TotalFamily}}</h5>
                                         <p class="card-text">
                                             Total Families
                                         </p>
@@ -105,7 +105,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">5541</h5>
+                                        <h5 class="card-title">{{agentProfileData?.NewVoter}}</h5>
                                         <p class="card-text">
                                             New Voters
                                         </p>
@@ -116,7 +116,7 @@
 
                         <div class="card card-body shadow-none border mb-3">
                             Pie chart<br>
-                            total x family count x pending count
+                            <div class="agentProfilePiChart" style="height: 250px;"></div>
                         </div>
 
                         <div class="row justify-content-end">
@@ -169,7 +169,7 @@
                                 <p class="card-text"> Voters </p>
                             </a>
                         </div>
-                        <div class="col-sm">
+                        <!-- <div class="col-sm">
                             <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
                                 <h5 class="card-title">2426</h5>
                                 <p class="card-text"> Pending </p>
@@ -180,7 +180,7 @@
                                 <h5 class="card-title">2426</h5>
                                 <p class="card-text"> Filled </p>
                             </a>
-                        </div>
+                        </div> -->
                         <div class="col-sm">
                             <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
                                 <h5 class="card-title">2426</h5>
@@ -194,7 +194,7 @@
                             Agent Performance
                         </div>
                         <div class="card-body pt-1">
-                            day vs activity graph (family & individual voter)
+                           <!-- <div class="agentProfilePiChart"></div> -->
                         </div>
                     </div>
 

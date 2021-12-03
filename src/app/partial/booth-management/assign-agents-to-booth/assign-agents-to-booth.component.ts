@@ -618,7 +618,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
   //------------------------------------------   assign booth list modal end here  -------------------------------------------- //
 
   blockUser(userId:any,ClientId:any, blogStatus:any){
-    debugger;
     let checkBlogStatus :any;
     blogStatus == 0  ? checkBlogStatus = 1 : checkBlogStatus = 0;
     
