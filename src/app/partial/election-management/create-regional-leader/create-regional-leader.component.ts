@@ -321,15 +321,18 @@ export class CreateRegionalLeaderComponent implements OnInit {
     }
     this.paginationNo = 1;
     this.getClientData();
+    this.clearForm();
   }
 
   filterData() {
     this.paginationNo = 1;
     this.getClientData();
+    this.clearForm();
   }
 
   onKeyUpFilter() {
     this.subject.next();
+    this.clearForm();
   }
 
   searchFilters(flag: any) {

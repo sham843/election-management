@@ -455,6 +455,7 @@ export class CreateConstituenyComponent implements OnInit {
   filterData() {
     this.paginationNo = 1;
     this.getConstituency();
+    this.resetConstituencyName();
   }
 
   clearFilter(flag: any) {
@@ -465,11 +466,12 @@ export class CreateConstituenyComponent implements OnInit {
     }
     this.paginationNo = 1;
     this.getConstituency();
-    this.resetConstituencyName()
+    this.resetConstituencyName();
   }
 
   onKeyUpFilter() {
     this.subject.next();
+    this.resetConstituencyName();
   }
 
   searchFilters(flag: any) {

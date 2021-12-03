@@ -400,6 +400,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   filterData() {
     this.paginationNo = 1;
     this.getClientAgentWithBooths();
+    this.resetAssignAgentForm();
   }
 
   clearFilter(flag: any) {
@@ -410,6 +411,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     }
     this.paginationNo = 1;
     this.getClientAgentWithBooths();
+    this.resetAssignAgentForm();
   }
 
   defaultFilterForm() {
@@ -421,6 +423,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   onKeyUpFilter() {
     this.subject.next();
+    this.resetAssignAgentForm();
   }
 
   searchFilters(flag: any) {
