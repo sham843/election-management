@@ -80,6 +80,12 @@ export class CommonService {
         return new Date(year, month -1, day);
     }
 
+    changeDateFormat(date: string) {
+        const dateParts = date.substring(0, 10).split("/");
+        const ddMMYYYYDate = new Date(+dateParts[2], parseInt(dateParts[1]) - 1, +dateParts[0]);
+        return ddMMYYYYDate;
+      }
+
     dateTransformPipe(date_string: any) {
         let dateFormtchange: any;
         dateFormtchange = this.datePipe.transform(date_string, 'dd/MM/YYYY');
