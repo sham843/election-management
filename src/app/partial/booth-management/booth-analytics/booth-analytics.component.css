@@ -1,0 +1,18 @@
+#boothanalytics-filters .accordion-button{
+    font-size: 0.85rem;
+    box-shadow: none !important;
+    padding: 10px ;
+    text-transform: uppercase;
+}
+#boothanalytics-filters .accordion-body{
+    font-size: 0.85rem;
+    padding: 10px ;
+}
+#boothanalytics-filters .accordion-button:not(.collapsed){
+    background-color:#eee;
+    color: var(--main-color);
+}
+#boothanalytics-filters .accordion-button:not(.collapsed)::after > svg{
+    fill: #fff;
+    filter: #fff;
+}

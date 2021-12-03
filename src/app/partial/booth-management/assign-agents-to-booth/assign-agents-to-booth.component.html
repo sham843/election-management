@@ -324,13 +324,13 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="Address1" class="form-label required-field">Address</label>
+                            <label for="Address1" class="form-label">Address</label>
                             <textarea class="form-control" id="txtAddress" formControlName="Address"
                                 placeholder="Address"
                                 [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
-                            <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
-                                <div *ngIf="f.Address.errors.required">Address is required</div>
-                            </div>
+                            <!-- <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                <div *ngIf="f.Address.errors.pattern">Address is required</div>
+                            </div> -->
                         </div>
                         <div class="mb-2">
                             <div class="form-check">

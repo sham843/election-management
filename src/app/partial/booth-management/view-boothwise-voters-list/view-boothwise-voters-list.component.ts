@@ -70,6 +70,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   assignAgentForm!: FormGroup;
   submitted = false;
   btnText = 'Add Agent';
+  fillDataId = 0;
+  isChecked = new FormControl(false);
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -258,6 +260,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   clickBoothList(data: any) {
+    // Start Data Filled Filed Checkbox code
+    this.isChecked.setValue(false);
+    this.fillDataId = 0;
+    this.votersPaginationNo = 1;
+    //End Data Filled Filed Checkbox code
+
     this.globalboothVoterData = data;
     this.HighlightRow = data?.BoothId;
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + data?.BoothId;
@@ -285,7 +293,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
   boothVoterList() {
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
-      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo;
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo + '&IsFilled=' + this.fillDataId;
 
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList?' + obj, false, false, false, 'electionServiceForWeb');
@@ -293,6 +301,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.boothVoterListArray = res.data1;
+
         this.votersTotal = res.data2[0].TotalCount;
       } else {
         this.boothVoterListArray = [];
@@ -304,6 +313,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+  
+  onCheckFillData(event: any){
+    event.target.checked == true ? this.fillDataId = 1 : this.fillDataId = 0 ; this.votersPaginationNo = 1 ;
+    this.boothVoterList();
   }
 
   onClickPagintionVoters(pageNo: any) {

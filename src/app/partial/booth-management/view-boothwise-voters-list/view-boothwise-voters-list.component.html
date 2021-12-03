@@ -175,6 +175,10 @@
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
                                                 <div class="row justify-content-end mb-3">
+                                                    <div class="col-sm-auto pt-1">
+                                                        <input class="form-check-input me-1" [formControl]="isChecked" (change)="onCheckFillData($event)" type="checkbox">
+                                                        <label class="form-check-label" for="flexCheckDefault"> Data Filled</label>
+                                                    </div>
                                                     <div class="col-sm-3">
                                                         <div class="form-container">
                                                             <div class="input-group">
@@ -216,10 +220,10 @@
                                                             </td>
 
                                                             <td>
-                                                                <div *ngIf="boothVoterList?.MobileNo1"><a
-                                                                        class="calltomember"
-                                                                        href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a>
-                                                                </div>
+                                                                <div *ngIf="boothVoterList?.MobileNo1"><a class="calltomember" href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a></div>
+                                                                <!-- <div *ngIf="boothVoterList?.MobileNo1">
+                                                                    {{boothVoterList?.MobileNo1}}
+                                                                </div> -->
                                                                 <div *ngIf="!boothVoterList?.MobileNo1">-</div>
                                                             </td>
                                                         </tr>
@@ -513,30 +517,50 @@
                                                     </div>
                                                 </div>
                                                 <!-- Agents table start here  -->
-                                                <table class="table table-hover mb-0">
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span class="text-main me-3">
+                                                            <i class="fas fa-star me-1"></i> Indicates Booth Agent
+                                                        </span>
+                                                        <span class="text-dark">
+                                                            <i class="far fa-star me-1"></i> Indicates Area Agent
+                                                        </span>
+                                                    </caption>
                                                     <thead>
                                                         <tr>
                                                             <th>Sr. No.</th>
                                                             <th>Agents Name</th>
                                                             <th>Contact No</th>
+                                                            <th>Area</th>
                                                             <th>Voters</th>
                                                             <th>Filled</th>
                                                             <th>Migrated</th>
                                                             <th>Families</th>
                                                             <th>Pending</th>
-
-
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
-                                                            <td>{{agentList?.FullName}}</td>
+                                                            <td>
+                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main">
+                                                                    <i class="fas fa-star me-1"></i>
+                                                                    {{agentList?.FullName}}
+                                                                </span>
+                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-dark">
+                                                                    <i class="far fa-star me-1"></i>
+                                                                    {{agentList?.FullName}}
+                                                                </span>                                                                
+                                                            </td>
                                                             <td>
                                                                 <div *ngIf="agentList?.MobileNo"><a class="calltomember"
                                                                         href="tel:{{agentList?.MobileNo}}">{{agentList?.MobileNo}}</a>
                                                                 </div>
                                                                 <div *ngIf="!agentList?.MobileNo">-</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.Area">{{agentList?.Area}}</div>
+                                                                <div *ngIf="!agentList?.Area">-</div>
                                                             </td>
                                                             <td>{{agentList?.TotalVoter}}</td>
                                                             <td>{{agentList?.TotalFilled}}</td>
