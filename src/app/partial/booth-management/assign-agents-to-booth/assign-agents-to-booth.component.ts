@@ -237,6 +237,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
         }
       } else {
         this.AssemblyNameArray = [];
+        this.assemblyArray = [];
+        this.boothListMergeArray = [];
         this.spinner.hide();
       }
     }, (error: any) => {
