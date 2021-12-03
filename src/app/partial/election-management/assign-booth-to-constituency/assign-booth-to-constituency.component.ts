@@ -139,6 +139,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
       return;
     }
     else {
+      debugger;
       this.spinner.show();
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
       let id;

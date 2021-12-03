@@ -56,7 +56,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
+                            <!-- <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <div class="card card-body shadow-none border py-2">
                                         <p class="text-main fw-bold mb-1">
@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
 
 
@@ -398,17 +398,9 @@
                                             <!-- <button type="button" class="btn btn-light text-danger btn-sm"
                                                 (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
                                                     class="fas fa-trash-alt"></i></button> -->
-<<<<<<< HEAD
                                                     <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':agentList?.IsUserBlock == 1 , 'text-main' :agentList?.IsUserBlock == 0}" (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)" >
                                                    {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
                                                </button>
-=======
-                                            <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
-                                                [ngClass]="{'text-danger':agentList?.IsUserBlock == 0 , 'text-main' :agentList?.IsUserBlock == 1}"
-                                                (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)">
-                                                {{agentList?.IsUserBlock == 0 ? 'Blocked' : 'Active'}}
-                                            </button>
->>>>>>> a2dd94dea0c2028a5590f042a3424fcccb2ca22b
                                         </td>
                                     </tr>
                                     <tr>

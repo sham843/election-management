@@ -16,9 +16,7 @@
                 </div>
                 <div class="col-sm">
                     <div class="col-sm">
-                        <ngx-select  [allowClear]="true" [items]="allAgentLists" formControlName="AgentId"
-                         optionValueField="AgentId" (select)="allSubAgentsByAgentId();" optionTextField="FullName" placeholder="Select Area Agent"
-                        (remove)="clearFilter('Agent')" >
+                        <ngx-select  [allowClear]="true" [items]="allAgentLists" formControlName="subAreaAgentId">
                         </ngx-select>
                     </div>
                 </div>

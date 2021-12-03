@@ -88,7 +88,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentToBoothForm() {
     this.assAgentToBoothForm = this.fb.group({
       Id:[0],
-      ClientId: ['', [Validators.required]],
+      ClientId: [0, [Validators.required]],
       UserId: ['', [Validators.required]],
       ElectionId: ['', [Validators.required]],
       ConstituencyId: ['', [Validators.required]],
