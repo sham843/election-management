@@ -39,9 +39,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   cardActiveClass:boolean = true;
   subject: Subject<any> = new Subject();
 
-  constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, 
-    private fb: FormBuilder,public dateTimeAdapter: DateTimeAdapter<any>,private datePipe: DatePipe,
-    private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) { { dateTimeAdapter.setLocale('en-IN') } }
+  constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService,private fb: FormBuilder,public dateTimeAdapter: DateTimeAdapter<any>,private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) { 
+    { dateTimeAdapter.setLocale('en-IN') } 
+  }
 
   ngOnInit(): void {
     let agentInfo:any =  sessionStorage.getItem('agents-activity');
@@ -59,7 +59,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   topFilterForm(data:any) {
     let setAgentId:any;
     // data.SubUserTypeId == 3 ? setAgentId = data.BoothAgentId : setAgentId = data.
-    console.log(data);
     this.filterForm = this.fb.group({
       AgentId: [data.BoothAgentId],
       ClientId: [data.ClientId],
@@ -273,6 +272,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       FromTo: [],
       Search:[''],
     })
+    // this.voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker);
   }
 
   onKeyUpSearchFilter(){
@@ -324,7 +324,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getVotersCardData(){  
     this.spinner.show();
     let formData = this.filterForm.value;
-    debugger;
     let obj:any =  'AgentId=' + formData.AgentId + '&ClientId='+formData.ClientId+'&BoothId='+formData.BoothId+'&AssemblyId='+this.selBothIdObj.AssemblyId
     +'&Search=&nopage='+this.votersPaginationNo+'&FromDate='+this.voterProfilefilterForm.value.fromDate+'&ToDate='+this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_DailyWork?'+obj, false, false, false, 'electionServiceForWeb');
