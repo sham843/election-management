@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="text-end">
                                         <button type="button" [disabled]="!this.assAgentToBoothForm.value.ClientId"
-                                            class="btn btn-link btn-sm" (click)="Client_AgentList()"
+                                            class="btn btn-link btn-sm shadow-none" (click)="Client_AgentList()"
                                             data-bs-toggle="modal" data-bs-target="#AddAgentsToBoothModal">
                                             Add Agents</button>
                                     </div>
@@ -264,8 +264,9 @@
                                             <i class="fas fa-pen"></i>
                                         </button>
                                         <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
-                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':clientABooths?.Isblock == 1 , 'text-main' :clientABooths?.Isblock == 0}"
-                                             data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
+                                            [ngClass]="{'text-danger':clientABooths?.Isblock == 1 , 'text-main' :clientABooths?.Isblock == 0}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
                                             (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
                                             {{clientABooths?.Isblock == 1 ? 'Blocked' : 'Active'}}
                                         </button>
@@ -295,7 +296,7 @@
 <!-- Modal to add agents to booth -->
 <div class="modal fade" id="AddAgentsToBoothModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="AddAgentsToBoothModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <form [formGroup]="assignAgentForm">
                 <div class="modal-header">
@@ -304,116 +305,135 @@
                         (click)="clearAggentForm()"></button>
                 </div>
                 <div class="modal-body chartbox">
-                    <div class="form-container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-container">
 
-                        <div class="row mb-3 g-2">
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">First Name</label>
-                                <input type="text" class="form-control" formControlName="FName" placeholder="First Name"
-                                    [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
-                                <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
-                                    <div *ngIf="f.FName.errors.required">First Name is required</div>
-                                    <div *ngIf="f.FName.errors.pattern">First Name can not contain space</div>
-                                    <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
+                                <div class="row mb-3 g-2">
+                                    <div class="col-sm-4">
+                                        <label class="form-label required-field">First Name</label>
+                                        <input type="text" class="form-control" formControlName="FName"
+                                            placeholder="First Name"
+                                            [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                                        <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.FName.errors.required">First Name is required</div>
+                                            <div *ngIf="f.FName.errors.pattern">First Name can not contain space</div>
+                                            <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="txtFullName" class="form-label">Middle Name</label>
+                                        <input type="text" class="form-control" formControlName="MName"
+                                            placeholder="Middle Name"
+                                            [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                                        <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space</div>
+                                            <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="txtFullName" class="form-label required-field">Last Name</label>
+                                        <input type="text" class="form-control" formControlName="LName"
+                                            placeholder="Last Name"
+                                            [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                                        <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.LName.errors.required">Last Name is required</div>
+                                            <div *ngIf="f.LName.errors.pattern">Last Name can not contain space</div>
+                                            <div *ngIf="f.LName.errors.onlyEnglish">Use English Language</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <label for="txtFullName" class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" formControlName="MName"
-                                    placeholder="Middle Name" [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
-                                <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
-                                    <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space</div>
-                                    <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <label for="txtFullName" class="form-label required-field">Last Name</label>
-                                <input type="text" class="form-control" formControlName="LName" placeholder="Last Name"
-                                    [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
-                                <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
-                                    <div *ngIf="f.LName.errors.required">Last Name is required</div>
-                                    <div *ngIf="f.LName.errors.pattern">Last Name can not contain space</div>
-                                    <div *ngIf="f.LName.errors.onlyEnglish">Use English Language</div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <div class="col-sm-12">
-                                <label for="txtContactNo" class="form-label required-field">Contact No.</label>
-                                <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
-                                    formControlName="MobileNo" placeholder="Contact No."
-                                    [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
-                                <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
-                                    <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
-                                    <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                <div class="row mb-3">
+                                    <div class="col-sm-12">
+                                        <label for="txtContactNo" class="form-label required-field">Contact No.</label>
+                                        <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
+                                            formControlName="MobileNo" placeholder="Contact No."
+                                            [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                                        <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                            <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
+                                            <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Address1" class="form-label">Address</label>
+                                    <textarea class="form-control" id="txtAddress" formControlName="Address"
+                                        placeholder="Address"
+                                        [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
+                                    <!-- <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                        <div *ngIf="f.Address.errors.pattern">Address is required</div>
+                                    </div> -->
+                                </div>
+                                <div class="mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            formControlName="IsMemberAddAllow" value="" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Allow add area agent
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                            (click)="clearAggentForm()">Clear</button>
+                                    </div>
+                                    <div class="col-sm-6 text-end">
+                                        <button type="button" class="btn btn-primary btn-main btn-sm"
+                                            (click)="addAgent()">{{btnText}}</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="Address1" class="form-label">Address</label>
-                            <textarea class="form-control" id="txtAddress" formControlName="Address"
-                                placeholder="Address"
-                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
-                            <!-- <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
-                                <div *ngIf="f.Address.errors.pattern">Address is required</div>
-                            </div> -->
-                        </div>
-                        <div class="mb-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" formControlName="IsMemberAddAllow"
-                                    value="" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Allow add area agent
-                                </label>
+
+                        <div class="col-sm-6">
+                            <div class="mb-0" *ngIf="clientAgentListFlag">
+                                <div class="table-sticky">
+                                    <table class="table table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. No.</th>
+                                                <th>Agent Name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let agentList of getAllClientAgentList">
+                                                <td>{{agentList.SrNo}}</td>
+                                                <td>{{agentList.FullName}} <small> {{agentList?.MobileNo}}</small></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-light text-edit btn-sm me-1"
+                                                        (click)="editAgent(agentList)"><i
+                                                            class="fas fa-pen"></i></button>
+                                                    <!-- <button type="button" class="btn btn-light text-danger btn-sm"
+                                                    (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
+                                                        class="fas fa-trash-alt"></i></button> -->
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-light text-main rounded fw-bold"
+                                                        [ngClass]="{'text-danger':agentList?.IsUserBlock == 1 , 'text-main' :agentList?.IsUserBlock == 0}"
+                                                        (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)">
+                                                        {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <div *ngIf="getAllClientAgentList.length == 0">
+                                                        <div class="alert alert-danger text-center py-2">No Data
+                                                            Found..!</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-outline-secondary btn-sm"
-                                    (click)="clearAggentForm()">Clear</button>
-                            </div>
-                            <div class="col-sm-6 text-end">
-                                <button type="button" class="btn btn-primary btn-main btn-sm"
-                                    (click)="addAgent()">{{btnText}}</button>
-                            </div>
-                        </div>
-                        <div class="mb-0" *ngIf="clientAgentListFlag">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Agent Name</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let agentList of getAllClientAgentList">
-                                        <td>{{agentList.SrNo}}</td>
-                                        <td>{{agentList.FullName}} <small> {{agentList?.MobileNo}}</small></td>
-                                        <td>
-                                            <button type="button" class="btn btn-light text-edit btn-sm me-1"
-                                                (click)="editAgent(agentList)"><i class="fas fa-pen"></i></button>
-                                            <!-- <button type="button" class="btn btn-light text-danger btn-sm"
-                                                (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
-                                                    class="fas fa-trash-alt"></i></button> -->
-                                                    <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold" [ngClass]="{'text-danger':agentList?.IsUserBlock == 1 , 'text-main' :agentList?.IsUserBlock == 0}" (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)" >
-                                                   {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
-                                               </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div *ngIf="getAllClientAgentList.length == 0">
-                                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
+
+
                 </div>
             </form>
         </div>

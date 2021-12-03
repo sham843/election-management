@@ -366,10 +366,12 @@ export class CreateElectionsComponent implements OnInit {
   filterData() {
     this.paginationNo = 1;
     this.getElectionMaster();
+    this.clearForm();
   }
 
   onKeyUpFilter() {
     this.subject.next();
+    this.clearForm();
   }
 
   searchFilters(flag: any) {
