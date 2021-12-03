@@ -31,6 +31,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
     npm i ng-connection-service
     npm i ngx-toastr
     npm i ngx-select-ex
+    npm install @amcharts/amcharts4
+    npm i ng-pick-datetime@5.2.6
     -->
 
 <!-- Added By prasad

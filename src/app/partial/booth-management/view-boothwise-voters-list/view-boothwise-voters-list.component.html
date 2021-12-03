@@ -202,7 +202,7 @@
                                                         <tr>
                                                             <th>Sr. No.</th>
                                                             <th>Voters Name</th>
-                                                            <th>Voter ID</th>
+                                                            <th>Voter NO.</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                         </tr>
@@ -380,7 +380,7 @@
                                                         <tr>
                                                             <th>Sr. No.</th>
                                                             <th>Voters Name</th>
-                                                            <th>Voter ID</th>
+                                                            <th>Voter NO.</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                             <th>Migrated To</th>
@@ -448,7 +448,7 @@
                                                         <tr>
                                                             <th>Sr. No.</th>
                                                             <th>Voters Name</th>
-                                                            <th>Voter ID</th>
+                                                            <th>Voter NO.</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                             <th>Migrated City</th>
@@ -543,7 +543,7 @@
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
                                                             <td>
-                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main">
+                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main" style=" cursor: pointer;" (click)="redirectToAgentDetails(agentList)">
                                                                     <i class="fas fa-star me-1"></i>
                                                                     {{agentList?.FullName}}
                                                                 </span>
@@ -608,7 +608,7 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Voter Name</th>
-                            <th>Voter ID</th>
+                            <th>Voter NO.</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -661,6 +661,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     }
   }
 
+  redirectToAgentDetails(obj:any){
+    sessionStorage.setItem('agents-activity', JSON.stringify(obj))
+    this.router.navigate(['../agents-activity']);
+  }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
   // ------------------------------------------ Booth details ------------------------------ -------------------- //

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -15,32 +15,137 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
   templateUrl: './agents-activity.component.html',
   styleUrls: ['./agents-activity.component.css']
 })
-export class AgentsActivityComponent implements OnInit {
+export class AgentsActivityComponent implements OnInit, OnDestroy {
+  agentProfileCardData: any;
   agentProfileData: any;
+  allAgentLists: any;
+  allSubAgentsByAgentId: any;
   filterForm!: FormGroup;
+  voterProfilefilterForm!: FormGroup;
   piChartArray = [];
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder,
     private commonService: CommonService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.topFilterForm(); // top filter method
+    let agentInfo:any =  sessionStorage.getItem('agents-activity');
+    this.topFilterForm(JSON.parse(agentInfo)); // top filter method
+    this.getAllAgentList();
     this.getAgentProfileData();
+    this.getAgentProfileCardData();
+
+    this.deafultVoterProfilefilterForm(); // voter list filter
   }
 
   //--------------------------------------------------  top filter method's start  here e -----------------------------------------------------------//
-  topFilterForm() {
+  topFilterForm(data:any) {
+    let setAgentId:any;
+    data.SubUserTypeId == 3 ? setAgentId = data.BoothAgentId : setAgentId = data.
+    console.log(data);
     this.filterForm = this.fb.group({
-      AgentId: [530],
-      ClientId: [this.commonService.loggedInUserId()],
+      AgentId: [data.BoothAgentId],
+      ClientId: [data.ClientId],
       BoothId: [0],
-      AssemblyId: [0]
+      AssemblyId: [0],
+      subAreaAgentId:[]
     })
+  }
+
+  getAllAgentList() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.allAgentLists = res.data1;
+        this.areaSubAgentByAgentId();
+      } else {
+        this.allAgentLists = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  areaSubAgentByAgentId(){
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let agentId:any;
+
+    formData.subAreaAgentId == "" ||  formData.subAreaAgentId == null || formData.subAreaAgentId == undefined ?  agentId =  formData.ClientId :  agentId =  formData.subAreaAgentId;
+   
+    let obj:any =  'ClientId='+agentId+'&UserId=' + this.commonService.loggedInUserId()+'&BoothAgentId='+formData.BoothId;
+    this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?'+obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.allSubAgentsByAgentId = res.data1;
+        this.getAgentByBooths();
+      } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  getAgentByBooths(){
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let obj:any =  'ClientId='+formData.ClientId+'&AgentId=' + formData.AgentId +'&BoothAgentId='+formData.BoothId;
+    this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBoothsList?'+obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.allSubAgentsByAgentId = res.data1;
+        console.log(this.allSubAgentsByAgentId)
+      } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  
+  clearFilter(flag:any){
+
   }
   //--------------------------------------------------  top filter method's end  here e -----------------------------------------------------------//
 
   //-------------------------------------------------- agent Profile method's start here -----------------------------------------------------------//
-  getAgentProfileData() {
+  getAgentProfileData(){
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.commonService.loggedInUserId()+'&clientid='+this.filterForm.value.ClientId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.agentProfileData = res.data1[0];
+        this.getpiChartArray(res.data1);
+      } else {
+        this.agentProfileData = [];
+        this.spinner.hide();
+      }
+    
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+ 
+  getAgentProfileCardData() {
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj = 'AgentId=' + formData.AgentId + '&ClientId=' + formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + formData.AssemblyId;
@@ -48,9 +153,9 @@ export class AgentsActivityComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.agentProfileData = res.data1[0];
+        this.agentProfileCardData = res.data1[0];
       } else {
-        this.agentProfileData = [];
+        this.agentProfileCardData = [];
         this.spinner.hide();
       }
       this.getpiChartArray(res.data1);
@@ -137,23 +242,39 @@ export class AgentsActivityComponent implements OnInit {
 
   //-------------------------------------------------- agent Profile method's end here -----------------------------------------------------------//
 
+  // --------------------------------------------------  voters data  method's Start here right side panel  -------------------------------------------------- //
+ 
+  // --------------------------------------------------   voter filter metho's  start here   -------------------------------------------------- //
 
-  getClientName() {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        // this.clientNameArray = res.data1;
-      } else {
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+  deafultVoterProfilefilterForm(){
+    this.voterProfilefilterForm = this.fb.group({
+      fromTo: [['','']],
+      FromDate: [['','']],
+      ToDate: [['','']],
+      Search:[''],
     })
   }
+
+  onKeyUpSearchFilter(){
+
+  }
+
+  voterDateRangeSelect(){
+    
+  }
+  clearFilterVoter(flag:any){
+    
+  }
+
+  // --------------------------------------------------   voter filter metho's  start here   -------------------------------------------------- //
+
+  ngOnDestroy(){
+    sessionStorage.removeItem('agents-activity');
+  }
+  
+  // --------------------------------------------------  voters data  method's End  here right side panel -------------------------------------------------- //
+
+
+
 
 }

@@ -6,26 +6,32 @@
             </span>
         </div>
         <div class="col-sm-8 text-end">
+            <form  [formGroup]="filterForm">
             <div class="row g-2">
-                <!-- <div class="col-sm">
-                    <input type="date" class="form-control">
-                </div> -->
                 <div class="col-sm">
-                    <select class="form-select">
-                        <option value="">Select Agent</option>
-                    </select>
+                    <ngx-select  [allowClear]="true" [items]="allAgentLists" formControlName="AgentId"
+                     optionValueField="AgentId" (select)="areaSubAgentByAgentId();" optionTextField="FullName" placeholder="Select Agent"
+                    (remove)="clearFilter('Agent')" >
+                </ngx-select>
                 </div>
                 <div class="col-sm">
-                    <select class="form-select">
-                        <option value="">Select Area Agent</option>
-                    </select>
+                    <div class="col-sm">
+                        <ngx-select  [allowClear]="true" [items]="allAgentLists" formControlName="AgentId"
+                         optionValueField="AgentId" (select)="allSubAgentsByAgentId();" optionTextField="FullName" placeholder="Select Area Agent"
+                        (remove)="clearFilter('Agent')" >
+                        </ngx-select>
+                    </div>
                 </div>
                 <div class="col-sm">
-                    <select class="form-select">
-                        <option value="">Select Booth</option>
-                    </select>
+                    <ngx-select  [allowClear]="true" [items]="allSubAgentsByAgentId" formControlName="BoothId"
+                         optionValueField="BoothId" (select)="allSubAgentsByAgentId();" optionTextField="BoothName" placeholder="Select Booth"
+                        (remove)="clearFilter('Booth')" >
+                        </ngx-select>
+                    
                 </div>
+           
             </div>
+        </form>
         </div>
     </div>
 
@@ -36,12 +42,15 @@
                     <div class="profile-info">
                         <div class="d-flex mb-3">
                             <div class="flex-shrink-0">
-                                <img src="assets/images/Profile-Photo.jpg">
+                                <img src="{{agentProfileData?.ProfilePhoto != '' ? agentProfileData?.ProfilePhoto : 'assets/images/Profile-Photo.jpg'}}">
                             </div>
                             <div class="flex-grow-1 ms-3 pt-2">
-                                <h5>Agent Middle Name</h5>
-                                <p class="contact">+91-9876543210</p>
-                                <p class="contact">Address</p>
+                                <h5 >{{agentProfileData?.FullName | titlecase}}</h5>
+                                <p class="contact mb-0">+91-{{agentProfileData?.MobileNo}}</p>
+                                <p class="contact mb-0">Address</p>
+                                <p class="mb-0"><small>{{agentProfileData?.Address | titlecase}}</small></p>
+                                <p class="mb-0">{{agentProfileData?.Emailid}}</p>
+                                <!-- <p class="mb-0">{{agentProfileData?.Gender == 1 ? 'Male' : 'Female'}}</p> -->
                                 <span class="badge bg-danger py-1 fw-normal rounded-pill px-3 mt-1">
                                     This Agent is Blocked
                                 </span>
@@ -55,7 +64,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileData?.TotalVoter}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalVoter}}</h5>
                                         <p class="card-text">
                                             Total Voters
                                         </p>
@@ -65,7 +74,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileData?.TotalFilled}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalFilled}}</h5>
                                         <p class="card-text">
                                             Data Filled
                                         </p>
@@ -75,7 +84,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileData?.Pending}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.Pending}}</h5>
                                         <p class="card-text">
                                             Date Pending
                                         </p>
@@ -85,7 +94,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileData?.TotalMigrated}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalMigrated}}</h5>
                                         <p class="card-text">
                                             Total Migrated
                                         </p>
@@ -95,7 +104,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileData?.TotalFamily}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalFamily}}</h5>
                                         <p class="card-text">
                                             Total Families
                                         </p>
@@ -105,7 +114,7 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileData?.NewVoter}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.NewVoter}}</h5>
                                         <p class="card-text">
                                             New Voters
                                         </p>
@@ -150,9 +159,28 @@
                                 </label>
                             </div>
                         </div> -->
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control">
-                        </div>
+                            <form [formGroup]="voterProfilefilterForm">
+                                <div class="row g-1 mb-2 border-bottom pb-2">
+                                    <div class="offset-sm-4 col-sm-4">
+                                        <!-- <div class="input-group">
+                                            <input [owlDateTime]="dt3" (remove)="clearFilterVoter('dateRangePicker')" formControlName="fromTo" [selectMode]="'range'" (dateTimeChange)="voterDateRangeSelect()" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date">
+                                            <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3">
+                                                <i class="fas fa-calendar-alt"></i></button>
+                                            <button class="btn btn-light border btn-sm" type="button" *ngIf="defaultCloseBtn" (click)="clearFilter('dateRangePIcker')">
+                                                <i class="fas fa-times"></i></button>
+                                        </div>
+                                        <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time> -->
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" formControlName="Search" placeholder="Search..." (keyup)="onKeyUpSearchFilter()" />
+                                            <button type="button" class="btn btn-light border btn-sm" (click)="clearFilterVoter('search')" *ngIf="voterProfilefilterForm.value.Search" ><i
+                                                  class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!voterProfilefilterForm.value.Search" class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                     </div>
                 </div>
                 <div class="card-body profile-info">
@@ -160,13 +188,13 @@
                         <div class="col-sm">
                             <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
                                 <h5 class="card-title">2426</h5>
-                                <p class="card-text"> Families </p>
+                                <p class="card-text"> Voters </p>
                             </a>
                         </div>
                         <div class="col-sm">
                             <a routerLink="#" class="card p-2 card-body shadow-none border box-link">
                                 <h5 class="card-title">2426</h5>
-                                <p class="card-text"> Voters </p>
+                                <p class="card-text"> Families </p>
                             </a>
                         </div>
                         <!-- <div class="col-sm">
@@ -204,7 +232,7 @@
                                 <th>Sr. No.</th>
                                 <th>Voters Full Name</th>
                                 <th>Visit Time</th>
-                                <th>Voter ID</th>
+                                <th>Voter NO.</th>
                                 <th>Gender</th>
                                 <th>Contact No</th>
                             </tr>
