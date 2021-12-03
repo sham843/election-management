@@ -461,7 +461,7 @@ body{
     color: #dc3545!important;
     font-size: 18px;
     margin-left: 2px;
-    line-height: 21px;
+    line-height: 17px;
 }
 
 tr.active {
@@ -581,4 +581,16 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     column-gap:10px;
     font-size: 0.85rem;
     margin:0;
+}
+.table-sticky {
+    height: 300px;
+  overflow-y: auto;
+}
+.table-sticky .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table-sticky thead{
+    position: sticky;
+  top: 0;
 }
