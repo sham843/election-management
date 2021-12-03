@@ -349,11 +349,13 @@ export class AssignElectionsToRegionalLeaderComponent implements OnInit {
     }
     this.paginationNo = 1;
     this.getAssignedConstituencytoClient();
+    this.resetAssignElectionForm();
   }
 
   filterData() {
     this.paginationNo = 1;
     this.getAssignedConstituencytoClient();
+    this.resetAssignElectionForm();
   }
 
   onKeyUpFilter() {
