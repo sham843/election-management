@@ -35,3 +35,11 @@
     background: var(--main-color);
     color: #fff !important;
 } */
+
+.box-link.active {
+    background: #463afd;
+}
+
+.box-link.active h5, .box-link.active p{
+    color: #fff !important;
+}
