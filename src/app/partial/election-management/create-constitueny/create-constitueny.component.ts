@@ -72,6 +72,7 @@ export class CreateConstituenyComponent implements OnInit {
   defaultMapData:any;
   geoFanceConstituencyId:any;
   getGeofenceTypeId:any;
+  ElectionId: any;
 
 
   constructor(
@@ -85,7 +86,10 @@ export class CreateConstituenyComponent implements OnInit {
     public dialog: MatDialog,
     //private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone
-  ) { }
+  ) { 
+    let getsessionStorageData: any = sessionStorage.getItem('ElectionId');
+    this.ElectionId= JSON.parse(getsessionStorageData);
+  }
 
   ngOnInit(): void {
     this.defaultConstituencyForm();
@@ -104,7 +108,7 @@ export class CreateConstituenyComponent implements OnInit {
   defaultConstituencyForm() {
     this.createConstituencyForm = this.fb.group({
       Id: [0],
-      ElectionId: ['', Validators.required],
+      ElectionId: [''|| this.ElectionId, Validators.required],
       ConstituencyName: ['', [Validators.required]],
       Members: [0],
       NoofMembers: [''],
@@ -261,9 +265,10 @@ export class CreateConstituenyComponent implements OnInit {
 
   resetConstituencyName() {
     this.submitted = false;
-    this.defaultConstituencyForm();
+    this.ngOnDestroy();
     this.addSubConstituencyArray = [];
     this.subConsTableHideShowOnArray();
+    this.defaultConstituencyForm();
     this.subConstituencyDivHide = false;
     this.noOfMembersDiv = false;
     this.btnText = 'Create Constituency';
@@ -321,6 +326,9 @@ export class CreateConstituenyComponent implements OnInit {
       this.addSubConstituencyArray = [];
       this.subConstituencyTableDiv = false;
       this.subConstituencyDivHide = false;
+    }
+    if(this.createConstituencyForm.value.Id == 0 ){
+      this.addSubConstituencyArray = [];
     }
   }
 
@@ -422,7 +430,9 @@ export class CreateConstituenyComponent implements OnInit {
   }
 
   subConsTableHideShowOnArray() {
+    this.ElectionId = '';
     this.addSubConstituencyArray.length != 0 ? this.subConstituencyTableDiv = true : this.subConstituencyTableDiv = false; // hide div on array
+  
   }
 
   deleteElectionMasterData() {
@@ -449,6 +459,9 @@ export class CreateConstituenyComponent implements OnInit {
     this.getConstituency();
   }
 
+  ngOnDestroy() {
+    sessionStorage.removeItem('ElectionId');
+  }
 
   // filter form 
 

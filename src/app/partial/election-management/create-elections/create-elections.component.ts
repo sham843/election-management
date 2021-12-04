@@ -96,6 +96,9 @@ export class CreateElectionsComponent implements OnInit {
       this.addSubElectionArray = [];
       this.subElecTableHide = false;
     }
+    if(this.createElectionForm.value.Id == 0 ){
+      this.addSubElectionArray = [];
+    }
   }
 
   addBtndisabledEnabled() {// when dropdown value select
@@ -294,6 +297,11 @@ export class CreateElectionsComponent implements OnInit {
       IsAsemblyBoothListApplicable: this.electionDetailsArray.IsAsemblyBoothListApplicable,
       IsSubElectionApplicable: this.electionDetailsArray.IsSubElectionApplicable,
     })
+  }
+
+  redToCreateConstituency(eleId:any){
+    sessionStorage.setItem('ElectionId', JSON.stringify(eleId));
+    this.router.navigate(['../create-constituency'], { relativeTo: this.route })
   }
 
   clearForm() {

@@ -167,12 +167,14 @@
                             <tr *ngFor="let electionMaster of electionMasterArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
                                 [class.active]="electionMaster.Id == HighlightRow">
                                 <td>{{electionMaster.SrNo}}</td>
-                                <td><a routerLink="../election-profile">{{electionMaster.ElectionName}}</a></td>
+                                <td><a routerLink="../voters-profile">{{electionMaster.ElectionName}}</a></td>
                                 <td>{{electionMaster.ElectionType}}</td>
+
                                 <td>
-                                    <a class="fw-bold text-primary"
-                                        routerLink="../create-constituency">{{electionMaster.Constituency}}</a>
+                                    <a class="fw-bold text-primary" (click)="redToCreateConstituency(electionMaster.Id)"
+                                        >{{electionMaster.Constituency}}</a>
                                 </td>
+
                                 <td *ngIf="electionMaster.IsSubElectionApplicable == 1;else otherContent">
                                     <ol class="mb-0 ps-3">
                                         <li
