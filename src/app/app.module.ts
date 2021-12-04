@@ -19,7 +19,6 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteComponent } from './partial/dialogs/delete/delete.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 @NgModule({
@@ -35,8 +34,6 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
     NgxSelectModule,

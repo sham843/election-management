@@ -16,7 +16,7 @@
                         <div class="form-container">
                             <div class="mb-2">
                                 <label for="ddlElection" class="form-label required-field">Election</label>
-                                <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="id" optionTextField="ElectionName" placeholder="Select Election" (select)="GetConstituencyName($event)" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                                <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="id" optionTextField="ElectionName" placeholder="Select Election" (select)="getConstituencyName($event)" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
                                 </ngx-select>
                                 <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
                                     <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>

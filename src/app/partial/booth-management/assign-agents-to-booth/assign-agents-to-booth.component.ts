@@ -304,8 +304,12 @@ export class AssignAgentsToBoothComponent implements OnInit {
           return ele;
         }
       });
-      console.log(this.boothListMergeArray);
-      this.checkBoxCehckBoothArray(this.AssemblyBoothArray = []);
+      let uncheckAssemblyBoothArrayckAs = this.AssemblyBoothArray.filter((ele: any) => {
+        if (ele.AssemblyId !== assemblyId) {
+          return ele;
+        }
+      });
+      this.checkBoxCehckBoothArray(this.AssemblyBoothArray = uncheckAssemblyBoothArrayckAs);
     }
   }
 

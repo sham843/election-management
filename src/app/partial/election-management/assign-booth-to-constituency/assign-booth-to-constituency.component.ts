@@ -50,7 +50,8 @@ export class AssignBoothToConstituencyComponent implements OnInit {
   searchboothList = '';
   assemblyCheckBoxCheck!: boolean;
   selBoothId: any;
-  BoothListDetailData:any;
+  BoothListDetailData: any;
+  globalEditObj:any;
 
 
   constructor(
@@ -65,7 +66,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.defaultAssignBoothForm();
+    this.defaultAssignBoothsForm();
     this.getAssembly();
     this.getElection();
     this.defaultFilterForm();
@@ -73,65 +74,158 @@ export class AssignBoothToConstituencyComponent implements OnInit {
     this.searchFilters('false');
   }
 
-  defaultAssignBoothForm() {
+  //---------------------------------------- left side AssignBoothForm method's  start here -----------------------------------------------// 
+  defaultAssignBoothsForm() {
     this.assignBoothForm = this.fb.group({
       Id: [0],
       ElectionId: ['', Validators.required],
       ConstituencyId: ['', Validators.required],
       assembly: [''],
       boothList: [''],
-      // Assembly: [false,  Validators.requiredTrue],
-      // Booths: [false, Validators.requiredTrue],
     })
   }
 
   get f() { return this.assignBoothForm.controls };
 
-  defaultFilterForm() {
-    this.filterForm = this.fb.group({
-      ElectionNameId: [0],
-      Search: [''],
+  getElection() {
+    this.spinner.show();
+    // this.callAPIService.setHttp('get', 'Web_GetElection?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'ncpServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Election_Get_ElectionNameHaveConstituency?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.electionNameArray = res.data1;
+        if (this.btnText == 'Update Booths') {
+          this.assignBoothForm.controls['ElectionId'].setValue(this.globalEditObj.ElectionId);
+          this.getConstituencyName(this.globalEditObj.ElectionId);
+        }
+      } else {
+        this.spinner.hide();
+        this.electionNameArray = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
     })
   }
 
-  onCheckChangeAssembly(event: any, assemblyId:any) {
-    this.assemblyCheckBoxCheck = event.target.checked;
-    this.AssemblyId = assemblyId;
-    if (event.target.checked == false) {
-      let index = this.assemblyIdArray.indexOf(this.AssemblyId);
-      this.assemblyIdArray.splice(index, 1);
-  
-      let indexBoothArray = this.AssemblyBoothArray.findIndex((x:any)=> x.AssemblyId == this.AssemblyId);
-      this.AssemblyBoothArray.splice(indexBoothArray, 1);
-      // this.onCheckChangeBooths(event, assemblyId);
-      this.boothListMergeArray = this.boothListMergeArray.filter((ele: any) => {
-        if (ele.AssemblyId !== Number(this.AssemblyId)) {
-          return ele;
+  getConstituencyName(ElectionId: any) {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + ElectionId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.constituencyNameArray = res.data1;
+
+        if (this.btnText == 'Update Booths') {
+          this.assignBoothForm.controls['ConstituencyId'].setValue(this.globalEditObj.ConstituencyId);
+          this.getAssembly();
         }
-      });
-      this.boothListMergeArray.length == 0 ?   this.boothDivHide = false : this.boothDivHide = true;
-    }
-    else {
-      this.assemblyIdArray.push(this.AssemblyId);
-      this.GetBoothList(this.AssemblyId);
-    };
-    // this.GetBoothList(this.AssemblyId);
+
+      } else {
+        this.spinner.hide();
+        this.constituencyNameArray = [];
+        this.toastrService.error("Constituency Name is not available");
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
   }
 
-  onCheckChangeBooths(event: any, assemblyId: any, boothId: any) {
-    if (event.target.checked == false) {
-      let index = this.AssemblyBoothArray.map((x: any) => { return x.BoothId; }).indexOf(boothId);
-      this.AssemblyBoothArray.splice(index, 1);
+  getAssembly() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Election_GetAssembly?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.assemblyArray = res.data1;
+        if (this.btnText == 'Update Booths') {
+          this.checkBoxCehckAssemblyArray(this.ConstituencyIdArray);
+          this.boothDivHide = true;
+        }
+      } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      if (error.status == 500) {
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  getBoothList(AssemblyId: any) {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Election_GetBoothList?ConstituencyId=' + AssemblyId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothDivHide = true;
+        this.boothListArray = res.data1;
+        this.boothListArray.map((ele: any) => {
+          this.boothListMergeArray.push(ele);
+        });
+
+        if (this.btnText == 'Update Booths') {
+          //on edit get obj by BoothId
+          debugger;
+           this.AssemblyBoothArray.forEach((element: any, i:any) => {
+            this.boothListArray.filter((item: any) => {
+              if(element == item.Id){
+                this.AssemblyBoothArray[i] = item;
+                    this.AssemblyBoothArray[i].BoothId = item.Id;
+                    delete this.AssemblyBoothArray[i]['BoothEnglishName'];
+                    delete this.AssemblyBoothArray[i]['checked'];
+              }
+            });
+          });
+          this.checkBoxCehckBoothArray(this.AssemblyBoothArray);
+        }
+      } else {
+        this.boothListMergeArray.length == 0 ?  this.boothListMergeArray = [] : '';
+        this.spinner.hide();
+        //this.toastrService.error("Data is not available");
+      }
+    }, (error: any) => {
+      if (error.status == 500) {
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  checkBoxCehckAssemblyArray(ConstituencyId: any) {
+    for (let i = 0; i < ConstituencyId.length; i++) {
+      for (let j = 0; j <this.assemblyArray.length; j++) {
+        if (this.assemblyArray[j].Id == Number(ConstituencyId[i])) {
+          this.assemblyArray[j].checked = true;
+          this.getBoothList(Number(ConstituencyId[i]));
+        }
+      }
     }
-    else {
-      this.AssemblyBoothArray.push({ 'AssemblyId': assemblyId, 'BoothId': boothId });
+  }
+
+  checkBoxCehckBoothArray(ConstituencyId: any) {
+    debugger
+    for (let i = 0; i < ConstituencyId.length; i++) {
+      for (let j = 0; j < this.boothListArray.length; j++) {
+        if (this.boothListArray[j].Id == Number(ConstituencyId[i].Id)) {
+          this.boothListArray[j].checked = true;
+        }
+      }
     }
   }
 
   onSubmitElection() {
     this.submitted = true;
-    let formData = this.assignBoothForm.value;
     debugger;
+    let formData = this.assignBoothForm.value;
     if (this.assignBoothForm.invalid) {
       this.spinner.hide();
     }else if (this.AssemblyBoothArray.length == 0  ||  this.AssemblyBoothArray.length == 0){
@@ -139,7 +233,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
       return;
     }
     else {
-    
+    debugger;
       this.spinner.show();
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
       let id;
@@ -147,11 +241,14 @@ export class AssignBoothToConstituencyComponent implements OnInit {
 
       let obj = id + '&ElectionId=' + formData.ElectionId + '&ConstituencyId=' + formData.ConstituencyId
         + '&strAssmblyBoothId=' + this.assemblyBoothJSON + '&CreatedBy=' + this.commonService.loggedInUserId();
+        
       this.callAPIService.setHttp('get', 'Web_Insert_Election_AssignBoothToElection?Id=' + obj, false, false, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.toastrService.success(res.data1[0].Msg);
+          this.assemblyArray = [];
           this.AssemblyBoothArray = [];
+          this.boothDivHide = false;
           this.getAssignedBoothToElection();
           this.spinner.hide();
           this.clearForm();
@@ -171,100 +268,106 @@ export class AssignBoothToConstituencyComponent implements OnInit {
     }
   }
 
-  getElection() {
-    this.spinner.show();
-    // this.callAPIService.setHttp('get', 'Web_GetElection?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'ncpServiceForWeb');
-    this.callAPIService.setHttp('get', 'Web_Election_Get_ElectionNameHaveConstituency?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.electionNameArray = res.data1;
-      } else {
-        this.spinner.hide();
-        this.electionNameArray = [];
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
+  clearForm() {
+    this.submitted = false;
+    this.btnText = 'Assign Booths'
+    this.defaultAssignBoothsForm();
+    this.boothListArray = [];
+    this.boothDivHide = false;
+    this.searchAssembly = '';
+    this.searchboothList = '';
+    this.getAssembly();
   }
 
-  GetConstituencyName(ElectionId: any) {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + ElectionId, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.assignBoothForm.controls['ConstituencyId'].setValue(this.ConstituencyId);
-        this.spinner.hide();
-        this.constituencyNameArray = res.data1;
-
-      } else {
-        this.spinner.hide();
-        this.constituencyNameArray = [];
-        this.toastrService.error("Constituency Name is not available");
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
-
-
-  getAssembly() {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_GetAssembly?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.assemblyArray = res.data1;
-      } else {
-        this.spinner.hide();
-        //this.toastrService.error("Data is not available");
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
-
-  GetBoothList(AssemblyId: any) {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_GetBoothList?ConstituencyId=' + AssemblyId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.boothDivHide = true;
-        this.boothListArray = res.data1;
-        this.boothListArray.map((ele: any) => {
-          if (this.assemblyCheckBoxCheck) {
-            this.boothListMergeArray.push(ele);
-          }
-        });
-        if (this.btnText == 'Update Booths') {
-          let BoothIdArray = this.selBoothId.split(',');
-          this.checkBoxCehckBoothArray(BoothIdArray);
+  onCheckChangeAssembly(event: any, assemblyId:any) {
+    debugger;
+    if (event.target.checked){
+      this.assemblyIdArray.push(assemblyId);
+      this.getBoothList(assemblyId);
+    }else{
+      this.boothListMergeArray = this.boothListMergeArray.filter((ele: any) => {
+        if (ele.AssemblyId !== assemblyId) {
+          return ele;
         }
+      });
+      let uncheckAssemblyBoothArrayckAs = this.AssemblyBoothArray.filter((ele: any) => {
+        if (ele.AssemblyId !== assemblyId) {
+          return ele;
+        }
+      });
+      this.checkBoxCehckBoothArray(this.AssemblyBoothArray = uncheckAssemblyBoothArrayckAs);
+    }
+  }
 
-      } else {
-        this.boothListMergeArray.length == 0 ?  this.boothListMergeArray = [] : '';
-        this.spinner.hide();
-        //this.toastrService.error("Data is not available");
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+  onCheckChangeBooths(event: any, assemblyId: any, boothId: any) {
+    if (event.target.checked == false) {
+      let index = this.AssemblyBoothArray.map((x: any) => { return x.BoothId; }).indexOf(boothId);
+      this.AssemblyBoothArray.splice(index, 1);
+    }
+    else {
+      this.AssemblyBoothArray.push({ 'AssemblyId': assemblyId, 'BoothId': boothId });
+    }
+  }
+
+  clearAssemblyBooth() {
+    this.boothListMergeArray = [];
+    this.assemblyArray = [];
+  }
+  //---------------------------------------- left side AssignBoothForm method's  end here -----------------------------------------------// 
+
+
+  //------------------------------------------------- Top filters method's  start here ---------------------------------------------------// 
+
+  defaultFilterForm() {
+    this.filterForm = this.fb.group({
+      ElectionNameId: [0],
+      Search: [''],
     })
   }
 
-  getAssignedBoothToElection() {//get TableRecord
+  onKeyUpFilter() {
+    this.subject.next();
+    this.clearForm();
+  }
+
+
+  searchFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.filterForm.value.Search;
+        this.paginationNo = 1;
+        this.getAssignedBoothToElection();
+      });
+  }
+
+  filterData() {
+    this.paginationNo = 1;
+    this.getAssignedBoothToElection();
+    this.clearForm();
+  }
+
+  clearFilter(flag: any) {
+    if (flag == 'electionType') {
+      this.filterForm.controls['ElectionNameId'].setValue(0);
+    } else if (flag == 'search') {
+      this.filterForm.controls['Search'].setValue('');
+    }
+    this.paginationNo = 1;
+    this.getAssignedBoothToElection();
+    this.clearForm();
+  }
+
+  //------------------------------------------------- Top filters method's  end here ---------------------------------------------------// 
+
+  //----------------------------------------------- assign booth to constituency table method's start here---------------------------------//  
+  getAssignedBoothToElection() {
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj = '&ElectionId=' + formData.ElectionNameId + '&UserId=' + this.commonService.loggedInUserId() + '&Search=' + formData.Search +
@@ -278,7 +381,6 @@ export class AssignBoothToConstituencyComponent implements OnInit {
       } else {
         this.spinner.hide();
         this.assignedBoothToElectionArray = [];
-        // //this.toastrService.error("Data is not available");
       }
     }, (error: any) => {
       if (error.status == 500) {
@@ -287,7 +389,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
     })
   }
 
-  getAssignedBoothListDetail(HeaderId: any,obj:any) {//modelRecord
+  getAssignedBoothListDetail(HeaderId: any, obj: any) {
     this.spinner.show();
     this.BoothListDetailData = obj;
     this.callAPIService.setHttp('get', 'Web_Election_GetAssignedBoothListDetail?HeaderId=' + HeaderId, false, false, false, 'electionServiceForWeb');
@@ -297,98 +399,12 @@ export class AssignBoothToConstituencyComponent implements OnInit {
         this.AssBoothListDetailArray = res.data1;
       } else {
         this.spinner.hide();
-        //this.toastrService.error("Data is not available");
       }
     }, (error: any) => {
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
-  }
-  patchAssBoothElection(HeaderId: any) {
-    this.btnText = 'Update Booths';
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_GetAssignedBoothListbyHeaderId?HeaderId=' + HeaderId, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.editAssignBoothsPatchValue(res.data1[0]);
-
-      } else {
-        this.spinner.hide();
-        //this.toastrService.error("Data is not available");
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
-
-  editAssignBoothsPatchValue(objData: any) {
-    this.boothListMergeArray = [];
-    this.ConstituencyId = objData.ConstituencyId;
-    this.HighlightRow = objData.Id;
-    this.boothDivHide = true;
-    this.selBoothId = objData.BoothId;
-    this.ConstituencyIdArray = objData.Assembly.split('');
-    this.assemblyCheckBoxCheck = true;
-    let assemblyArray = objData.Assembly.split(',');
-    this.checkBoxCehckAssemblyArray(assemblyArray);
-
-    assemblyArray.forEach((ele: any) => {
-      this.GetBoothList(ele)
-    });
-    
-    this.assignBoothForm.patchValue({
-      Id: objData.Id,
-      ElectionId: objData.ElectionId,
-      // Id: objData.Id,
-      // ElectionId: objData.ElectionId,
-    });
-    this.GetConstituencyName(objData.ElectionId);
-    setTimeout(() => { this.editAssemblyBoothArray()}, 1000);
-  }
-
-  editAssemblyBoothArray() {
-    let boothArray = this.selBoothId.split(',');
-   this.boothListMergeArray.find((ele: any) => { 
-        boothArray.find((el: any) => {
-          if (ele.Id == Number(el)) {
-            this.AssemblyBoothArray.push({ 'AssemblyId': ele.AssemblyId, 'BoothId': ele.Id });
-          }
-        })
-      });
-  }
-
-  checkBoxCehckAssemblyArray(ConstituencyId: any) {
-    for (let i = 0; i < ConstituencyId.length; i++) {
-      for (let j = 0; j < this.assemblyArray.length; j++) {
-        if (this.assemblyArray[j].ConstituencyNo === ConstituencyId[i]) {
-          this.assemblyArray[j].checked = true;
-        }
-      }
-    }
-  }
-
-  checkBoxCehckBoothArray(ConstituencyId: any) {
-    for (let i = 0; i < ConstituencyId.length; i++) {
-      for (let j = 0; j < this.boothListArray.length; j++) {
-        if (this.boothListArray[j].Id == Number(ConstituencyId[i])) {
-          this.boothListArray[j].checked = true;
-        }
-      }
-    }
-  }
-
-  clearForm() {
-    this.submitted = false;
-    this.btnText = 'Assign Booths'
-    this.defaultAssignBoothForm();
-    this.boothListArray = [];
-    this.boothDivHide = false;
-    this.searchAssembly = '';
-    this.searchboothList = '';
-    this.getAssembly();
   }
 
   delConfirmAssBothEle(ElectionId: any) {
@@ -427,43 +443,47 @@ export class AssignBoothToConstituencyComponent implements OnInit {
     this.getAssignedBoothToElection();
   }
 
-  clearFilter(flag: any) {
-    if (flag == 'electionType') {
-      this.filterForm.controls['ElectionNameId'].setValue(0);
-    } else if (flag == 'search') {
-      this.filterForm.controls['Search'].setValue('');
-    }
-    this.paginationNo = 1;
-    this.getAssignedBoothToElection();
-    this.clearForm();
-  }
+  //----------------------------------------------- assign booth to constituency table method's end here-----------------------------------//  
+  //----------------------------------------------- assign booth edit form  method's start here-----------------------------------//  
+  patchAssBoothElection(HeaderId: any) {
+    this.clearAssemblyBooth();
+    this.btnText = 'Update Booths';
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Election_GetAssignedBoothListbyHeaderId?HeaderId=' + HeaderId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.editAssignBoothsPatchValue(res.data1[0]);
 
-  filterData() {
-    this.paginationNo = 1;
-    this.getAssignedBoothToElection();
-    this.clearForm();
-  }
-
-  onKeyUpFilter() {
-    this.subject.next();
-    this.clearForm();
-  }
-
-  searchFilters(flag: any) {
-    if (flag == 'true') {
-      if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
-        this.toastrService.error("Please search and try again");
-        return
+      } else {
+        this.spinner.hide();
+        //this.toastrService.error("Data is not available");
       }
-    }
-    this.subject
-      .pipe(debounceTime(700))
-      .subscribe(() => {
-        this.searchFilter = this.filterForm.value.Search;
-        this.paginationNo = 1;
-        this.getAssignedBoothToElection();
+    }, (error: any) => {
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
       }
-      );
+    })
   }
+  
+  editAssignBoothsPatchValue(objData: any) {
+    this.ConstituencyIdArray = [];
+    this.AssemblyBoothArray = [];
+    this.globalEditObj = objData;
 
+    this.assignBoothForm.patchValue({
+      Id: objData.Id,
+    });
+    this.getElection();
+    debugger;
+    let checkAssemblyComma = objData.Assembly.includes(",");
+    checkAssemblyComma == true ? this.ConstituencyIdArray = objData.Assembly.split(',') : this.ConstituencyIdArray = objData.Assembly.split(' ');
+    let checkBoothComma = objData.BoothId.includes(",");
+    checkBoothComma == true ? this.AssemblyBoothArray = objData.BoothId.split(',') : this.AssemblyBoothArray = objData.BoothId.split(' ');
+    
+  }
+  editAssemblyBoothArray() {
+
+  }
+  //----------------------------------------------- assign booth edit form  method's end here-----------------------------------//  
 }
+
