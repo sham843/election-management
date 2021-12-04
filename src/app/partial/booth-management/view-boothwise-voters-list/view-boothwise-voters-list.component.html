@@ -212,7 +212,7 @@
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.SrNo}}</td>
                                                             <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td>
-                                                            <td>{{boothVoterList?.VoterNo}}</td>
+                                                            <td>{{boothVoterList?.VoterId}}</td>
 
                                                             <td>
                                                                 <div *ngIf="boothVoterList?.Gender == 'F'">Female</div>
@@ -391,7 +391,7 @@
                                                             *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
                                                             <td>{{MigratedList?.SrNo}}</td>
                                                             <td>{{MigratedList?.EnglishName}}</td>
-                                                            <td>{{MigratedList?.VoterNo}}</td>
+                                                            <td>{{MigratedList?.VoterId}}</td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="MigratedList?.Gender == 'M'">Male</div>
@@ -459,7 +459,7 @@
                                                             *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
                                                             <td>{{PendingList?.SrNo}}</td>
                                                             <td>{{PendingList?.EnglishName}}</td>
-                                                            <td>{{PendingList?.VoterNo}}</td>
+                                                            <td>{{PendingList?.VoterId}}</td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="PendingList?.Gender == 'M'">Male</div>
@@ -547,7 +547,7 @@
                                                                     <i class="fas fa-star me-1"></i>
                                                                     {{agentList?.FullName}}
                                                                 </span>
-                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-dark">
+                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-dark" tyle=" cursor: pointer;" (click)="redirectToAgentDetails(agentList)">
                                                                     <i class="far fa-star me-1"></i>
                                                                     {{agentList?.FullName}}
                                                                 </span>                                                                
