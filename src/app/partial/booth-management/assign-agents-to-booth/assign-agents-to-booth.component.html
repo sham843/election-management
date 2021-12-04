@@ -72,10 +72,7 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
+                            <ng-container  class="disabledNoOfCasesDiv">
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
@@ -107,7 +104,7 @@
                                         </div> -->
                                     <ngx-select [allowClear]="true" [items]="constituencyNameArray"
                                         [disabled]="!this.assAgentToBoothForm.value.ElectionId"
-                                        (select)="getAssemblyName()" (remove)="clearAggentToBooth('constituencyName')"
+                                        (select)="getAssemblyName(); defaultAgentDataFlag = true" (remove)="clearAggentToBooth('constituencyName')"
                                         formControlName="ConstituencyId" optionValueField="ConstituencyId"
                                         optionTextField="ConstituencyName" placeholder="Select Constituency"
                                         [ngClass]="{ 'is-invalid': aAsubmitted && a.ConstituencyId.errors}">
@@ -188,6 +185,7 @@
                                     <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
                                 </div>
                             </div>
+                            </ng-container>
                         </form>
                     </div>
                 </div>
@@ -457,11 +455,11 @@
                 </div>
                 <div class="mb-0">
                     <label class="form-label">Booths Assigned</label>
+                    <!-- <a  (click)="patchAssBoothElection(clientABooths.HeaderId)">Edit</a> -->
                     <div class="form-data">
                         <ul class="mb-0 ps-3 list-column">
-                            <li class="ng-star-inserted"
-                                *ngFor="let boothsAssi of assBoothObjData?.BoothsAssigned.split(',')">
-                                {{boothsAssi}}</li>
+                            <li class="ng-star-inserted" *ngFor="let boothsAssigned of assBoothObjData?.BoothsAssigned.split(',')">
+                                {{boothsAssigned}}</li>
                         </ul>
                     </div>
                 </div>

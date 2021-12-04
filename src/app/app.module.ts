@@ -19,6 +19,7 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteComponent } from './partial/dialogs/delete/delete.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 @NgModule({
@@ -39,6 +40,8 @@ import { DeleteComponent } from './partial/dialogs/delete/delete.component';
     NgxSelectModule,
     HttpClientModule,
     MatDialogModule,
+    OwlNativeDateTimeModule,
+    OwlDateTimeModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       closeButton: true,

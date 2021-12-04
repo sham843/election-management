@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-sm-4">
                         <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-                            (remove)="clearFilter('constituencyId')" formControlName="ConstituencyId"
+                            (remove)="clearFilter('constituencyId')" (select)="boothDataHide =false; boothSummary()" formControlName="ConstituencyId"
                             optionValueField="ConstituencyId" optionTextField="ConstituencyName"
                             [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
                         </ngx-select>
@@ -211,7 +211,7 @@
                                                         <tr
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.SrNo}}</td>
-                                                            <td>{{boothVoterList?.EnglishName}}</td>
+                                                            <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td>
                                                             <td>{{boothVoterList?.VoterNo}}</td>
 
                                                             <td>

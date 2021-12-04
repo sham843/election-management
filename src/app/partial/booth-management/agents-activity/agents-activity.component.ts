@@ -45,8 +45,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let agentInfo:any =  sessionStorage.getItem('agents-activity');
-    this.topFilterForm(JSON.parse(agentInfo)); // top filter method
     this.deafultVoterProfilefilterForm(); // voter list filter
+
+    this.topFilterForm(JSON.parse(agentInfo)); // top filter method
+
     this.getAllAgentList();
     this.getAgentProfileData();
     this.getAgentProfileCardData();
@@ -57,6 +59,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   //--------------------------------------------------  top filter method's start  here e -----------------------------------------------------------//
   topFilterForm(data:any) {
+    console.log(data);
     let setAgentId:any;
     // data.SubUserTypeId == 3 ? setAgentId = data.BoothAgentId : setAgentId = data.
     this.filterForm = this.fb.group({
@@ -76,7 +79,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        this.areaSubAgentByAgentId();
+        this.filterForm.value.subAreaAgentId == "" ||  this.filterForm.value.subAreaAgentId ==  null ||  this.filterForm.value.subAreaAgentId == "" ? this.getAgentByBooths() : this.areaSubAgentByAgentId();
       } else {
         this.allAgentLists = [];
         this.spinner.hide();
@@ -96,7 +99,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
     formData.subAreaAgentId == "" ||  formData.subAreaAgentId == null || formData.subAreaAgentId == undefined ?  agentId =  formData.ClientId :  agentId =  formData.subAreaAgentId;
    
-    let obj:any =  'ClientId='+agentId+'&UserId=' + this.commonService.loggedInUserId()+'&BoothAgentId='+formData.BoothId;
+    let obj:any =  'ClientId='+agentId+'&UserId=' +  formData.AgentId+'&BoothAgentId='+formData.BoothId;
     this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?'+obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -142,7 +145,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   //-------------------------------------------------- agent Profile method's start here -----------------------------------------------------------//
   getAgentProfileData(){
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.commonService.loggedInUserId()+'&clientid='+this.filterForm.value.ClientId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.filterForm.value.AgentId+'&clientid='+this.filterForm.value.ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -272,7 +275,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       FromTo: [],
       Search:[''],
     })
-    // this.voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker);
+
+    this.voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker);
   }
 
   onKeyUpSearchFilter(){
@@ -322,6 +326,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getVotersCardData(){  
+    console.log(this.voterProfilefilterForm);
+    return
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj:any =  'AgentId=' + formData.AgentId + '&ClientId='+formData.ClientId+'&BoothId='+formData.BoothId+'&AssemblyId='+this.selBothIdObj.AssemblyId
@@ -338,9 +344,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      // if (error.status == 500) {
+      //   this.router.navigate(['../500'], { relativeTo: this.route });
+      // }
     })
   }
 
@@ -363,9 +369,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      // if (error.status == 500) {
+      //   this.router.navigate(['../500'], { relativeTo: this.route });
+      // }
     })
   }
 
@@ -390,9 +396,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      // if (error.status == 500) {
+      //   this.router.navigate(['../500'], { relativeTo: this.route });
+      // }
     })
   } 
   
@@ -415,9 +421,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      // if (error.status == 500) {
+      //   this.router.navigate(['../500'], { relativeTo: this.route });
+      // }
     })
   }
   // --------------------------------------------------  voters data  method's End  here right side panel -------------------------------------------------- //

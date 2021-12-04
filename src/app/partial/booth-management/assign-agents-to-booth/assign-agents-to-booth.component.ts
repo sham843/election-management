@@ -65,6 +65,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentBlogStatus :any
   agentwiseAssigBoothArray: any = [];
   agentwiseAssigBoothHide : boolean = false;
+  defaultAgentDataFlag : boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -168,7 +169,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
             let BoothName = ele.BoothName;
             let ElecName = ele.ElectionName;
             let ConstituencyName = ele.ConstituencyName;
-            this.agentwiseAssigBoothArray.push({'BoothName':BoothName,'ElectionName':ElecName,'ConstituencyName':ConstituencyName});
+            this.agentwiseAssigBoothArray.push({'BoothName':BoothName,'ElectionName':ElecName,'ConstituencyName':ConstituencyName,});
           } 
         })
       } else {
@@ -548,6 +549,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   //------------------------------------------ edit Assign Booth Election form   ------------------------------------------  //
   patchAssBoothElection(HeaderId: any) {
     this.clearAssemblyBooth();
+    this.defaultAgentDataFlag = true;
     this.btnText = 'Update agent';
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Election_GetBoothToAgentDetails?HeaderId=' + HeaderId, false, false, false, 'electionServiceForWeb');

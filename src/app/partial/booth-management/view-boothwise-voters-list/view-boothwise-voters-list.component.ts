@@ -152,7 +152,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
         this.constituencyNameArray.length == 1 ? (this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false) : '';
-        this.boothSummary();
+        //this.boothSummary();
       } else {
         this.constituencyNameArray = [];
         this.spinner.hide();
@@ -667,5 +667,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
+  redirectToVoterPrfile(obj:any){
+    sessionStorage.setItem('voter-profile', JSON.stringify(obj));
+    this.router.navigate(['voters-profile'])
+  }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 }
