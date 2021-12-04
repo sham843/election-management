@@ -39,6 +39,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   cardActiveClass:boolean = true;
   subject: Subject<any> = new Subject();
 
+  clientBoothAgentFamiliyList:any;
+  familyPaginationNo = 1;
+  familyPageSize: number = 10;
+  familyTotal: any;
+  boothFamilyDetailsArray: any;
+
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService,private fb: FormBuilder,public dateTimeAdapter: DateTimeAdapter<any>,private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) { 
     { dateTimeAdapter.setLocale('en-IN') } 
   }
@@ -276,7 +283,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       Search:[''],
     })
 
-    this.voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker);
+    setTimeout(() => {
+      this.voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker);
+    }, 1000);
   }
 
   onKeyUpSearchFilter(){
@@ -326,8 +335,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getVotersCardData(){  
-    console.log(this.voterProfilefilterForm);
-    return
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj:any =  'AgentId=' + formData.AgentId + '&ClientId='+formData.ClientId+'&BoothId='+formData.BoothId+'&AssemblyId='+this.selBothIdObj.AssemblyId
@@ -376,22 +383,23 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   
+  //--------------------------------------------------------- FamiliyCard method's start here -------------------------------------------//
   
   clickOnFamiliyCard(){
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj:any =  'AgentId=' + formData.AgentId + '&ClientId='+formData.ClientId+'&BoothId='+formData.BoothId+'&AssemblyId='+this.selBothIdObj.AssemblyId
-    +'&Search='+this.voterProfilefilterForm.value.Search+'&nopage='+this.votersPaginationNo+'&FromDate='+this.voterProfilefilterForm.value.fromDate+'&ToDate='+this.voterProfilefilterForm.value.ToDate;
+    +'&Search='+this.voterProfilefilterForm.value.Search+'&nopage='+this.familyPaginationNo+'&FromDate='+this.voterProfilefilterForm.value.fromDate+'&ToDate='+this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Agentwise_Booth_Familly_VoterList?'+obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.clientBoothAgentVoterList = res.data1;
-         this.votersTotal = res.data2[0].TotalCount;
+        this.clientBoothAgentFamiliyList = res.data1;
+         this.familyTotal = res.data2[0].TotalCount;
         this.defaultVaoterListFlag = true;
       } else {
         this.defaultVaoterListFlag = false;
-        this.clientBoothAgentVoterList = [];
+        this.clientBoothAgentFamiliyList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -401,7 +409,35 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       // }
     })
   } 
+
+  onClickPagintionFamily(pageNo: any){
+    this.familyPaginationNo = pageNo;
+    this.clickOnFamiliyCard();
+  }
+
+  familyDetails(ParentVoterId: any) {
+    let formData = this.filterForm.value;
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId+'&Search='+this.voterProfilefilterForm.value.Search+'&AgentId='+formData.AgentId;
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();;
+        this.boothFamilyDetailsArray = res.data1;
+      } else {
+        this.boothFamilyDetailsArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
   
+  //--------------------------------------------------------- FamiliyCard method's start here -------------------------------------------//
+
   clickOnNewVotersCard(){
     this.spinner.show();
     let formData = this.filterForm.value;
@@ -429,7 +465,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   // --------------------------------------------------  voters data  method's End  here right side panel -------------------------------------------------- //
 
   ngOnDestroy(){
-    sessionStorage.removeItem('agents-activity');
+    // sessionStorage.removeItem('agents-activity');
   }
   
 
