@@ -389,13 +389,15 @@
                                             <tr>
                                                 <th>Sr. No.</th>
                                                 <th>Agent Name</th>
+                                                <th>Contact No</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let agentList of getAllClientAgentList">
                                                 <td>{{agentList.SrNo}}</td>
-                                                <td>{{agentList.FullName}} <small> {{agentList?.MobileNo}}</small></td>
+                                                <td>{{agentList.FullName}}</td>
+                                                <td>{{agentList?.MobileNo}}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-light text-edit btn-sm me-1"
                                                         (click)="editAgent(agentList)"><i
