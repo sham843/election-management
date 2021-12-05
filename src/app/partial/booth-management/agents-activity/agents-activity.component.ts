@@ -49,6 +49,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   agentAssBoothActivityGraphData:any;
   subAreaAgantDisabledFlag:boolean =true;
 
+  getnewVotersList:any;
+  newVotersPaginationNo = 1;
+  newVotersPageSize: number = 10;
+  newVotersTotal: any;
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
   }
@@ -358,6 +363,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getAgentAssBoothActivityGraph() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    debugger;
     let obj = 'AgentId=' +this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + this.selBothIdObj.AssemblyId + '&FromDate='+this.voterProfilefilterForm.value.fromDate + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_ActivityGraph?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -502,11 +508,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     }, (error: any) => {
       this.spinner.hide();
-      // if (error.status == 500) {
-      //   this.router.navigate(['../500'], { relativeTo: this.route });
-      // }
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
     })
   }
+
+
 
   //--------------------------------------------------------- FamiliyCard method's start here -------------------------------------------//
 
@@ -529,9 +537,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     }, (error: any) => {
       this.spinner.hide();
-      // if (error.status == 500) {
-      //   this.router.navigate(['../500'], { relativeTo: this.route });
-      // }
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
     })
   }
 
@@ -561,9 +569,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  //--------------------------------------------------------- FamiliyCard method's start here -------------------------------------------//
+  //--------------------------------------------------------- FamiliyCard method's end here -------------------------------------------//
 
-  clickOnNewVotersCard() {
+  clickOnNewVotersList() {
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + this.selBothIdObj.AssemblyId
@@ -572,19 +580,19 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.clientBoothAgentVoterList = res.data1;
+        this.getnewVotersList = res.data1;
         this.votersTotal = res.data2[0].TotalCount;
         this.defaultVaoterListFlag = true;
       } else {
         this.defaultVaoterListFlag = false;
-        this.clientBoothAgentVoterList = [];
+        this.getnewVotersList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      // if (error.status == 500) {
-      //   this.router.navigate(['../500'], { relativeTo: this.route });
-      // }
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
     })
   }
   // --------------------------------------------------  voters data  method's End  here right side panel -------------------------------------------------- //
