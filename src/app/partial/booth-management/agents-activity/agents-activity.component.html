@@ -17,13 +17,13 @@
                     <div class="col-sm">
                         <div class="col-sm">
                             <ngx-select [allowClear]="true" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
-                            optionValueField="Id" optionTextField="FullName">
+                            optionValueField="Id" optionTextField="FullName" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="getAgentByBoothsData" formControlName="BoothId"
-                            optionValueField="BoothId" (select)="selBothId($event);" optionTextField="BoothName"
+                            optionValueField="BoothId" (select)="selBoothByAgent($event);" optionTextField="BoothName"
                             placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
 
@@ -203,7 +203,7 @@
                             Agent Performance
                         </div>
                         <div class="card-body pt-1">
-                            <div class="agentPerformancediv"></div>
+                            <div class="agentPerformancediv" style="height: 350px;"></div>
                         </div>
                     </div>
 
@@ -351,7 +351,38 @@
                         </div>
                         <div class="tab-pane fade show" id="pills-agents" role="tabpanel"
                             aria-labelledby="pills-agents">
-                            3
+                            <ng-container>
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Voters Full Name</th>
+                                            <th>Visit Time</th>
+                                            <th>Voter NO.</th>
+                                            <th>Gender</th>
+                                            <th>Contact No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {id: 'votersPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
+                                            <td>{{clientBooth?.SrNo}}</td>
+                                            <td>{{clientBooth?.EnglishName | titlecase}}</td>
+                                            <td>{{clientBooth?.SurveyDate}}</td>
+                                            <td>{{clientBooth?.VoterNo}}</td>
+                                            <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                            <td>{{clientBooth?.MobileNo1}} {{clientBooth?.MobileNo2}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                            <div class="mt-2 text-end" *ngIf="clientBoothAgentVoterList?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                            </div>
+                            <pagination-controls id="votersPagination" *ngIf="clientBoothAgentVoterList?.length != 0" previousLabel=""
+                                nextLabel="" (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                            </pagination-controls>
                         </div>
 
                     </div>
