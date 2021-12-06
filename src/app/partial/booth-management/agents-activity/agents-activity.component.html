@@ -9,24 +9,23 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
-                        <ngx-select [allowClear]="true" [items]="allAgentLists" formControlName="AgentId"
-                            optionValueField="AgentId" (select)="areaSubAgentByAgentId();" optionTextField="FullName"
+                        <ngx-select [allowClear]="allowClearAgentFlag" [items]="allAgentLists" formControlName="AgentId"
+                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel');clikOnVoterList()" optionTextField="FullName"
                             placeholder="Select Agent" (remove)="clearFilter('Agent')">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="true" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
-                            optionValueField="Id" optionTextField="FullName" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
+                            <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
+                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clikOnVoterList()" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="true" [items]="getAgentByBoothsData" formControlName="BoothId"
-                            optionValueField="BoothId" (select)="selBoothByAgent($event);" optionTextField="BoothName"
+                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="filterForm.value.subAreaAgentId" [items]="getAgentByBoothsData" formControlName="BoothId"
+                            optionValueField="BoothId" (select)="selBoothByAgent($event);clikOnVoterList()" optionTextField="BoothName"
                             placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
-
                     </div>
 
                 </div>
