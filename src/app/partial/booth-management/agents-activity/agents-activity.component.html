@@ -9,24 +9,23 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
-                        <ngx-select [allowClear]="true" [items]="allAgentLists" formControlName="AgentId"
-                            optionValueField="AgentId" (select)="areaSubAgentByAgentId();" optionTextField="FullName"
+                        <ngx-select [allowClear]="allowClearAgentFlag" [items]="allAgentLists" formControlName="AgentId"
+                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel');clikOnVoterList()" optionTextField="FullName"
                             placeholder="Select Agent" (remove)="clearFilter('Agent')">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="true" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
-                            optionValueField="Id" optionTextField="FullName" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
+                            <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
+                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clikOnVoterList()" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="true" [items]="getAgentByBoothsData" formControlName="BoothId"
-                            optionValueField="BoothId" (select)="selBoothByAgent($event);" optionTextField="BoothName"
+                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="filterForm.value.subAreaAgentId" [items]="getAgentByBoothsData" formControlName="BoothId"
+                            optionValueField="BoothId" (select)="selBoothByAgent($event);clikOnVoterList()" optionTextField="BoothName"
                             placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
-
                     </div>
 
                 </div>
@@ -210,7 +209,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="card m-4 card-body shadow-none border box-link active" id="pills-migrated-tab"
                                 data-bs-toggle="pill" data-bs-target="#pills-migrated" type="button" role="tab"
-                                aria-controls="pills-migrated" aria-selected="true" (click)="getClientBoothAgentVoterList()">
+                                aria-controls="pills-migrated" aria-selected="true" (click)="votersPaginationNo = 1;this.searchVoters.setValue(''); getClientBoothAgentVoterList()">
                                 <h5 class="card-title">{{this.votersCardData?.TotalVoters}}</h5>
                                 <p class="card-text"> Voters </p>
                             </a>
@@ -218,7 +217,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="card m-4 card-body shadow-none border box-link" id="pills-pending-tab"
                                 data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab"
-                                aria-controls="pills-pending" aria-selected="false" (click)="clickOnFamiliyCard()">
+                                aria-controls="pills-pending" aria-selected="false" (click)="familyPaginationNo = 1; this.searchFamilyVoters.setValue(''); clickOnFamiliyCard()">
                                 <h5 class="card-title">{{this.votersCardData?.TotalFamiliy}}</h5>
                                 <p class="card-text"> Families </p>
                             </a>
@@ -226,7 +225,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="card m-4 card-body shadow-none border box-link" id="pills-agents-tab"
                                 data-bs-toggle="pill" data-bs-target="#pills-agents" type="button" role="tab"
-                                aria-controls="pills-agents" aria-selected="false" (click)="clickOnNewVotersList()">
+                                aria-controls="pills-agents" aria-selected="false" (click)="newVotersPaginationNo = 1; this.searchNewVoters.setValue(''); clickOnNewVotersList()">
                                 <h5 class="card-title">{{this.votersCardData?.NewVoters}}</h5>
                                 <p class="card-text"> New Voters </p>
                             </a>
