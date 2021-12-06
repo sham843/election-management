@@ -327,7 +327,6 @@ export class AssignBoothToConstituencyComponent implements OnInit {
 
   onKeyUpFilter() {
     this.subject.next();
-    this.clearForm();
   }
 
 
