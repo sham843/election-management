@@ -553,18 +553,15 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   searchAgentFilters(flag: any) {
     if (flag == 'true') {
-      if (this.searchAgent.value == "" || this.searchAgent == null) {
+      if (this.searchAgent.value == "" || this.searchAgent.value == null) {
         this.toastrService.error("Please search and try again");
         return
       }
     }
-    this.subject
-      .pipe(debounceTime(700))
-      .subscribe(() => {
+    this.subject .pipe(debounceTime(700)).subscribe(() => {
         this.searchAgent.value;
         this.boothAgentList();
-      }
-      );
+      });
   }
   // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
 
