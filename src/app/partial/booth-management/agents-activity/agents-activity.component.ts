@@ -62,6 +62,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   allowClearSubAgentsFlag:boolean = true;
   allowClearAgentFlag:boolean = true;
 
+  maxDate: any = new Date();
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
   }
@@ -178,7 +180,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.getAgentByBoothsData = res.data1;
-        debugger;
         this.getAgentByBoothsData.length == 1 ? (this.filterForm.controls['BoothId'].setValue(this.getAgentByBoothsData[0].BoothId), this.selBoothByAgent(this.getAgentByBoothsData[0].BoothId), this.allowClearBoothIdFlag = false) : this.allowClearBoothIdFlag = true
         this.getAgentAssBoothActivityGraph();
       } else {
@@ -394,14 +395,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.getClientBoothAgentVoterList();
   }
 
-  clikOnVoterList(){
+  clickOnVoterList(){
     let clickOnVoterTab:any  =  document.getElementById('pills-migrated-tab');
     clickOnVoterTab.click();
     this.votersPaginationNo = 1;
     this.searchVoters.setValue(''); 
     this.getClientBoothAgentVoterList()
   }
-  
+
   // --------------------------------------------------   voter filter method's  end here   -------------------------------------------------- //
 
   // --------------------------------------------------  voters Graph  method's  & card data  Start here right side panel  -------------------------------------------------- //
