@@ -60,7 +60,7 @@
                                 <div class="text-end">
                                     <span class="badge small bg-danger mb-2 fw-normal">Do Not Call</span>
                                 </div>
-                                <h5>{{voterProfileData.EnglishName}}</h5>
+                                <h5>{{voterProfileData?.EnglishName}}</h5>
                                 <p class="contact">List No. : <span class="text-dark fw-bold">65241</span></p>
                             </div>
                         </div>
@@ -74,11 +74,11 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Age :</span>
-                            <span class="voter-data">{{voterProfileData.Age}}</span>
+                            <span class="voter-data">{{voterProfileData?.Age}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Date Of Birth :</span>
-                            <span class="voter-data">{{voterProfileData.DateOfBirth}}</span>
+                            <span class="voter-data">{{voterProfileData?.DateOfBirth}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Gender :</span>
@@ -87,42 +87,42 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 1 :</span>
-                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i> {{voterProfileData.MobileNo1}}
+                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i> {{voterProfileData?.MobileNo1}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 2 :</span>
-                            <span class="voter-data">{{voterProfileData.MobileNo2}}</span>
+                            <span class="voter-data">{{voterProfileData?.MobileNo2}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Email :</span>
-                            <span class="voter-data">{{voterProfileData.Email}}</span>
+                            <span class="voter-data">{{voterProfileData?.Email}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Qualification :</span>
-                            <span class="voter-data">{{voterProfileData.Qualification}}</span>
+                            <span class="voter-data">{{voterProfileData?.Qualification}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Occupation :</span>
-                            <span class="voter-data">{{voterProfileData.Occupation}}</span>
+                            <span class="voter-data">{{voterProfileData?.Occupation}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">House No. :</span>
-                            <span class="voter-data">{{voterProfileData.HouseNo}}</span>
+                            <span class="voter-data">{{voterProfileData?.HouseNo}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Area :</span>
-                            <span class="voter-data">{{voterProfileData.Area}}</span>
+                            <span class="voter-data">{{voterProfileData?.Area}}</span>
                         </li>
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
                             <div class="voter-data">
-                                {{voterProfileData.Address}}
+                                {{voterProfileData?.Address}}
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Blood Group :</span>
-                            <span class="voter-data">{{voterProfileData.Bloodgroup}}</span>
+                            <span class="voter-data">{{voterProfileData?.Bloodgroup}}</span>
                         </li>
                     </ul>
                 </div>
@@ -286,14 +286,14 @@
                         <div class="form-container">
                             <div class="alert alert-success p-2 mb-2">
                                 <label class="form-label">Positive Influence :</label>
-                                <div class="form-data">
-                                    Sharad Pawar, Rahul Gandhi, Raj Thakare, Rohit Pawar
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.Support}}</span>
                                 </div>
                             </div>
                             <div class="alert alert-danger p-2 mb-0">
                                 <label class="form-label">Negative Influence :</label>
-                                <div class="form-data">
-                                    BJP, Abhijit Mane
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.Support}}</span>
                                 </div>
                             </div>
                         </div>
@@ -304,81 +304,22 @@
                     Extra Information
                 </div>
                 <div class="card-body pt-0">
-                    <div class="card card-body shadow-none border mb-2 p-2">
+                    <div class="card card-body shadow-none border mb-2 p-2" *ngFor="let voterVisitDetail of voterVisitDetailDataArray">
                         <div class="d-flex">
                             <div class="flex-shrink-0">
-                                <img class="extrainfo-img"
-                                    src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg">
+                                <span><img class="extrainfo-img" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
+                                <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img" src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <div class="voter-data">General Comment On voter</div>
+                                <div class="voter-data">{{voterVisitDetail.VisitDate}}</div>
+                                <div class="voter-data">{{voterVisitDetail.visittype}}</div>
                                 <div class="voter-label">
-                                    This is some content from a media component. You can replace this with any content
-                                    and adjust it as needed.
+                                    {{voterVisitDetail.VisitDetails}}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card card-body shadow-none border mb-2 p-2">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img class="extrainfo-img"
-                                    src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="voter-data">Personal Issues of voter</div>
-                                <div class="voter-label">
-                                    This is some content from a media component. You can replace this with any content
-                                    and adjust it as needed.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card card-body shadow-none border mb-2 p-2">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img class="extrainfo-img"
-                                    src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="voter-data">Social Media Forwards of voter</div>
-                                <div class="voter-label">
-                                    This is some content from a media component. You can replace this with any content
-                                    and adjust it as needed.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card card-body shadow-none border mb-2 p-2">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img class="extrainfo-img"
-                                    src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="voter-data">Social Issues of voter</div>
-                                <div class="voter-label">
-                                    This is some content from a media component. You can replace this with any content
-                                    and adjust it as needed.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card card-body shadow-none border mb-2 p-2">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img class="extrainfo-img"
-                                    src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="voter-data">Influencial Person of voter</div>
-                                <div class="voter-label">
-                                    This is some content from a media component. You can replace this with any content
-                                    and adjust it as needed.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -479,10 +420,12 @@
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="voter-label">Comments :</span>
-                            </div>
-                            <div class="voter-data mt-1">
-                                No Comments
+                                <div class="voter-label">Comments :
+                                <ul *ngFor="let VPComments of VPCommentData">
+                                    <li *ngIf="VPComments?.CommentDetails">{{VPComments?.CommentDetails}}</li> 
+                                </ul>
+                                <span *ngIf="VPCommentData?.length == 0">No Comments</span>
+                                </div>
                             </div>
                         </li>
                     </ul>
