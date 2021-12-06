@@ -7,12 +7,12 @@
         </div>
         <div class="col-sm-10 text-end">
             <ol class="breadcrumb mb-0 w-auto d-inline-flex">
-                <li class="breadcrumb-item">Maharashtra</li>
-                <li class="breadcrumb-item">258 MAN</li>
-                <li class="breadcrumb-item">Shripanvan</li>
-                <li class="breadcrumb-item">1-श्रीपालवण</li>
-                <li class="breadcrumb-item">भैरवनाथ मंदीर प्राथमिक शाळा</li>
-                <li class="breadcrumb-item active" aria-current="page">SANGITA HINDURAO JADHAV</li>
+                <li class="breadcrumb-item">{{voterProfileData?.State}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.Assemblyid}} {{voterProfileData?.ConstituencyName}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.VillageName}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.BoothName}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.Area}}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{voterProfileData?.EnglishName}}</li>
             </ol>
             <!-- Maharashtra->258 MAN->Shripanvan->1-श्रीपालवण->भैरवनाथ मंदीर प्राथमिक शाळा->SANGITA HINDURAO JADHAV -->
         </div>
@@ -23,23 +23,13 @@
             <div class="card">
                 <div class="card-body p-2">
                     <div class="btn-group voter-repeat" role="group" aria-label="Basic radio toggle button group">
+                        <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData">
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
                         <label class="btn btn-outline-secondary text-start" for="btnradio1">
-                            <small>12-10-2021</small>
-                            <p class="mb-0">Agent Name (Booth Agent)</p>
+                            <small>{{VPBoothAgent.SurveyDate | date:'dd-MM-yyyy hh:mm a'}}</small>
+                            <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
                         </label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                        <label class="btn btn-outline-secondary text-start" for="btnradio2">
-                            <small>12-10-2021</small>
-                            <p class="mb-0">Agent Name (Area Agent)</p>
-                        </label>
-
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                        <label class="btn btn-outline-secondary text-start" for="btnradio3">
-                            <small>12-10-2021</small>
-                            <p class="mb-0">Agent Name (Booth Agent)</p>
-                        </label>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -61,7 +51,7 @@
                                     <span class="badge small bg-danger mb-2 fw-normal">Do Not Call</span>
                                 </div>
                                 <h5>{{voterProfileData?.EnglishName}}</h5>
-                                <p class="contact">List No. : <span class="text-dark fw-bold">65241</span></p>
+                                <p class="contact">Voter No. : <span class="text-dark fw-bold"> {{voterProfileData?.VoterId}}</span></p>
                             </div>
                         </div>
                     </div>
@@ -70,15 +60,15 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Nick Name :</span>
-                            <span class="voter-data">votu</span>
+                            <span class="voter-data">{{voterProfileData?.NickName ? voterProfileData?.NickName : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Age :</span>
-                            <span class="voter-data">{{voterProfileData?.Age}}</span>
+                            <span class="voter-data">{{voterProfileData?.Age ? voterProfileData?.Age : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Date Of Birth :</span>
-                            <span class="voter-data">{{voterProfileData?.DateOfBirth}}</span>
+                            <span class="voter-data">{{voterProfileData?.DateOfBirth ? voterProfileData?.DateOfBirth : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Gender :</span>
@@ -87,42 +77,40 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 1 :</span>
-                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i> {{voterProfileData?.MobileNo1}}
+                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i> {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 2 :</span>
-                            <span class="voter-data">{{voterProfileData?.MobileNo2}}</span>
+                            <span class="voter-data">{{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Email :</span>
-                            <span class="voter-data">{{voterProfileData?.Email}}</span>
+                            <span class="voter-data">{{voterProfileData?.Email ? voterProfileData?.Email : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Qualification :</span>
-                            <span class="voter-data">{{voterProfileData?.Qualification}}</span>
+                            <span class="voter-data">{{voterProfileData?.Qualification ? voterProfileData?.Qualification : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Occupation :</span>
-                            <span class="voter-data">{{voterProfileData?.Occupation}}</span>
+                            <span class="voter-data">{{voterProfileData?.Occupation ? voterProfileData?.Occupation : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">House No. :</span>
-                            <span class="voter-data">{{voterProfileData?.HouseNo}}</span>
+                            <span class="voter-data">{{voterProfileData?.HouseNo ? voterProfileData?.HouseNo : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Area :</span>
-                            <span class="voter-data">{{voterProfileData?.Area}}</span>
+                            <span class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</span>
                         </li>
-                        <li class="list-group-item">
-                            <div class="voter-label">Address :</div>
-                            <div class="voter-data">
-                                {{voterProfileData?.Address}}
-                            </div>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Address :</span>
+                            <span class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Blood Group :</span>
-                            <span class="voter-data">{{voterProfileData?.Bloodgroup}}</span>
+                            <span class="voter-data">{{voterProfileData?.Bloodgroup ? voterProfileData?.Bloodgroup : '-'}}</span>
                         </li>
                     </ul>
                 </div>
@@ -168,13 +156,13 @@
                             <span class="voter-label">Religion : </span>
                         </div>
                         <div class="col-sm-3">
-                            <span class="voter-data">Religion</span>
+                            <span class="voter-data">{{voterProfileData?.ReligionName}}</span>
                         </div>
                         <div class="col-sm-3">
                             <span class="voter-label">Caste : </span>
                         </div>
                         <div class="col-sm-3">
-                            <span class="voter-data">Caste</span>
+                            <span class="voter-data">{{voterProfileData?.Castname}}</span>
                         </div>
                     </div>
                     <div class="row mb-2">
@@ -182,13 +170,13 @@
                             <span class="voter-label">Is Family Head : </span>
                         </div>
                         <div class="col-sm-3">
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data">{{voterProfileData?.Head}}</span>
                         </div>
                         <div class="col-sm-3">
                             <span class="voter-label">Family Size : </span>
                         </div>
                         <div class="col-sm-3">
-                            <span class="voter-data">5</span>
+                            <span class="voter-data">{{voterProfileData?.Familysize}}</span>
                         </div>
                     </div>
                     <div class="row">
@@ -206,48 +194,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>जाधव संगीता हिंदुराव (17) <i class="fas fa-house-user ms-2"></i></td>
-                                        <td>987653210</td>
-                                        <td>Service</td>
-                                        <td>B. Sc.</td>
-                                        <td>Yes</td>
+                                    <tr *ngFor="let voterProfileFamily of voterProfileFamilyData" [class.active]="voterProfileFamily.SrNo == HighlightRow" (click)="familyMemberData(voterProfileFamily)">
+                                        <td>{{voterProfileFamily.SrNo}}</td>
+                                        <td>{{voterProfileFamily.Family}}</td>
+                                        <td>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</td>
+                                        <td>{{voterProfileFamily.Occupation ? voterProfileFamily.Occupation : '-'}}</td>
+                                        <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification : '-'}}</td>
+                                        <td>{{voterProfileFamily.Migrated ? voterProfileFamily.Migrated : '-'}}</td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>जाधव संगीता हिंदुराव (17)</td>
-                                        <td>987653210</td>
-                                        <td>Service</td>
-                                        <td>B. Sc.</td>
-                                        <td>Yes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>जाधव संगीता हिंदुराव (17)</td>
-                                        <td>987653210</td>
-                                        <td>Service</td>
-                                        <td>B. Sc.</td>
-                                        <td>Yes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>जाधव संगीता हिंदुराव (17)</td>
-                                        <td>987653210</td>
-                                        <td>Service</td>
-                                        <td>B. Sc.</td>
-                                        <td>Yes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>जाधव संगीता हिंदुराव (17)</td>
-                                        <td>987653210</td>
-                                        <td>Service</td>
-                                        <td>B. Sc.</td>
-                                        <td>Yes</td>
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
+                            <div  *ngIf="voterProfileFamilyData?.length == 0" class=" mt-2 alert alert-danger p-2 mb-0"><label _ngcontent-age-c139="" class="form-label text-center">No Data Found</label></div>
+                            <!-- <div class="mt-2 p-2" *ngIf="voterProfileFamilyData?.length == 0">
+                                <div class="alert alert-danger text-center">No Data Found..!</div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -260,14 +221,14 @@
                             <span class="voter-label">Party Name : </span>
                         </div>
                         <div class="col-sm-4">
-                            <span class="voter-data">National Congress Party</span>
+                            <span class="voter-data">{{voterProfileData?.partyname}}</span>
                         </div>
                         <div class="col-sm-2">
                             <span class="voter-label">Leader : </span>
                         </div>
                         <div class="col-sm-4">
                             <span class="voter-data">
-                                Yes
+                                {{voterProfileData?.Leader}}
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -307,6 +268,7 @@
                     <div class="card card-body shadow-none border mb-2 p-2" *ngFor="let voterVisitDetail of voterVisitDetailDataArray">
                         <div class="d-flex">
                             <div class="flex-shrink-0">
+                                <!-- (click)="imgData(voterVisitDetail)" -->
                                 <span><img class="extrainfo-img" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
                                 <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img" src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
                             </div>
@@ -320,13 +282,18 @@
                         </div>
                     </div>
 
+                     <!-- <div class="col-sm-3 mb-3" *ngFor="let imgs of comUserdetImg; index as i">
+                        <img [lightbox]="i" [src]="imgs?.data?.thumb" class="img-thumbnail img-square">
+                     </div> -->
                 </div>
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="card mb-3">
+
+
+            <div class="card mb-3" *ngIf="MigInfoHide">
                 <div class="card-header">
-                    <h6 class="voter-data text-main fw-bold">जाधव संगीता हिंदुराव (17)</h6>
+                    <h6 class="voter-data text-main fw-bold">{{familyMemberDataObject?.Family}}</h6>
                 </div>
                 <div class="card-body form-container pt-0">
                     <div class="row">
@@ -352,10 +319,10 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="voter-label">Migrated :</span>
-                                <span class="voter-data">Yes</span>
+                                <span class="voter-data">{{familyMemberDataObject?.Migrated ? familyMemberDataObject?.Migrated : '-'}}</span>
                             </div>
                             <div class="voter-data mt-1">
-                                Saras Baug, Pune
+                                {{familyMemberDataObject?.Address ? familyMemberDataObject?.Address : '-'}}
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -383,40 +350,40 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Dairy Farmer :</span>
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data"> {{voterProfileData?.IsDairyFarmer == 0 ? 'No' : voterProfileData?.IsDairyFarmer  == 1 ? 'Yes' : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Goat/Sheep Farmer :</span>
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data">{{voterProfileData?.IsGoatSheepFarmer == 0 ? 'No' : voterProfileData?.IsGoatSheepFarmer  == 1 ? 'Yes' : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Sugarcane/Cutter-Worker :</span>
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data">{{voterProfileData?.IsSugarCaneCutter == 0 ? 'No' : voterProfileData?.IsSugarCaneCutter  == 1 ? 'Yes' : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Farmer :</span>
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data">{{voterProfileData?.IsFarmer == 0 ? 'No' : voterProfileData?.IsFarmer  == 1 ? 'Yes' : '-'}}</span>
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="voter-label">Business :</span>
-                                <span class="voter-data">Yes</span>
+                                <span class="voter-data">{{voterProfileData?.HaveBusiness == 0 ? 'No' : voterProfileData?.HaveBusiness  == 1 ? 'Yes' : '-'}}</span>
                             </div>
                             <div class="voter-data mt-1">
-                                Rice Mill Owner
+                                {{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '-' }}
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Yuvak :</span>
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data">{{voterProfileData?.IsYuvak == 0 ? 'No' : voterProfileData?.IsYuvak  == 1 ? 'Yes' : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Vehicle :</span>
-                            <span class="voter-data">2 Wheeler</span>
+                            <span class="voter-data">{{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle  == 2 ? 'Family' : voterProfileData?.HaveVehicle  == 0 ? 'None' : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Income Group :</span>
-                            <span class="voter-data">Middle</span>
+                            <span class="voter-data">{{voterProfileData?.FinancialCondition == 1 ? 'Low' : voterProfileData?.FinancialCondition  == 2 ? 'Med' : voterProfileData?.FinancialCondition  == 3 ? 'High' : '-'}}</span>
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
@@ -433,9 +400,23 @@
             </div>
 
             <div class="card card-body p-2">
-                <img src="https://previews.123rf.com/images/elenabsl/elenabsl1409/elenabsl140900005/31392676-street-map.jpg"
-                    class="img-fluid">
+                <label class="form-label">Location: <small>{{voterProfileData?.VillageName}},{{voterProfileData?.BoothName}},
+                    {{voterProfileData?.Area}}</small>
+                </label>
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'">
+                    <div *ngFor="let votersonmap of VPVotersonmapData">
+                    <agm-marker  [latitude]="votersonmap?.Latitude" [longitude]="votersonmap?.Longitude">
+                    </agm-marker>
+                </div>
+                </agm-map>
             </div>
+            <!-- <ng-template #elseBlock>
+                <div class="h-20 text-center">
+                    <img src="assets/images/location-not-found.svg" class="img-h300">
+                </div>
+            </ng-template> -->
+
+
         </div>
     </div>
 </div>
