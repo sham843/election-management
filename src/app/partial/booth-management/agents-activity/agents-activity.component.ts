@@ -122,6 +122,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   areaSubAgentByAgentId() {
+    // on chenage agent bind agent activity 
+    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + formData.AgentId + '&BoothAgentId=' + formData.BoothId;
@@ -370,6 +372,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------  voters Graph  method's  & card data  Start here right side panel  -------------------------------------------------- //
   getAgentAssBoothActivityGraph() {
+    debugger
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + formData.AssemblyId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
@@ -550,7 +553,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + formData.AssemblyId
-      + '&Search=' + this.voterProfilefilterForm.value.Search + '&nopage=' + this.familyPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+      + '&Search=' + this.searchFamilyVoters.value + '&nopage=' + this.familyPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Agentwise_Booth_Familly_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -576,7 +579,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   familyDetails(ParentVoterId: any) {
     let formData = this.filterForm.value;
-    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.voterProfilefilterForm.value.Search + '&AgentId=' + formData.AgentId;
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + formData.AgentId;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
