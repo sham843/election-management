@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ImageItem } from '@ngx-gallery/core';
 
 
 @Injectable({
@@ -168,6 +169,18 @@ export class CommonService {
 
     setDefaultValueinForm(formName: any, keyName: any, setValue: any) {
         return formName.controls[keyName].setValue(setValue);
+    }
+
+    imgesDataTransform(data: any, type: any) {
+        if (type == 'obj') {
+            let images = data.map((item: any) =>
+                new ImageItem({ src: item.ImagePath, thumb: item.ImagePath, text: 'programGalleryImg' }));
+            return images;
+        } else {
+            let images = data.map((item: any) =>
+                new ImageItem({ src: item, thumb: item, text: 'programGalleryImg' }));
+            return images;
+        }
     }
 
 }
