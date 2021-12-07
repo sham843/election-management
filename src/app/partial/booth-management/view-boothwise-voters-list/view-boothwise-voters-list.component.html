@@ -212,8 +212,8 @@
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.SrNo}}</td>
                                                             <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
-                                                            <td> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td>
-                                                            <td>{{boothVoterList?.VoterNo}}</td>
+                                                            <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td>
+                                                            <td>{{boothVoterList?.VoterId}}</td>
 
                                                             <td>
                                                                 <div *ngIf="boothVoterList?.Gender == 'F'">Female</div>
@@ -543,13 +543,13 @@
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
                                                             <td>
-                                                                <a  href="agents-activity" target="_blank"  (click)="redirectToAgentDetails(agentList)">
+                                                                <a   target="_blank"  (click)="redirectToAgentDetails(agentList)">
                                                                 <span *ngIf="agentList?.SubUserTypeId==3" class="text-main" style=" cursor: pointer;">
                                                                     <i class="fas fa-star me-1"></i>
                                                                     {{agentList?.FullName}}
                                                                 </span>
                                                             </a>
-                                                            <a href="agents-activity" target="_blank"  (click)="redirectToAgentDetails(agentList)">
+                                                            <a target="_blank"  (click)="redirectToAgentDetails(agentList)">
                                                                 <span *ngIf="agentList?.SubUserTypeId==4" class="text-main" style=" cursor: pointer;">
                                                                     <i class="far fa-star me-1"></i>
                                                                     {{agentList?.FullName}}

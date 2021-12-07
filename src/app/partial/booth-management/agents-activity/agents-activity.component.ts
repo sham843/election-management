@@ -71,7 +71,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.agentInfo = localStorage.getItem('agents-activity');
+    this.agentInfo = sessionStorage.getItem('agents-activity');
     this.agentInfo = JSON.parse(this.agentInfo);
     this.deafultVoterProfilefilterForm(); // voter list filter
 
@@ -749,7 +749,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    // localStorage.removeItem('agents-activity');
+    // sessionStorage.removeItem('agents-activity');
   }
 
   // --------------------------------------------------  global method's start here   -------------------------------------------------- //

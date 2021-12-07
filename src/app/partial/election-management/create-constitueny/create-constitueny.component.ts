@@ -87,8 +87,8 @@ export class CreateConstituenyComponent implements OnInit {
     //private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone
   ) { 
-    let getlocalStorageData: any = localStorage.getItem('ElectionId');
-    this.ElectionId= JSON.parse(getlocalStorageData);
+    let getsessionStorageData: any = sessionStorage.getItem('ElectionId');
+    this.ElectionId= JSON.parse(getsessionStorageData);
   }
 
   ngOnInit(): void {
@@ -464,7 +464,7 @@ export class CreateConstituenyComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    localStorage.removeItem('ElectionId');
+    sessionStorage.removeItem('ElectionId');
   }
 
   // filter form 

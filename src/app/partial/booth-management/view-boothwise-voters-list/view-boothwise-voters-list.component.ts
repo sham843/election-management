@@ -659,19 +659,19 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   redirectToAgentDetails(obj:any){
-    localStorage.setItem('agents-activity', JSON.stringify(obj))
-    // this.router.navigate(['../agents-activity']);
+    sessionStorage.setItem('agents-activity', JSON.stringify(obj))
+    this.router.navigate(['../agents-activity']);
   }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
   redirectToVoterPrfile(obj:any){
-    localStorage.setItem('voter-profile', JSON.stringify(obj));
-    // this.router.navigate(['voters-profile'])
+    sessionStorage.setItem('voter-profile', JSON.stringify(obj));
+    this.router.navigate(['voters-profile'])
   }
 
   redirectToAgentActivity(){
     // let obj = {ClientId: 1, SubUserTypeId:''}
-    // localStorage.setItem('agents-activity', JSON.stringify(obj));
+    // sessionStorage.setItem('agents-activity', JSON.stringify(obj));
     // this.router.navigate(['../agents-activity']) 
   }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //

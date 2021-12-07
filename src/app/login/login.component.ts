@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // this.reCaptcha();
     this.defaultLoginForm();
-    if(localStorage.getItem('loggedInDetails')){
+    if(sessionStorage.getItem('loggedInDetails')){
       //this.commonService.getAllPageName()
     }
   }
@@ -56,8 +56,8 @@ export class LoginComponent implements OnInit {
       this.callAPIService.setHttp('get', 'Web_GetLogin_3_0?UserName=' + this.loginForm.value.UserName + '&Password=' + this.loginForm.value.Password+'&LoginType=1', false, false, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == '0') {
-          localStorage.setItem('loggedInDetails', JSON.stringify(res));
-          localStorage.setItem('loginDateTime', this.date)
+          sessionStorage.setItem('loggedInDetails', JSON.stringify(res));
+          sessionStorage.setItem('loginDateTime', this.date)
           this.spinner.hide();
           this.toastrService.success('login successfully');
           this.router.navigate(['../'+this.commonService.redirectToDashborad()], { relativeTo: this.route })
