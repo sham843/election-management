@@ -40,8 +40,7 @@
                     <div class="profile-info">
                         <div class="d-flex mb-3">
                             <div class="flex-shrink-0">
-                                <img
-                                    src="{{agentProfileData?.ProfilePhoto != '' ? agentProfileData?.ProfilePhoto : 'assets/images/Profile-Photo.jpg'}}">
+                                <!-- <img src="{{agentProfileData?.ProfilePhoto != '' ? agentProfileData?.ProfilePhoto : 'assets/images/Profile-Photo.jpg'}}"> -->
                             </div>
                             <div class="flex-grow-1 ms-3 pt-2">
                                 <h5>{{agentProfileData?.FullName | titlecase}}</h5>
@@ -58,6 +57,7 @@
                         <div class="mb-3">
                             <small class="text-muted">Booths(s) Assigned :</small>
                             <p class="area">{{agentProfileData?.Booths}}</p>
+                            <p class="area" *ngIf="agentProfileData?._Area">{{agentProfileData?._Area}}</p>
                         </div>
                         <div class="row row-cols-1 row-cols-md-3 g-2 mb-3">
                             <div class="col">

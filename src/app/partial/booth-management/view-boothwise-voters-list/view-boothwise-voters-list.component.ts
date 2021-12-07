@@ -668,5 +668,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     sessionStorage.setItem('voter-profile', JSON.stringify(obj));
     this.router.navigate(['voters-profile'])
   }
+
+  redirectToAgentActivity(){
+    // let obj = {ClientId: 1, SubUserTypeId:''}
+    // sessionStorage.setItem('agents-activity', JSON.stringify(obj));
+    // this.router.navigate(['../agents-activity']) 
+  }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 }

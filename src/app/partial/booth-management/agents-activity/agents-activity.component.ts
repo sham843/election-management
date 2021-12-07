@@ -270,7 +270,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   getpiChartArray(piChartData: any) {
     // data transform from orignal array 
-    let obj: any = [{ 'category': "TotalVoter", 'categoryCount': piChartData.TotalVoter }, , { 'category': 'TotalFamily', 'categoryCount': piChartData.TotalFamily }, { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
+    console.log(piChartData);
+    let obj: any = [{ 'category': "TotalFilled", 'categoryCount': piChartData.TotalFilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
     this.piChartArray = obj;
     this.piechartAgentProfile();
   }
@@ -284,12 +285,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     // Add and configure Series
     let pieSeries = chart.series.push(new am4charts.PieSeries());
     pieSeries.colors.list = [
-      am4core.color("#CC9999"),
       am4core.color("#4DB6AC"),
-      am4core.color("#FF6F91"),
-      am4core.color("#FF9671"),
-      am4core.color("#FFC75F"),
-      am4core.color("#9FA8DA"),
+      am4core.color("#ff7091"),
     ];
 
     pieSeries.dataFields.value = "categoryCount";
