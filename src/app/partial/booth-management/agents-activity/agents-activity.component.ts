@@ -458,7 +458,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     categoryAxis.dataFields.category = "Date";
     categoryAxis.renderer.opposite = false;
 
-    categoryAxis.renderer.minGridDistance = 20;c
+    categoryAxis.renderer.minGridDistance = 20;
     // Create value axis
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.inversed = false;
