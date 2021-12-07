@@ -17,7 +17,7 @@
                     <div class="col-sm">
                         <div class="col-sm">
                             <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
-                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList()" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
+                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList();" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
@@ -70,6 +70,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col"  *ngIf="agentProfileData?.SubusertypeId == 4">
+                                <div class="card shadow-none border">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalAssigned}}</h5>
+                                        <p class="card-text">
+                                            Total Assigned
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
@@ -85,7 +95,7 @@
                                     <div class="card-body p-2">
                                         <h5 class="card-title">{{agentProfileCardData?.Pending}}</h5>
                                         <p class="card-text">
-                                            Date Pending
+                                            Data Pending
                                         </p>
                                     </div>
                                 </div>
@@ -120,6 +130,7 @@
                                     </div>
                                 </div>
                             </div>
+                           
                         </div>
 
                         <div class="card card-body shadow-none border mb-3">
