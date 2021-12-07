@@ -269,7 +269,7 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0">
                                 <!-- (click)="imgData(voterVisitDetail)" -->
-                                <span><img class="extrainfo-img" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
+                                <span><img class="extrainfo-img" (click)="imgData(voterVisitDetail) ; lightbox.open(0, 'lightbox')" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
                                 <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img" src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
                             </div>
                             <div class="flex-grow-1 ms-3">
@@ -281,10 +281,6 @@
                             </div>
                         </div>
                     </div>
-
-                     <!-- <div class="col-sm-3 mb-3" *ngFor="let imgs of comUserdetImg; index as i">
-                        <img [lightbox]="i" [src]="imgs?.data?.thumb" class="img-thumbnail img-square">
-                     </div> -->
                 </div>
             </div>
         </div>
