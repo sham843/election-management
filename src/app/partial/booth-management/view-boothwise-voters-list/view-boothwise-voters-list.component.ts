@@ -666,7 +666,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   redirectToVoterPrfile(obj:any){
     localStorage.setItem('voter-profile', JSON.stringify(obj));
-    this.router.navigate(['voters-profile'])
+    // this.router.navigate(['voters-profile'])
   }
 
   redirectToAgentActivity(){
