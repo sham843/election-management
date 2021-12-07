@@ -90,7 +90,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentToBoothForm() {
     this.assAgentToBoothForm = this.fb.group({
       Id:[0],
-      ClientId: [0, [Validators.required]],
+      ClientId: ['', [Validators.required]],
       UserId: ['', [Validators.required]],
       ElectionId: ['', [Validators.required]],
       ConstituencyId: ['', [Validators.required]],
@@ -391,6 +391,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   onSubmitAssAgentToBoothForm(){
+    debugger;
     this.aAsubmitted = true;
     let formData = this.assAgentToBoothForm.value;
 
@@ -487,19 +488,19 @@ export class AssignAgentsToBoothComponent implements OnInit {
       this.agentwiseAssigBoothArray = [];
       this.agentwiseAssigBoothHide = false;
     } else if (flag == 'agentName') {
-      this.assAgentToBoothForm.controls['UserId'].setValue(0);
-      this.assAgentToBoothForm.controls['ElectionId'].setValue(0);
-      this.assAgentToBoothForm.controls['ConstituencyId'].setValue(0);
+      this.assAgentToBoothForm.controls['UserId'].setValue('');
+      this.assAgentToBoothForm.controls['ElectionId'].setValue('');
+      this.assAgentToBoothForm.controls['ConstituencyId'].setValue('');
       this.clearAssemblyBooth();
       this.agentwiseAssigBoothArray = [];
       this.agentwiseAssigBoothHide = false;
     }
     else if (flag == 'electionName') {
-      this.assAgentToBoothForm.controls['ElectionId'].setValue(0);
-      this.assAgentToBoothForm.controls['ConstituencyId'].setValue(0);
+      this.assAgentToBoothForm.controls['ElectionId'].setValue('');
+      this.assAgentToBoothForm.controls['ConstituencyId'].setValue('');
       this.clearAssemblyBooth();
     } else if (flag == 'constituencyName') {
-      this.assAgentToBoothForm.controls['ConstituencyId'].setValue(0);
+      this.assAgentToBoothForm.controls['ConstituencyId'].setValue('');
       this.clearAssemblyBooth();
     }
     this.paginationNo = 1;
