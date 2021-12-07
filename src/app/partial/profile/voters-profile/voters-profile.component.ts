@@ -41,7 +41,7 @@ export class VotersProfileComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public gallery: Gallery,
-    private _lightbox: Lightbox,
+    public lightbox: Lightbox,
   ) { 
      let getsessionStorageData: any = sessionStorage.getItem('voter-profile');
      let getStorageData= JSON.parse(getsessionStorageData); 
@@ -182,12 +182,12 @@ export class VotersProfileComponent implements OnInit {
     })
   }
 
-  // imgData(data:any){
-  //   console.log(data)
-  //   this.comUserdetImg = data.VisitPhoto.split(',');
-  //   this.comUserdetImg = this.commonService.imgesDataTransform(this.comUserdetImg,'array');
-  //   this.gallery.ref().load(this.comUserdetImg);
-  // }
+  imgData(data:any){
+    console.log(data)
+    this.comUserdetImg = data.VisitPhoto.split(',');
+    this.comUserdetImg = this.commonService.imgesDataTransform(this.comUserdetImg,'array');
+    this.gallery.ref('lightbox').load(this.comUserdetImg);
+  }
 
                                     //........... get Voter Profile Voters on map ................//
 
