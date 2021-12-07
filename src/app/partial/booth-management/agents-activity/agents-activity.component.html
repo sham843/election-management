@@ -10,20 +10,20 @@
                 <div class="row g-2">
                     <div class="col-sm">
                         <ngx-select [allowClear]="allowClearAgentFlag" [items]="allAgentLists" formControlName="AgentId"
-                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel');clikOnVoterList()" optionTextField="FullName"
-                            placeholder="Select Agent" (remove)="clearFilter('Agent')">
+                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel');clickOnVoterList();getAgentProfileData();" optionTextField="FullName"
+                            placeholder="Select Agent" (remove)="clearFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
                             <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
-                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clikOnVoterList()" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
+                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList()" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="filterForm.value.subAreaAgentId" [items]="getAgentByBoothsData" formControlName="BoothId"
-                            optionValueField="BoothId" (select)="selBoothByAgent($event);clikOnVoterList()" optionTextField="BoothName"
+                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="subAreaAgentIdDisabledFlag" [items]="getAgentByBoothsData" formControlName="BoothId"
+                            optionValueField="BoothId" (select)="selBoothByAgent($event);clickOnVoterList()" optionTextField="BoothName"
                             placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
                     </div>
@@ -57,7 +57,7 @@
                         </div>
                         <div class="mb-3">
                             <small class="text-muted">Booths(s) Assigned :</small>
-                            <p class="area">Bibwewadi, Kondhwa, Pune</p>
+                            <p class="area">{{agentProfileData?.Booths}}</p>
                         </div>
                         <div class="row row-cols-1 row-cols-md-3 g-2 mb-3">
                             <div class="col">
@@ -165,7 +165,7 @@
                                         <input [owlDateTime]="dt3" formControlName="weekRangePicker"
                                             [selectMode]="'range'"
                                             (dateTimeChange)="voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker)"
-                                            class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date">
+                                            class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date" [max]="maxDate">
                                         <button class="btn btn-light border btn-sm" type="button"
                                             *ngIf="defaultCalenderIconFlag == false"
                                             [owlDateTimeTrigger]="dt3">
