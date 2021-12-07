@@ -194,10 +194,10 @@ export class CreateRegionalLeaderComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    // else if(this.addClientForm.value.ContactNo2.length < 9){ 
-    //   this.spinner.hide();
-    //   this.toastrService.error("Please Enter 10 Digit Mobile No.");
-    // }
+    else if(this.addClientForm.value.MobileNo == this.addClientForm.value.ContactNo2){ 
+      this.spinner.hide();
+      this.toastrService.error("Please Enter Different Mobile No.");
+    }
     else {
       this.spinner.show();
       let data = this.addClientForm.value;

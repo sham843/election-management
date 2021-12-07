@@ -31,8 +31,6 @@ export class VotersProfileComponent implements OnInit {
   MigInfoHide : boolean = false;
   familyMemberDataObject: any;
   voterProfileBoothAgentData: any;
-  starRating = new FormControl();
-  leaderImpRatingStar: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -66,11 +64,6 @@ export class VotersProfileComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.voterProfileData = res.data1[0];
-                           //..................  get Rating Count Start................ //
-       this.leaderImpRatingStar = this.voterProfileData.LeaderImportance;
-       this.starRating.setValue(this.leaderImpRatingStar);
-                          //..................  get Rating Count End................ //
-
         this.voterProfileBoothAgentData = res.data2;
       } else {
         this.spinner.hide();
