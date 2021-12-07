@@ -286,11 +286,17 @@
                                                                         <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
                                                                         <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                                                                     </div>
-                                                                    <div class="col-sm-2">{{boothFamilyList.occupation | titlecase}}
+                                                                    <div class="col-sm-2">
+                                                                        <div>{{boothFamilyList.occupation | titlecase}}</div>
+                                                                        <div *ngIf="!boothFamilyList?.occupation">-</div>
                                                                     </div>
                                                                     <div class="col-sm-2">
-                                                                        {{boothFamilyList.qualification}}</div>
-                                                                    <div class="col-sm-1">{{boothFamilyList.migrated | titlecase}}
+                                                                       <div> {{boothFamilyList.qualification}}</div>
+                                                                        <div *ngIf="!boothFamilyList?.qualification">-</div>
+                                                                    </div>
+                                                                    <div class="col-sm-1">
+                                                                        <div>{{boothFamilyList.migrated | titlecase}} </div>
+                                                                        <div *ngIf="!boothFamilyList?.migrated">-</div>
                                                                     </div>
                                                                     <div class="col-sm-1">
                                                                         <a class="accordion-button collapsed"
@@ -314,8 +320,8 @@
                                                                             *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
                                                                             <div class="col-sm-1">
                                                                                 {{boothFamilyDetails?.SrNo}}</div>
-                                                                            <div class="col-sm-3">
-                                                                                {{boothFamilyDetails?.Family}}</div>
+                                                                            <!-- <div class="col-sm-3"> {{boothFamilyDetails?.Family}}</div> -->
+                                                                            <div> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothFamilyDetails)">{{boothFamilyDetails?.Family}}</a></div>
                                                                             <div class="col-sm-2">
                                                                                 <div *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a> </div>
                                                                                 <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
@@ -391,8 +397,9 @@
                                                         <tr
                                                             *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
                                                             <td>{{MigratedList?.SrNo}}</td>
-                                                            <td>{{MigratedList?.EnglishName}}</td>
-                                                            <td>{{MigratedList?.VoterId}}</td>
+                                                            <!-- <td>{{MigratedList?.EnglishName}}</td> -->
+                                                            <td> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(MigratedList)">{{MigratedList?.EnglishName}}</a></td> 
+                                                            <td>{{MigratedList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="MigratedList?.Gender == 'M'">Male</div>
@@ -452,15 +459,15 @@
                                                             <th>Voter NO.</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
-                                                            <th>Migrated City</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr
                                                             *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
                                                             <td>{{PendingList?.SrNo}}</td>
-                                                            <td>{{PendingList?.EnglishName}}</td>
-                                                            <td>{{PendingList?.VoterId}}</td>
+                                                            <!-- <td>{{PendingList?.EnglishName}}</td> -->
+                                                            <td> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(PendingList)">{{PendingList?.EnglishName}}</a></td> 
+                                                            <td>{{PendingList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="PendingList?.Gender == 'M'">Male</div>
@@ -472,7 +479,6 @@
                                                                 </div>
                                                                 <div *ngIf="!PendingList?.MobileNo1">-</div>
                                                             </td>
-                                                            <td>{{PendingList?.MigratedCity}}</td>
                                                         </tr>
 
 

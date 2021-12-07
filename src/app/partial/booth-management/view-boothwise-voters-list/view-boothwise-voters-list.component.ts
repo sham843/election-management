@@ -482,6 +482,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.boothPendingListArray = res.data1;
+        console.log(this.boothPendingListArray )
         this.pendingTotal = res.data2[0].TotalCount;
       } else {
         this.boothPendingListArray = [];
