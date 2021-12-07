@@ -6,8 +6,6 @@ import { VotersProfileComponent } from './voters-profile.component';
 import { LightboxModule } from '@ngx-gallery/lightbox';
 import { GalleryModule } from '@ngx-gallery/core';
 import { AgmCoreModule } from '@agm/core';
-import { NgxStarRatingModule } from 'ngx-star-rating';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,9 +16,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     VotersProfileRoutingModule,
     LightboxModule,
     GalleryModule,
-    NgxStarRatingModule ,
-    ReactiveFormsModule,
-    FormsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
       language: 'en',
