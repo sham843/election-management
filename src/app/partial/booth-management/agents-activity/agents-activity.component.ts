@@ -280,7 +280,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   getpiChartArray(piChartData: any) {
     // data transform from orignal array 
-    let obj: any = [{ 'category': "TotalFilled", 'categoryCount': piChartData.TotalFilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
+    let obj: any = [{ 'category': "Total Filled", 'categoryCount': piChartData.TotalFilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
     this.piChartArray = obj;
     this.piechartAgentProfile();
   }
@@ -294,8 +294,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     // Add and configure Series
     let pieSeries = chart.series.push(new am4charts.PieSeries());
     pieSeries.colors.list = [
-      am4core.color("#4DB6AC"),
-      am4core.color("#ff7091"),
+      am4core.color("#44ff44"),
+      am4core.color("#8b84f6"),
     ];
 
     pieSeries.dataFields.value = "categoryCount";
@@ -332,10 +332,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     // Add a legend
     chart.legend = new am4charts.Legend();
     chart.legend.maxWidth = 100;
-    chart.legend.fontSize = 10;
+    chart.legend.fontSize = 14;
     chart.legend.scrollable = true;
     chart.legend.position = "bottom";
-    chart.legend.contentAlign = "left";
+    chart.legend.contentAlign = "right";
 
     let markerTemplate = chart.legend.markers.template;
     markerTemplate.width = 15;
@@ -483,6 +483,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     series1.tooltipText = "{valueY}";
     series1.legendSettings.valueText = "{valueY}";
     series1.visible = false;
+    series1.smoothing = "monotoneX";
+    series1.stroke = am4core.color("#00ff00");
+    series1.strokeWidth = 3;
+    // series1.tensionX = 0.8;
+    // series1.tensionY = 1;
 
     let series2 = chart.series.push(new am4charts.LineSeries());
     series2.dataFields.valueY = "FamilyCount";
@@ -491,6 +496,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     series2.bullets.push(new am4charts.CircleBullet());
     series2.tooltipText = "{valueY}";
     series2.legendSettings.valueText = "{valueY}";
+    series2.smoothing = "monotoneX";
+    series2.stroke = am4core.color("#463AFD");
+    series2.strokeWidth = 3;
+    // series1.tensionX = 0.8;
+    // series1.tensionY = 1;
 
     // Add chart cursor
     chart.cursor = new am4charts.XYCursor();

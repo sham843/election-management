@@ -39,9 +39,9 @@
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Agent</label>
                                     <ngx-select [allowClear]="true" [items]="ClientAgentListddl"
-                                        formControlName="UserId" optionValueField="AgentId"
+                                        formControlName="UserId" optionValueField="AgentId" [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                         [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
-                                        class="w-75" (select)="getElectionName()" placeholder="Select Agent"
+                                        class="w-75" (select)="flagselectAgent = 'selectAgent'; getElectionName();" placeholder="Select Agent"
                                         (remove)="clearAggentToBooth('agentName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
@@ -60,13 +60,13 @@
                                 <div class="col-sm-12">
                                     <div class="card card-body shadow-none border py-2">
                                         <p class="text-main fw-bold mb-1">
-                                            {{agentwiseAssigBoothArray[0].ElectionName}}
-                                            <small class="text-muted">[{{agentwiseAssigBoothArray[0].ConstituencyName}}]</small>
+                                            {{agentwiseAssigBoothArray[0]?.ElectionName}}
+                                            <small class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
                                         </p>
                                         <div class="form-container">
                                             <label class="form-label">Booths Assigned</label>
                                             <ul class="list-column">
-                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">{{agentwiseAssigBooth.BoothName}}</li>
+                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">{{agentwiseAssigBooth?.BoothName}}</li>
                                             </ul>
                                         </div>
                                     </div>

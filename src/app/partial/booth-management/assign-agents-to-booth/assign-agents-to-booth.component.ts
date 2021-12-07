@@ -66,6 +66,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentwiseAssigBoothArray: any = [];
   agentwiseAssigBoothHide : boolean = false;
   defaultAgentDataFlag : boolean = false;
+  flagselectAgent:any = '';
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -136,7 +137,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   Client_AgentList() {//Client_AgentList
     this.spinner.show();
     let data = this.assAgentToBoothForm.value;
-    this.callAPIService.setHttp('get', 'Web_Client_AgentList?ClientId=' + data.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Client_AgentList?ClientId=' + this.returnZeroByString(data.ClientId) + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.clientAgentListFlag = true;
@@ -158,7 +159,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.spinner.show();
     this.agentwiseAssigBoothArray = [];
     let data = this.assAgentToBoothForm.value;
-    this.callAPIService.setHttp('get', 'Web_get_Agentwise_AssignedBooth?AgentId=' + data.UserId + '&ClientId=' + data.ClientId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_get_Agentwise_AssignedBooth?AgentId=' + data.UserId + '&ClientId=' + this.returnZeroByString(data.ClientId), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -212,7 +213,13 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   getElectionName() {
     this.getAgentwiseAssignedBooth();
+    debugger
+    if(this.flagselectAgent=='selectAgent' &&  this.btnText == 'Update agent'){
+      this.clearAggentToBooth('electionName');
+      return;
+    }
     this.btnText == 'Update agent' ?  this.clearAssemblyBooth() : '';
+
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.assAgentToBoothForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -261,7 +268,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   getAssemblyName() {
     this.spinner.show();
     let data = this.assAgentToBoothForm.value; 
-    this.callAPIService.setHttp('get', 'Web_Get_Assembly_byClientId_ddl?ClientId=' + data.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + data.ElectionId
+    this.callAPIService.setHttp('get', 'Web_Get_Assembly_byClientId_ddl?ClientId=' + data.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.returnZeroByString(data.ElectionId)
       + '&ConstituencyId=' + data.ConstituencyId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -330,7 +337,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     let data = this.assAgentToBoothForm.value;
     let url;
     this.getIsSubElectionApplicable() == 1 ? url = 'Web_Get_Booths_by_Subelection_ddl_1_0?' : url = 'Web_Get_Booths_NonSubElection_ddl?';
-    this.callAPIService.setHttp('get', url + 'ClientId=' + data.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + data.ElectionId
+    this.callAPIService.setHttp('get', url + 'ClientId=' + data.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' +  this.returnZeroByString(data.ElectionId)
       + '&ConstituencyId=' + data.ConstituencyId + '&AssemblyId=' + assembleId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -391,7 +398,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   onSubmitAssAgentToBoothForm(){
-    debugger;
     this.aAsubmitted = true;
     let formData = this.assAgentToBoothForm.value;
 
@@ -399,7 +405,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    else if (this.AssemblyBoothArray.length == 0){
+    else if (this.assAgentToBoothForm && this.AssemblyBoothArray.length == 0){
       this.toastrService.error("Assembly Or Booth is required");
       return;
     }
@@ -446,7 +452,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   clearFilter(flag: any) {
     if (flag == 'clientName') {
-      this.filterForm.controls['ClientId'].setValue(0);
+      this.filterForm.controls['ClientId'].setValue('');
     } else if (flag == 'search') {
       this.filterForm.controls['Search'].setValue('');
     }
@@ -690,6 +696,14 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+  returnZeroByString(val:any){
+    if(val == '' || val == null){
+      return val = 0; 
+    }else{
+      return val
+    }
   }
 }
 
