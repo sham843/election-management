@@ -44,8 +44,8 @@ export class CallAPIService {
     isHeader = false;
     // check user is login or not 
     try {
-      this.userObj = JSON.parse(localStorage.loggedInDetails);
-      // this.UserLoginDetails = JSON.parse(localStorage.loggedInDetails);
+      this.userObj = JSON.parse(sessionStorage.loggedInDetails);
+      // this.UserLoginDetails = JSON.parse(sessionStorage.loggedInDetails);
     } catch (e) { }
     this.clearHttp();
     this.httpObj.type = type;
@@ -79,7 +79,7 @@ export class CallAPIService {
     let currentDate: any = new Date();
     let currentTime = currentDate.getTime();
 
-    let loginDateTime: any = localStorage.getItem('loginDateTime');
+    let loginDateTime: any = sessionStorage.getItem('loginDateTime');
     let loginTime = new Date(loginDateTime);
     let checkloginTime = loginTime.getTime();
 
@@ -97,7 +97,7 @@ export class CallAPIService {
     ss = ('0' + ss).slice(-2)
 
     if (mm > 60) {
-      localStorage.clear();
+      sessionStorage.clear();
       this.router.navigate(['../home']);
     }
 

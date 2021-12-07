@@ -300,7 +300,7 @@ export class CreateElectionsComponent implements OnInit {
   }
 
   redToCreateConstituency(eleId:any){
-    localStorage.setItem('ElectionId', JSON.stringify(eleId));
+    sessionStorage.setItem('ElectionId', JSON.stringify(eleId));
     this.router.navigate(['../create-constituency'], { relativeTo: this.route })
   }
 
