@@ -29,8 +29,8 @@ export class VotersProfileComponent implements OnInit {
   voterProfileFamilyData: any;
   HighlightRow: any;
   MigInfoHide : boolean = false;
-  familyMemberDataObject: any;
   voterProfileBoothAgentData: any;
+  VPMemberDetailsData: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -152,10 +152,36 @@ export class VotersProfileComponent implements OnInit {
 
                             //........ Get Family Member Data ...........//    
 
-  familyMemberData(objData:any){
-    this.familyMemberDataObject = objData;
-    this.HighlightRow = objData.SrNo;
-    this.MigInfoHide = true;
+  familyMemberData(FMobjData:any){
+    if(FMobjData.VoterId != this.voterListData.VoterId){
+      // this.familyMemberDataObject = FMobjData;
+      this.HighlightRow = FMobjData.SrNo;
+      this.MigInfoHide = true;
+      this.getVPMemberDetailsData(FMobjData)
+    } else{
+      this.MigInfoHide = false;
+    } 
+  }
+
+                            //.................... Get Voter Profile Member Details Data .......................//
+
+  getVPMemberDetailsData(FMobjData:any) {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile_Member_Details?ClientId=' + FMobjData.ClientId + '&AgentId='+ FMobjData.AgentId + '&VoterId='+ FMobjData.VoterId , false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.VPMemberDetailsData = res.data1[0];
+      } else {
+        this.VPMemberDetailsData = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
   }
 
 
@@ -181,9 +207,9 @@ export class VotersProfileComponent implements OnInit {
       }
     })
   }
-
-  imgData(data:any){
-    console.log(data)
+                             
+                               // ............ Gallary LightBox code .............  //
+  showGallaryLightbox(data:any){
     this.comUserdetImg = data.VisitPhoto.split(',');
     this.comUserdetImg = this.commonService.imgesDataTransform(this.comUserdetImg,'array');
     this.gallery.ref('lightbox').load(this.comUserdetImg);
@@ -209,8 +235,6 @@ export class VotersProfileComponent implements OnInit {
       }
     })
   }
-
-  
 
   ngOnDestroy() {
     localStorage.removeItem('voter-profile');

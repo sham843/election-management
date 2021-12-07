@@ -120,7 +120,8 @@
                     <div id="voterhomeimages">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                 <img src="{{voterProfileData?.VoterHomePhoto}}">
+                                 <img *ngIf="voterProfileData?.VoterHomePhoto"  src="{{voterProfileData?.VoterHomePhoto}}">
+                                 <img *ngIf="!voterProfileData?.VoterHomePhoto" src="assets/images/ele.png">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#voterhomeimages"
@@ -261,7 +262,7 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0">
                                 <!-- (click)="imgData(voterVisitDetail)" -->
-                                <span><img class="extrainfo-img" (click)="imgData(voterVisitDetail) ; lightbox.open(0, 'lightbox')" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
+                                <span><img class="extrainfo-img" (click)="showGallaryLightbox(voterVisitDetail) ; lightbox.open(0, 'lightbox')" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
                                 <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img" src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
                             </div>
                             <div class="flex-grow-1 ms-3">
@@ -281,21 +282,27 @@
 
             <div class="card mb-3" *ngIf="MigInfoHide">
                 <div class="card-header">
-                    <h6 class="voter-data text-main fw-bold">{{familyMemberDataObject?.Family}}</h6>
+                    <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.Family}}</h6>
                 </div>
                 <div class="card-body form-container pt-0">
                     <div class="row">
                         <div class="col-sm-4">
                             <label class="form-label">Age</label>
-                            <div class="form-data">23</div>
+                            <div class="form-data">{{VPMemberDetailsData?.Age}}</div>
                         </div>
                         <div class="col-sm-4">
                             <label class="form-label">Date of Birth</label>
-                            <div class="form-data">12-4-2021</div>
+                            <div class="form-data">{{VPMemberDetailsData?.DateOfBirth}}</div>
                         </div>
                         <div class="col-sm-4">
                             <label class="form-label">Gender</label>
-                            <div class="form-data">Female</div>
+                            <div class="form-data">{{VPMemberDetailsData?.Gender == 'M' ? 'Male' : VPMemberDetailsData?.Gender == 'F' ? 'Female' : '-'  }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="form-label">Area:</label>
+                            <span class="form-data">{{VPMemberDetailsData?.Area}}</span>
                         </div>
                     </div>
                 </div>
@@ -307,23 +314,21 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="voter-label">Migrated :</span>
-                                <span class="voter-data">{{familyMemberDataObject?.Migrated ? familyMemberDataObject?.Migrated : '-'}}</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.Migrated ? VPMemberDetailsData?.Migrated : '-'}}</span>
                             </div>
-                            <div class="voter-data mt-1">
-                                {{familyMemberDataObject?.Address ? familyMemberDataObject?.Address : '-'}}
-                            </div>
+                            <!-- <div class="voter-data mt-1">
+                                {{VPMemberDetailsData?.Address ? VPMemberDetailsData?.Address : '-'}}
+                            </div> -->
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Postal Voting :</span>
-                            <span class="voter-data">Yes</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' : VPMemberDetailsData?.PostalFlag  == 1 ? 'Yes' : '-'}}</span>
+                            
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="voter-label">Need Support :</span>
-                                <span class="voter-data">Yes</span>
-                            </div>
-                            <div class="voter-data mt-1">
-                                The next generation of the web’s favorite icon library
+                                <span class="voter-data">{{VPMemberDetailsData?.NeedSupportFlag == 0 ? 'No' :  VPMemberDetailsData?.NeedSupportFlag == 1 ? 'Yes' : '-'}}</span>
                             </div>
                         </li>
                     </ul>

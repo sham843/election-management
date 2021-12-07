@@ -232,7 +232,11 @@ export class CreateConstituenyComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.toastrService.success(res.data1[0].Msg);
+        if(res.data1[0].Msg == "Constituency Name already Registerd"){
+          this.toastrService.error("Constituency Name already Registerd");
+        }else{
+          this.toastrService.success(res.data1[0].Msg);
+        }
         this.btnText = "Create Constituency";
         this.resetConstituencyName();
         this.getConstituency();

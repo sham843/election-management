@@ -280,23 +280,17 @@
                                                                 <div class="row">
                                                                     <div class="col-sm-1">{{boothFamilyList.SrNo}}
                                                                     </div>
-                                                                    <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}
-                                                                    </div>
+                                                                    <!-- <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}  </div>-->
+                                                                        <div class="col-sm-3"> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothFamilyList)">{{boothFamilyList.Family}}</a></div>
                                                                     <div class="col-sm-2">
                                                                         <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
                                                                         <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                                                                     </div>
-                                                                    <div class="col-sm-2">
-                                                                        <div>{{boothFamilyList.occupation | titlecase}}</div>
-                                                                        <div *ngIf="!boothFamilyList?.occupation">-</div>
+                                                                    <div class="col-sm-2">{{boothFamilyList.occupation ? (boothFamilyList.occupation | titlecase) : '-'}}
                                                                     </div>
-                                                                    <div class="col-sm-2">
-                                                                       <div> {{boothFamilyList.qualification}}</div>
-                                                                        <div *ngIf="!boothFamilyList?.qualification">-</div>
-                                                                    </div>
+                                                                    <div class="col-sm-2"> {{boothFamilyList?.qualification ? boothFamilyList.qualification : "-"}}</div>
                                                                     <div class="col-sm-1">
-                                                                        <div>{{boothFamilyList.migrated | titlecase}} </div>
-                                                                        <div *ngIf="!boothFamilyList?.migrated">-</div>
+                                                                        <div>{{boothFamilyList.migrated ? (boothFamilyList.migrated | titlecase) : '-'}} </div>
                                                                     </div>
                                                                     <div class="col-sm-1">
                                                                         <a class="accordion-button collapsed"
@@ -318,21 +312,20 @@
                                                                     <ng-container>
                                                                         <div class="row familytree-details"
                                                                             *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
-                                                                            <div class="col-sm-1">
-                                                                                {{boothFamilyDetails?.SrNo}}</div>
+                                                                            <div class="col-sm-1">{{boothFamilyDetails?.SrNo}}</div>
                                                                             <!-- <div class="col-sm-3"> {{boothFamilyDetails?.Family}}</div> -->
-                                                                            <div> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothFamilyDetails)">{{boothFamilyDetails?.Family}}</a></div>
+                                                                            <div class="col-sm-3"> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothFamilyDetails)">{{boothFamilyDetails?.Family}}</a></div>
                                                                             <div class="col-sm-2">
-                                                                                <div *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a> </div>
-                                                                                <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
+                                                                                <span *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a> </span>
+                                                                                <span *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
                                                                             </div>
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.Occupation | titlecase}}</div>
+                                                                                {{boothFamilyDetails?.Occupation ? (boothFamilyDetails?.Occupation | titlecase) : '-'}}</div>
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.Qualification | titlecase}}
+                                                                                {{boothFamilyDetails?.Qualification ? (boothFamilyDetails?.Qualification | titlecase) : '-'}}
                                                                             </div>
                                                                             <div class="col-sm-1">
-                                                                                {{boothFamilyDetails?.Migrated | titlecase}}</div>
+                                                                                {{boothFamilyDetails?.Migrated ? (boothFamilyDetails?.Migrated | titlecase) : '-'}}</div>
                                                                             <div class="col-sm-1"></div>
                                                                         </div>
                                                                         <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
