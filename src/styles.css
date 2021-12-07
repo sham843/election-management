@@ -599,3 +599,7 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     position: sticky;
   top: 0;
 }
+.chart-container{
+    height:350px;
+    font-size: 0.85rem;
+}
