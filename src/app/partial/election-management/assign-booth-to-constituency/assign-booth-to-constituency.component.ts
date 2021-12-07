@@ -87,6 +87,16 @@ export class AssignBoothToConstituencyComponent implements OnInit {
 
   get f() { return this.assignBoothForm.controls };
 
+  clearAssignBoothsForm(flag: any) {
+    if (flag == 'Election') {
+      this.defaultAssignBoothsForm();
+      // this.clearAssemblyBooth();
+    } else if (flag == 'Constituency') {
+      this.assignBoothForm.controls['ConstituencyId'].setValue('');
+      // this.clearAssemblyBooth();
+    }
+  }
+
   getElection() {
     this.spinner.show();
     // this.callAPIService.setHttp('get', 'Web_GetElection?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'ncpServiceForWeb');

@@ -16,7 +16,7 @@
                         <div class="form-container">
                             <div class="mb-2">
                                 <label for="ddlElection" class="form-label required-field">Election</label>
-                                <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="id" optionTextField="ElectionName" placeholder="Select Election" (select)="getConstituencyName($event)" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                                <ngx-select [allowClear]="true" [items]="electionNameArray" (remove)="clearAssignBoothsForm('Election')" formControlName="ElectionId" optionValueField="id" optionTextField="ElectionName" placeholder="Select Election" (select)="getConstituencyName($event)" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
                                 </ngx-select>
                                 <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
                                     <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>
@@ -24,7 +24,7 @@
                             </div>
                             <div class="mb-2">
                                 <label for="ddlConstituency" class="form-label required-field">Constituency</label>
-                                <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency" [disabled]="(!assignBoothForm.value.ElectionId || constituencyNameArray?.length == 0) ? true : false"
+                                <ngx-select [allowClear]="true" [items]="constituencyNameArray" (remove)="clearAssignBoothsForm('Constituency')"  formControlName="ConstituencyId" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency" [disabled]="(!assignBoothForm.value.ElectionId || constituencyNameArray?.length == 0) ? true : false"
                                     [ngClass]="{ 'is-invalid': submitted && f.ConstituencyId.errors}">
                                 </ngx-select>
                                 <div *ngIf="submitted && f.ConstituencyId.errors" class="invalid-feedback">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-2">
+                            <div class="mb-2" *ngIf="assignBoothForm.value.ConstituencyId">
                                 <label for="txtSearchAssembly" class="form-label required-field">Assembly</label>
                                 <div class="card border shadow-none">
                                     <div class="card-header border-bottom p-0 py-1">
