@@ -18,10 +18,8 @@
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId"
-                                formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
-                                (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList()"
-                                [disabled]="subAreaAgantDisabledFlag" placeholder="Select Area  Agent">
+                            <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
+                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList();" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
@@ -45,8 +43,7 @@
                     <div class="profile-info">
                         <div class="d-flex mb-3">
                             <div class="flex-shrink-0">
-                                <img
-                                    src="{{agentProfileData?.ProfilePhoto != '' ? agentProfileData?.ProfilePhoto : 'assets/images/Profile-Photo.jpg'}}">
+                                <!-- <img src="{{agentProfileData?.ProfilePhoto != '' ? agentProfileData?.ProfilePhoto : 'assets/images/Profile-Photo.jpg'}}"> -->
                             </div>
                             <div class="flex-grow-1 ms-3 pt-2">
                                 <h5>{{agentProfileData?.FullName | titlecase}}</h5>
@@ -63,6 +60,7 @@
                         <div class="mb-3">
                             <small class="text-muted">Booths(s) Assigned :</small>
                             <p class="area">{{agentProfileData?.Booths}}</p>
+                            <p class="area" *ngIf="agentProfileData?._Area">{{agentProfileData?._Area}}</p>
                         </div>
                         <div class="row row-cols-1 row-cols-md-3 g-2 mb-3">
                             <div class="col">
@@ -71,6 +69,16 @@
                                         <h5 class="card-title">{{agentProfileCardData?.TotalVoter}}</h5>
                                         <p class="card-text">
                                             Total Voters
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col"  *ngIf="agentProfileData?.SubusertypeId == 4">
+                                <div class="card shadow-none border">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalAssigned}}</h5>
+                                        <p class="card-text">
+                                            Total Assigned
                                         </p>
                                     </div>
                                 </div>
@@ -90,7 +98,7 @@
                                     <div class="card-body p-2">
                                         <h5 class="card-title">{{agentProfileCardData?.Pending}}</h5>
                                         <p class="card-text">
-                                            Date Pending
+                                            Data Pending
                                         </p>
                                     </div>
                                 </div>
@@ -125,6 +133,7 @@
                                     </div>
                                 </div>
                             </div>
+                           
                         </div>
 
                         <div class="card card-body shadow-none border mb-3">
