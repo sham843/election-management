@@ -8,7 +8,7 @@ export class AuthService {
   constructor() { }
 
   isLoggedIn() {
-    if (sessionStorage.getItem('loggedInDetails')) {
+    if (localStorage.getItem('loggedInDetails')) {
       return true;
     }
     else {

@@ -72,3 +72,19 @@
 .accordion-button .collapsed > .familytree-row{
     background-color: red;
 }
+
+#boothdetails .nav-pills .nav-link{
+    color: #aaa;
+    border-bottom:solid 4px #eee ;
+    border-radius: 0;
+    line-height: 16px;
+}
+#boothdetails .nav-pills .nav-link.active{
+    background-color: transparent;
+    border-bottom: solid 4px var(--main-color);
+    color: #000;
+}
+#boothdetails .card-header{
+    line-height: unset;
+    font-size: 0.8rem;
+}

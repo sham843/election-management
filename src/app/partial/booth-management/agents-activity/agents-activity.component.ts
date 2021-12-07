@@ -64,13 +64,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   maxDate: any = new Date();
   subAreaAgentIdDisabledFlag:boolean= true;
+  SubAreaAgent:any = '';
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
   }
 
   ngOnInit(): void {
-    this.agentInfo = sessionStorage.getItem('agents-activity');
+    this.agentInfo = localStorage.getItem('agents-activity');
     this.agentInfo = JSON.parse(this.agentInfo);
     this.deafultVoterProfilefilterForm(); // voter list filter
 
@@ -210,6 +211,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         BoothId:0,
         subAreaAgentId:0,
       })
+      this.SubAreaAgent = '';
+      this.getAgentProfileData();
     } else if (flag == "Booth") {
       this.filterForm.controls["BoothId"].setValue(0);
     }else{
@@ -224,7 +227,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   //-------------------------------------------------- agent Profile method's start here left side data -----------------------------------------------------------//
   getAgentProfileData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.filterForm.value.AgentId + '&clientid=' + this.filterForm.value.ClientId, false, false, false, 'electionServiceForWeb');
+    let formData = this.filterForm.value;
+    let agentId:any;
+    this.SubAreaAgent == '' ? agentId = formData.AgentId : agentId = this.SubAreaAgent;
+    // this.agentInfo.SubUserTypeId !=  formData.AgentId ? agentId =  formData.subAreaAgentId :  agentId  = formData.AgentId;
+    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + agentId + '&clientid=' + formData.ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -249,7 +256,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let checkBoothId:any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
 
-    let obj = 'AgentId=' + formData.AgentId + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
+    let agentId:any;
+    this.SubAreaAgent == '' ? agentId = formData.AgentId : agentId = this.SubAreaAgent;
+
+    let obj = 'AgentId=' + agentId + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -270,7 +280,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   getpiChartArray(piChartData: any) {
     // data transform from orignal array 
-    console.log(piChartData);
     let obj: any = [{ 'category': "TotalFilled", 'categoryCount': piChartData.TotalFilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
     this.piChartArray = obj;
     this.piechartAgentProfile();
@@ -730,7 +739,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    // sessionStorage.removeItem('agents-activity');
+    // localStorage.removeItem('agents-activity');
   }
 
   // --------------------------------------------------  global method's start here   -------------------------------------------------- //

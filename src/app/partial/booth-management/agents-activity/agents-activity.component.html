@@ -10,20 +10,23 @@
                 <div class="row g-2">
                     <div class="col-sm">
                         <ngx-select [allowClear]="allowClearAgentFlag" [items]="allAgentLists" formControlName="AgentId"
-                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel');clickOnVoterList();getAgentProfileData();" optionTextField="FullName"
-                            placeholder="Select Agent" (remove)="clearFilter('Agent');getAgentProfileData()">
+                            optionValueField="AgentId"
+                            (select)="areaSubAgentByAgentId('sel');clickOnVoterList();getAgentProfileData();"
+                            optionTextField="FullName" placeholder="Select Agent"
+                            (remove)="clearFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
                             <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId" formControlName="subAreaAgentId"
-                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList()" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
+                            optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList();" [disabled]="subAreaAgantDisabledFlag"  placeholder="Select Area  Agent">
                             </ngx-select>
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="subAreaAgentIdDisabledFlag" [items]="getAgentByBoothsData" formControlName="BoothId"
-                            optionValueField="BoothId" (select)="selBoothByAgent($event);clickOnVoterList()" optionTextField="BoothName"
+                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="subAreaAgentIdDisabledFlag"
+                            [items]="getAgentByBoothsData" formControlName="BoothId" optionValueField="BoothId"
+                            (select)="selBoothByAgent($event);clickOnVoterList()" optionTextField="BoothName"
                             placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
                     </div>
@@ -45,11 +48,11 @@
                             <div class="flex-grow-1 ms-3 pt-2">
                                 <h5>{{agentProfileData?.FullName | titlecase}}</h5>
                                 <p class="contact mb-0">+91-{{agentProfileData?.MobileNo}}</p>
-                                <p class="contact mb-0">Address</p>
-                                <p class="mb-0"><small>{{agentProfileData?.Address | titlecase}}</small></p>
+                                <p class="mb-0 contact"><small>{{agentProfileData?.Address | titlecase}}</small></p>
                                 <p class="mb-0">{{agentProfileData?.Emailid}}</p>
                                 <!-- <p class="mb-0">{{agentProfileData?.Gender == 1 ? 'Male' : 'Female'}}</p> -->
-                                <span class="badge  py-1 fw-normal rounded-pill px-3 mt-1"   [ngClass]="{'bg-danger':agentProfileData?.IsUserBlock == 1 , 'bg-success' :agentProfileData?.IsUserBlock == 0}">
+                                <span class="badge  py-1 fw-normal rounded-pill px-3 mt-1"
+                                    [ngClass]="{'bg-danger':agentProfileData?.IsUserBlock == 1 , 'bg-success' :agentProfileData?.IsUserBlock == 0}">
                                     {{agentProfileData?.IsUserBlock == 1 ? 'Blocked' : 'Active' }}
                                 </span>
                             </div>
@@ -70,6 +73,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col"  *ngIf="agentProfileData?.SubusertypeId == 4">
+                                <div class="card shadow-none border">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalAssigned}}</h5>
+                                        <p class="card-text">
+                                            Total Assigned
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
@@ -85,7 +98,7 @@
                                     <div class="card-body p-2">
                                         <h5 class="card-title">{{agentProfileCardData?.Pending}}</h5>
                                         <p class="card-text">
-                                            Date Pending
+                                            Data Pending
                                         </p>
                                     </div>
                                 </div>
@@ -120,6 +133,7 @@
                                     </div>
                                 </div>
                             </div>
+                           
                         </div>
 
                         <div class="card card-body shadow-none border mb-3">
@@ -129,8 +143,10 @@
 
                         <div class="row justify-content-end">
                             <div class="col-sm-6 text-end">
-                                <button class="btn  btn-sm"    [ngClass]="{'btn-danger':agentProfileData?.IsUserBlock == 0 , 'btn-main' :agentProfileData?.IsUserBlock == 1}" (click)="blockUser(agentProfileData.ID, agentProfileData.IsUserBlock)">
-                                    {{agentProfileData?.IsUserBlock == 1 ? 'Unblock Agent' : 'Block Agent'}}    
+                                <button class="btn  btn-sm"
+                                    [ngClass]="{'btn-danger':agentProfileData?.IsUserBlock == 0 , 'btn-main' :agentProfileData?.IsUserBlock == 1}"
+                                    (click)="blockUser(agentProfileData.ID, agentProfileData.IsUserBlock)">
+                                    {{agentProfileData?.IsUserBlock == 1 ? 'Unblock Agent' : 'Block Agent'}}
                                 </button>
                             </div>
                         </div>
@@ -165,10 +181,10 @@
                                         <input [owlDateTime]="dt3" formControlName="weekRangePicker"
                                             [selectMode]="'range'"
                                             (dateTimeChange)="voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker)"
-                                            class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date" [max]="maxDate">
+                                            class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date"
+                                            [max]="maxDate">
                                         <button class="btn btn-light border btn-sm" type="button"
-                                            *ngIf="defaultCalenderIconFlag == false"
-                                            [owlDateTimeTrigger]="dt3">
+                                            *ngIf="defaultCalenderIconFlag == false" [owlDateTimeTrigger]="dt3">
                                             <i class="fas fa-calendar-alt"></i></button>
                                         <button class="btn btn-light border btn-sm" type="button"
                                             *ngIf="defaultCalenderIconFlag  == true"
@@ -201,56 +217,64 @@
                             Agent Performance
                         </div>
                         <div class="card-body pt-1">
-                            <div class="agentPerformancediv" style="height: 350px;"></div>
+                            <div class="agentPerformancediv chart-container"></div>
                         </div>
                     </div>
 
-                    <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="card m-4 card-body shadow-none border box-link active" id="pills-migrated-tab"
-                                data-bs-toggle="pill" data-bs-target="#pills-migrated" type="button" role="tab"
-                                aria-controls="pills-migrated" aria-selected="true" (click)="votersPaginationNo = 1;this.searchVoters.setValue(''); getClientBoothAgentVoterList()">
-                                <h5 class="card-title">{{this.votersCardData?.TotalVoters}}</h5>
-                                <p class="card-text"> Voters </p>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="card m-4 card-body shadow-none border box-link" id="pills-pending-tab"
-                                data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab"
-                                aria-controls="pills-pending" aria-selected="false" (click)="familyPaginationNo = 1; this.searchFamilyVoters.setValue(''); clickOnFamiliyCard()">
-                                <h5 class="card-title">{{this.votersCardData?.TotalFamiliy}}</h5>
-                                <p class="card-text"> Families </p>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="card m-4 card-body shadow-none border box-link" id="pills-agents-tab"
-                                data-bs-toggle="pill" data-bs-target="#pills-agents" type="button" role="tab"
-                                aria-controls="pills-agents" aria-selected="false" (click)="newVotersPaginationNo = 1; this.searchNewVoters.setValue(''); clickOnNewVotersList()">
-                                <h5 class="card-title">{{this.votersCardData?.NewVoters}}</h5>
-                                <p class="card-text"> New Voters </p>
-                            </a>
-                        </li>
-                    </ul>
-
+                    <div class="card-header p-0 pb-2" id="boothdetails">
+                        <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-migrated-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-migrated" type="button" role="tab"
+                                    aria-controls="pills-migrated" aria-selected="true"
+                                    (click)="votersPaginationNo = 1;this.searchVoters.setValue(''); getClientBoothAgentVoterList()">
+                                    <h5 class="mb-0">{{this.votersCardData?.TotalVoters}}</h5>
+                                    Voters
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-pending-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab"
+                                    aria-controls="pills-pending" aria-selected="false"
+                                    (click)="familyPaginationNo = 1; this.searchFamilyVoters.setValue(''); clickOnFamiliyCard()">
+                                    <h5 class="mb-0">{{this.votersCardData?.TotalFamiliy}}</h5>
+                                    Families
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-agents-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-agents" type="button" role="tab"
+                                    aria-controls="pills-agents" aria-selected="false"
+                                    (click)="newVotersPaginationNo = 1; this.searchNewVoters.setValue(''); clickOnNewVotersList()">
+                                    <h5 class="mb-0">{{this.votersCardData?.NewVoters}}</h5>
+                                    New Voters
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="tab-content" id="pills-tabContent">
                         <!-- Voters tab start here   -->
-                       
+
                         <div class="tab-pane fade show active" id="pills-migrated" role="tabpanel"
                             aria-labelledby="pills-migrated">
-                        <!-- Voters filter start here   -->
-                           <div class="row  justify-content-end mb-3">
-                               <div class="col-sm-4">
-                                <div class="form-container">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Search..." [formControl]="searchVoters"(keyup)="onKeyUpFilterVoters()" />
-                                        <button type="button"  class="btn btn-light border btn-sm"  (click)="clearFilters('clearSearchVoters')" *ngIf="searchVoters.value"><i
-                                                class="fas fa-times"></i></button>
-                                        <button type="button" *ngIf="!searchVoters.value"class="btn btn-sm border btn-light"><i  class="fas fa-search"></i></button>
+                            <!-- Voters filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchVoters" (keyup)="onKeyUpFilterVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchVoters')"
+                                                *ngIf="searchVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
                                     </div>
                                 </div>
-                               </div>
                             </div>
-                        <!-- Voters filter end here   -->
+                            <!-- Voters filter end here   -->
                             <ng-container>
                                 <table class="table table-hover mb-0">
                                     <thead>
@@ -280,25 +304,31 @@
                             <div class="mt-2 text-end" *ngIf="clientBoothAgentVoterList?.length == 0">
                                 <div class="alert alert-danger text-center py-2">No Data Found..!</div>
                             </div>
-                            <pagination-controls id="votersPagination" *ngIf="clientBoothAgentVoterList?.length != 0" previousLabel=""
-                                nextLabel="" (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                            <pagination-controls id="votersPagination" *ngIf="clientBoothAgentVoterList?.length != 0"
+                                previousLabel="" nextLabel=""
+                                (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
                             </pagination-controls>
                         </div>
                         <div class="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending">
                             <!-- new Family filter start here   -->
-                           <div class="row  justify-content-end mb-3">
-                            <div class="col-sm-4">
-                             <div class="form-container">
-                                 <div class="input-group">
-                                     <input class="form-control" type="text" placeholder="Search..." [formControl]="searchFamilyVoters" (keyup)="onKeyUpFilterFamilyVoters()" />
-                                     <button type="button"  class="btn btn-light border btn-sm"  (click)="clearFilters('clearSearchFamilyVoters')" *ngIf="searchFamilyVoters.value"><i
-                                             class="fas fa-times"></i></button>
-                                     <button type="button" *ngIf="!searchFamilyVoters.value"class="btn btn-sm border btn-light"><i  class="fas fa-search"></i></button>
-                                 </div>
-                             </div>
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchFamilyVoters"
+                                                (keyup)="onKeyUpFilterFamilyVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchFamilyVoters')"
+                                                *ngIf="searchFamilyVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchFamilyVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                         </div>
-                     <!-- new Voter filter end here   -->
+                            <!-- new Voter filter end here   -->
                             <div class="accordion accordion-flush" id="familytreeaccordion">
                                 <div class="row familytree-header">
                                     <div class="col-sm-1">Sr. No.</div>
@@ -369,8 +399,7 @@
                                     </div>
                                 </div>
                                 <pagination-controls id="familyPagination"
-                                    *ngIf="clientBoothAgentFamiliyList?.length != 0" previousLabel=""
-                                    nextLabel=""
+                                    *ngIf="clientBoothAgentFamiliyList?.length != 0" previousLabel="" nextLabel=""
                                     (pageChange)="onClickPagintionFamily(familyPageSize = $event)">
                                 </pagination-controls>
 
@@ -378,20 +407,24 @@
                         </div>
                         <div class="tab-pane fade show" id="pills-agents" role="tabpanel"
                             aria-labelledby="pills-agents">
-                    <!-- new Voter filter start here   -->
-                           <div class="row  justify-content-end mb-3">
-                            <div class="col-sm-4">
-                             <div class="form-container">
-                                 <div class="input-group">
-                                     <input class="form-control" type="text" placeholder="Search..." [formControl]="searchNewVoters" (keyup)="onKeyUpFilterNewVoters()" />
-                                     <button type="button"  class="btn btn-light border btn-sm"  (click)="clearFilters('clearSearchNewVoters')" *ngIf="searchNewVoters.value"><i
-                                             class="fas fa-times"></i></button>
-                                     <button type="button" *ngIf="!searchNewVoters.value"class="btn btn-sm border btn-light"><i  class="fas fa-search"></i></button>
-                                 </div>
-                             </div>
+                            <!-- new Voter filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchNewVoters" (keyup)="onKeyUpFilterNewVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchNewVoters')"
+                                                *ngIf="searchNewVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchNewVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                         </div>
-                     <!-- new Voter filter end here   -->
+                            <!-- new Voter filter end here   -->
                             <ng-container>
                                 <table class="table table-hover mb-0">
                                     <thead>
@@ -421,8 +454,9 @@
                             <div class="mt-2 text-end" *ngIf="getnewVotersList?.length == 0">
                                 <div class="alert alert-danger text-center py-2">No Data Found..!</div>
                             </div>
-                            <pagination-controls id="newVotersPagination" *ngIf="getnewVotersList?.length != 0" previousLabel=""
-                                nextLabel="" (pageChange)="onClickPagintionNewVoters(newVotersPageSize = $event)">
+                            <pagination-controls id="newVotersPagination" *ngIf="getnewVotersList?.length != 0"
+                                previousLabel="" nextLabel=""
+                                (pageChange)="onClickPagintionNewVoters(newVotersPageSize = $event)">
                             </pagination-controls>
                         </div>
 
