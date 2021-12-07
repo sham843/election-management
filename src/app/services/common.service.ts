@@ -15,17 +15,17 @@ export class CommonService {
     regions_m: any;
     codecareerPage: any;
 
-    getsessionStorageData() {
-        let loginObj = JSON.parse(sessionStorage.loggedInDetails).data1[0];
+    getlocalStorageData() {
+        let loginObj = JSON.parse(localStorage.loggedInDetails).data1[0];
         return loginObj;
     }
     getLoginType() {
-        let LoginType = JSON.parse(sessionStorage.loggedInDetails).data1[0];
+        let LoginType = JSON.parse(localStorage.loggedInDetails).data1[0];
         return LoginType.LoginType;
     }
     
     getAllPageName() {
-        let getAllPageName = JSON.parse(sessionStorage.loggedInDetails).data2;
+        let getAllPageName = JSON.parse(localStorage.loggedInDetails).data2;
         return getAllPageName;
     }
 
@@ -36,40 +36,40 @@ export class CommonService {
     }
 
     loggedInUserId() {
-        let userId = this.getsessionStorageData();
+        let userId = this.getlocalStorageData();
         return userId.Id;
     }
 
     districtId() {
-        let DistrictId = this.getsessionStorageData();
+        let DistrictId = this.getlocalStorageData();
         return DistrictId.DistrictId;
     }
 
     loggedInUserName() {
-        let Username = this.getsessionStorageData();
+        let Username = this.getlocalStorageData();
         return Username.Username;
     }
 
     getFullName() {
-        let localStorage = this.getsessionStorageData();
+        let localStorage = this.getlocalStorageData();
         let fName_lName = localStorage.FullName.split(' ')
         let obj = { 'FName': fName_lName[0],'LName': fName_lName[2], 'ProfilePhoto': localStorage.ProfilePhoto }
         return obj;
     }
 
     getCommiteeInfo() {
-        let localStorage = this.getsessionStorageData();
+        let localStorage = this.getlocalStorageData();
         let obj = { 'CommiteeId': localStorage.CommiteeId, 'CommiteeName': localStorage.CommiteeName }
         return obj;
     }
 
     loggedInUserType() {
-        let UserTypeId = this.getsessionStorageData();
+        let UserTypeId = this.getlocalStorageData();
         return UserTypeId.UserTypeId;
     }
 
     loggedInSubUserTypeId() {
-        let SubUserTypeId = this.getsessionStorageData();
+        let SubUserTypeId = this.getlocalStorageData();
         return SubUserTypeId.SubUserTypeId;
     }
 

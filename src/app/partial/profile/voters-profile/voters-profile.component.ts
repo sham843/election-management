@@ -43,8 +43,8 @@ export class VotersProfileComponent implements OnInit {
     public gallery: Gallery,
     private _lightbox: Lightbox,
   ) { 
-     let getsessionStorageData: any = sessionStorage.getItem('voter-profile');
-     let getStorageData= JSON.parse(getsessionStorageData); 
+     let getlocalStorageData: any = localStorage.getItem('voter-profile');
+     let getStorageData= JSON.parse(getlocalStorageData); 
      this.voterListData = {'AgentId': getStorageData.AgentId ,'ClientID': getStorageData.ClientID, 'VoterId': getStorageData.VoterId}
 }
 
@@ -213,7 +213,7 @@ export class VotersProfileComponent implements OnInit {
   
 
   ngOnDestroy() {
-    sessionStorage.removeItem('voter-profile');
+    localStorage.removeItem('voter-profile');
   }
 
 }

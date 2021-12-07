@@ -529,7 +529,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sr. No.</th>
-                                                            <th>Agents Name</th>
+                                                            <th>Agents Name1</th>
                                                             <th>Contact No</th>
                                                             <th>Area</th>
                                                             <th>Voters</th>
@@ -543,14 +543,18 @@
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
                                                             <td>
-                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main" style=" cursor: pointer;" (click)="redirectToAgentDetails(agentList)">
+                                                                <a  href="agents-activity" target="_blank"  (click)="redirectToAgentDetails(agentList)">
+                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main" style=" cursor: pointer;">
                                                                     <i class="fas fa-star me-1"></i>
                                                                     {{agentList?.FullName}}
                                                                 </span>
-                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-main" style=" cursor: pointer;" (click)="redirectToAgentDetails(agentList)">
+                                                            </a>
+                                                            <a href="agents-activity" target="_blank"  (click)="redirectToAgentDetails(agentList)">
+                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-main" style=" cursor: pointer;">
                                                                     <i class="far fa-star me-1"></i>
                                                                     {{agentList?.FullName}}
-                                                                </span>                                                                
+                                                                </span>         
+                                                            </a>                                                       
                                                             </td>
                                                             <td>
                                                                 <div *ngIf="agentList?.MobileNo"><a class="calltomember"
