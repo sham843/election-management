@@ -41,7 +41,7 @@
                                     <ngx-select [allowClear]="true" [items]="ClientAgentListddl"
                                         formControlName="UserId" optionValueField="AgentId" [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                         [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
-                                        class="w-75" (select)="flagselectAgent = 'selectAgent'; getElectionName();" placeholder="Select Agent"
+                                        class="w-75" (select)="getElectionName();" placeholder="Select Agent"
                                         (remove)="clearAggentToBooth('agentName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
