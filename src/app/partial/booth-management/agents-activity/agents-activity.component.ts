@@ -98,9 +98,12 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       subAreaAgentId: [this.agentInfo.SubUserTypeId],
     });
 
-    data.SubUserTypeId == 3 ? this.filterForm.controls['AgentId'].setValue(data.BoothAgentId) :
+    if (data.SubUserTypeId == 3) {
+      this.filterForm.controls['AgentId'].setValue(data.BoothAgentId)
+    } else {
       this.filterForm.controls['AgentId'].setValue(data.Addedby)
       this.filterForm.controls['subAreaAgentId'].setValue(data.BoothAgentId)
+    }
   }
 
   get filterFormControls() { return this.filterForm.controls };
@@ -113,9 +116,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        //
-        this.allAgentLists.length == 1 ? (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId), this.allowClearAgentFlag = false) : this.allowClearAgentFlag = true;
-        this.filterForm.value.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId(false);
+        
+        this.allAgentLists.forEach((element:any) => {
+          if(element.AgentId == formData.AgentId){
+            this.filterForm.controls['AgentId'].setValue(element.AgentId)
+          }
+        });
+        // this.allAgentLists.length == 1 ? (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId), this.allowClearAgentFlag = false) : this.allowClearAgentFlag = true;
+        this.filterForm.value.subAreaAgentId == 3 ? this.getAgentByBooths(false) : this.areaSubAgentByAgentId(false);
       } else {
         this.allAgentLists = [];
         this.spinner.hide();
@@ -141,20 +149,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         this.allSubAgentsByAgentId = res.data1;
 
-        if (this.filterForm.value.SubUserTypeId == 4) {
-          this.allSubAgentsByAgentId.length == 1 ? (this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id), this.subAreaAgantDisabledFlag = true, this.allowClearSubAgentsFlag = false) : this.subAreaAgantDisabledFlag = false, this.allowClearSubAgentsFlag = true;
-        } else {
-          this.allSubAgentsByAgentId.length == 1 ? (this.filterForm.controls['AgentId'].setValue(this.allSubAgentsByAgentId[0].AgentId), this.subAreaAgantDisabledFlag = true, this.allowClearSubAgentsFlag = false)  : this.subAreaAgantDisabledFlag= false, this.allowClearSubAgentsFlag = true;
-        }
+        this.allSubAgentsByAgentId.length == 1 ? (this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id), this.getAgentProfileData())  : this.subAreaAgantDisabledFlag= false, this.allowClearSubAgentsFlag = true;
+        flag == 'sel' ? this.filterForm.controls['subAreaAgentId'].setValue(formData.subAreaAgentId) : '';
 
-        if(flag == 'sel'){
-          this.filterForm.controls['subAreaAgentId'].setValue(0) 
-        }
-
-        this.getAgentByBooths();
+        this.getAgentByBooths(false);
       } else {
+        this.filterForm.controls['subAreaAgentId'].setValue(0);
         this.allSubAgentsByAgentId = [];
-        this.getAgentByBooths();
+        this.getAgentByBooths(false);
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -168,11 +170,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getReturnAgentIdOrAreaAgentId() {
     let fromData = this.filterForm.value;
     let agentId: any;
-    fromData.subAreaAgentId == 0 || fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined ? agentId = fromData.AgentId : agentId = fromData.subAreaAgentId;
+    fromData.subAreaAgentId == 0 || fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined  || fromData.subAreaAgentId == 3  ? agentId = fromData.AgentId : agentId = fromData.subAreaAgentId;
     return agentId
   }
 
-  getAgentByBooths() {
+  getAgentByBooths(flag:any) {
+
+    flag == 'sel' ? this.getAgentProfileData() : '';
+    
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
@@ -181,7 +186,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.getAgentByBoothsData = res.data1;
-        this.getAgentByBoothsData.length == 1 ? (this.filterForm.controls['BoothId'].setValue(this.getAgentByBoothsData[0].BoothId), this.selBoothByAgent(this.getAgentByBoothsData[0].BoothId), this.allowClearBoothIdFlag = false) : this.allowClearBoothIdFlag = true
+        this.getAgentByBoothsData.length == 1 ? (this.filterForm.controls['BoothId'].setValue(this.getAgentByBoothsData[0].BoothId), this.selBoothByAgent(this.getAgentByBoothsData[0].BoothId), this.allowClearBoothIdFlag = false, this.subAreaAgentIdDisabledFlag = false) : this.subAreaAgentIdDisabledFlag = true; this.allowClearBoothIdFlag = true
         this.getAgentAssBoothActivityGraph();
       } else {
         this.getAgentByBoothsData = [];
@@ -229,6 +234,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let formData = this.filterForm.value;
     let agentId:any;
+    debugger
     this.SubAreaAgent == '' ? agentId = formData.AgentId : agentId = this.SubAreaAgent;
     // this.agentInfo.SubUserTypeId !=  formData.AgentId ? agentId =  formData.subAreaAgentId :  agentId  = formData.AgentId;
     this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + agentId + '&clientid=' + formData.ClientId, false, false, false, 'electionServiceForWeb');
