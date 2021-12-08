@@ -331,9 +331,8 @@ export class CreateConstituenyComponent implements OnInit {
       this.subConstituencyTableDiv = false;
       this.subConstituencyDivHide = false;
     }
-    if(this.createConstituencyForm.value.Id == 0 ){
-      this.addSubConstituencyArray = [];
-    }
+    this.createConstituencyForm.value.Id == 0 ? this.addSubConstituencyArray = [] : this.addSubConstituencyArray ;
+    (this.createConstituencyForm.value.Id != 0 && this.constituencyDetailsArray.IsSubConstituencyApplicable == 0 ) ? this.addSubConstituencyArray = [] : this.addSubConstituencyArray;
   }
 
   addSubConstituency() {

@@ -96,9 +96,9 @@ export class CreateElectionsComponent implements OnInit {
       this.addSubElectionArray = [];
       this.subElecTableHide = false;
     }
-    if(this.createElectionForm.value.Id == 0 ){
-      this.addSubElectionArray = [];
-    }
+    this.createElectionForm.value.Id == 0 ? this.addSubElectionArray = [] : this.addSubElectionArray ;
+    (this.createElectionForm.value.Id != 0 && this.electionDetailsArray.IsSubElectionApplicable == 0 ) ? this.addSubElectionArray = [] : this.addSubElectionArray;
+    
   }
 
   addBtndisabledEnabled() {// when dropdown value select
@@ -246,6 +246,7 @@ export class CreateElectionsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.electionMasterArray = res.data1;
+        console.log(this.electionMasterArray )
         this.total = res.data2[0].TotalCount;
       } else {
         this.spinner.hide();
