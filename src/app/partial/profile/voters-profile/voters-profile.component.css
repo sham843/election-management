@@ -1,10 +1,14 @@
 .profile-info img{
-    width: 90px;
+    width: 75px;
+    height: 75px;
     margin: 0 auto;
     display: flex;
     border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
 }
-.profile-info h5{
+.profile-info h6{
+    font-weight: 600;
     color: var(--main-color);
 }
 .profile-info .contact{

@@ -24,12 +24,13 @@
                 <div class="card-body p-2">
                     <div class="btn-group voter-repeat" role="group" aria-label="Basic radio toggle button group">
                         <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData">
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                        <label class="btn btn-outline-secondary text-start" for="btnradio1">
-                            <small>{{VPBoothAgent.SurveyDate | date:'dd-MM-yyyy hh:mm a'}}</small>
-                            <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
-                        </label>
-                    </div>
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
+                                checked>
+                            <label class="btn btn-outline-secondary text-start" for="btnradio1">
+                                <small>{{VPBoothAgent.SurveyDate | date:'dd-MM-yyyy hh:mm a'}}</small>
+                                <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,17 +43,19 @@
             <div class="card">
                 <div class="card-body">
                     <div class="profile-info">
+                        <div class="text-end">
+                            <span class="badge small bg-danger mb-2 fw-normal"
+                                *ngIf="voterProfileData?.IsNotCall == 1">Do Not Call</span>
+                        </div>
                         <div class="d-flex">
                             <div class="flex-shrink-0">
                                 <img src="{{voterProfileData?.VoterPhoto}}">
                                 <img *ngIf="!voterProfileData?.VoterPhoto" src="assets/images/Profile-Photo.jpg">
                             </div>
-                            <div class="flex-grow-1 ms-3 pt-2">
-                                <div class="text-end">
-                                    <span class="badge small bg-danger mb-2 fw-normal" *ngIf="voterProfileData?.IsNotCall == 1">Do Not Call</span>
-                                </div>
-                                <h5>{{voterProfileData?.EnglishName}}</h5>
-                                <p class="contact">Voter No. : <span class="text-dark fw-bold"> {{voterProfileData?.VoterNo}}</span></p>
+                            <div class="flex-grow-1 ms-2 pt-2">
+                                <h6>{{voterProfileData?.EnglishName}}</h6>
+                                <p class="contact">Voter No. : <span class="text-dark fw-bold">
+                                        {{voterProfileData?.VoterNo}}</span></p>
                             </div>
                         </div>
                     </div>
@@ -61,7 +64,8 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Nick Name :</span>
-                            <span class="voter-data">{{voterProfileData?.NickName ? voterProfileData?.NickName : '-'}}</span>
+                            <span class="voter-data">{{voterProfileData?.NickName ? voterProfileData?.NickName :
+                                '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Age :</span>
@@ -69,7 +73,8 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Date Of Birth :</span>
-                            <span class="voter-data">{{voterProfileData?.DateOfBirth ? voterProfileData?.DateOfBirth : '-'}}</span>
+                            <span class="voter-data">{{voterProfileData?.DateOfBirth ? voterProfileData?.DateOfBirth :
+                                '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Gender :</span>
@@ -78,12 +83,14 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 1 :</span>
-                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i> {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
+                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i>
+                                {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 2 :</span>
-                            <span class="voter-data">{{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 : '-'}}</span>
+                            <span class="voter-data">{{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 :
+                                '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Email :</span>
@@ -91,27 +98,27 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Qualification :</span>
-                            <span class="voter-data">{{voterProfileData?.Qualification ? voterProfileData?.Qualification : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Occupation :</span>
-                            <span class="voter-data">{{voterProfileData?.Occupation ? voterProfileData?.Occupation : '-'}}</span>
+                            <span class="voter-data">{{voterProfileData?.Qualification ? voterProfileData?.Qualification
+                                : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">House No. :</span>
-                            <span class="voter-data">{{voterProfileData?.HouseNo ? voterProfileData?.HouseNo : '-'}}</span>
+                            <span class="voter-data">{{voterProfileData?.HouseNo ? voterProfileData?.HouseNo :
+                                '-'}}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Area :</span>
-                            <span class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</span>
+                        <li class="list-group-item">
+                            <div class="voter-label">Area :</div>
+                            <div class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Address :</span>
-                            <span class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}</span>
+                        <li class="list-group-item">
+                            <div class="voter-label">Address :</div>
+                            <div class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}
+                            </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Blood Group :</span>
-                            <span class="voter-data">{{voterProfileData?.Bloodgroup ? voterProfileData?.Bloodgroup : '-'}}</span>
+                            <span class="voter-data">{{voterProfileData?.Bloodgroup ? voterProfileData?.Bloodgroup :
+                                '-'}}</span>
                         </li>
                     </ul>
                 </div>
@@ -120,8 +127,9 @@
                     <div id="voterhomeimages">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                 <img *ngIf="voterProfileData?.VoterHomePhoto"  src="{{voterProfileData?.VoterHomePhoto}}">
-                                 <img *ngIf="!voterProfileData?.VoterHomePhoto" src="assets/images/ele.png">
+                                <img *ngIf="voterProfileData?.VoterHomePhoto"
+                                    src="{{voterProfileData?.VoterHomePhoto}}">
+                                <img *ngIf="!voterProfileData?.VoterHomePhoto" src="assets/images/ele.png">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#voterhomeimages"
@@ -145,40 +153,91 @@
                 </div>
                 <div class="card-body pt-0">
                     <div class="row mb-2">
-                        <div class="col-sm-3">
-                            <span class="voter-label">Religion : </span>
+                        <div class="col-sm-6">
+                            <span class="voter-data">
+                                {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})
+                            </span>
                         </div>
-                        <div class="col-sm-3">
-                            <span class="voter-data">{{voterProfileData?.ReligionName}}</span>
-                        </div>
-                        <div class="col-sm-3">
-                            <span class="voter-label">Caste : </span>
-                        </div>
-                        <div class="col-sm-3">
-                            <span class="voter-data">{{voterProfileData?.Castname}}</span>
+                        <div class="col-sm-6">
+                            <span class="voter-data">
+                                <i class="fas fa-house-user fa-1x"></i>
+                                {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members)</span>
                         </div>
                     </div>
+                    <hr class="my-2">
+
                     <div class="row mb-2">
-                        <div class="col-sm-3">
-                            <span class="voter-label">Is Family Head : </span>
-                        </div>
-                        <div class="col-sm-3">
-                            <span class="voter-data">{{voterProfileData?.Head}}</span>
-                        </div>
-                        <div class="col-sm-3">
-                            <span class="voter-label">Family Size : </span>
-                        </div>
-                        <div class="col-sm-3">
-                            <span class="voter-data">{{voterProfileData?.Familysize}}</span>
+                        <div class="col-sm-12">
+                            <div class="voter-data mb-2">
+                                {{voterProfileData?.IsDairyFarmer == 0 ? '' : voterProfileData?.IsDairyFarmer == 1 ?
+                                'Dairy Farmer, ' : ''}}
+                                {{voterProfileData?.IsGoatSheepFarmer == 0 ? '' : voterProfileData?.IsGoatSheepFarmer ==
+                                1 ? 'Goat / Sheep Farmer, ' : ''}}
+                                {{voterProfileData?.IsSugarCaneCutter == 0 ? '' : voterProfileData?.IsSugarCaneCutter ==
+                                1 ? 'SugarCane Cutter / Worker, ' : ''}}
+                                {{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ? 'Farmer, ' :
+                                ''}}
+                                {{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ?
+                                'Business ' : ''}}
+                                ({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }})
+                                {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
+                                'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},
+                                {{voterProfileData?.FinancialCondition == 1 ? 'Low Income Family' :
+                                voterProfileData?.FinancialCondition == 2 ? 'Medium Income Family' :
+                                voterProfileData?.FinancialCondition == 3 ? 'High Income Family' : ''}}
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
+
+                    <div class="card-header p-0">Comments :</div>
+                    <div class="card-body p-0 mb-2">
+                        <div class="voter-data">
+                            <ul *ngFor="let VPComments of VPCommentData" class="list-group list-group-flush mb-0">
+                                <li class="list-group-item ps-0" *ngIf="VPComments?.CommentDetails">
+                                    <i class="fas fa-check me-2"></i>
+                                    {{VPComments?.CommentDetails}}
+                                </li>
+                            </ul>
+                            <span class="text-danger" *ngIf="VPCommentData?.length == 0">No Comments</span>
+                        </div>
+                    </div>
+
+                    <div class="card-header p-0">
+                        Political Information
+                    </div>
+                    <div class="card-body p-0 mb-2">
+                        <div class="voter-data">
+                            {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
+                        </div>
+                    </div>
+
+                    <div class="card-header p-0">
+                        Political Influence
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-container">
+                            <div class="alert alert-success p-2 mb-2">
+                                <label class="form-label">Party/Person Favouring :</label>
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.Support}}</span>
+                                </div>
+                            </div>
+                            <div class="alert alert-danger p-2 mb-0">
+                                <label class="form-label">Party/Person Opposing :</label>
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.Support}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
                         <div class="col-sm-12">
                             <span class="voter-label">Family Details : </span>
                             <table class="table table-hover mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Sr. No.</th>
+                                        <th>Voter No.</th>
                                         <th>Member Name</th>
                                         <th>Mobile No.</th>
                                         <th>Occupation</th>
@@ -187,83 +246,47 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let voterProfileFamily of voterProfileFamilyData" [class.active]="voterProfileFamily.SrNo == HighlightRow" (click)="familyMemberData(voterProfileFamily)">
-                                        <td>{{voterProfileFamily.SrNo}}</td>
+                                    <tr *ngFor="let voterProfileFamily of voterProfileFamilyData"
+                                        [class.active]="voterProfileFamily.SrNo == HighlightRow"
+                                        (click)="familyMemberData(voterProfileFamily)">
+                                        <td>{{voterProfileFamily.VoterNo}}</td>
                                         <td>{{voterProfileFamily.Family}}</td>
                                         <td>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</td>
                                         <td>{{voterProfileFamily.Occupation ? voterProfileFamily.Occupation : '-'}}</td>
-                                        <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification : '-'}}</td>
-                                        <td>{{voterProfileFamily.Migrated ? voterProfileFamily.Migrated : '-'}}</td>
+                                        <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification :
+                                            '-'}}</td>
+                                        <td>{{voterProfileFamily.Address ? voterProfileFamily.Address : '-'}}</td>
                                     </tr>
-                                   
+
                                 </tbody>
                             </table>
-                            <div  *ngIf="voterProfileFamilyData?.length == 0" class=" mt-2 alert alert-danger p-2 mb-0"><label _ngcontent-age-c139="" class="form-label text-center">No Data Found</label></div>
+                            <div *ngIf="voterProfileFamilyData?.length == 0" class=" mt-2 alert alert-danger p-2 mb-0">
+                                <label _ngcontent-age-c139="" class="form-label text-center">No Data Found</label>
+                            </div>
                             <!-- <div class="mt-2 p-2" *ngIf="voterProfileFamilyData?.length == 0">
                                 <div class="alert alert-danger text-center">No Data Found..!</div>
                             </div> -->
                         </div>
                     </div>
                 </div>
-                <div class="card-header py-0">
-                    Political Information
-                </div>
-                <div class="card-body pt-0">
-                    <div class="row mb-2">
-                        <div class="col-sm-2">
-                            <span class="voter-label">Party Name : </span>
-                        </div>
-                        <div class="col-sm-4">
-                            <span class="voter-data">{{voterProfileData?.partyname}}</span>
-                        </div>
-                        <div class="col-sm-2">
-                            <span class="voter-label">Leader : </span>
-                        </div>
-                        <div class="col-sm-4">
-                            <span class="voter-data">
-                                {{voterProfileData?.Leader}}
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                
 
-                <div class="card shadow-none border mx-3 mb-3">
-                    <div class="card-header py-0">
-                        Political Influence
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="form-container">
-                            <div class="alert alert-success p-2 mb-2">
-                                <label class="form-label">Positive Influence :</label>
-                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                    <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.Support}}</span>
-                                </div>
-                            </div>
-                            <div class="alert alert-danger p-2 mb-0">
-                                <label class="form-label">Negative Influence :</label>
-                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                    <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.Support}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <div class="card-header py-0">
                     Extra Information
                 </div>
                 <div class="card-body pt-0">
-                    <div class="card card-body shadow-none border mb-2 p-2" *ngFor="let voterVisitDetail of voterVisitDetailDataArray">
+                    <div class="card card-body shadow-none border mb-2 p-2"
+                        *ngFor="let voterVisitDetail of voterVisitDetailDataArray">
                         <div class="d-flex">
                             <div class="flex-shrink-0">
                                 <!-- (click)="imgData(voterVisitDetail)" -->
-                                <span><img class="extrainfo-img" (click)="showGallaryLightbox(voterVisitDetail) ; lightbox.open(0, 'lightbox')" src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
-                                <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img" src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
+                                <span><img class="extrainfo-img"
+                                        (click)="showGallaryLightbox(voterVisitDetail) ; lightbox.open(0, 'lightbox')"
+                                        src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
+                                <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img"
+                                        src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="voter-data">{{voterVisitDetail.VisitDate}}</div>
@@ -292,17 +315,13 @@
                         </div>
                         <div class="col-sm-4">
                             <label class="form-label">Date of Birth</label>
-                            <div class="form-data">{{VPMemberDetailsData?.DateOfBirth ? VPMemberDetailsData?.DateOfBirth : '-' }}</div>
+                            <div class="form-data">{{VPMemberDetailsData?.DateOfBirth ? VPMemberDetailsData?.DateOfBirth
+                                : '-' }}</div>
                         </div>
                         <div class="col-sm-4">
                             <label class="form-label">Gender</label>
-                            <div class="form-data">{{VPMemberDetailsData?.Gender == 'M' ? 'Male' : VPMemberDetailsData?.Gender == 'F' ? 'Female' : '-'  }}</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">Area:</label>
-                            <span class="form-data">{{VPMemberDetailsData?.Area}}</span>
+                            <div class="form-data">{{VPMemberDetailsData?.Gender == 'M' ? 'Male' :
+                                VPMemberDetailsData?.Gender == 'F' ? 'Female' : '-' }}</div>
                         </div>
                     </div>
                 </div>
@@ -314,7 +333,8 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="voter-label">Migrated :</span>
-                                <span class="voter-data">{{VPMemberDetailsData?.Migrated ? VPMemberDetailsData?.Migrated : '-'}}</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.Migrated ? VPMemberDetailsData?.Migrated
+                                    : '-'}}</span>
                             </div>
                             <!-- <div class="voter-data mt-1">
                                 {{VPMemberDetailsData?.Address ? VPMemberDetailsData?.Address : '-'}}
@@ -322,84 +342,33 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Postal Voting :</span>
-                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' : VPMemberDetailsData?.PostalFlag  == 1 ? 'Yes' : '-'}}</span>
-                            
+                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
+                                VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
+
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="voter-label">Need Support :</span>
-                                <span class="voter-data">{{VPMemberDetailsData?.NeedSupportFlag == 0 ? 'No' :  VPMemberDetailsData?.NeedSupportFlag == 1 ? 'Yes' : '-'}}</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.NeedSupportFlag == 0 ? 'No' :
+                                    VPMemberDetailsData?.NeedSupportFlag == 1 ? 'Yes' : '-'}}</span>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="card mb-3">
-                <div class="card-header">
-                    Additional Information
-                </div>
-                <div class="card-body px-0 pt-0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Dairy Farmer :</span>
-                            <span class="voter-data"> {{voterProfileData?.IsDairyFarmer == 0 ? 'No' : voterProfileData?.IsDairyFarmer  == 1 ? 'Yes' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Goat/Sheep Farmer :</span>
-                            <span class="voter-data">{{voterProfileData?.IsGoatSheepFarmer == 0 ? 'No' : voterProfileData?.IsGoatSheepFarmer  == 1 ? 'Yes' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Sugarcane/Cutter-Worker :</span>
-                            <span class="voter-data">{{voterProfileData?.IsSugarCaneCutter == 0 ? 'No' : voterProfileData?.IsSugarCaneCutter  == 1 ? 'Yes' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Farmer :</span>
-                            <span class="voter-data">{{voterProfileData?.IsFarmer == 0 ? 'No' : voterProfileData?.IsFarmer  == 1 ? 'Yes' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span class="voter-label">Business :</span>
-                                <span class="voter-data">{{voterProfileData?.HaveBusiness == 0 ? 'No' : voterProfileData?.HaveBusiness  == 1 ? 'Yes' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Business Details :</span>
-                            <span class="voter-data">{{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '-' }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Yuvak :</span>
-                            <span class="voter-data">{{voterProfileData?.IsYuvak == 0 ? 'No' : voterProfileData?.IsYuvak  == 1 ? 'Yes' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Vehicle :</span>
-                            <span class="voter-data">{{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle  == 2 ? 'Family' : voterProfileData?.HaveVehicle  == 0 ? 'None' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Income Group :</span>
-                            <span class="voter-data">{{voterProfileData?.FinancialCondition == 1 ? 'Low' : voterProfileData?.FinancialCondition  == 2 ? 'Med' : voterProfileData?.FinancialCondition  == 3 ? 'High' : '-'}}</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="voter-label">Comments :
-                                <ul *ngFor="let VPComments of VPCommentData">
-                                    <li *ngIf="VPComments?.CommentDetails">{{VPComments?.CommentDetails}}</li> 
-                                </ul>
-                                <span *ngIf="VPCommentData?.length == 0">No Comments</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
 
             <div class="card card-body p-2">
-                <label class="form-label">Location: <small>{{voterProfileData?.VillageName}},{{voterProfileData?.BoothName}},
-                    {{voterProfileData?.Area}}</small>
+                <label class="form-label">Location:
+                    <small>{{voterProfileData?.VillageName}},{{voterProfileData?.BoothName}},
+                        {{voterProfileData?.Area}}</small>
                 </label>
                 <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'">
                     <div *ngFor="let votersonmap of VPVotersonmapData">
-                    <agm-marker  [latitude]="votersonmap?.Latitude" [longitude]="votersonmap?.Longitude">
-                    </agm-marker>
-                </div>
+                        <agm-marker [latitude]="votersonmap?.Latitude" [longitude]="votersonmap?.Longitude">
+                        </agm-marker>
+                    </div>
                 </agm-map>
             </div>
             <!-- <ng-template #elseBlock>
