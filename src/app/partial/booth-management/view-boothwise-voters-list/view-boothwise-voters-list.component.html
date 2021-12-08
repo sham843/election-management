@@ -211,8 +211,8 @@
                                                         <tr
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.SrNo}}</td>
-                                                            <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
-                                                            <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td>
+                                                            <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td>
+                                                            <!-- <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <td>{{boothVoterList?.VoterId}}</td>
 
                                                             <td>
@@ -281,7 +281,7 @@
                                                                     <div class="col-sm-1">{{boothFamilyList.SrNo}}
                                                                     </div>
                                                                     <!-- <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}  </div>-->
-                                                                        <div class="col-sm-3"> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothFamilyList)">{{boothFamilyList.Family}}</a></div>
+                                                                    <div class="col-sm-2"><a (click)="redirectToVoterPrfile(boothFamilyList)" class="text-primary" style="cursor: pointer;">{{boothFamilyList?.Family}}</a></div>
                                                                     <div class="col-sm-2">
                                                                         <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
                                                                         <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
@@ -313,8 +313,8 @@
                                                                         <div class="row familytree-details"
                                                                             *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
                                                                             <div class="col-sm-1">{{boothFamilyDetails?.SrNo}}</div>
-                                                                            <!-- <div class="col-sm-3"> {{boothFamilyDetails?.Family}}</div> -->
-                                                                            <div class="col-sm-3"> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(boothFamilyDetails)">{{boothFamilyDetails?.Family}}</a></div>
+                                                                            <div class="col-sm-3"> {{boothFamilyDetails?.Family}}</div>
+                                                                            <!-- <div class="col-sm-2"><a (click)="redirectToVoterPrfile(boothFamilyDetails)" class="text-primary" style="cursor: pointer;">{{boothFamilyDetails?.Family}}</a></div> -->
                                                                             <div class="col-sm-2">
                                                                                 <span *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a> </span>
                                                                                 <span *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
@@ -391,7 +391,7 @@
                                                             *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
                                                             <td>{{MigratedList?.SrNo}}</td>
                                                             <!-- <td>{{MigratedList?.EnglishName}}</td> -->
-                                                            <td> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(MigratedList)">{{MigratedList?.EnglishName}}</a></td> 
+                                                            <td><a (click)="redirectToVoterPrfile(MigratedList)" class="text-primary" style="cursor: pointer;">{{MigratedList?.EnglishName}}</a></td>
                                                             <td>{{MigratedList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
@@ -459,7 +459,7 @@
                                                             *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
                                                             <td>{{PendingList?.SrNo}}</td>
                                                             <!-- <td>{{PendingList?.EnglishName}}</td> -->
-                                                            <td> <a  href="voters-profile" target="_blank"  (click)="redirectToVoterPrfile(PendingList)">{{PendingList?.EnglishName}}</a></td> 
+                                                            <td><a (click)="redirectToVoterPrfile(PendingList)" class="text-primary" style="cursor: pointer;">{{PendingList?.EnglishName}}</a></td>
                                                             <td>{{PendingList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.Gender == 'F'">Female</div>
