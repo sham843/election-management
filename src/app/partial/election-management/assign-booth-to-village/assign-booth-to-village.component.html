@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row mx-0 px-0" id="pageheader">
         <div class="col-sm-4">
-            <span class="page-name">Assign Booths to Constituency</span>
+            <span class="page-name">Assign Booths to Village</span>
         </div>
         <div class="col-sm-8 text-end">
         </div>
@@ -10,47 +10,66 @@
     <div class="row chartbox mb-3">
         <div class="col-sm-3">
             <div class="card">
-                <div class="card-header">Assign Booths to Constituency</div>
+                <div class="card-header">Assign Booths to Village</div>
                 <div class="card-body pt-0">
                     <div class="form-container">
+                        <form [formGroup]="assignBoothsToVillageForm" (ngSubmit)="onSubmitData()">
                         <div class="mb-3">
-                            <label class="form-label">Select Assembly</label>
-                            <select class="form-select">
-                                <option value="">Select Assembly</option>
-                            </select>
+                            <label class="form-label required-field">Select Assembly</label>
+                            <ngx-select [allowClear]="false" [items]="assemblyArray" formControlName="assembly" optionValueField="Id" optionTextField="ConstituencyName" placeholder="Select Assembly" (select)="getBoothList()" [ngClass]="{ 'is-invalid': submitted && f.assembly.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.assembly.errors" class="invalid-feedback">
+                                <div *ngIf="f.assembly.errors.required">Assembly Name is required</div>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Select District</label>
-                            <select class="form-select">
-                                <option value="">Select District</option>
-                            </select>
+                            <label for="ddlConstituency" class="form-label required-field">Booths</label>
+                            <ngx-select [allowClear]="false" [items]="boothListArray" formControlName="boothList" optionValueField="Id" optionTextField="BoothNickName" placeholder="Select Booths" [disabled]="(!assignBoothsToVillageForm.value.assembly || boothListArray?.length == 0) ? true : false"
+                                [ngClass]="{ 'is-invalid': submitted && f.boothList.errors}">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.boothList.errors" class="invalid-feedback">
+                                <div *ngIf="f.boothList.errors.required">Constituency is required
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Select Taluka</label>
-                            <select class="form-select">
-                                <option value="">Select Taluka</option>
-                            </select>
+                            <label class="form-label required-field">Select District</label>
+                            <ngx-select [allowClear]="true" [items]="allDistrict" formControlName="districtId" (select)="getTaluka()" optionValueField="DistrictId" optionTextField="DistrictName" placeholder="Select District"
+                            [ngClass]="{ 'is-invalid': submitted && f.districtId.errors }">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.districtId.errors" class="invalid-feedback">
+                            <div *ngIf="f.districtId.errors.required">District is required
+                            </div>
+                        </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Select Booth</label>
-                            <select class="form-select">
-                                <option value="">Select Booth</option>
-                            </select>
+                            <label class="form-label required-field">Select Taluka</label>
+                            <ngx-select [allowClear]="true" [items]="getTalkaByDistrict" [disabled]="!this.assignBoothsToVillageForm.value.districtId" formControlName="TalukaId" optionValueField="TalukaId" optionTextField="TalukaName" placeholder="Select Taluka"
+                            (select)="getVillage();" [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.TalukaId.errors" class="invalid-feedback">
+                            <div *ngIf="f.TalukaId.errors.required">Taluka is required
+                            </div>
+                        </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Select Village</label>
-                            <select class="form-select">
-                                <option value="">Select Village</option>
-                            </select>
+                            <label class="form-label required-field">Select Village</label>
+                        <ngx-select [allowClear]="true" [items]="resultVillage" placeholder="Select Village" formControlName="VillageId" optionValueField="VillageId" optionTextField="VillageName" [disabled]="!this.assignBoothsToVillageForm.value.TalukaId" placeholder="Select Village" [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
+                            <div *ngIf="f.VillageId.errors.required">
+                                Village is required</div>
+                        </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3">
-                                <button type="button" class="btn btn-secondary text-lg-start">Clear</button>
+                                <button type="button" class="btn btn-secondary text-lg-start" (click)="clearForm()">Clear</button>
                             </div>
                             <div class="col-sm-9 text-end">
                                 <button type="submit" class="btn btn-main text-lg-end">Assign Booth</button>
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
