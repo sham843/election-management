@@ -14,61 +14,78 @@
                 <div class="card-body pt-0">
                     <div class="form-container">
                         <form [formGroup]="assignBoothsToVillageForm" (ngSubmit)="onSubmitData()">
-                        <div class="mb-3">
-                            <label class="form-label required-field">Select Assembly</label>
-                            <ngx-select [allowClear]="false" [items]="assemblyArray" formControlName="assembly" optionValueField="Id" optionTextField="ConstituencyName" placeholder="Select Assembly" (select)="getBoothList()" [ngClass]="{ 'is-invalid': submitted && f.assembly.errors }">
-                            </ngx-select>
-                            <div *ngIf="submitted && f.assembly.errors" class="invalid-feedback">
-                                <div *ngIf="f.assembly.errors.required">Assembly Name is required</div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="ddlConstituency" class="form-label required-field">Booths</label>
-                            <ngx-select [allowClear]="false" [items]="boothListArray" formControlName="boothList" optionValueField="Id" optionTextField="BoothNickName" placeholder="Select Booths" [disabled]="(!assignBoothsToVillageForm.value.assembly || boothListArray?.length == 0) ? true : false"
-                                [ngClass]="{ 'is-invalid': submitted && f.boothList.errors}">
-                            </ngx-select>
-                            <div *ngIf="submitted && f.boothList.errors" class="invalid-feedback">
-                                <div *ngIf="f.boothList.errors.required">Constituency is required
+                            <div class="mb-3">
+                                <label class="form-label required-field">Select Assembly</label>
+                                <ngx-select [allowClear]="true" [items]="assemblyArray" formControlName="assembly"
+                                    optionValueField="Id" optionTextField="ConstituencyName"
+                                    placeholder="Select Assembly" (select)="getBoothList(this.assignBoothsToVillageForm.value.assembly)" (remove)="clearOption('Assembly')"
+                                    [ngClass]="{ 'is-invalid': submitted && f.assembly.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.assembly.errors" class="invalid-feedback">
+                                    <div *ngIf="f.assembly.errors.required">Assembly Name is required</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label required-field">Select District</label>
-                            <ngx-select [allowClear]="true" [items]="allDistrict" formControlName="districtId" (select)="getTaluka()" optionValueField="DistrictId" optionTextField="DistrictName" placeholder="Select District"
-                            [ngClass]="{ 'is-invalid': submitted && f.districtId.errors }">
-                        </ngx-select>
-                        <div *ngIf="submitted && f.districtId.errors" class="invalid-feedback">
-                            <div *ngIf="f.districtId.errors.required">District is required
+                            <div class="mb-3">
+                                <label class="form-label required-field">Booths</label>
+                                <ngx-select [allowClear]="true" [items]="boothListArray" formControlName="BoothId"
+                                    optionValueField="Id" optionTextField="BoothNickName" placeholder="Select Booths"
+                                    [disabled]="(!assignBoothsToVillageForm.value.assembly || boothListArray?.length == 0) ? true : false"
+                                    [ngClass]="{ 'is-invalid': submitted && f.BoothId.errors}">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.BoothId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.BoothId.errors.required">Booths Name is required
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label required-field">Select Taluka</label>
-                            <ngx-select [allowClear]="true" [items]="getTalkaByDistrict" [disabled]="!this.assignBoothsToVillageForm.value.districtId" formControlName="TalukaId" optionValueField="TalukaId" optionTextField="TalukaName" placeholder="Select Taluka"
-                            (select)="getVillage();" [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
-                        </ngx-select>
-                        <div *ngIf="submitted && f.TalukaId.errors" class="invalid-feedback">
-                            <div *ngIf="f.TalukaId.errors.required">Taluka is required
+                            <div class="mb-3">
+                                <label class="form-label required-field">Select District</label>
+                                <ngx-select [allowClear]="true" [items]="allDistrict" formControlName="districtId"
+                                    (select)="getTaluka(this.assignBoothsToVillageForm.value.districtId,'select')" optionValueField="DistrictId" optionTextField="DistrictName"
+                                    placeholder="Select District" (remove)="clearOption('District')"
+                                    [ngClass]="{ 'is-invalid': submitted && f.districtId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.districtId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.districtId.errors.required">District is required
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label required-field">Select Village</label>
-                        <ngx-select [allowClear]="true" [items]="resultVillage" placeholder="Select Village" formControlName="VillageId" optionValueField="VillageId" optionTextField="VillageName" [disabled]="!this.assignBoothsToVillageForm.value.TalukaId" placeholder="Select Village" [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
-                        </ngx-select>
-                        <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
-                            <div *ngIf="f.VillageId.errors.required">
-                                Village is required</div>
-                        </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <button type="button" class="btn btn-secondary text-lg-start" (click)="clearForm()">Clear</button>
+                            <div class="mb-3">
+                                <label class="form-label required-field">Select Taluka</label>
+                                <ngx-select [allowClear]="true" [items]="getTalkaByDistrict"
+                                    [disabled]="!this.assignBoothsToVillageForm.value.districtId"
+                                    formControlName="TalukaId" optionValueField="TalukaId" optionTextField="TalukaName"
+                                    placeholder="Select Taluka" (remove)="clearOption('Taluka')"
+                                    (select)="getVillage(this.assignBoothsToVillageForm.value.TalukaId);" 
+                                    [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.TalukaId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.TalukaId.errors.required">Taluka is required
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-9 text-end">
-                                <button type="submit" class="btn btn-main text-lg-end">Assign Booth</button>
+                            <div class="mb-3">
+                                <label class="form-label required-field">Select Village</label>
+                                <ngx-select [allowClear]="true" [items]="resultVillage" placeholder="Select Village"
+                                    formControlName="VillageId" optionValueField="VillageId"
+                                    optionTextField="VillageName"
+                                    [disabled]="!this.assignBoothsToVillageForm.value.districtId"
+                                    placeholder="Select Village" (remove)="clearOption('Village')"
+                                    [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.VillageId.errors.required">
+                                        Village is required</div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button type="button" class="btn btn-secondary text-lg-start"
+                                        (click)="clearForm()">Clear</button>
+                                </div>
+                                <div class="col-sm-9 text-end">
+                                    <button type="submit" class="btn btn-main text-lg-end">{{btnText}}</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -90,28 +107,36 @@
                                 <th>Taluka</th>
                                 <th>Village</th>
                                 <th>Booth</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Kukkudwadi Assembly</td>
-                                <td>Satara</td>
-                                <td>Satara</td>
-                                <td>Maan</td>
-                                <td>Mokashi Vasti</td>
+                            <tr
+                                *ngFor="let boothListwithVilg of boothListwithVilgArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
+                                [class.active]="boothListwithVilg.SrNo == HighlightRow">
+                                <td>{{boothListwithVilg.SrNo}}</td>
+                                <td>{{boothListwithVilg.ConstituencyName}}</td>
+                                <td>{{boothListwithVilg.districtName}}</td>
+                                <td>{{boothListwithVilg.TalukaName}}</td>
+                                <td>{{boothListwithVilg.VillageName}}</td>
+                                <td>{{boothListwithVilg.BoothNickName}}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" title="Edit Election" class="btn btn-sm btn-light text-edit mx-1 rounded">
+                                        <button type="button" title="Edit Election"
+                                            class="btn btn-sm btn-light text-edit mx-1 rounded" (click)="patchFormRecord(boothListwithVilg)">
                                             <i class="far fa-edit"></i></button>
-                                        <button type="button" title="Delete Election" class="btn btn-sm btn-light text-danger rounded">
-                                            <i class="fas fa-trash-alt"></i></button>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="boothListwithVilgArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="boothListwithVilgArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
                 </div>
             </div>
         </div>

@@ -246,7 +246,6 @@ export class CreateElectionsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.electionMasterArray = res.data1;
-        console.log(this.electionMasterArray )
         this.total = res.data2[0].TotalCount;
       } else {
         this.spinner.hide();
