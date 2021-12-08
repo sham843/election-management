@@ -22,7 +22,7 @@ const routes: Routes = [
       { path: 'assign-elections-to-regional-leader', loadChildren: () => import('./partial/election-management/assign-elections-to-regional-leader/assign-elections-to-regional-leader.module').then(m => m.AssignElectionsToRegionalLeaderModule),data: { title: 'Assign Elections To Regional Leader', allowedRoles: ['1'] }},
       { path: 'assign-booth-to-constituency', loadChildren: () => import('./partial/election-management/assign-booth-to-constituency/assign-booth-to-constituency.module').then(m => m.AssignBoothToConstituencyModule),data: { title: 'Assign Booth To Constituency Module', allowedRoles: ['1'] } },
       { path: 'election-dashboard', loadChildren: () => import('./partial/election-management/election-dashboard/election-dashboard.module').then(m => m.ElectionDashboardModule),data: { title: 'Election Dashboard', allowedRoles: ['1'] } },
-    
+      { path: 'assign-booth-to-village', loadChildren: () => import('./partial/election-management/assign-booth-to-village/assign-booth-to-village.module').then(m => m.AssignBoothToVillageModule),data: { title: 'Assign Booth To Village', allowedRoles: ['1'] }  },
       //booth manag
       { path: 'agents-activity', loadChildren: () => import('./partial/booth-management/agents-activity/agents-activity.module').then(m => m.AgentsActivityModule),data:{ title:'Agents Activity',allowedRoles:['1','2'] }},
       { path: 'assign-agents-to-booth', loadChildren: () => import('./partial/booth-management/assign-agents-to-booth/assign-agents-to-booth.module').then(m => m.AssignAgentsToBoothModule),data:{ title:'Assign Agents To Booth',allowedRoles:['1','2'] } },
@@ -35,6 +35,7 @@ const routes: Routes = [
     ]
   },
   { path: '500', component: ServerErrorComponent },
+  
  
   { path: '**', component: PageNotFoundComponent },
 ];

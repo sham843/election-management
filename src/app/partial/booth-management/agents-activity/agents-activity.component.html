@@ -20,17 +20,19 @@
                         <div class="col-sm">
                             <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId"
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
-                                (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();clickOnVoterList();"
-                                [disabled]="subAreaAgantDisabledFlag" placeholder="Select Area  Agent">
+                                (remove)="clearFilter('subAgent')" (select)="getAgentByBooths('sel');clickOnVoterList();"
+                                placeholder="Select Area  Agent">
                             </ngx-select>
+                            <!-- [disabled]="subAreaAgantDisabledFlag"  -->
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="allowClearBoothIdFlag" [disabled]="subAreaAgentIdDisabledFlag"
+                        <ngx-select [allowClear]="allowClearBoothIdFlag" 
                             [items]="getAgentByBoothsData" formControlName="BoothId" optionValueField="BoothId"
                             (select)="selBoothByAgent($event);clickOnVoterList()" optionTextField="BoothName"
                             placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
+                        <!-- [disabled]="subAreaAgentIdDisabledFlag" -->
                     </div>
 
                 </div>
