@@ -175,8 +175,8 @@
                                <span>{{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ? 'Farmer, ' : ''}} </span> 
                                <span>{{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ? 'Business ' : ''}}</span> 
                                <span *ngIf="voterProfileData?.BusinnessDetails">({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }})</span> 
-                               <span> {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
-                                'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}}</span>,
+                               <span *ngIf="voterProfileData?.HaveVehicle"> {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
+                                'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},</span>
                                <span> {{voterProfileData?.FinancialCondition == 1 ? 'Low Income Family' :
                                 voterProfileData?.FinancialCondition == 2 ? 'Medium Income Family' :
                                 voterProfileData?.FinancialCondition == 3 ? 'High Income Family' : ''}}</span>
