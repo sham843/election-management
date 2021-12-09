@@ -115,7 +115,7 @@ export class MyProfileComponent implements OnInit {
     loginObj.data1[0].ProfilePhoto = data.ProfilePhoto;
     sessionStorage.setItem('loggedInDetails', JSON.stringify(loginObj));
     this.commonService.pathchange(this.ImgUrl);
-    localStorage.setItem('imgUrl', this.ImgUrl);
+    sessionStorage.setItem('imgUrl', this.ImgUrl);
 
 
     this.selGender = data.Gender;

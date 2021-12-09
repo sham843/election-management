@@ -49,7 +49,7 @@
                         </div>
                         <div class="d-flex">
                             <div class="flex-shrink-0">
-                                <img src="{{voterProfileData?.VoterPhoto}}">
+                                <img *ngIf="voterProfileData?.VoterPhoto" src="{{voterProfileData?.VoterPhoto}}">
                                 <img *ngIf="!voterProfileData?.VoterPhoto" src="assets/images/Profile-Photo.jpg">
                             </div>
                             <div class="flex-grow-1 ms-2 pt-2">
@@ -153,12 +153,12 @@
                 </div>
                 <div class="card-body pt-0">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" *ngIf="voterProfileData?.ReligionName">
                             <span class="voter-data">
                                 {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})
                             </span>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" *ngIf="voterProfileData?.Head">
                             <span class="voter-data">
                                 <i class="fas fa-house-user fa-1x"></i>
                                 {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members)</span>
@@ -169,22 +169,17 @@
                     <div class="row mb-2">
                         <div class="col-sm-12">
                             <div class="voter-data mb-2">
-                                {{voterProfileData?.IsDairyFarmer == 0 ? '' : voterProfileData?.IsDairyFarmer == 1 ?
-                                'Dairy Farmer, ' : ''}}
-                                {{voterProfileData?.IsGoatSheepFarmer == 0 ? '' : voterProfileData?.IsGoatSheepFarmer ==
-                                1 ? 'Goat / Sheep Farmer, ' : ''}}
-                                {{voterProfileData?.IsSugarCaneCutter == 0 ? '' : voterProfileData?.IsSugarCaneCutter ==
-                                1 ? 'SugarCane Cutter / Worker, ' : ''}}
-                                {{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ? 'Farmer, ' :
-                                ''}}
-                                {{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ?
-                                'Business ' : ''}}
-                                ({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }})
-                                {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
-                                'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},
-                                {{voterProfileData?.FinancialCondition == 1 ? 'Low Income Family' :
+                               <span>{{voterProfileData?.IsDairyFarmer == 0 ? '' : voterProfileData?.IsDairyFarmer == 1 ? 'Dairy Farmer, ' : ''}}</span> 
+                                <span>{{voterProfileData?.IsGoatSheepFarmer == 0 ? '' : voterProfileData?.IsGoatSheepFarmer == 1 ? 'Goat / Sheep Farmer, ' : ''}}</span>
+                               <span>{{voterProfileData?.IsSugarCaneCutter == 0 ? '' : voterProfileData?.IsSugarCaneCutter == 1 ? 'SugarCane Cutter / Worker, ' : ''}}</span> 
+                               <span>{{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ? 'Farmer, ' : ''}} </span> 
+                               <span>{{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ? 'Business ' : ''}}</span> 
+                               <span *ngIf="voterProfileData?.BusinnessDetails">({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }})</span> 
+                               <span *ngIf="voterProfileData?.HaveVehicle"> {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
+                                'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},</span>
+                               <span> {{voterProfileData?.FinancialCondition == 1 ? 'Low Income Family' :
                                 voterProfileData?.FinancialCondition == 2 ? 'Medium Income Family' :
-                                voterProfileData?.FinancialCondition == 3 ? 'High Income Family' : ''}}
+                                voterProfileData?.FinancialCondition == 3 ? 'High Income Family' : ''}}</span>
                             </div>
                         </div>
                     </div>
@@ -205,7 +200,7 @@
                     <div class="card-header p-0">
                         Political Information
                     </div>
-                    <div class="card-body p-0 mb-2">
+                    <div class="card-body p-0 mb-2" *ngIf="voterProfileData?.partyname">
                         <div class="voter-data">
                             {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
                         </div>
@@ -270,9 +265,6 @@
                     </div>
                 </div>
                 
-
-                
-
                 <div class="card-header py-0">
                     Extra Information
                 </div>
@@ -286,7 +278,7 @@
                                         (click)="showGallaryLightbox(voterVisitDetail) ; lightbox.open(0, 'lightbox')"
                                         src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
                                 <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img"
-                                        src="https://static.toiimg.com/thumb/msid-62205005,width-400,resizemode-4/62205005.jpg"></span>
+                                        src="assets/images/ele.png"></span>
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="voter-data">{{voterVisitDetail.VisitDate}}</div>
@@ -356,8 +348,6 @@
                     </ul>
                 </div>
             </div>
-
-
 
             <div class="card card-body p-2">
                 <label class="form-label">Location:

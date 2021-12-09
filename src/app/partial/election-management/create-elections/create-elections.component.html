@@ -167,7 +167,7 @@
                             <tr *ngFor="let electionMaster of electionMasterArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
                                 [class.active]="electionMaster.Id == HighlightRow">
                                 <td>{{electionMaster.SrNo}}</td>
-                                <td><a routerLink="../voters-profile">{{electionMaster.ElectionName}}</a></td>
+                                <td>{{electionMaster.ElectionName}}</td>
                                 <td>{{electionMaster.ElectionType}}</td>
 
                                 <td>

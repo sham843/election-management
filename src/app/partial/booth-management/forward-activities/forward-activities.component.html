@@ -1,0 +1,149 @@
+<div class="container-fluid">
+    <div class="row mx-1 px-0" id="pageheader">
+        <div class="col-sm-4">
+            <span class="page-name">Forward Activities</span>
+        </div>
+        <div class="col-sm-8 text-end pt-1">
+            <!-- <a routerLink="../forward-activity-tracker"><i class="fas fa-chart-line me-2"></i>Forward Activity Tracker</a> -->
+        </div>
+    </div>
+
+    <div class="row chartbox">
+        <div class="col-sm-12">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <form [formGroup]="forwardActivitiForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+                            <div class="form-container">
+                                <div class="mb-2">
+                                    <label for="txtActivityTitle" class="form-label">Activity Title</label>
+                                    <input type="text" class="form-control" formControlName="activityTitle" id="txtActivityTitle" placeholder="Activity Title">
+                                    <div *ngIf="submitted && f.activityTitle.errors" class="invalid-feedback">
+                                        <div *ngIf="f.activityTitle.errors.required">Activity Title is required</div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="txtBody" class="form-label">Activity Body</label>
+                                    <textarea type="text" rows="6" formControlName="activityBody" class="form-control" id="txtBody" placeholder="Activity Body"></textarea>
+                                    <div *ngIf="submitted && f.activityBody.errors" class="invalid-feedback">
+                                        <div *ngIf="f.activityBody.errors.required">Activity Body is required</div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="txtBody" class="form-label">Hashtags for Activity</label>
+                                    <textarea type="text" rows="3" class="form-control" formControlName="hashtags_Activity" id="txtBody" placeholder="Hashtags for Activity"></textarea>
+                                    <small class="form-text small">Use # symbol before every hashtag and separate each
+                                        tag with comma (,).</small>
+
+                                </div>
+                                <!-- <div class="mb-3">
+                                    <label for="fuPhoto" class="form-label">Activity Photo</label>
+                                    <input class="form-control form-control-sm" (change)="readUrl($event)" type="file">
+                                    <div class="d-flex flex-row">
+                                        <div class="img-con mt-3" *ngIf="getImgPath">
+                                            <img src="{{getImgPath}}" class="helpimg" />
+                                            <button type="button" class="btn"><i class="fas fa-trash-alt text-danger"
+                                                    (click)="deleteImg()"></i></button>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="mb-3">
+                                    <label for="fuPhoto" class="form-label">Activity Photo</label>
+                                    <div class="uploadimg">
+                                        <input type="file" id="img-upload" class="d-none" (change)="readUrl($event)"
+                                            #fileInput>
+                                        <img src="{{getImgPath}}" *ngIf="getImgPath else defaultImg"
+                                            class="img-fluid img-thumbnail" />
+                                        <ng-template #defaultImg> <img src="assets/images/ncp-default.png"
+                                                class="img-fluid img-thumbnail"></ng-template>
+                                        <button type="button" class="btn btn-light btn-sm btn-add" *ngIf="!getImgPath"
+                                            (click)="openInputFile()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-light btn-sm btn-remove" *ngIf="getImgPath"
+                                            (click)="deleteImg()"><i class="fas fa-trash-alt text-danger"></i></button>
+                                    </div>
+                                    <!-- <div class="uploadimg">
+                                        <input type="file" id="img-upload" class="d-none" (change)="readUrl($event)" #fileInput>
+                                        <img src="{{getImgPath}}" *ngIf="getImgPath else defaultImg" class="img-fluid img-thumbnail" />
+                                        <ng-template #defaultImg> <img src="assets/images/ncp-default.png" class="img-fluid img-thumbnail"></ng-template>
+                                            <button type="button" class="btn btn-light btn-sm btn-add" *ngIf="!getImgPath" (click)="openInputFile()">
+                                                <i class="fas fa-plus"></i>
+                                               
+                                            </button>
+                                            <button type="button" class="btn btn-light btn-sm btn-remove" *ngIf="getImgPath" (click)="deleteImg()"><i
+                                                    class="fas fa-trash-alt text-danger" ></i></button>
+                                    </div> -->
+                                </div>
+
+                                <div class="mb-2 mt-4">
+                                    <button type="button" class="btn btn-secondary float-lg-start" (click)="resetNotificationForm()">Clear</button>
+                                    <button type="submit" class="btn btn-main float-lg-end">{{NotificationText}}
+                                        Activity</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-8 border-start" id="notifications">
+                        <form [formGroup]="filterForm">
+                            <div class="row g-1 mb-2 border-bottom pb-2">
+                                <div class="offset-sm-4 col-sm-4">
+                                    <div class="input-group">
+                                        <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" formControlName="fromTo" [selectMode]="'range'" (dateTimeChange)="filterData('range')" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date">
+                                        <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3" *ngIf="!defaultCloseBtn">
+                                            <i class="fas fa-calendar-alt"></i></button>
+                                        <button class="btn btn-light border btn-sm" type="button" *ngIf="defaultCloseBtn" (click)="clearFilter('dateRangePIcker')">
+                                            <i class="fas fa-times"></i></button>
+                                    </div>
+                                    <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" formControlName="searchText" placeholder="Search..." (keyup)="onKeyUpFilter()" />
+                                        <button type="button" class="btn btn-light border btn-sm" (click)="clearFilter('search')" *ngIf="filterForm.value.searchText"><i
+                                                _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                                        <button type="button" *ngIf="!filterForm.value.searchText" class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="d-flex media" *ngFor="let getnews of getnewsArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index">
+                            <div class="flex-shrink-0">
+                                <img *ngIf="getnews?.NewsImages else noImg" src="{{getnews?.NewsImages}}" alt="..." class="media-img">
+                                <ng-template #noImg>
+                                    <img src="assets/images/ncp-default.png" alt="..." class="media-img">
+
+                                </ng-template>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <span class="media-date">{{getnews.NewsDate1}}</span>
+                                <div class="media-title">{{getnews.Title | titlecase}}</div>
+                                <div class="media-body">
+                                    {{getnews.Description}}
+                                </div>
+                                <div class="media-links">
+                                    <span class="float-end">
+                                        <button type="button" title="Edit Notification"
+                                            (click)="editNotification(getnews)"
+                                            class="btn text-edit btn-light btn-sm me-1"><i class="fas fa-edit"></i></button>
+                                        <button type="button" title="Delete Notification"
+                                            (click)="delNotConfirmation(getnews?.NewsId)"
+                                            class="btn btn-light text-danger btn-sm me-1"><i class="fas fa-trash-alt"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-end" *ngIf="getnewsArray?.length == 0">
+                            <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                        </div>
+                        <div class="mt-2 text-end" *ngIf="getnewsArray?.length != 0">
+                            <pagination-controls previousLabel="" nextLabel="" (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
