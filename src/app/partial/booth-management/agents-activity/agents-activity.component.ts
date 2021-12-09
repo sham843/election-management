@@ -104,7 +104,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.filterForm.controls['subAreaAgentId'].setValue(this.agentInfo.BoothAgentId);
       }
     }else{
-      let localStorageAgenData =  this.commonService.getsessionStorageData();
+      let localStorageAgenData =  this.commonService.getlocalStorageData();
       this.filterForm.controls['AgentId'].setValue(localStorageAgenData.Id)
       this.filterForm.controls['ClientId'].setValue(localStorageAgenData.ClientId)
       this.filterForm.controls['subAreaAgentId'].setValue(0);

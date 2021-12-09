@@ -15,6 +15,7 @@ export class CommonService {
     regions_m: any;
     codecareerPage: any;
     secretKey = "YourSecretKeyForEncryption&Descryption";
+    
     getlocalStorageData() {
         let loginObj = JSON.parse(sessionStorage.loggedInDetails).data1[0];
         return loginObj;
