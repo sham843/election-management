@@ -75,6 +75,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   btnText = 'Add Agent';
   fillDataId = 0;
   isChecked = new FormControl(false);
+  encryptData: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -669,15 +670,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
   redirectToVoterPrfile(obj:any){
-    sessionStorage.setItem('voter-profile', JSON.stringify(obj));
-    this.router.navigate(['voters-profile'])
+    this.encryptData =this.commonService.encrypt(obj);
+    const url = this.router.createUrlTree(['voters-profile', {Data:this.encryptData}])
+     window.open(url.toString(), '_blank');
   }
 
-  redirectToAgentActivity(){
-    // let obj = {ClientId: 1, SubUserTypeId:''}
-    // sessionStorage.setItem('agents-activity', JSON.stringify(obj));
-    // this.router.navigate(['../agents-activity']) 
-  }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {

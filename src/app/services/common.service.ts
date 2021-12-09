@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ImageItem } from '@ngx-gallery/core';
-
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
     providedIn: 'root'
@@ -14,8 +14,8 @@ export class CommonService {
     }
     regions_m: any;
     codecareerPage: any;
-
-    getsessionStorageData() {
+    secretKey = "YourSecretKeyForEncryption&Descryption";
+    getlocalStorageData() {
         let loginObj = JSON.parse(sessionStorage.loggedInDetails).data1[0];
         return loginObj;
     }
@@ -23,7 +23,7 @@ export class CommonService {
         let LoginType = JSON.parse(sessionStorage.loggedInDetails).data1[0];
         return LoginType.LoginType;
     }
-    
+
     getAllPageName() {
         let getAllPageName = JSON.parse(sessionStorage.loggedInDetails).data2;
         return getAllPageName;
@@ -36,40 +36,40 @@ export class CommonService {
     }
 
     loggedInUserId() {
-        let userId = this.getsessionStorageData();
+        let userId = this.getlocalStorageData();
         return userId.Id;
     }
 
     districtId() {
-        let DistrictId = this.getsessionStorageData();
+        let DistrictId = this.getlocalStorageData();
         return DistrictId.DistrictId;
     }
 
     loggedInUserName() {
-        let Username = this.getsessionStorageData();
+        let Username = this.getlocalStorageData();
         return Username.Username;
     }
 
     getFullName() {
-        let sessionStorage = this.getsessionStorageData();
+        let sessionStorage = this.getlocalStorageData();
         let fName_lName = sessionStorage.FullName.split(' ')
-        let obj = { 'FName': fName_lName[0],'LName': fName_lName[2], 'ProfilePhoto': sessionStorage.ProfilePhoto }
+        let obj = { 'FName': fName_lName[0], 'LName': fName_lName[2], 'ProfilePhoto': sessionStorage.ProfilePhoto }
         return obj;
     }
 
     getCommiteeInfo() {
-        let sessionStorage = this.getsessionStorageData();
+        let sessionStorage = this.getlocalStorageData();
         let obj = { 'CommiteeId': sessionStorage.CommiteeId, 'CommiteeName': sessionStorage.CommiteeName }
         return obj;
     }
 
     loggedInUserType() {
-        let UserTypeId = this.getsessionStorageData();
+        let UserTypeId = this.getlocalStorageData();
         return UserTypeId.UserTypeId;
     }
 
     loggedInSubUserTypeId() {
-        let SubUserTypeId = this.getsessionStorageData();
+        let SubUserTypeId = this.getlocalStorageData();
         return SubUserTypeId.SubUserTypeId;
     }
 
@@ -78,14 +78,14 @@ export class CommonService {
         var day = date_components[0];
         var month = date_components[1];
         var year = date_components[2];
-        return new Date(year, month -1, day);
+        return new Date(year, month - 1, day);
     }
 
     changeDateFormat(date: string) {
         const dateParts = date.substring(0, 10).split("/");
         const ddMMYYYYDate = new Date(+dateParts[2], parseInt(dateParts[1]) - 1, +dateParts[0]);
         return ddMMYYYYDate;
-      }
+    }
 
     dateTransformPipe(date_string: any) {
         let dateFormtchange: any;
@@ -156,16 +156,16 @@ export class CommonService {
     onlyEnglish(control: AbstractControl): { [key: string]: any } | null {
         let text = control.value
         let re = /^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$/;
-        let  regexp =  /\s/;
+        let regexp = /\s/;
         //console.log(regexp.test(text));
-        
-        if ( text =='' ||re.test(text) || regexp.test(text) ) {
-          // alert();
-          return null;
+
+        if (text == '' || re.test(text) || regexp.test(text)) {
+            // alert();
+            return null;
         } else {
-          return { 'onlyEnglish': true };
+            return { 'onlyEnglish': true };
         }
-      }
+    }
 
     setDefaultValueinForm(formName: any, keyName: any, setValue: any) {
         return formName.controls[keyName].setValue(setValue);
@@ -181,6 +181,13 @@ export class CommonService {
                 new ImageItem({ src: item, thumb: item, text: 'programGalleryImg' }));
             return images;
         }
+    }
+    encrypt(value: any): any {
+        return CryptoJS.AES.encrypt(JSON.stringify(value), this.secretKey.trim()).toString();
+    }
+
+    decrypt(textToDecrypt: string) {
+        return CryptoJS.AES.decrypt(textToDecrypt, this.secretKey.trim()).toString(CryptoJS.enc.Utf8);
     }
 
 }

@@ -82,14 +82,13 @@
                 </div>
             </div>
             <div class="col-sm-2">
-                <div class="card card-body bg-voilet" (click)="redirectToAgentActivity()">
+                <div class="card card-body bg-voilet">
                     <i class="fas fa-user-cog"></i>
                     <p>Agents</p>
                     <h3>{{cardData?.TotalAgents}}</h3>
                 </div>
             </div>
         </div>
-
 
         <div class="row chartbox mb-3">
             <div class="col-sm-12">
@@ -280,6 +279,7 @@
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                             <th>CRM</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -287,8 +287,13 @@
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <!-- <td>{{boothVoterList?.SrNo}}</td> -->
                                                             <td>{{boothVoterList?.VoterId}}</td>
+                                                            <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
+                                                            <!-- <td> <a (click)="redirectToVoterPrfile(boothVoterList)"  href="voters-profile/{{encryptData}}" target="_blank">{{boothVoterList?.EnglishName}}</a></td> -->
+                                                           <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> 
+                                                            <!-- <td>{{boothVoterList?.SrNo}}</td> -->
+                                                            
                                                             <td>
-                                                                <a (click)="redirectToVoterPrfile(boothVoterList)" class="text-main">{{boothVoterList?.EnglishName}}</a>
+                                                                <a class="text-main">{{boothVoterList?.EnglishName}}</a>
                                                                 <small class="text-muted">{{boothVoterList?.Leader}} {{boothVoterList?.LeaderImportance}}</small>
                                                             </td>
                                                             <td>
