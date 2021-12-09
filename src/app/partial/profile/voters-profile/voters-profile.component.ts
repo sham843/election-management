@@ -43,9 +43,9 @@ export class VotersProfileComponent implements OnInit {
     public gallery: Gallery,
     public lightbox: Lightbox,
   ) { 
-     let getsessionStorageData: any = sessionStorage.getItem('voter-profile');
-     let getStorageData= JSON.parse(getsessionStorageData); 
-     this.voterListData = {'AgentId': getStorageData.AgentId ,'ClientID': getStorageData.ClientID, 'VoterId': getStorageData.VoterId}
+    let ReceiveDataSnapshot = this.route.snapshot.params.Data;
+    this.voterListData = this.commonService.decrypt(ReceiveDataSnapshot);
+    this.voterListData = JSON.parse(this.voterListData);
 }
 
   ngOnInit(): void {
@@ -55,6 +55,7 @@ export class VotersProfileComponent implements OnInit {
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
   }
+
                                 // Get Voter Profile Data.....................
 
   getVoterProfileData() {
