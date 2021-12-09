@@ -11,19 +11,20 @@
                     <div class="col-sm">
                         <ngx-select [allowClear]="allowClearAgentFlag" [items]="allAgentLists" formControlName="AgentId"
                             optionValueField="AgentId"
-                            (select)="areaSubAgentByAgentId('sel');clickOnVoterList();getAgentProfileData();"
+                            (select)="areaSubAgentByAgentId('sel');clickOnVoterList()"
                             optionTextField="FullName" placeholder="Select Agent"
                             (remove)="clearFilter('Agent');getAgentProfileData()">
                         </ngx-select>
+                        <!-- ;getAgentProfileData(); -->
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId"
+                            <ngx-select [allowClear]="allowClearSubAgentsFlag"  [items]="allSubAgentsByAgentId"
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
                                 (remove)="clearFilter('subAgent')" (select)="getAgentByBooths('sel');clickOnVoterList();"
                                 placeholder="Select Area  Agent">
                             </ngx-select>
-                            <!-- [disabled]="subAreaAgantDisabledFlag"  -->
+                            <!--   getAgentProfileData() -->
                         </div>
                     </div>
                     <div class="col-sm">

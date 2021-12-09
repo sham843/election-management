@@ -66,6 +66,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   subAreaAgentIdDisabledFlag:boolean= true;
   SubAreaAgent:any = '';
 
+  selectSubAreaAgentId:any= '';
+
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
   }
@@ -148,9 +151,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.allSubAgentsByAgentId = res.data1;
-
-        this.allSubAgentsByAgentId.length == 1 ? (this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id), this.getAgentProfileData())  : this.subAreaAgantDisabledFlag= false, this.allowClearSubAgentsFlag = true;
-        flag == 'sel' ? this.filterForm.controls['subAreaAgentId'].setValue(formData.subAreaAgentId) : '';
+        this.allSubAgentsByAgentId.length == 1 ? (this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id), this.getAgentProfileData(), this.subAreaAgantDisabledFlag = false)   : this.subAreaAgantDisabledFlag= false, this.allowClearSubAgentsFlag = true;
+        //flag == 'sel' ? this.filterForm.controls['subAreaAgentId'].setValue(formData.subAreaAgentId) : '';
 
         this.getAgentByBooths(false);
       } else {
@@ -235,9 +237,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let formData = this.filterForm.value;
     let agentId:any;
     debugger
-    this.SubAreaAgent == '' ? agentId = formData.AgentId : agentId = this.SubAreaAgent;
     // this.agentInfo.SubUserTypeId !=  formData.AgentId ? agentId =  formData.subAreaAgentId :  agentId  = formData.AgentId;
-    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + agentId + '&clientid=' + formData.ClientId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.getReturnAgentIdOrAreaAgentId() + '&clientid=' + formData.ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -262,10 +263,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let checkBoothId:any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
 
-    let agentId:any;
-    this.SubAreaAgent == '' ? agentId = formData.AgentId : agentId = this.SubAreaAgent;
 
-    let obj = 'AgentId=' + agentId + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
+    let obj = 'AgentId=' + formData.AgentId + '&ClientId=' + this.getReturnAgentIdOrAreaAgentId() + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
