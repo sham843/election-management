@@ -11,19 +11,20 @@
                     <div class="col-sm">
                         <ngx-select [allowClear]="allowClearAgentFlag" [items]="allAgentLists" formControlName="AgentId"
                             optionValueField="AgentId"
-                            (select)="areaSubAgentByAgentId('sel');clickOnVoterList();getAgentProfileData();"
+                            (select)="areaSubAgentByAgentId('sel');clickOnVoterList()"
                             optionTextField="FullName" placeholder="Select Agent"
                             (remove)="clearFilter('Agent');getAgentProfileData()">
                         </ngx-select>
+                        <!-- ;getAgentProfileData(); -->
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="allowClearSubAgentsFlag" [items]="allSubAgentsByAgentId"
+                            <ngx-select [allowClear]="allowClearSubAgentsFlag"  [disabled]="subAreaAgantDisabledFlag" [items]="allSubAgentsByAgentId"
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
                                 (remove)="clearFilter('subAgent')" (select)="getAgentByBooths('sel');clickOnVoterList();"
                                 placeholder="Select Area  Agent">
                             </ngx-select>
-                            <!-- [disabled]="subAreaAgantDisabledFlag"  -->
+                            <!--   getAgentProfileData() -->
                         </div>
                     </div>
                     <div class="col-sm">
@@ -259,11 +260,18 @@
                                     New Voters
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-calllog" type="button" role="tab" aria-controls="pills-calllog"
+                                    aria-selected="false">
+                                    <h5 class="mb-0">12345</h5>
+                                    Agents Call Log
+                                </button>
+                            </li>
                         </ul>
                     </div>
                     <div class="tab-content" id="pills-tabContent">
                         <!-- Voters tab start here   -->
-
                         <div class="tab-pane fade show active" id="pills-migrated" role="tabpanel"
                             aria-labelledby="pills-migrated">
                             <!-- Voters filter start here   -->
@@ -318,6 +326,8 @@
                                 (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
                             </pagination-controls>
                         </div>
+
+                        <!-- families tab start here   -->
                         <div class="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending">
                             <!-- new Family filter start here   -->
                             <div class="row  justify-content-end mb-3">
@@ -414,6 +424,8 @@
 
                             </div>
                         </div>
+
+                        <!-- New Voters tab start here   -->
                         <div class="tab-pane fade show" id="pills-agents" role="tabpanel"
                             aria-labelledby="pills-agents">
                             <!-- new Voter filter start here   -->
@@ -469,7 +481,114 @@
                             </pagination-controls>
                         </div>
 
+                        <!-- Agents Call Log tab start here   -->
+                        <div class="tab-pane fade show" id="pills-calllog" role="tabpanel"
+                            aria-labelledby="pills-calllog">
+                            <!-- agent call log filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchNewVoters" (keyup)="onKeyUpFilterNewVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchNewVoters')"
+                                                *ngIf="searchNewVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchNewVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- agent call log filter end here   -->
+                            <ng-container>
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Receiver Name</th>
+                                            <th>Mobile No.</th>
+                                            <th>Date & Time</th>
+                                            <th>Call Duration</th>
+                                            <th>Call Type</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Anil Jadhav</td>
+                                            <td>9876543210</td>
+                                            <td>15/07/2021 12:45 PM</td>
+                                            <td>14:25</td>
+                                            <td>Outgoing</td>
+                                            <td><i class="fas fa-ban text-danger"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Sunil Jadhav</td>
+                                            <td>9876543210</td>
+                                            <td>15/07/2021 12:45 PM</td>
+                                            <td>1:55</td>
+                                            <td>Incoming</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">App Use Track</div>
+                <div class="card-body">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>App Device</th>
+                                <th>App Open Date & Time</th>
+                                <th>App Use Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Android</td>
+                                <td>12-05-2021, 10:20 AM</td>
+                                <td>05:30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">App Location Track</div>
+                <div class="card-body">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>App Device</th>
+                                <th>App Open Date & Time</th>
+                                <th>Location From</th>
+                                <th>Location To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Android</td>
+                                <td>12-05-2021, 10:20 AM</td>
+                                <td>Mokashi Vasti</td>
+                                <td>Ramji Vasti</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

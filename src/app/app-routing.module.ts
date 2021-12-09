@@ -28,14 +28,17 @@ const routes: Routes = [
       { path: 'assign-agents-to-booth', loadChildren: () => import('./partial/booth-management/assign-agents-to-booth/assign-agents-to-booth.module').then(m => m.AssignAgentsToBoothModule),data:{ title:'Assign Agents To Booth',allowedRoles:['1','2'] } },
       { path: 'assign-candidate-to-constituency', loadChildren: () => import('./partial/booth-management/assign-candidate-to-constituency/assign-candidate-to-constituency.module').then(m => m.AssignCandidateToConstituencyModule),data:{ title:'Assign Candidate To Constituency',allowedRoles:['1','2'] } },
       { path: 'booth-analytics', loadChildren: () => import('./partial/booth-management/booth-analytics/booth-analytics.module').then(m => m.BoothAnalyticsModule),data:{ title:'Booth Analytics',allowedRoles:['1','2'] } },
-      { path: 'booth-dashboard', loadChildren: () => import('./partial/booth-management/booth-dashboard/booth-dashboard.module').then(m => m.BoothDashboardModule),data:{ title:'Booth Dashboard',allowedRoles:['1','2'] } },
+      { path: 'client-dashboard', loadChildren: () => import('./partial/booth-management/booth-dashboard/booth-dashboard.module').then(m => m.BoothDashboardModule),data:{ title:'Booth Dashboard',allowedRoles:['1','2'] } },
       { path: 'candidate-registration', loadChildren: () => import('./partial/booth-management/candidate-registration/candidate-registration.module').then(m => m.CandidateRegistrationModule),data:{ title:'Candidate Registration',allowedRoles:['1','2'] } },
       { path: 'view-boothwise-voters-list', loadChildren: () => import('./partial/booth-management/view-boothwise-voters-list/view-boothwise-voters-list.module').then(m => m.ViewBoothwiseVotersListModule),data:{ title:'View Booth Wise Voters List',allowedRoles:['1','2'] } },
-      { path: 'voters-profile', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) },
+      { path: 'voters-profile', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2'] } },
+      { path: 'restricted-Mobile', loadChildren: () => import('./partial/settings/restricted-mobile/restricted-mobile.module').then(m => m.RestrictedMobileModule),data:{ title:'Restricted Mobile',allowedRoles:['1','2'] } },
+      { path: 'my-profile', loadChildren: () => import('./my-profile/my-profile.module').then(m => m.MyProfileModule),data:{ title:'My Profile',allowedRoles:['1','2'] } },
+  
     ]
   },
   { path: '500', component: ServerErrorComponent },
-  
+ 
  
   { path: '**', component: PageNotFoundComponent },
 ];
