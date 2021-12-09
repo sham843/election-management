@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -7,6 +8,8 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
+import { NameCorrectionComponent } from '../../dialogs/delete/name-correction/name-correction.component';
+import { VoterCallEntriesComponent } from '../../dialogs/delete/voter-call-entries/voter-call-entries.component';
 
 @Component({
   selector: 'app-view-boothwise-voters-list',
@@ -81,6 +84,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -675,4 +679,20 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     // this.router.navigate(['../agents-activity']) 
   }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
+
+  openDialogVoterCallEntries() {
+    const dialogRef = this.dialog.open(VoterCallEntriesComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openDialogNameCorrection() {
+    const dialogRef = this.dialog.open(NameCorrectionComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
