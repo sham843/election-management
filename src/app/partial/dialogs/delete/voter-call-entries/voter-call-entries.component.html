@@ -1,13 +1,30 @@
-<div class="modal-content">
-    <div class="modal-header bg-transparent border-bottom-0">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onNoClick('No')"></button>
-    </div>
-    <div class="modal-body text-center pb-5">
-   
-        <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button" (click)="onNoClick('No')" data-bs-dismiss="modal"
-            aria-label="Close">Cancel</button>
-        <button class="btn btn-danger" type="button" data-bs-dismiss="modal" (click)="onNoClick('Yes')" aria-label="Close" type="button"
-            data-bs-dismiss="modal" aria-label="Close" >I'm
-            Sure</button>
+<div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+        <div class="modal-header bg-transparent border-bottom-0">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                (click)="onNoClick('No')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <input class="form-control" placeholder="first name">
+                </div>
+                <div class="col-sm-6">
+                    <input class="form-control" placeholder="first name">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer d-block">
+            <div class="row g-0">
+                <div class="col-sm-6 text-start">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" type="button" (click)="onNoClick('No')"
+                    data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                </div>
+                <div class="col-sm-6 text-end">
+                    <button class="btn btn-main btn-sm" type="button" data-bs-dismiss="modal" (click)="onNoClick('Yes')"
+                    aria-label="Close" type="button" data-bs-dismiss="modal" aria-label="Close">Submit</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
