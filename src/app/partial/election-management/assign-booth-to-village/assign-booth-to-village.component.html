@@ -68,7 +68,7 @@
                                 <ngx-select [allowClear]="true" [items]="resultVillage" placeholder="Select Village"
                                     formControlName="VillageId" optionValueField="VillageId"
                                     optionTextField="VillageName"
-                                    [disabled]="!this.assignBoothsToVillageForm.value.districtId"
+                                    [disabled]="!this.assignBoothsToVillageForm.value.TalukaId"
                                     placeholder="Select Village" (remove)="clearOption('Village')"
                                     [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
                                 </ngx-select>

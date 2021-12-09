@@ -28,8 +28,6 @@ export class AssignBoothToVillageComponent implements OnInit {
   total: any;
   HighlightRow: any;
   globalEditData: any;
-  // disableFlagTal: boolean = true;
-  // disableFlagVill: boolean = true;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -103,7 +101,9 @@ export class AssignBoothToVillageComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.getTalkaByDistrict = res.data1;
-
+        if(flag == 'select'){
+          this.assignBoothsToVillageForm.controls['VillageId'].setValue('');
+        }
         if (this.btnText == 'Update Village' && flag != 'select') {
            this.assignBoothsToVillageForm.controls['TalukaId'].setValue(this.globalEditData.TalukaId);
          this.getVillage(this.globalEditData.TalukaId);
@@ -246,19 +246,14 @@ export class AssignBoothToVillageComponent implements OnInit {
     this.btnText = 'Update Village';
     this.globalEditData = obj;
     this.HighlightRow = obj.SrNo;
-
     this.assignBoothsToVillageForm.patchValue({
       Id: obj.AssemblyId,
       districtId: obj.DistrictId,
-      // TalukaId: obj.TalukaId,
-      // VillageId: obj.VillageId,
       assembly: obj.AssemblyId,
-      //BoothId: obj.boothid,
     })
     this.getAssembly();
     this.getDistrict();
   }
-
 
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
@@ -267,14 +262,10 @@ export class AssignBoothToVillageComponent implements OnInit {
 
   clearOption(flag: any) { // on click select option close icon
    if (flag == 'District') {
-      // this.disableFlagTal = true;
-      // this.disableFlagVill = true;
       this.assignBoothsToVillageForm.controls["districtId"].setValue("");
       this.assignBoothsToVillageForm.controls["TalukaId"].setValue("");
       this.assignBoothsToVillageForm.controls["VillageId"].setValue("");
     } else if (flag == 'Taluka') {
-      // this.disableFlagTal = true;
-      // this.disableFlagVill = false;
       this.assignBoothsToVillageForm.controls["TalukaId"].setValue("");
       this.assignBoothsToVillageForm.controls["VillageId"].setValue("");
     } else if (flag == 'Village') {
@@ -285,8 +276,6 @@ export class AssignBoothToVillageComponent implements OnInit {
       this.assignBoothsToVillageForm.controls["BoothId"].setValue("");
     }
   }
-
-
 
 }
 

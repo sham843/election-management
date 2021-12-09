@@ -157,10 +157,19 @@ export class VotersProfileComponent implements OnInit {
       // this.familyMemberDataObject = FMobjData;
       this.HighlightRow = FMobjData.SrNo;
       this.MigInfoHide = true;
-      this.getVPMemberDetailsData(FMobjData)
+      this.getVPMemberDetailsData(FMobjData);
+      this.ScrollToFamilyMemberData();
     } else{
       this.MigInfoHide = false;
     } 
+  }
+                          //.............. Scroll Family member Details ......................//
+  ScrollToFamilyMemberData(){
+    window.scrollTo({
+      top: 20,
+      left: 50,
+      behavior: 'smooth'
+    });
   }
 
                             //.................... Get Voter Profile Member Details Data .......................//
