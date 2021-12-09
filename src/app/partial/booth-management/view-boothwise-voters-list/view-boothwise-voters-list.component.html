@@ -173,12 +173,83 @@
                                             <!-- Voters tab start here   -->
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
-                                                <div class="row justify-content-end mb-3">
+                                                <div class="row mb-3 g-2 form-container">
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Select Area</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Select Gender</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Select Business</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Political Party</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Select Stars</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">In Favour Of</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">In Oppose Of</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Yuvak</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Age</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Family Size</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Religion</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="">Caste</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-end mb-3 g-2">
                                                     <div class="col-sm-auto pt-1">
+                                                        <div class="voter-data text-success">
+                                                            25 Results found
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-auto pt-1 text-end">
+                                                        <input class="form-check-input me-1" [formControl]="isChecked" type="checkbox">
+                                                        <label class="form-check-label" for="chkNameCorrection"> Name Corrections</label>
+                                                    </div>
+                                                    <div class="col-sm-auto pt-1 text-end">
                                                         <input class="form-check-input me-1" [formControl]="isChecked" (change)="onCheckFillData($event)" type="checkbox">
                                                         <label class="form-check-label" for="flexCheckDefault"> Data Filled</label>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm">
                                                         <div class="form-container">
                                                             <div class="input-group">
                                                                 <input class="form-control" type="text"
@@ -192,18 +263,22 @@
                                                                 <button type="button" *ngIf="!searchVoters.value"
                                                                     class="btn btn-sm border btn-light"><i
                                                                         class="fas fa-search"></i></button>
-                                                            </div>
+                                                            </div>                                                            
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-auto">
+                                                        <button type="button" class="btn btn-main">Export to Excel</button>
                                                     </div>
                                                 </div>
                                                 <table class="table table-hover mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Sr. No.</th>
+                                                            <th>Voter No.</th>
                                                             <th>Voters Name</th>
-                                                            <th>Voter NO.</th>
+                                                            <th>Name Correction</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
+                                                            <th>CRM</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -213,18 +288,34 @@
                                                             <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <!-- <td> <a (click)="redirectToVoterPrfile(boothVoterList)"  href="voters-profile/{{encryptData}}" target="_blank">{{boothVoterList?.EnglishName}}</a></td> -->
                                                            <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> 
+                                                            <!-- <td>{{boothVoterList?.SrNo}}</td> -->
                                                             <td>{{boothVoterList?.VoterId}}</td>
                                                             <td>
-                                                                <div *ngIf="boothVoterList?.Gender == 'F'">Female</div>
-                                                                <div *ngIf="boothVoterList?.Gender == 'M'">Male</div>
+                                                                <a (click)="redirectToVoterPrfile(boothVoterList)" class="text-main">{{boothVoterList?.EnglishName}}</a>
+                                                                <small class="text-muted">{{boothVoterList?.Leader}} {{boothVoterList?.LeaderImportance}}</small>
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-light text-primary"  (click)="openDialogNameCorrection()">
+                                                                    <i class="fas fa-user-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                            <!-- <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td> -->
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.Gender == 'F'">F</div>
+                                                                <div *ngIf="boothVoterList?.Gender == 'M'">M</div>
                                                             </td>
 
                                                             <td>
-                                                                <div *ngIf="boothVoterList?.MobileNo1"><a class="calltomember" href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a></div>
+                                                                <div *ngIf="boothVoterList?.MobileNo1"><a class="text-main" href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a></div>
                                                                 <!-- <div *ngIf="boothVoterList?.MobileNo1">
                                                                     {{boothVoterList?.MobileNo1}}
                                                                 </div> -->
                                                                 <div *ngIf="!boothVoterList?.MobileNo1">-</div>
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-light text-success"  (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -270,8 +361,8 @@
                                                         <div class="col-sm-2">Mobile No.</div>
                                                         <div class="col-sm-2">Occupation</div>
                                                         <div class="col-sm-2">Qualification</div>
-                                                        <div class="col-sm-1">Migration</div>
-                                                        <div class="col-sm-1"></div>
+                                                        <div class="col-sm-auto">Migration</div>
+                                                        <div class="col-sm"></div>
                                                     </div>
                                                     <div class="accordion-item"  *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
                                                         
@@ -280,18 +371,21 @@
                                                                     <div class="col-sm-1">{{boothFamilyList.SrNo}}
                                                                     </div>
                                                                     <!-- <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}  </div>-->
-                                                                    <div class="col-sm-2"><a (click)="redirectToVoterPrfile(boothFamilyList)" class="text-primary" style="cursor: pointer;">{{boothFamilyList?.Family}}</a></div>
+                                                                    <div class="col-sm-3">
+                                                                        <a (click)="redirectToVoterPrfile(boothFamilyList)" class="text-main">{{boothFamilyList?.Family}}</a>
+                                                                        <!-- {{boothFamilyList?.Family}} {{boothFamilyList?.Family}} -->
+                                                                    </div>
                                                                     <div class="col-sm-2">
-                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
+                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a class="text-main" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
                                                                         <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                                                                     </div>
                                                                     <div class="col-sm-2">{{boothFamilyList.occupation ? (boothFamilyList.occupation | titlecase) : '-'}}
                                                                     </div>
                                                                     <div class="col-sm-2"> {{boothFamilyList?.qualification ? boothFamilyList.qualification : "-"}}</div>
-                                                                    <div class="col-sm-1">
+                                                                    <div class="col-sm-auto">
                                                                         <div>{{boothFamilyList.migrated ? (boothFamilyList.migrated | titlecase) : '-'}} </div>
                                                                     </div>
-                                                                    <div class="col-sm-1">
+                                                                    <div class="col-sm">
                                                                         <a class="accordion-button collapsed"
                                                                             data-bs-toggle="collapse"
                                                                             [attr.data-bs-target]="'#flush-collapseOne'+i"
@@ -390,7 +484,7 @@
                                                             *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
                                                             <td>{{MigratedList?.SrNo}}</td>
                                                             <!-- <td>{{MigratedList?.EnglishName}}</td> -->
-                                                            <td><a (click)="redirectToVoterPrfile(MigratedList)" class="text-primary" style="cursor: pointer;">{{MigratedList?.EnglishName}}</a></td>
+                                                            <td><a (click)="redirectToVoterPrfile(MigratedList)" class="text-main" style="cursor: pointer;">{{MigratedList?.EnglishName}}</a></td>
                                                             <td>{{MigratedList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
@@ -398,7 +492,7 @@
                                                             </td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.MobileNo1"><a
-                                                                        class="calltomember"
+                                                                        class="text-main"
                                                                         href="tel:{{MigratedList?.MobileNo1}}">{{MigratedList?.MobileNo1}}</a>
                                                                 </div>
                                                                 <div *ngIf="!MigratedList?.MobileNo1">-</div>
@@ -458,7 +552,7 @@
                                                             *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
                                                             <td>{{PendingList?.SrNo}}</td>
                                                             <!-- <td>{{PendingList?.EnglishName}}</td> -->
-                                                            <td><a (click)="redirectToVoterPrfile(PendingList)" class="text-primary" style="cursor: pointer;">{{PendingList?.EnglishName}}</a></td>
+                                                            <td><a (click)="redirectToVoterPrfile(PendingList)" class="text-main" style="cursor: pointer;">{{PendingList?.EnglishName}}</a></td>
                                                             <td>{{PendingList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.Gender == 'F'">Female</div>
@@ -466,7 +560,7 @@
                                                             </td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.MobileNo1"><a
-                                                                        class="calltomember"
+                                                                        class="text-main"
                                                                         href="tel:{{PendingList?.MobileNo1}}">{{PendingList?.MobileNo1}}</a>
                                                                 </div>
                                                                 <div *ngIf="!PendingList?.MobileNo1">-</div>
@@ -556,7 +650,7 @@
                                                             </a>                                                       
                                                             </td>
                                                             <td>
-                                                                <div *ngIf="agentList?.MobileNo"><a class="calltomember"
+                                                                <div *ngIf="agentList?.MobileNo"><a class="text-main"
                                                                         href="tel:{{agentList?.MobileNo}}">{{agentList?.MobileNo}}</a>
                                                                 </div>
                                                                 <div *ngIf="!agentList?.MobileNo">-</div>

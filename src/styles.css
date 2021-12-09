@@ -29,7 +29,15 @@ body{
     background-color: var(--main-color);
     color: #fff;
 }
-
+a.text-main {
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--main-color);
+}
+a.text-main:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
 .text-main {
     color: var(--main-color);
 }
