@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="allowClearSubAgentsFlag"  [items]="allSubAgentsByAgentId"
+                            <ngx-select [allowClear]="allowClearSubAgentsFlag"  [disabled]="subAreaAgantDisabledFlag" [items]="allSubAgentsByAgentId"
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
                                 (remove)="clearFilter('subAgent')" (select)="getAgentByBooths('sel');clickOnVoterList();"
                                 placeholder="Select Area  Agent">

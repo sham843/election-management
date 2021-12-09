@@ -140,6 +140,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   areaSubAgentByAgentId(flag:any) {
+    debugger;
     // on chenage agent bind agent activity 
     this.spinner.show();
     let formData = this.filterForm.value;
@@ -150,12 +151,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
+        debugger;
         this.allSubAgentsByAgentId = res.data1;
         this.allSubAgentsByAgentId.length == 1 ? (this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id), this.getAgentProfileData(), this.subAreaAgantDisabledFlag = false)   : this.subAreaAgantDisabledFlag= false, this.allowClearSubAgentsFlag = true;
-        //flag == 'sel' ? this.filterForm.controls['subAreaAgentId'].setValue(formData.subAreaAgentId) : '';
+       // flag == 'sel' ? (this.filterForm.controls['subAreaAgentId'].setValue(''), this.getAgentProfileData()) : '';
 
         this.getAgentByBooths(false);
       } else {
+        this.subAreaAgantDisabledFlag= false;
         this.filterForm.controls['subAreaAgentId'].setValue(0);
         this.allSubAgentsByAgentId = [];
         this.getAgentByBooths(false);
@@ -219,7 +222,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         subAreaAgentId:0,
       })
       this.SubAreaAgent = '';
+      this.areaSubAgentByAgentId(false)
       this.getAgentProfileData();
+      
     } else if (flag == "Booth") {
       this.filterForm.controls["BoothId"].setValue(0);
     }else{
