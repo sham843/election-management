@@ -531,7 +531,7 @@
                                             <td>{{callList?.CallDuration}} Sec</td>
                                             <td>{{callList?.CallType}}</td>
                                             <td>
-                                                <ng-container *ngIf="callList?.IsAlert  == 1"; else elseBlock> <i class="fas fa-ban text-danger"></i>
+                                                <ng-container *ngIf="callList?.IsAlert  == 1" else elseBlock> <i class="fas fa-ban text-danger"></i>
                                                 </ng-container>
                                                 <ng-template #elseBlock> - </ng-template>
                                                 </td>
@@ -581,8 +581,7 @@
             <div class="card mb-3">
                 <div class="card-header">App Location Track</div>
                 <div class="card-body">
-                    <!-- [zoom]="zoom" -->
-                    <agm-map [fitBounds]="true" [latitude]="lat" [longitude]="lng" [mapTypeId]="'roadmap'" style="height:500px;">
+                    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'" style="height:500px;">
                         <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
                             <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
                                 <agm-info-window #infowindow>

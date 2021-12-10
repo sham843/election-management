@@ -79,9 +79,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   lat: any = 19.75117687556874;
   lng: any = 75.71630325927731;
-  // zoom: any =12;
+  zoom: any = 6;
   previous:any;
-
+  
   boothAgentTrackingList:any;
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
@@ -201,10 +201,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         // if agent is find sub agent info
         if (this.allSubAgentsByAgentId.length == 1) {
           this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id); // Id men's agent Id
+          this.boothAgentTracking();
         } else {
           this.filterForm.controls['subAreaAgentId'].setValue(0);
         }
-        this.boothAgentTracking();
         this.getAgentProfileData();
         this.getAgentByBooths();
 
@@ -232,6 +232,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBoothsList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
+        this.boothAgentTracking();
         this.spinner.hide();
         this.getAgentByBoothsData = res.data1;
 
@@ -243,6 +244,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         this.getAgentAssBoothActivityGraph();
       } else {
+        this.boothAgentTracking();
         this.getAgentByBoothsData = [];
         this.getAgentAssBoothActivityGraph();
         this.spinner.hide();
