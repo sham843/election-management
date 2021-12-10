@@ -71,8 +71,9 @@ a.text-main:hover {
     font-weight: 500
 }
 
-.form-container .btn {
-    font-size: .85rem
+.form-container .btn, .btn {
+    font-size: .85rem;
+    box-shadow: none !important;
 }
 .form-container .input-group{
     border: 1px solid #ced4da;
