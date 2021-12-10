@@ -58,18 +58,18 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   searchNewVoters = new FormControl('');
   searchFamilyVoters = new FormControl('');
 
-  allowClearBoothIdFlag:boolean = true;
-  allowClearSubAgentsFlag:boolean = true;
-  allowClearAgentFlag:boolean = true;
+  allowClearBoothIdFlag: boolean = true;
+  allowClearSubAgentsFlag: boolean = true;
+  allowClearAgentFlag: boolean = true;
 
   maxDate: any = new Date();
-  subAreaAgentIdDisabledFlag:boolean= true;
-  SubAreaAgent:any = '';
+  subAreaAgentIdDisabledFlag: boolean = true;
+  SubAreaAgent: any = '';
 
-  selectSubAreaAgentId:any= '';
-  clientNameArray:any
-  clientDropDownDis:boolean = true;
-  clientDropDownCloseIcon:boolean = false;
+  selectSubAreaAgentId: any = '';
+  clientNameArray: any
+  clientDropDownDis: boolean = true;
+  clientDropDownCloseIcon: boolean = false;
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
@@ -78,6 +78,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.agentInfo = sessionStorage.getItem('agents-activity');
     this.agentInfo = JSON.parse(this.agentInfo);
+    this.deafultVoterProfilefilterForm();
     this.topFilterForm();
     this.getClientName();
   }
@@ -91,9 +92,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       BoothId: [0],
       AssemblyId: [0],
       subAreaAgentId: [0],
-      
+
     });
-    if(this.agentInfo){ // If data is find on session set deafult value
+    if (this.agentInfo) { // If data is find on session set deafult value
       if (this.agentInfo.SubUserTypeId == 3) {
         this.filterForm.controls['AgentId'].setValue(this.agentInfo.BoothAgentId);
         this.filterForm.controls['ClientId'].setValue(this.agentInfo.ClientId);
@@ -102,8 +103,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.filterForm.controls['ClientId'].setValue(this.agentInfo.ClientId)
         this.filterForm.controls['subAreaAgentId'].setValue(this.agentInfo.BoothAgentId);
       }
-    }else{
-      let localStorageAgenData =  this.commonService.getlocalStorageData();
+    } else {
+      let localStorageAgenData = this.commonService.getlocalStorageData();
       this.filterForm.controls['AgentId'].setValue(localStorageAgenData.Id)
       this.filterForm.controls['ClientId'].setValue(localStorageAgenData.ClientId)
       this.filterForm.controls['subAreaAgentId'].setValue(0);
@@ -130,7 +131,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
           this.clientDropDownDis = true;
           this.clientDropDownCloseIcon = false;
         }
-        this.getAllAgentList(false);
+        this.getAllAgentList();
         //this.clientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.clientNameArray[0].id }), this.getAllAgentList(), this.clientIdFlag = false) : '';
       } else {
         this.spinner.hide();
@@ -143,7 +144,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  getAllAgentList(flag:any) {
+  getAllAgentList() {
     debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
@@ -161,7 +162,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         // if(this.agentInfo){
         //   this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId();
         // }
-        this.areaSubAgentByAgentId(false);
+        this.areaSubAgentByAgentId();
       } else {
         this.allAgentLists = [];
         this.spinner.hide();
@@ -174,8 +175,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  areaSubAgentByAgentId(flag:any) {
-    debugger
+  areaSubAgentByAgentId() {
+    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
@@ -186,18 +187,19 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         this.allSubAgentsByAgentId = res.data1;
         // if agent is find sub agent info
-        if(this.allSubAgentsByAgentId.length == 1){
+        if (this.allSubAgentsByAgentId.length == 1) {
           this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id); // Id men's agent Id
           this.getAgentProfileData();
-        }else{
+        } else {
           this.filterForm.controls['subAreaAgentId'].setValue(0);
+          this.getAgentProfileData();
         }
-        this.getAgentByBooths(false);
+        this.getAgentByBooths();
 
       } else {
         this.filterForm.controls['subAreaAgentId'].setValue(0)
         this.allSubAgentsByAgentId = [];
-        this.getAgentByBooths(false);
+        this.getAgentByBooths();
         this.getAgentProfileData();
         this.spinner.hide();
       }
@@ -209,7 +211,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  getAgentByBooths(flag:any) {
+  getAgentByBooths() {
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
@@ -220,15 +222,15 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.getAgentByBoothsData = res.data1;
 
         // if sub agent is find show all booths
-        if(this.getAgentByBoothsData.length == 1){
+        if (this.getAgentByBoothsData.length == 1) {
           this.filterForm.controls['BoothId'].setValue(this.getAgentByBoothsData[0].BoothId); // Id men's agent Id
           this.getAgentProfileData();
         }
         this.spinner.hide();
-        // this.getAgentAssBoothActivityGraph();
+        this.getAgentAssBoothActivityGraph();
       } else {
         this.getAgentByBoothsData = [];
-        // this.getAgentAssBoothActivityGraph();
+        this.getAgentAssBoothActivityGraph();
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -239,12 +241,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  selBoothByAgent(data:any) {
-    debugger;
+  selBoothByAgent() {
     this.getAgentByBoothsData.filter((ele: any) => {
-      if (data == ele.BoothId) {
+      if (this.filterForm.value.BoothId == ele.BoothId) {
         this.filterForm.controls['AssemblyId'].setValue(ele.AssemblyId)
-       // this.getAgentAssBoothActivityGraph();
+        this.getAgentAssBoothActivityGraph();
       }
     })
   }
@@ -256,7 +257,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
       this.filterForm.controls["AgentId"].setValue(0);
-    }else if (flag == 'Agent') {
+    } else if (flag == 'Agent') {
       sessionStorage.removeItem('agents-activity');
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
@@ -265,35 +266,36 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
     }
+    this.getAgentAssBoothActivityGraph();
   }
 
   //--------------------------------------------------  top filter method's End  here -----------------------------------------------------------//
 
- //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
+  //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
 
   getReturnAgentIdOrAreaAgentId() {
     let fromData = this.filterForm.value;
     let agentId: any;
-    fromData.subAreaAgentId == 0 || fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined  || fromData.subAreaAgentId == 3  ? agentId = fromData.AgentId : agentId = fromData.subAreaAgentId;
+    fromData.subAreaAgentId == 0 || fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined || fromData.subAreaAgentId == 3 ? agentId = fromData.AgentId : agentId = fromData.subAreaAgentId;
     return agentId
   }
 
-  checkSubAreaAgentId(){
+  checkSubAreaAgentId() {
     debugger;
     let fromData = this.filterForm.value;
-    if(fromData.subAreaAgentId == "" ||  fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined || fromData.subAreaAgentId == 0 ){
-      return   fromData.AgentId
-    } else{
-      return  fromData.subAreaAgentId
+    if (fromData.subAreaAgentId == "" || fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined || fromData.subAreaAgentId == 0) {
+      return fromData.AgentId
+    } else {
+      return fromData.subAreaAgentId
     }
 
   }
 
-  
+
   //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
 
   //-------------------------------------------------- agent Profile method's start here left side  data -----------------------------------------------------------//
- 
+
   getAgentProfileData() {
     debugger;
     this.spinner.show();
@@ -321,9 +323,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
-    let checkBoothId:any
+    let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
-    let obj = 'AgentId=' +  formData.AgentId + '&ClientId='+formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
+
+    let obj = 'AgentId=' + formData.AgentId + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -412,11 +415,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   //-------------------------------------------------- agent block  method start here    -------------------------------------------------- //
 
-  blockUser(userId:any,blogStatus:any){
-    let checkBlogStatus :any;
-    blogStatus == 0  ? checkBlogStatus = 1 : checkBlogStatus = 0;
+  blockUser(userId: any, blogStatus: any) {
+    let checkBlogStatus: any;
+    blogStatus == 0 ? checkBlogStatus = 1 : checkBlogStatus = 0;
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId='+userId+'&ClientId='+this.agentInfo.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId()+'&IsBlock='+checkBlogStatus, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId=' + userId + '&ClientId=' + this.agentInfo.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId() + '&IsBlock=' + checkBlogStatus, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
@@ -433,152 +436,197 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
   //-------------------------------------------------- agent block  method End here    -------------------------------------------------- //
-  
-    // --------------------------------------------------  voters Graph  method's  & card data  Start here right side panel  -------------------------------------------------- //
-    getAgentAssBoothActivityGraph() {
-      this.spinner.show();
-      let formData = this.filterForm.value;
-      let checkBoothId:any
-      formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
-      let obj = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
-      this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_ActivityGraph?' + obj, false, false, false, 'electionServiceForWeb');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.data == 0) {
-          this.spinner.hide();
-          this.agentAssBoothActivityGraphData = res.data1;
-        } else {
-          this.agentAssBoothActivityGraphData = [];
-          this.spinner.hide();
-        }
-  
-        this.LineChartAgentPerformance(this.agentAssBoothActivityGraphData);
-      }, (error: any) => {
+
+  // --------------------------------------------------   voter filter method's  start here   -------------------------------------------------- //
+
+  deafultVoterProfilefilterForm() {
+    let toDate: any = new Date();         //selected Date
+    let fromDate = new Date((toDate) - 6 * 24 * 60 * 60 * 1000);
+    this.voterProfilefilterForm = this.fb.group({
+      weekRangePicker: [[fromDate, toDate]],
+      ToDate: [this.datePipe.transform(toDate, 'dd/MM/yyyy')],
+      FromTo: [this.datePipe.transform(fromDate, 'dd/MM/yyyy')],
+      // Search: [''],
+    })
+  }
+
+  voterDateRangeSelect(dateRange: any) {
+    this.defaultCalenderIconFlag = true;
+    this.voterProfilefilterForm.patchValue({
+      ToDate: this.datePipe.transform(dateRange[1], 'dd/MM/yyyy'),
+      FromTo: this.datePipe.transform(dateRange[0], 'dd/MM/yyyy'),
+    });
+    this.getAgentAssBoothActivityGraph();
+  }
+
+  clearFilterDateRangepicker() {
+    this.defaultCalenderIconFlag = false;
+    this.deafultVoterProfilefilterForm();
+    this.getAgentAssBoothActivityGraph();
+
+  }
+
+  onClickPagintionVoters(pageNo: any) {
+    this.votersPaginationNo = pageNo;
+    this.getClientBoothAgentVoterList();
+  }
+
+  clickOnVoterList() {
+    let clickOnVoterTab: any = document.getElementById('pills-migrated-tab');
+    clickOnVoterTab.click();
+    this.votersPaginationNo = 1;
+    this.searchVoters.setValue('');
+    this.getClientBoothAgentVoterList()
+  }
+
+  // --------------------------------------------------   voter filter method's  end here   -------------------------------------------------- //
+
+
+  // --------------------------------------------------  voters Graph  method's  & card data  Start here right side panel  -------------------------------------------------- //
+  getAgentAssBoothActivityGraph() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let checkBoothId: any
+    formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
+    let obj = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_ActivityGraph?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
         this.spinner.hide();
-        if (error.status == 500) {
-          this.router.navigate(['../500'], { relativeTo: this.route });
-        }
-      })
-    }
-  
-    LineChartAgentPerformance(data: any) {
-      // Themes begin
-      am4core.useTheme(am4themes_animated);
-      // Themes end
-  
-      // Create chart instance
-      let chart = am4core.create("agentPerformancediv", am4charts.XYChart);
-  
-      // Add data
-  
-  
-      data.map((ele: any) => {
-        if (ele.Date) {
-          let DateFormate = this.commonService.changeDateFormat(ele.Date);
-          let transformDate = this.datePipe.transform(DateFormate, 'MMM d');
-          ele.Date = transformDate;
-        }
-      })
-  
-      chart.data = data;
-  
-  
-      // Create category axis
-      let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-      categoryAxis.dataFields.category = "Date";
-      categoryAxis.renderer.opposite = false;
-  
-      categoryAxis.renderer.minGridDistance = 20;
-      // Create value axis
-      let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.renderer.inversed = false;
-      valueAxis.title.text = "Agent Performance Count";
-      valueAxis.renderer.minLabelPosition = 0.01;
-  
-      // Create series
-      let series1 = chart.series.push(new am4charts.LineSeries());
-      series1.dataFields.valueY = "VoterCount";
-      series1.dataFields.categoryX = "Date";
-      series1.name = "VoterCount";
-      series1.bullets.push(new am4charts.CircleBullet());
-      series1.tooltipText = "{valueY}";
-      series1.legendSettings.valueText = "{valueY}";
-      series1.visible = false;
-      series1.smoothing = "monotoneX";
-      series1.stroke = am4core.color("#00ff00");
-      series1.strokeWidth = 3;
-      // series1.tensionX = 0.8;
-      // series1.tensionY = 1;
-  
-      let series2 = chart.series.push(new am4charts.LineSeries());
-      series2.dataFields.valueY = "FamilyCount";
-      series2.dataFields.categoryX = "Date";
-      series2.name = 'FamilyCount';
-      series2.bullets.push(new am4charts.CircleBullet());
-      series2.tooltipText = "{valueY}";
-      series2.legendSettings.valueText = "{valueY}";
-      series2.smoothing = "monotoneX";
-      series2.stroke = am4core.color("#463AFD");
-      series2.strokeWidth = 3;
-      // series1.tensionX = 0.8;
-      // series1.tensionY = 1;
-  
-      // Add chart cursor
-      chart.cursor = new am4charts.XYCursor();
-      chart.cursor.behavior = "zoomY";
-  
-  
-      let hs1 = series1.segments.template.states.create("hover")
-      hs1.properties.strokeWidth = 5;
-      series1.segments.template.strokeWidth = 1;
-  
-      let hs2 = series2.segments.template.states.create("hover")
-      hs2.properties.strokeWidth = 5;
-      series2.segments.template.strokeWidth = 1;
-  
-      // Add legend
-      chart.legend = new am4charts.Legend();
-      chart.legend.itemContainers.template.events.on("over", function (event: any) {
-        let segments = event.target.dataItem.dataContext.segments;
-        segments.each(function (segment: any) {
-          segment.isHover = true;
-        })
-      })
-  
-      chart.legend.itemContainers.template.events.on("out", function (event: any) {
-        let segments = event.target.dataItem.dataContext.segments;
-        segments.each(function (segment: any) {
-          segment.isHover = false;
-        })
-      })
-      this.getVotersCardData();
-    }
-  
-  
-    getVotersCardData() {
-      this.spinner.show();
-      let formData = this.filterForm.value;
-      let checkBoothId:any
-      formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
-      let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId
-        + '&Search=&nopage=' + this.votersPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
-      this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_DailyWork?' + obj, false, false, false, 'electionServiceForWeb');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.data == 0) {
-          this.spinner.hide();
-          this.votersCardData = res.data1[0];
-          this.getClientBoothAgentVoterList();
-        } else {
-          this.votersCardData = [];
-          this.spinner.hide();
-        }
-      }, (error: any) => {
+        this.agentAssBoothActivityGraphData = res.data1;
+      } else {
+        this.agentAssBoothActivityGraphData = [];
         this.spinner.hide();
-        if (error.status == 500) {
-          this.router.navigate(['../500'], { relativeTo: this.route });
-        }
+      }
+
+      this.LineChartAgentPerformance(this.agentAssBoothActivityGraphData);
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  LineChartAgentPerformance(data: any) {
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart instance
+    let chart = am4core.create("agentPerformancediv", am4charts.XYChart);
+
+    // Add data
+
+
+    data.map((ele: any) => {
+      if (ele.Date) {
+        let DateFormate = this.commonService.changeDateFormat(ele.Date);
+        let transformDate = this.datePipe.transform(DateFormate, 'MMM d');
+        ele.Date = transformDate;
+      }
+    })
+
+    chart.data = data;
+
+
+    // Create category axis
+    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "Date";
+    categoryAxis.renderer.opposite = false;
+
+    categoryAxis.renderer.minGridDistance = 20;
+    // Create value axis
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.inversed = false;
+    valueAxis.title.text = "Agent Performance Count";
+    valueAxis.renderer.minLabelPosition = 0.01;
+
+    // Create series
+    let series1 = chart.series.push(new am4charts.LineSeries());
+    series1.dataFields.valueY = "VoterCount";
+    series1.dataFields.categoryX = "Date";
+    series1.name = "VoterCount";
+    series1.bullets.push(new am4charts.CircleBullet());
+    series1.tooltipText = "{valueY}";
+    series1.legendSettings.valueText = "{valueY}";
+    series1.visible = false;
+    series1.smoothing = "monotoneX";
+    series1.stroke = am4core.color("#00ff00");
+    series1.strokeWidth = 3;
+    // series1.tensionX = 0.8;
+    // series1.tensionY = 1;
+
+    let series2 = chart.series.push(new am4charts.LineSeries());
+    series2.dataFields.valueY = "FamilyCount";
+    series2.dataFields.categoryX = "Date";
+    series2.name = 'FamilyCount';
+    series2.bullets.push(new am4charts.CircleBullet());
+    series2.tooltipText = "{valueY}";
+    series2.legendSettings.valueText = "{valueY}";
+    series2.smoothing = "monotoneX";
+    series2.stroke = am4core.color("#463AFD");
+    series2.strokeWidth = 3;
+    // series1.tensionX = 0.8;
+    // series1.tensionY = 1;
+
+    // Add chart cursor
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.behavior = "zoomY";
+
+
+    let hs1 = series1.segments.template.states.create("hover")
+    hs1.properties.strokeWidth = 5;
+    series1.segments.template.strokeWidth = 1;
+
+    let hs2 = series2.segments.template.states.create("hover")
+    hs2.properties.strokeWidth = 5;
+    series2.segments.template.strokeWidth = 1;
+
+    // Add legend
+    chart.legend = new am4charts.Legend();
+    chart.legend.itemContainers.template.events.on("over", function (event: any) {
+      let segments = event.target.dataItem.dataContext.segments;
+      segments.each(function (segment: any) {
+        segment.isHover = true;
       })
-    }
-  
+    })
+
+    chart.legend.itemContainers.template.events.on("out", function (event: any) {
+      let segments = event.target.dataItem.dataContext.segments;
+      segments.each(function (segment: any) {
+        segment.isHover = false;
+      })
+    })
+    this.getVotersCardData();
+  }
+
+
+  getVotersCardData() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let checkBoothId: any
+    formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId+ '&AssemblyId=' + formData.AssemblyId
+      + '&Search=&nopage=' + this.votersPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_DailyWork?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.votersCardData = res.data1[0];
+        this.getClientBoothAgentVoterList();
+      } else {
+        this.votersCardData = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
   // --------------------------------------------------  voters Graph & card data  method's End here right side panel  -------------------------------------------------- //
 
   // ------------------------------------------  Voter list with filter start here  ------------------------------------------//
@@ -586,7 +634,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getClientBoothAgentVoterList() {
     this.spinner.show();
     let formData = this.filterForm.value;
-    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + formData.BoothId  + '&AssemblyId=' + formData.AssemblyId
+    let checkBoothId: any
+    formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId
       + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -605,10 +655,167 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       }
     })
   }
-  
+  onKeyUpFilterVoters() {
+    this.subject.next();
+  }
+
+  searchVoterFilter(flag: any) {
+    if (flag == 'true') {
+      if (this.searchVoters.value == "" || this.searchVoters == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject.pipe(debounceTime(700)).subscribe(() => {
+      this.searchVoters.value;
+      this.getClientBoothAgentVoterList();
+    });
+  }
+  // ------------------------------------------  Voter list with filter start here  ------------------------------------------//
+
+  //--------------------------------------------------------- FamiliyCard method's with filter start here -------------------------------------------//
+
+  clickOnFamiliyCard() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let checkBoothId: any
+    formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId
+      + '&Search=' + this.searchFamilyVoters.value + '&nopage=' + this.familyPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Agentwise_Booth_Familly_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.clientBoothAgentFamiliyList = res.data1;
+        this.familyTotal = res.data2[0].TotalCount;
+      } else {
+        this.clientBoothAgentFamiliyList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionFamily(pageNo: any) {
+    this.familyPaginationNo = pageNo;
+    this.clickOnFamiliyCard();
+  }
+
+  familyDetails(ParentVoterId: any) {
+    let formData = this.filterForm.value;
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + formData.AgentId;
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();;
+        this.boothFamilyDetailsArray = res.data1;
+      } else {
+        this.boothFamilyDetailsArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onKeyUpFilterFamilyVoters() {
+    this.subject.next();
+  }
+
+  searchFamilyVotersFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchFamilyVoters.value == "" || this.searchFamilyVoters.value == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject.pipe(debounceTime(700)).subscribe(() => {
+      this.searchFamilyVoters.value;
+      this.clickOnFamiliyCard();
+    });
+  }
+  //--------------------------------------------------------- FamiliyCard method's with filter end here -------------------------------------------//
+
+  //--------------------------------------------------------- New Voters  list with filter start here  -------------------------------------------//
+
+  clickOnNewVotersList() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchNewVoters.value + '&nopage=' + this.newVotersPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_NewVoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.getnewVotersList = res.data1;
+        this.newVotersTotal = res.data2[0].TotalCount;
+      } else {
+        this.getnewVotersList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionNewVoters(pageNo: any) {
+    this.newVotersPaginationNo = pageNo;
+    this.clickOnNewVotersList();
+  }
+
+  onKeyUpFilterNewVoters() {
+    this.subject.next();
+  }
+
+  searchNewVotersFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchNewVoters.value == "" || this.searchNewVoters.value == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject.pipe(debounceTime(700)).subscribe(() => {
+      this.searchNewVoters.value;
+      this.clickOnNewVotersList();
+    });
+  }
+
+  //--------------------------------------------------------- New Voters  list with filter End here  -------------------------------------------//
+
+  //--------------------------------------------------------- app use track start here --------------------------------------------------------- //
+ 
+  //--------------------------------------------------------- app use track end here --------------------------------------------------------- //
+
   //-------------------------------------------------- agent Profile method's end here  left side data -----------------------------------------------------------//
   ngOnDestroy() {
     // sessionStorage.removeItem('agents-activity');
+  }
+
+  clearFilters(flag: any) {
+    if (flag == 'clearSearchVoters') {
+      this.votersPaginationNo = 1;
+      this.searchVoters.setValue('');
+      this.getClientBoothAgentVoterList();
+    } else if (flag == 'clearSearchNewVoters') {
+      this.newVotersPaginationNo = 1;
+      this.searchNewVoters.setValue('');
+      this.clickOnNewVotersList();
+    } else if (flag == 'clearSearchFamilyVoters') {
+      this.familyPaginationNo = 1;
+      this.searchFamilyVoters.setValue('');
+      this.clickOnFamiliyCard();
+    }
+    this.deafultVoterProfilefilterForm();
   }
 
 }
