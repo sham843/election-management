@@ -178,32 +178,52 @@
                                                     CRM
                                                 </button>
                                             </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-crm-history-tab"
+                                                    data-bs-toggle="pill" data-bs-target="#pills-crm-history"
+                                                    type="button" role="tab" aria-controls="pills-crm-history"
+                                                    aria-selected="false">
+                                                    <h5 class="mb-0">1245</h5>
+                                                    CRM History
+                                                </button>
+                                            </li>
                                         </ul>
                                     </div>
                                     <div class="card-body">
                                         <div class="tab-content" id="pills-tabContent">
-                                            <!-- Voters tab start here   --> 
+                                            <!-- Voters tab start here   -->
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
                                                 <div class="row mb-3" id="filter-alerts">
                                                     <div class="col-sm-12">
-                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                                            Male <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                          </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                                            Farmer <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                          </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                                            5 star <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                          </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                                            18 To 30 Years <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                          </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Male <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            18 To 30 Years <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
                                                     </div>
                                                 </div>
 
-                                                <div class="row justify-content-between mb-3 g-2">
-                                                    <div class="col-sm-4">
+                                                <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm-4 pt-1">
+                                                        <span class="text-success">25 Results Found</span>
+                                                    </div>
+                                                    <div class="col-sm-6">
                                                         <div class="form-container">
                                                             <div class="input-group">
                                                                 <input class="form-control" type="text"
@@ -220,7 +240,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-auto">
+                                                    <div class="col-sm-2">
                                                         <button type="button" class="btn btn-main btn-sm me-2">Export to
                                                             Excel</button>
                                                         <button type="button" class="btn btn-outline-secondary btn-sm"
@@ -236,8 +256,8 @@
                                                             <th>Voters Name</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
-                                                            <th>Followup Date-Time</th>
-
+                                                            <th>Occupation</th>
+                                                            <th>Comments</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -273,7 +293,12 @@
                                                                 <div *ngIf="!boothVoterList?.MobileNo1">-</div>
                                                             </td>
                                                             <td>
-                                                                25-05-2021 12:14 PM
+                                                                <div *ngIf="boothVoterList?.Occupation">{{boothVoterList?.Occupation}}</div>
+                                                                <div *ngIf="!boothVoterList?.Occupation">-</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.Comment">{{boothVoterList?.Comment}}</div>
+                                                                <div *ngIf="!boothVoterList?.Comment">-</div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -671,132 +696,279 @@
                                             </div>
                                             <!-- CRM tab start here   -->
                                             <div class="tab-pane fade" id="pills-crm" role="tabpanel"
-                                            aria-labelledby="pills-crm-tab">
-                                            <div class="form-container">
-                                                <div class="row justify-content-end mb-3 g-2">
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="Select Followup Status">Select Status</option>
-                                                            <option value="Todays">Todays</option>
-                                                            <option value="Upcoming">Upcoming</option>
-                                                            <option value="Not Attended">Not Attended</option>
-                                                            <option value="Ended">Ended</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <input class="form-control" type="date" placeholder="Dd/MM/YYYY">
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="form-container">
-                                                            <div class="input-group">
-                                                                <input class="form-control" type="text"
-                                                                    placeholder="Search..." [formControl]="searchAgent"
-                                                                    (keyup)="onKeyUpFilterAgent()" />
-                                                                <button type="button"
-                                                                    class="btn btn-light border btn-sm"
-                                                                    (click)="clearFiltersBooth('clearFiltersAgent')"
-                                                                    *ngIf="searchAgent.value"><i
-                                                                        class="fas fa-times"></i></button>
-                                                                <button type="button" *ngIf="!searchAgent.value"
-                                                                    class="btn btn-sm border btn-light"><i
-                                                                        class="fas fa-search"></i></button>
+                                                aria-labelledby="pills-crm-tab">
+                                                <div class="form-container">
+                                                    <div class="row justify-content-end mb-3 g-2">
+                                                        <div class="col-sm-3">
+                                                            <select class="form-select">
+                                                                <option value="Select Followup Status">Select Followup
+                                                                    Status</option>
+                                                                <option value="Todays">Todays</option>
+                                                                <option value="Upcoming">Upcoming</option>
+                                                                <option value="Not Attended">Not Attended</option>
+                                                                <option value="Not To Call">Not To Call</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        [formControl]="searchAgent"
+                                                                        (keyup)="onKeyUpFilterAgent()" />
+                                                                    <button type="button"
+                                                                        class="btn btn-light border btn-sm"
+                                                                        (click)="clearFiltersBooth('clearFiltersAgent')"
+                                                                        *ngIf="searchAgent.value"><i
+                                                                            class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!searchAgent.value"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <!-- CRM table start here  -->
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span class="text-main me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Todays Followups
+                                                        </span>
+                                                        <span class="text-success me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Upcoming Followups
+                                                        </span>
+                                                        <span class="text-dark me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Not Attended Followups
+                                                        </span>
+                                                        <span class="text-danger">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Not To Call
+                                                        </span>
+                                                    </caption>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Gender</th>
+                                                            <th>Area</th>
+                                                            <th>Followup Date-Time</th>
+                                                            <th>Last Feedback</th>
+                                                            <th>CRM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="text-main">
+                                                            <td>182267</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Mokashi Vasti</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-success">
+                                                            <td>182268</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Mokashi Vasti</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-dark">
+                                                            <td>182269</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Mokashi Vasti</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-danger">
+                                                            <td>182270</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Mokashi Vasti</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                            <!-- CRM table start here  -->
-                                            <table class="table table-hover mb-0 caption-top">
-                                                <caption>
-                                                    <span class="text-main me-4">
-                                                        <i class="fas fa-square me-1"></i>
-                                                        Todays Followups
-                                                    </span>
-                                                    <span class="text-success me-4">
-                                                        <i class="fas fa-square me-1"></i>
-                                                        Upcoming Followups
-                                                    </span>
-                                                    <span class="text-dark me-4">
-                                                        <i class="fas fa-square me-1"></i>
-                                                        Not Attended Followups
-                                                    </span>
-                                                    <span class="text-danger">
-                                                        <i class="fas fa-square me-1"></i>
-                                                        Dead/Ended Followups
-                                                    </span>
-                                                </caption>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Voter No.</th>
-                                                        <th>Voter Name</th>
-                                                        <th>Contact No</th>
-                                                        <th>Gender</th>
-                                                        <th>Area</th>
-                                                        <th>Followup Date-Time</th>
-                                                        <th>Last Feedback</th>
-                                                        <th>CRM</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="text-main">
-                                                        <td>182267</td>
-                                                        <td>विश्वास रमेश चव्हाण</td>
-                                                        <td>987654210</td>
-                                                        <td>M</td>
-                                                        <td>Mokashi Vasti</td>
-                                                        <td>25-05-2021 12:14 PM</td>
-                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                        <td>
-                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
-                                                                <i class="fas fa-phone-alt"></i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="text-success">
-                                                        <td>182268</td>
-                                                        <td>विश्वास रमेश चव्हाण</td>
-                                                        <td>987654210</td>
-                                                        <td>M</td>
-                                                        <td>Mokashi Vasti</td>
-                                                        <td>25-05-2021 12:14 PM</td>
-                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                        <td>
-                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
-                                                                <i class="fas fa-phone-alt"></i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="text-dark">
-                                                        <td>182269</td>
-                                                        <td>विश्वास रमेश चव्हाण</td>
-                                                        <td>987654210</td>
-                                                        <td>M</td>
-                                                        <td>Mokashi Vasti</td>
-                                                        <td>25-05-2021 12:14 PM</td>
-                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                        <td>
-                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
-                                                                <i class="fas fa-phone-alt"></i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="text-danger">
-                                                        <td>182270</td>
-                                                        <td>विश्वास रमेश चव्हाण</td>
-                                                        <td>987654210</td>
-                                                        <td>M</td>
-                                                        <td>Mokashi Vasti</td>
-                                                        <td>25-05-2021 12:14 PM</td>
-                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                        <td>
-                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
-                                                                <i class="fas fa-phone-alt"></i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                            <!-- CRM History tab start here   -->
+                                            <div class="tab-pane fade" id="pills-crm-history" role="tabpanel"
+                                                aria-labelledby="pills-crm-history-tab">
+                                                <div class="form-container">
+                                                    <div class="row justify-content-end mb-3 g-2">
+                                                        <div class="col-sm-3">
+                                                            <select class="form-select">
+                                                                <option value="Select Feedback Type">Select Feedback
+                                                                    Type</option>
+                                                                <option value="Positive">Positive</option>
+                                                                <option value="Negative">Negative</option>
+                                                                <option value="Neutral">Neutral</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-select">
+                                                                <option value="Select Followup Status">Select Followup
+                                                                    Status</option>
+                                                                <option value="Todays">Todays</option>
+                                                                <option value="Upcoming">Upcoming</option>
+                                                                <option value="Not Attended">Not Attended</option>
+                                                                <option value="Not To Call">Not To Call</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" type="date"
+                                                                placeholder="Dd/MM/YYYY">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        [formControl]="searchAgent"
+                                                                        (keyup)="onKeyUpFilterAgent()" />
+                                                                    <button type="button"
+                                                                        class="btn btn-light border btn-sm"
+                                                                        (click)="clearFiltersBooth('clearFiltersAgent')"
+                                                                        *ngIf="searchAgent.value"><i
+                                                                            class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!searchAgent.value"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- CRM History table start here  -->
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span class="text-main me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Todays Followups
+                                                        </span>
+                                                        <span class="text-success me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Upcoming Followups
+                                                        </span>
+                                                        <span class="text-dark me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Not Attended Followups
+                                                        </span>
+                                                        <span class="text-danger">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Not To Call
+                                                        </span>
+                                                    </caption>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Gender</th>
+                                                            <th>Feedback</th>
+                                                            <th>Followup Date-Time</th>
+                                                            <th>Last Feedback</th>
+                                                            <th>CRM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="text-main">
+                                                            <td>182267</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Positive</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-success">
+                                                            <td>182268</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Negative</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-dark">
+                                                            <td>182269</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Neutral</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-danger">
+                                                            <td>182270</td>
+                                                            <td>विश्वास रमेश चव्हाण</td>
+                                                            <td>987654210</td>
+                                                            <td>M</td>
+                                                            <td>Neutral</td>
+                                                            <td>25-05-2021 12:14 PM</td>
+                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
