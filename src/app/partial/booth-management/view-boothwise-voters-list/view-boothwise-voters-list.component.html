@@ -289,11 +289,11 @@
                                                             <td>{{boothVoterList?.VoterId}}</td>
                                                             <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <!-- <td> <a (click)="redirectToVoterPrfile(boothVoterList)"  href="voters-profile/{{encryptData}}" target="_blank">{{boothVoterList?.EnglishName}}</a></td> -->
-                                                           <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> 
+                                                           
                                                             <!-- <td>{{boothVoterList?.SrNo}}</td> -->
                                                             
                                                             <td>
-                                                                <a class="text-main">{{boothVoterList?.EnglishName}}</a>
+                                                                <a (click)="redirectToVoterPrfile(boothVoterList)" class="text-main">{{boothVoterList?.EnglishName}}</a>
                                                                 <small class="text-muted">{{boothVoterList?.Leader}} {{boothVoterList?.LeaderImportance}}</small>
                                                             </td>
                                                             <td>

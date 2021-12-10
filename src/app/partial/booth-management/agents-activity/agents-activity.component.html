@@ -9,35 +9,36 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
-                        <ngx-select [allowClear]="clientDropDownCloseIcon" [items]="clientNameArray" formControlName="ClientId" [disabled]="clientDropDownDis"
-                            (remove)="clearFilter('clientId')" (select)="getAllAgentList()"
-                            optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                        <ngx-select [allowClear]="clientNameArray?.length > 2" [items]="clientNameArray"
+                            formControlName="ClientId" [disabled]="clientNameArray?.length == 0"
+                            (remove)="clearFilter('clientId')" (select)="getAllAgentList('sel')" optionValueField="id"
+                            optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="true" [items]="allAgentLists" formControlName="AgentId"
-                            optionValueField="AgentId"
-                            (select)="areaSubAgentByAgentId()"
+                        <ngx-select  [items]="allAgentLists" [allowClear]="allAgentLists?.length > 2" formControlName="AgentId"
+                            [disabled]="allAgentLists?.length == 0"
+                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel')"
                             optionTextField="FullName" placeholder="Select Agent"
                             (remove)="clearFilter('Agent');getAgentProfileData();">
                         </ngx-select>
-                        <!-- ;getAgentProfileData(); -->
+                        <!-- getAgentProfileData(); -->
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select [allowClear]="true" [items]="allSubAgentsByAgentId"
-                                formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
-                                (remove)="clearFilter('subAgent')" (select)="getAgentByBooths();"
-                                placeholder="Select Area  Agent">
+                            <ngx-select  [items]="allSubAgentsByAgentId" [allowClear]="allSubAgentsByAgentId?.length > 2"
+                                [disabled]="allSubAgentsByAgentId?.length == 0" formControlName="subAreaAgentId"
+                                optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')"
+                                (select)="getAgentByBooths('sel');" placeholder="Select Area  Agent">
                             </ngx-select>
                             <!--   getAgentProfileData() -->
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="true" 
-                            [items]="getAgentByBoothsData" formControlName="BoothId" optionValueField="BoothId"
-                            (select)="selBoothByAgent()" optionTextField="BoothName"
-                            placeholder="Select Booth" (remove)="clearFilter('Booth')">
+                        <ngx-select  [items]="getAgentByBoothsData" [allowClear]="getAgentByBoothsData?.length > 2" 
+                            [disabled]="getAgentByBoothsData?.length == 0"
+                            formControlName="BoothId" optionValueField="BoothId" (select)="selBoothByAgent($event)"
+                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearFilter('Booth')">
                         </ngx-select>
                         <!-- [disabled]="subAreaAgentIdDisabledFlag" -->
                     </div>
@@ -170,6 +171,6 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>

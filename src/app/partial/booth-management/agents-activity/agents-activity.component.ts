@@ -131,7 +131,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
           this.clientDropDownDis = true;
           this.clientDropDownCloseIcon = false;
         }
-        this.getAllAgentList();
+        this.getAllAgentList(false);
         //this.clientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.clientNameArray[0].id }), this.getAllAgentList(), this.clientIdFlag = false) : '';
       } else {
         this.spinner.hide();
@@ -144,7 +144,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  getAllAgentList() {
+  getAllAgentList(flag:any) {
     debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
@@ -162,7 +162,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         // if(this.agentInfo){
         //   this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId();
         // }
-        this.areaSubAgentByAgentId();
+        this.areaSubAgentByAgentId(false);
       } else {
         this.allAgentLists = [];
         this.spinner.hide();
@@ -175,7 +175,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  areaSubAgentByAgentId() {
+  areaSubAgentByAgentId(flag:any) {
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
@@ -192,12 +192,12 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         }else{
           this.filterForm.controls['subAreaAgentId'].setValue(0);
         }
-        this.getAgentByBooths();
+        this.getAgentByBooths(false);
 
       } else {
         this.filterForm.controls['subAreaAgentId'].setValue(0)
         this.allSubAgentsByAgentId = [];
-        this.getAgentByBooths();
+        this.getAgentByBooths(false);
         this.getAgentProfileData();
         this.spinner.hide();
       }
@@ -209,7 +209,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  getAgentByBooths() {
+  getAgentByBooths(flag:any) {
     debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
@@ -240,13 +240,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
   }
 
-  selBoothByAgent() {
-    // this.getAgentByBoothsData.filter((ele: any) => {
-    //   if (data == ele.BoothId) {
-    //     this.filterForm.controls['AssemblyId'].setValue(ele.AssemblyId)
-    //     this.getAgentAssBoothActivityGraph();
-    //   }
-    // })
+  selBoothByAgent(data:any) {
+    this.getAgentByBoothsData.filter((ele: any) => {
+      if (data == ele.BoothId) {
+        this.filterForm.controls['AssemblyId'].setValue(ele.AssemblyId)
+        this.getAgentAssBoothActivityGraph();
+      }
+    })
   }
 
   clearFilter(flag: any) {
