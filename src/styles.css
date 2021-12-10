@@ -636,3 +636,16 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     z-index: 9;
     object-fit: cover;
 }
+.mat-dialog-container{
+    background-color:#fff;
+    padding:15px;
+}
+.mat-dialog-content {
+    max-height: 91vh !important;
+    height: 91vh !important;
+  }
+  .table-feedbacks{
+    height: 47vh;
+    max-height: 47vh;
+    overflow-y: auto;
+  }

@@ -678,7 +678,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {
-    const dialogRef = this.dialog.open(VoterCallEntriesComponent);
+    const dialogRef = this.dialog.open(VoterCallEntriesComponent,{
+      panelClass: 'fullscreen-dialog',
+      height: '98vh',
+      width: '99%'
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
