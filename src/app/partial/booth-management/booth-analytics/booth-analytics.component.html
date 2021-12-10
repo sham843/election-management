@@ -1,101 +1,154 @@
 <div class="container-fluid">
-    <div class="row mx-0 px-0" id="pageheader">
-        <div class="col-sm-4">
-            <span class="page-name">
-                Booth Analytics
-            </span>
-        </div>
-        <div class="col-sm-8 text-end">
-            <div class="row g-2 justify-content-end">
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Election</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Constituency</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Village</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <select class="form-select">
-                        <option value="">Select Booth</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+  <div class="row mx-0 px-0" id="pageheader">
+    <div class="col-sm-2">
+      <span class="page-name">
+        Booth Analytics
+      </span>
     </div>
-
+    <div class="col-sm-10 text-end">
+      <form [formGroup]="filterForm">
+        <div class="row g-2 justify-content-end">
+          <div class="col-sm-3">
+            <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
+                        (remove)="clearFilter('clientId')" (select)="HighlightRow=0; boothDataHide =false; getElectionName()"
+                        [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+            </ngx-select>
+          </div>
+          <div class="col-sm-3">
+            <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
+                        (remove)="clearFilter('electionId')" (select)="HighlightRow=0; boothDataHide =false;  getConstituencyName()"
+                        formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                        [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                        placeholder="Select Election">
+            </ngx-select>
+            <!--<select class="form-select">
+              <option value="">Select Election</option>
+            </select>-->
+          </div>
+          <div class="col-sm-2">
+            <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
+                        (remove)="clearFilter('constituencyId')" (select)="HighlightRow=0; boothDataHide =false; getVillageName()" formControlName="ConstituencyId"
+                        optionValueField="ConstituencyId" optionTextField="ConstituencyName"
+                        [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
+            </ngx-select>
+            <!--<select class="form-select">
+              <option value="">Select Constituency</option>
+            </select>-->
+          </div>
+          <div class="col-sm-2">
+            <ngx-select [allowClear]="villageFlag" [items]="villageNameArray"
+                        (remove)="clearFilter('VillageId')" formControlName="VillageId"
+                        (select)="ClientWiseBoothList();boothDataHide=false"
+                        optionValueField="VillageId" optionTextField="VillageName"
+                        [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+            </ngx-select>
+            <!--<select class="form-select">
+              <option value="">Select Village</option>
+            </select>-->
+          </div>
+          <div class="col-sm-2">
+            <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray"
+                        (remove)="clearFilter('BoothId')" formControlName="BoothId"
+                        (select)="boothSummary(); boothSummaryGraphs(); boothDataHide=false"
+                        optionValueField="BoothId" optionTextField="BoothName"
+                        [disabled]="!this.filterForm.value.VillageId" placeholder="Select Booth">
+            </ngx-select>
+            <!--<select class="form-select">
+              <option value="">Select Booth</option>
+            </select>-->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <ng-container *ngIf="dataNotFound">
     <div id="dash-stats" class="row g-2">
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Total Voters</p>
-                <h3>7</h3>
-            </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Total Voters</p>
+          <h3>{{cardData?.TotalVoters}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Data Filled</p>
-                <h3>76</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Data Filled</p>
+          <h3>{{cardData?.TotalFilled}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Pending</p>
-                <h3>5345</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Pending</p>
+          <h3>{{cardData?.TotalPending}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Families</p>
-                <h3>43</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Families</p>
+          <h3>{{cardData?.TotalFamilies}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Migrated</p>
-                <h3>34</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Migrated</p>
+          <h3>{{cardData?.TotalMigrated}}</h3>
         </div>
-        
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>New Voters</p>
-                <h3>345</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>New Voters</p>
+          <h3>{{cardData?.NewVoters}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Male</p>
-                <h3>34</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Male</p>
+          <h3>{{cardData?.Male}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Female</p>
-                <h3>43</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Female</p>
+          <h3>{{cardData?.Female}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Other Gender</p>
-                <h3>345</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Other Gender</p>
+          <h3>{{cardData?.OtheGender}}</h3>
         </div>
-        <div class="col-sm">
-            <div class="card card-body">
-                <p>Expired</p>
-                <h3>345</h3>
-            </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
+          <p>Expired</p>
+          <h3>{{cardData?.Expired}}</h3>
         </div>
+      </div>
     </div>
 
     <div class="row chartbox g-2 mb-3">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header pb-0">
+            Booth Analysis
+            <span class="float-end text-main">
+              Village - Booth
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-sm-9">
+                <div class="row g-2">
+                  <div class="col-sm-4">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Agewise Voters
+                      </div><img src="assets/images/agewisevoters.png" class="img-fluid">
+                            <div class="card-body">
+                              <div [hidden]="!isAgewiseChart" id="chartdiv" style="width: 100%;  height:250px"></div>
+                              <ng-container *ngIf="!isAgewiseChart">
+                                <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                              </ng-container>
+                              <!--<img src="assets/images/agewisevoters.png" class="img-fluid">-->
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header pb-0">
@@ -483,64 +536,452 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card shadow-none border">
-                                <div class="card-header">Common Issues in this Area</div>
-                                <div class="card-body pt-0">
-                                    <table class="table table-hover mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <span class="fw-bold text-main">Vijay Patil</span>
-                                                    <div>The next generation of the web’s favorite icon library + toolkit is now
-                                                        available as a Beta release! Try out the Free version. Subscribe to Font
-                                                        Awesome Pro to get even more!</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="fw-bold text-main">Vijay Patil</span>
-                                                    <div>The next generation of the web’s favorite icon library + toolkit is now
-                                                        available as a Beta release! Try out the Free version. Subscribe to Font
-                                                        Awesome Pro to get even more!</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="fw-bold text-main">Vijay Patil</span>
-                                                    <div>The next generation of the web’s favorite icon library + toolkit is now
-                                                        available as a Beta release! Try out the Free version. Subscribe to Font
-                                                        Awesome Pro to get even more!</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="fw-bold text-main">Vijay Patil</span>
-                                                    <div>The next generation of the web’s favorite icon library + toolkit is now
-                                                        available as a Beta release! Try out the Free version. Subscribe to Font
-                                                        Awesome Pro to get even more!</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="fw-bold text-main">Vijay Patil</span>
-                                                    <div>The next generation of the web’s favorite icon library + toolkit is now
-                                                        available as a Beta release! Try out the Free version. Subscribe to Font
-                                                        Awesome Pro to get even more!</div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Religionwise Voters Chart
+                      </div>
+                      <div class="card-body">
+                        <!--Religion vs Percentage of Voters-->
+                        <div [hidden]="!isReligionwiseChart" id="religionwisediv" style="width: 100%;  height:250px"></div>
+                        <ng-container *ngIf="!isReligionwiseChart">
+                          <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Caste Wise Chart
+                      </div>
+                      <div class="card-body">
+                        <div [hidden]="!isCasteWiseChart" id="castewisediv" style="width: 100%;  height: 400px"></div>
+                        <ng-container *ngIf="!isCasteWiseChart">
+                          <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                        </ng-container>
+                        <!--Caste vs Percentage of Voters-->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Migration Pattern
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-hover mb-0">
+                          <thead>
+                            <tr>
+                              <th>Sr. No.</th>
+                              <th>City</th>
+                              <th>Count</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>Mumbai</td>
+                              <td>272</td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Pune</td>
+                              <td>132</td>
+                            </tr>
+                            <tr>
+                              <td>3</td>
+                              <td>Nagpur</td>
+                              <td>12</td>
+                            </tr>
+                            <tr>
+                              <td>4</td>
+                              <td>Satara</td>
+                              <td>22</td>
+                            </tr>
+                            <tr>
+                              <td>5</td>
+                              <td>Banglore</td>
+                              <td>32</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Profession Wise Families
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-hover mb-0">
+                          <thead>
+                            <tr>
+                              <th>Sr. No.</th>
+                              <th>Profession</th>
+                              <th>Families</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>Mumbai</td>
+                              <td>272</td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Pune</td>
+                              <td>132</td>
+                            </tr>
+                            <tr>
+                              <td>3</td>
+                              <td>Nagpur</td>
+                              <td>12</td>
+                            </tr>
+                            <tr>
+                              <td>4</td>
+                              <td>Satara</td>
+                              <td>22</td>
+                            </tr>
+                            <tr>
+                              <td>5</td>
+                              <td>Banglore</td>
+                              <td>32</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Party wise voters
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <table class="table table-hover mb-0">
+                              <thead>
+                                <tr>
+                                  <th>Sr. No.</th>
+                                  <th>Party Name</th>
+                                  <th>Families</th>
+                                  <th>Voters</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>Nationalist Congress Party</td>
+                                  <td>22</td>
+                                  <td>272</td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Bhartiya Janata Party</td>
+                                  <td>12</td>
+                                  <td>132</td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Indian National Congress</td>
+                                  <td>18</td>
+                                  <td>132</td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Shivsena</td>
+                                  <td>22</td>
+                                  <td>232</td>
+                                </tr>
+                                <tr>
+                                  <td>5</td>
+                                  <td>Other</td>
+                                  <td>32</td>
+                                  <td>320</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-sm-6">
+                            bar chart
+                            (partyname vs families & voters)
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Important Leaders in This Village/Booth
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-hover mb-0">
+                          <caption>Heading sortable</caption>
+                          <thead>
+                            <tr>
+                              <th>Sr. No.</th>
+                              <th>Leader Name</th>
+                              <th>Area</th>
+                              <th>Party</th>
+                              <th>Importance</th>
+                              <th>Contact No.</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>Vijay Patil</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>Nationalist Congress Party</td>
+                              <td>5*</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Sachin Shinde</td>
+                              <td>Khara Mala</td>
+                              <td>BJP</td>
+                              <td>3*</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>3</td>
+                              <td>Vijay Patil</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>Nationalist Congress Party</td>
+                              <td>2*</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>4</td>
+                              <td>Vijay Patil</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>Nationalist Congress Party</td>
+                              <td>4*</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>5</td>
+                              <td>Vijay Patil</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>Nationalist Congress Party</td>
+                              <td>5*</td>
+                              <td>986543210</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Area Wise Voters
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-hover mb-0">
+                          <caption>Heading sortable</caption>
+                          <thead>
+                            <tr>
+                              <th>Sr. No.</th>
+                              <th>Area</th>
+                              <th>Total Voters</th>
+                              <th>Families</th>
+                              <th>Updated Voters</th>
+                              <th>Representative</th>
+                              <th>Phone</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>234</td>
+                              <td>34</td>
+                              <td>212</td>
+                              <td>Vijay Patil</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>234</td>
+                              <td>34</td>
+                              <td>212</td>
+                              <td>Vijay Patil</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>3</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>234</td>
+                              <td>34</td>
+                              <td>212</td>
+                              <td>Vijay Patil</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>4</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>234</td>
+                              <td>34</td>
+                              <td>212</td>
+                              <td>Vijay Patil</td>
+                              <td>986543210</td>
+                            </tr>
+                            <tr>
+                              <td>5</td>
+                              <td>Ramoshi Vasti</td>
+                              <td>234</td>
+                              <td>34</td>
+                              <td>212</td>
+                              <td>Vijay Patil</td>
+                              <td>986543210</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Social Media Supporter
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <table class="table table-hover mb-0">
+                              <thead>
+                                <tr>
+                                  <th>Sr. No.</th>
+                                  <th>Leader</th>
+                                  <th>Voters</th>
+                                  <th>Hits</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>Abhay Jagtap</td>
+                                  <td>272</td>
+                                  <td>354</td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Abhay Jagtap</td>
+                                  <td>132</td>
+                                  <td>354</td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Abhay Jagtap</td>
+                                  <td>132</td>
+                                  <td>354</td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Abhay Jagtap</td>
+                                  <td>232</td>
+                                  <td>354</td>
+                                </tr>
+                                <tr>
+                                  <td>5</td>
+                                  <td>Abhay Jagtap</td>
+                                  <td>320</td>
+                                  <td>354</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-sm-6">
+                            bar chart
+                            (leader vs voters & hits)
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="card shadow-none border">
+                  <div class="card-header">Common Issues in this Area</div>
+                  <div class="card-body pt-0">
+                    <table class="table table-hover mb-0">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <span class="fw-bold text-main">Vijay Patil</span>
+                            <div>
+                              The next generation of the web’s favorite icon library + toolkit is now
+                              available as a Beta release! Try out the Free version. Subscribe to Font
+                              Awesome Pro to get even more!
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="fw-bold text-main">Vijay Patil</span>
+                            <div>
+                              The next generation of the web’s favorite icon library + toolkit is now
+                              available as a Beta release! Try out the Free version. Subscribe to Font
+                              Awesome Pro to get even more!
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="fw-bold text-main">Vijay Patil</span>
+                            <div>
+                              The next generation of the web’s favorite icon library + toolkit is now
+                              available as a Beta release! Try out the Free version. Subscribe to Font
+                              Awesome Pro to get even more!
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="fw-bold text-main">Vijay Patil</span>
+                            <div>
+                              The next generation of the web’s favorite icon library + toolkit is now
+                              available as a Beta release! Try out the Free version. Subscribe to Font
+                              Awesome Pro to get even more!
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="fw-bold text-main">Vijay Patil</span>
+                            <div>
+                              The next generation of the web’s favorite icon library + toolkit is now
+                              available as a Beta release! Try out the Free version. Subscribe to Font
+                              Awesome Pro to get even more!
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
+
+          </div>
         </div>
+      </div>
     </div>
+  <!-- </ng-container> -->
+  <ng-container *ngIf="!dataNotFound">
+    <div class="alert alert-danger text-center py-2 mb-0">Please Select booth..!</div>
+  </ng-container>
+</div>
 </div>
 
 
