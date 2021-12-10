@@ -250,8 +250,12 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   clearFilter(flag: any) {
-    if (flag == 'clientId') {this.topFilterForm()}
+    if (flag == 'clientId') {
+      this.topFilterForm();
+      sessionStorage.removeItem('agents-activity');
+    }
     if (flag == 'Agent') {
+      sessionStorage.removeItem('agents-activity');
       this.filterForm.patchValue({subAreaAgentId: 0,  BoothId: 0, AgentId:0});
     } else if (flag == 'subAgent') {this.filterForm.patchValue({subAgent:0, BoothId: 0});
     }
