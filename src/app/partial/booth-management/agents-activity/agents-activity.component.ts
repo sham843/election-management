@@ -250,27 +250,19 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   clearFilter(flag: any) {
-    this.topFilterForm();
-    if(flag == 'Agent'){
-      this.filterForm.patchValue({
-        ClientId:this.filterForm.value.ClientId
-      });
-    }else if(flag == 'subAgent'){
-      this.filterForm.patchValue({
-          ClientId:this.filterForm.value.ClientId,
-          AgentId:this.filterForm.value.AgentId
-        });
-    }else if(flag == 'Booth'){
-      this.filterForm.patchValue({
-        ClientId:this.filterForm.value.ClientId,
-        AgentId:this.filterForm.value.AgentId,
-        subAreaAgentId:this.filterForm.value.subAreaAgentId,
-
-      });
+    if (flag == 'clientId') {this.topFilterForm()}
+    if (flag == 'Agent') {
+      this.filterForm.patchValue({subAreaAgentId: 0,  BoothId: 0, AgentId:0});
+    } else if (flag == 'subAgent') {this.filterForm.patchValue({subAgent:0, BoothId: 0});
     }
- 
     this.getClientName();
   }
+
+  // AgentId: 0
+  // AssemblyId: 0
+  // BoothId: null
+  // ClientId: 1
+  // subAreaAgentId: null
   //--------------------------------------------------  top filter method's End  here -----------------------------------------------------------//
 
  //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
@@ -285,7 +277,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   checkSubAreaAgentId(){
     debugger;
     let fromData = this.filterForm.value;
-    if(fromData.subAreaAgentId == "" ||  fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined ){
+    if(fromData.subAreaAgentId == "" ||  fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined || fromData.subAreaAgentId == 0 ){
       return   fromData.AgentId
     } else{
       return  fromData.subAreaAgentId
@@ -321,6 +313,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getAgentProfileCardData() {
+    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj = 'AgentId=' +  formData.AgentId + '&ClientId='+formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + formData.AssemblyId;
