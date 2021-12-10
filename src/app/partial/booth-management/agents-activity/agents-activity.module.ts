@@ -10,6 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { OwlNativeDateTimeModule, OwlDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AgmCoreModule } from '@agm/core';
 
 
 @NgModule({
@@ -28,6 +29,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     Ng2SearchPipeModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
+      language: 'en',
+      libraries: ['geometry','places']
+    }),
   ]
 })
 export class AgentsActivityModule { }

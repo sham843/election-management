@@ -642,8 +642,8 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     padding:15px;
 }
 .mat-dialog-content {
-    max-height: 91vh !important;
-    height: 91vh !important;
+    max-height: 89vh !important;
+    height: 89vh !important;
   }
   .table-feedbacks{
     height: 47vh;
