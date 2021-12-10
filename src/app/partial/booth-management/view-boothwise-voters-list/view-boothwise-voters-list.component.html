@@ -10,13 +10,15 @@
                 <div class="row g-2">
                     <div class="col-sm-4">
                         <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-                            (remove)="clearFilter('clientId')" (select)="HighlightRow=0; boothDataHide =false; getElectionName()"
-                            optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                            (remove)="clearFilter('clientId')"
+                            (select)="HighlightRow=0; boothDataHide =false; getElectionName()" optionValueField="id"
+                            optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm-4">
                         <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
-                            (remove)="clearFilter('electionId')" (select)="HighlightRow=0; boothDataHide =false;  getConstituencyName()"
+                            (remove)="clearFilter('electionId')"
+                            (select)="HighlightRow=0; boothDataHide =false;  getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                             placeholder="Select Election">
@@ -24,9 +26,11 @@
                     </div>
                     <div class="col-sm-4">
                         <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-                            (remove)="clearFilter('constituencyId')" (select)="HighlightRow=0; boothDataHide =false; boothSummary()" formControlName="ConstituencyId"
-                            optionValueField="ConstituencyId" optionTextField="ConstituencyName"
-                            [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
+                            (remove)="clearFilter('constituencyId')"
+                            (select)="HighlightRow=0; boothDataHide =false; boothSummary()"
+                            formControlName="ConstituencyId" optionValueField="ConstituencyId"
+                            optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"
+                            placeholder="Select Constituency">
                         </ngx-select>
                     </div>
                     <!-- <div class="col-sm-3">
@@ -166,90 +170,40 @@
                                                     Agents
                                                 </button>
                                             </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-crm" type="button" role="tab"
+                                                    aria-controls="pills-crm" aria-selected="false">
+                                                    <h5 class="mb-0">1245</h5>
+                                                    CRM
+                                                </button>
+                                            </li>
                                         </ul>
                                     </div>
                                     <div class="card-body">
                                         <div class="tab-content" id="pills-tabContent">
-                                            <!-- Voters tab start here   -->
+                                            <!-- Voters tab start here   --> 
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
-                                                <div class="row mb-3 g-2 form-container">
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Select Area</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Select Gender</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Select Business</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Political Party</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Select Stars</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">In Favour Of</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">In Oppose Of</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Yuvak</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Age</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Family Size</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Religion</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-select">
-                                                            <option value="">Caste</option>
-                                                        </select>
+                                                <div class="row mb-3" id="filter-alerts">
+                                                    <div class="col-sm-12">
+                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                                            Male <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                          </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                                            Farmer <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                          </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                                            5 star <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                          </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                                            18 To 30 Years <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                          </span>
                                                     </div>
                                                 </div>
-                                                <div class="row justify-content-end mb-3 g-2">
-                                                    <div class="col-sm-auto pt-1">
-                                                        <div class="voter-data text-success">
-                                                            25 Results found
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-auto pt-1 text-end">
-                                                        <input class="form-check-input me-1" [formControl]="isChecked" type="checkbox">
-                                                        <label class="form-check-label" for="chkNameCorrection"> Name Corrections</label>
-                                                    </div>
-                                                    <div class="col-sm-auto pt-1 text-end">
-                                                        <input class="form-check-input me-1" [formControl]="isChecked" (change)="onCheckFillData($event)" type="checkbox">
-                                                        <label class="form-check-label" for="flexCheckDefault"> Data Filled</label>
-                                                    </div>
-                                                    <div class="col-sm">
+
+                                                <div class="row justify-content-between mb-3 g-2">
+                                                    <div class="col-sm-4">
                                                         <div class="form-container">
                                                             <div class="input-group">
                                                                 <input class="form-control" type="text"
@@ -263,11 +217,16 @@
                                                                 <button type="button" *ngIf="!searchVoters.value"
                                                                     class="btn btn-sm border btn-light"><i
                                                                         class="fas fa-search"></i></button>
-                                                            </div>                                                            
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-auto">
-                                                        <button type="button" class="btn btn-main">Export to Excel</button>
+                                                        <button type="button" class="btn btn-main btn-sm me-2">Export to
+                                                            Excel</button>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                                            aria-controls="offcanvasRight"><i
+                                                                class="fas fa-filter"></i></button>
                                                     </div>
                                                 </div>
                                                 <table class="table table-hover mb-0">
@@ -275,11 +234,10 @@
                                                         <tr>
                                                             <th>Voter No.</th>
                                                             <th>Voters Name</th>
-                                                            <th>Name Correction</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
-                                                            <th>CRM</th>
-                                                            <th></th>
+                                                            <th>Followup Date-Time</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -289,17 +247,14 @@
                                                             <td>{{boothVoterList?.VoterId}}</td>
                                                             <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <!-- <td> <a (click)="redirectToVoterPrfile(boothVoterList)"  href="voters-profile/{{encryptData}}" target="_blank">{{boothVoterList?.EnglishName}}</a></td> -->
-                                                           
+
                                                             <!-- <td>{{boothVoterList?.SrNo}}</td> -->
-                                                            
+
                                                             <td>
-                                                                <a (click)="redirectToVoterPrfile(boothVoterList)" class="text-main">{{boothVoterList?.EnglishName}}</a>
-                                                                <small class="text-muted">{{boothVoterList?.Leader}} {{boothVoterList?.LeaderImportance}}</small>
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm btn-light text-primary"  (click)="openDialogNameCorrection()">
-                                                                    <i class="fas fa-user-edit"></i>
-                                                                </button>
+                                                                <a (click)="redirectToVoterPrfile(boothVoterList)"
+                                                                    class="text-main">{{boothVoterList?.EnglishName}}</a>
+                                                                <small class="text-muted">{{boothVoterList?.Leader}}
+                                                                    {{boothVoterList?.LeaderImportance}}</small>
                                                             </td>
                                                             <!-- <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <td>
@@ -308,16 +263,17 @@
                                                             </td>
 
                                                             <td>
-                                                                <div *ngIf="boothVoterList?.MobileNo1"><a class="text-main" href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a></div>
+                                                                <div *ngIf="boothVoterList?.MobileNo1"><a
+                                                                        class="text-main"
+                                                                        href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a>
+                                                                </div>
                                                                 <!-- <div *ngIf="boothVoterList?.MobileNo1">
                                                                     {{boothVoterList?.MobileNo1}}
                                                                 </div> -->
                                                                 <div *ngIf="!boothVoterList?.MobileNo1">-</div>
                                                             </td>
                                                             <td>
-                                                                <button class="btn btn-sm btn-light text-success"  (click)="openDialogVoterCallEntries()">
-                                                                    <i class="fas fa-phone-alt"></i>
-                                                                </button>
+                                                                25-05-2021 12:14 PM
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -337,62 +293,74 @@
                                             <div class="tab-pane fade" id="pills-family" role="tabpanel"
                                                 aria-labelledby="pills-family-tab">
                                                 <ng-container *ngIf="boothFamilyListArray?.length != 0">
-                                                <div class="row justify-content-end mb-3">
-                                                    <div class="col-sm-3">
-                                                        <div class="form-container">
-                                                            <div class="input-group">
-                                                                <input class="form-control" type="text"
-                                                                    placeholder="Search..." [formControl]="searchFamily"
-                                                                    (keyup)="onKeyUpFilterFamily()" />
-                                                                <button type="button"
-                                                                    class="btn btn-light border btn-sm"
-                                                                    (click)="clearFiltersBooth('clearFamilyVoters')"
-                                                                    *ngIf="searchFamily.value"><i
-                                                                        class="fas fa-times"></i></button>
-                                                                <button type="button" *ngIf="!searchFamily.value"
-                                                                    class="btn btn-sm border btn-light"><i
-                                                                        class="fas fa-search"></i></button>
+                                                    <div class="row justify-content-end mb-3">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        [formControl]="searchFamily"
+                                                                        (keyup)="onKeyUpFilterFamily()" />
+                                                                    <button type="button"
+                                                                        class="btn btn-light border btn-sm"
+                                                                        (click)="clearFiltersBooth('clearFamilyVoters')"
+                                                                        *ngIf="searchFamily.value"><i
+                                                                            class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!searchFamily.value"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="accordion accordion-flush" id="familytreeaccordion">
-                                                    <div class="row familytree-header">
-                                                        <div class="col-sm-1">Sr. No.</div>
-                                                        <div class="col-sm-3">Voter Name</div>
-                                                        <div class="col-sm-2">Mobile No.</div>
-                                                        <div class="col-sm-2">Occupation</div>
-                                                        <div class="col-sm-2">Qualification</div>
-                                                        <div class="col-sm-auto">Migration</div>
-                                                        <div class="col-sm"></div>
-                                                    </div>
-                                                    <div class="accordion-item"  *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
-                                                        
+                                                    <div class="accordion accordion-flush" id="familytreeaccordion">
+                                                        <div class="row familytree-header">
+                                                            <div class="col-sm-1">Sr. No.</div>
+                                                            <div class="col-sm-3">Voter Name</div>
+                                                            <div class="col-sm-2">Mobile No.</div>
+                                                            <div class="col-sm-2">Occupation</div>
+                                                            <div class="col-sm-2">Qualification</div>
+                                                            <div class="col-sm-auto">Migration</div>
+                                                            <div class="col-sm"></div>
+                                                        </div>
+                                                        <div class="accordion-item"
+                                                            *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
+
                                                             <div class="accordion-header familytree-row">
                                                                 <div class="row">
                                                                     <div class="col-sm-1">{{boothFamilyList.SrNo}}
                                                                     </div>
                                                                     <!-- <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}  </div>-->
                                                                     <div class="col-sm-3">
-                                                                        <a (click)="redirectToVoterPrfile(boothFamilyList)" class="text-main">{{boothFamilyList?.Family}}</a>
+                                                                        <a (click)="redirectToVoterPrfile(boothFamilyList)"
+                                                                            class="text-main">{{boothFamilyList?.Family}}</a>
                                                                         <!-- {{boothFamilyList?.Family}} {{boothFamilyList?.Family}} -->
                                                                     </div>
                                                                     <div class="col-sm-2">
-                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a class="text-main" href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a> </div>
+                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a
+                                                                                class="text-main"
+                                                                                href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a>
+                                                                        </div>
                                                                         <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                                                                     </div>
-                                                                    <div class="col-sm-2">{{boothFamilyList.occupation ? (boothFamilyList.occupation | titlecase) : '-'}}
+                                                                    <div class="col-sm-2">{{boothFamilyList.occupation ?
+                                                                        (boothFamilyList.occupation | titlecase) : '-'}}
                                                                     </div>
-                                                                    <div class="col-sm-2"> {{boothFamilyList?.qualification ? boothFamilyList.qualification : "-"}}</div>
+                                                                    <div class="col-sm-2">
+                                                                        {{boothFamilyList?.qualification ?
+                                                                        boothFamilyList.qualification : "-"}}</div>
                                                                     <div class="col-sm-auto">
-                                                                        <div>{{boothFamilyList.migrated ? (boothFamilyList.migrated | titlecase) : '-'}} </div>
+                                                                        <div>{{boothFamilyList.migrated ?
+                                                                            (boothFamilyList.migrated | titlecase) :
+                                                                            '-'}} </div>
                                                                     </div>
                                                                     <div class="col-sm">
                                                                         <a class="accordion-button collapsed"
                                                                             data-bs-toggle="collapse"
                                                                             [attr.data-bs-target]="'#flush-collapseOne'+i"
                                                                             aria-expanded="false"
-                                                                            aria-controls="flush-collapseOne" (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                            aria-controls="flush-collapseOne"
+                                                                            (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
                                                                         </a>
                                                                     </div>
                                                                 </div>
@@ -407,34 +375,50 @@
                                                                     <ng-container>
                                                                         <div class="row familytree-details"
                                                                             *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
-                                                                            <div class="col-sm-1">{{boothFamilyDetails?.SrNo}}</div>
-                                                                            <div class="col-sm-3"> {{boothFamilyDetails?.Family}}</div>
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.SrNo}}</div>
+                                                                            <div class="col-sm-3">
+                                                                                {{boothFamilyDetails?.Family}}</div>
                                                                             <!-- <div class="col-sm-2"><a (click)="redirectToVoterPrfile(boothFamilyDetails)" class="text-primary" style="cursor: pointer;">{{boothFamilyDetails?.Family}}</a></div> -->
                                                                             <div class="col-sm-2">
-                                                                                <span *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember" href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a> </span>
-                                                                                <span *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
+                                                                                <span
+                                                                                    *ngIf="boothFamilyDetails?.MobileNo1"><a
+                                                                                        class="calltomember"
+                                                                                        href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a>
+                                                                                </span>
+                                                                                <span
+                                                                                    *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
                                                                             </div>
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.Occupation ? (boothFamilyDetails?.Occupation | titlecase) : '-'}}</div>
+                                                                                {{boothFamilyDetails?.Occupation ?
+                                                                                (boothFamilyDetails?.Occupation |
+                                                                                titlecase) : '-'}}</div>
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.Qualification ? (boothFamilyDetails?.Qualification | titlecase) : '-'}}
+                                                                                {{boothFamilyDetails?.Qualification ?
+                                                                                (boothFamilyDetails?.Qualification |
+                                                                                titlecase) : '-'}}
                                                                             </div>
                                                                             <div class="col-sm-1">
-                                                                                {{boothFamilyDetails?.Migrated ? (boothFamilyDetails?.Migrated | titlecase) : '-'}}</div>
+                                                                                {{boothFamilyDetails?.Migrated ?
+                                                                                (boothFamilyDetails?.Migrated |
+                                                                                titlecase) : '-'}}</div>
                                                                             <div class="col-sm-1"></div>
                                                                         </div>
-                                                                        <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
-                                                                            <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                                        <div class="mt-2 text-end"
+                                                                            *ngIf="boothFamilyDetailsArray?.length == 0">
+                                                                            <div
+                                                                                class="alert alert-danger text-center py-2">
+                                                                                No Data Found..!
                                                                             </div>
                                                                         </div>
-                                                                        
+
                                                                     </ng-container>
                                                                 </div>
                                                             </div>
-                                                       
+
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </ng-container>
+                                                </ng-container>
                                                 <div class="mt-2 text-end" *ngIf="boothFamilyListArray?.length == 0">
                                                     <div class="alert alert-danger text-center py-2">No Data Found..!
                                                     </div>
@@ -486,7 +470,10 @@
                                                             *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
                                                             <td>{{MigratedList?.SrNo}}</td>
                                                             <!-- <td>{{MigratedList?.EnglishName}}</td> -->
-                                                            <td><a (click)="redirectToVoterPrfile(MigratedList)" class="text-main" style="cursor: pointer;">{{MigratedList?.EnglishName}}</a></td>
+                                                            <td><a (click)="redirectToVoterPrfile(MigratedList)"
+                                                                    class="text-main"
+                                                                    style="cursor: pointer;">{{MigratedList?.EnglishName}}</a>
+                                                            </td>
                                                             <td>{{MigratedList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
@@ -554,15 +541,17 @@
                                                             *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
                                                             <td>{{PendingList?.SrNo}}</td>
                                                             <!-- <td>{{PendingList?.EnglishName}}</td> -->
-                                                            <td><a (click)="redirectToVoterPrfile(PendingList)" class="text-main" style="cursor: pointer;">{{PendingList?.EnglishName}}</a></td>
+                                                            <td><a (click)="redirectToVoterPrfile(PendingList)"
+                                                                    class="text-main"
+                                                                    style="cursor: pointer;">{{PendingList?.EnglishName}}</a>
+                                                            </td>
                                                             <td>{{PendingList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="PendingList?.Gender == 'M'">Male</div>
                                                             </td>
                                                             <td>
-                                                                <div *ngIf="PendingList?.MobileNo1"><a
-                                                                        class="text-main"
+                                                                <div *ngIf="PendingList?.MobileNo1"><a class="text-main"
                                                                         href="tel:{{PendingList?.MobileNo1}}">{{PendingList?.MobileNo1}}</a>
                                                                 </div>
                                                                 <div *ngIf="!PendingList?.MobileNo1">-</div>
@@ -638,18 +627,22 @@
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
                                                             <td>
-                                                                <a   target="_blank"  (click)="redirectToAgentDetails(agentList)">
-                                                                <span *ngIf="agentList?.SubUserTypeId==3" class="text-main" style=" cursor: pointer;">
-                                                                    <i class="fas fa-star me-1"></i>
-                                                                    {{agentList?.FullName}}
-                                                                </span>
-                                                            </a>
-                                                            <a target="_blank"  (click)="redirectToAgentDetails(agentList)">
-                                                                <span *ngIf="agentList?.SubUserTypeId==4" class="text-main" style=" cursor: pointer;">
-                                                                    <i class="far fa-star me-1"></i>
-                                                                    {{agentList?.FullName}}
-                                                                </span>         
-                                                            </a>                                                       
+                                                                <a target="_blank"
+                                                                    (click)="redirectToAgentDetails(agentList)">
+                                                                    <span *ngIf="agentList?.SubUserTypeId==3"
+                                                                        class="text-main" style=" cursor: pointer;">
+                                                                        <i class="fas fa-star me-1"></i>
+                                                                        {{agentList?.FullName}}
+                                                                    </span>
+                                                                </a>
+                                                                <a target="_blank"
+                                                                    (click)="redirectToAgentDetails(agentList)">
+                                                                    <span *ngIf="agentList?.SubUserTypeId==4"
+                                                                        class="text-main" style=" cursor: pointer;">
+                                                                        <i class="far fa-star me-1"></i>
+                                                                        {{agentList?.FullName}}
+                                                                    </span>
+                                                                </a>
                                                             </td>
                                                             <td>
                                                                 <div *ngIf="agentList?.MobileNo"><a class="text-main"
@@ -676,6 +669,134 @@
 
                                                 <!-- Agents table start here  -->
                                             </div>
+                                            <!-- CRM tab start here   -->
+                                            <div class="tab-pane fade" id="pills-crm" role="tabpanel"
+                                            aria-labelledby="pills-crm-tab">
+                                            <div class="form-container">
+                                                <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm-3">
+                                                        <select class="form-select">
+                                                            <option value="Select Followup Status">Select Status</option>
+                                                            <option value="Todays">Todays</option>
+                                                            <option value="Upcoming">Upcoming</option>
+                                                            <option value="Not Attended">Not Attended</option>
+                                                            <option value="Ended">Ended</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <input class="form-control" type="date" placeholder="Dd/MM/YYYY">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..." [formControl]="searchAgent"
+                                                                    (keyup)="onKeyUpFilterAgent()" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearFiltersAgent')"
+                                                                    *ngIf="searchAgent.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchAgent.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- CRM table start here  -->
+                                            <table class="table table-hover mb-0 caption-top">
+                                                <caption>
+                                                    <span class="text-main me-4">
+                                                        <i class="fas fa-square me-1"></i>
+                                                        Todays Followups
+                                                    </span>
+                                                    <span class="text-success me-4">
+                                                        <i class="fas fa-square me-1"></i>
+                                                        Upcoming Followups
+                                                    </span>
+                                                    <span class="text-dark me-4">
+                                                        <i class="fas fa-square me-1"></i>
+                                                        Not Attended Followups
+                                                    </span>
+                                                    <span class="text-danger">
+                                                        <i class="fas fa-square me-1"></i>
+                                                        Dead/Ended Followups
+                                                    </span>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Voter No.</th>
+                                                        <th>Voter Name</th>
+                                                        <th>Contact No</th>
+                                                        <th>Gender</th>
+                                                        <th>Area</th>
+                                                        <th>Followup Date-Time</th>
+                                                        <th>Last Feedback</th>
+                                                        <th>CRM</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="text-main">
+                                                        <td>182267</td>
+                                                        <td>विश्वास रमेश चव्हाण</td>
+                                                        <td>987654210</td>
+                                                        <td>M</td>
+                                                        <td>Mokashi Vasti</td>
+                                                        <td>25-05-2021 12:14 PM</td>
+                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                        <td>
+                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
+                                                                <i class="fas fa-phone-alt"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="text-success">
+                                                        <td>182268</td>
+                                                        <td>विश्वास रमेश चव्हाण</td>
+                                                        <td>987654210</td>
+                                                        <td>M</td>
+                                                        <td>Mokashi Vasti</td>
+                                                        <td>25-05-2021 12:14 PM</td>
+                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                        <td>
+                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
+                                                                <i class="fas fa-phone-alt"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="text-dark">
+                                                        <td>182269</td>
+                                                        <td>विश्वास रमेश चव्हाण</td>
+                                                        <td>987654210</td>
+                                                        <td>M</td>
+                                                        <td>Mokashi Vasti</td>
+                                                        <td>25-05-2021 12:14 PM</td>
+                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                        <td>
+                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
+                                                                <i class="fas fa-phone-alt"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="text-danger">
+                                                        <td>182270</td>
+                                                        <td>विश्वास रमेश चव्हाण</td>
+                                                        <td>987654210</td>
+                                                        <td>M</td>
+                                                        <td>Mokashi Vasti</td>
+                                                        <td>25-05-2021 12:14 PM</td>
+                                                        <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                        <td>
+                                                            <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries()">
+                                                                <i class="fas fa-phone-alt"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -815,6 +936,99 @@
                 </form>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<!-- Off canvas for filters -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h6 id="offcanvasRightLabel" class="mb-0">Filters</h6>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="form-container">
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">Select Area</option>
+                </select>
+            </div>
+            <div class="row mb-3 g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Select Gender</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Mobile No. Available</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">Select Business</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">Political Party</option>
+                </select>
+            </div>
+            <div class="mb-3 row g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Select Stars</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Yuvak</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">In Favour Of</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">In Oppose Of</option>
+                </select>
+            </div>
+            <div class="row mb-3 g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Age</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Family Size</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3 g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Religion</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Caste</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-secondary btn-sm">Clear All</button>
+                </div>
+                <div class="col-sm-6 text-end">
+                    <button type="button" class="btn btn-main btn-sm">Show Data</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
