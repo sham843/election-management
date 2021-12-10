@@ -73,3 +73,13 @@
 .accordion-button .collapsed > .familytree-row{
     background-color: red;
 }
+#filter-alerts .alert{
+    padding-block: 5px;
+    border-radius: 15px;
+    margin-right: 5px;
+}
+#filter-alerts .alert .btn-close{
+    padding: 8px;
+    font-size: 10px;
+    background-color: transparent !important;
+}
