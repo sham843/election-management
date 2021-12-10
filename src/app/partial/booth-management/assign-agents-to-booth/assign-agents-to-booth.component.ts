@@ -90,7 +90,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentToBoothForm() {
     this.assAgentToBoothForm = this.fb.group({
       Id:[0],
-      ClientId: [0, [Validators.required]],
+      ClientId: [this.commonService.getlocalStorageData().ClientId, [Validators.required]],
       UserId: ['', [Validators.required]],
       ElectionId: ['', [Validators.required]],
       ConstituencyId: ['', [Validators.required]],
@@ -371,12 +371,13 @@ export class AssignAgentsToBoothComponent implements OnInit {
   getClientAgentWithBooths() {
     this.spinner.show();
     let data = this.filterForm.value;
-    this.callAPIService.setHttp('get', 'Web_Client_AgentWithBooths?ClientId=' + data.ClientId +
+    this.callAPIService.setHttp('get', 'Web_Client_AgentWithBooths?ClientId=' + data.ClientId+
       '&UserId=' + this.commonService.loggedInUserId() + '&Search=' + data.Search + '&nopage=' + this.paginationNo, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientAgentWithBoothArray = res.data1;
+        console.log(this.clientAgentWithBoothArray);
         this.total = res.data2[0].TotalCount;
       } else {
         this.clientAgentWithBoothArray = [];
@@ -456,7 +457,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      ClientId: [0],
+      ClientId: [this.commonService.getlocalStorageData().ClientId],
       Search: [''],
     })
   }

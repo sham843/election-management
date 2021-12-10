@@ -223,6 +223,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Agent</th>
+                                <th>Area Agent</th>
                                 <th>Assigned Booths</th>
                                 <th></th>
                             </tr>
@@ -233,6 +234,18 @@
                                 <td>{{clientABooths.SrNo}}</td>
                                 <td>{{clientABooths.FullName | titlecase}}
                                     <p class="mb-0 text-muted">{{clientABooths.MobileNo}}</p>
+                                </td>
+                                <td>
+                                    <ng-container *ngIf="clientABooths?.AreaAgent != null && clientABooths?.AreaAgent != '' else noData">
+                                        <ol>
+                                            <ng-container *ngFor="let subAreaAgentList of clientABooths?.AreaAgent.split(',')">
+                                                <li>{{subAreaAgentList}}</li>
+                                            </ng-container>
+                                        </ol>
+                                    </ng-container>
+                                    <ng-template #noData>
+                                        -
+                                    </ng-template>
                                 </td>
                                 <td>
                                     <a data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
