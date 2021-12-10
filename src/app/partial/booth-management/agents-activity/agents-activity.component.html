@@ -19,7 +19,7 @@
                         <ngx-select [items]="allAgentLists" [allowClear]="allAgentLists?.length > 2"
                             formControlName="AgentId"  optionValueField="AgentId"
                             (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId()" optionTextField="FullName"
-                            placeholder="Select Agent" (remove)="clearTopFilter('Agent');getAgentProfileData();">
+                            placeholder="Select Agent" (remove)="clearTopFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                         <!-- getAgentProfileData(); -->
                     </div>
@@ -28,8 +28,8 @@
                             <ngx-select [items]="allSubAgentsByAgentId" [allowClear]="true"
                                
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
-                                (remove)="clearTopFilter('subAgent'); getAgentByBooths();getAgentProfileData();"
-                                (select)="clearTopFilter('Booth'); getAgentByBooths();"
+                                (remove)="clearTopFilter('subAgent'); getAgentByBooths();getAgentProfileData()"
+                                (select)="clearTopFilter('Booth'); getAgentByBooths()"
                                 placeholder="Select Area  Agent">
                             </ngx-select>
                             <!--   getAgentProfileData() -->
@@ -268,14 +268,14 @@
                                     New Voters
                                 </button>
                             </li>
-                            <!-- <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-calllog" type="button" role="tab"
-                                    aria-controls="pills-calllog" aria-selected="false">
-                                    <h5 class="mb-0">12345</h5>
+                                    aria-controls="pills-calllog" aria-selected="false"    (click)="callLoggerPaginationNo = 1; this.searchAgentCallLogger.setValue(''); agentCallLogger()">
+                                    <h5 class="mb-0">{{this.votersCardData?.TotalCallLogs}}</h5>
                                     Agents Call Log
                                 </button>
-                            </li> -->
+                            </li>
                         </ul>
                     </div>
                     <div class="tab-content" id="pills-tabContent">
@@ -498,11 +498,11 @@
                                     <div class="form-container">
                                         <div class="input-group">
                                             <input class="form-control" type="text" placeholder="Search..."
-                                                [formControl]="searchNewVoters" (keyup)="onKeyUpFilterNewVoters()" />
+                                                [formControl]="searchAgentCallLogger" (keyup)="onKeyUpFilterAgentCallLogger()" />
                                             <button type="button" class="btn btn-light border btn-sm"
-                                                (click)="clearFilters('clearSearchNewVoters')"
-                                                *ngIf="searchNewVoters.value"><i class="fas fa-times"></i></button>
-                                            <button type="button" *ngIf="!searchNewVoters.value"
+                                                (click)="clearFilters('clearSearchAgentCallLogger')"
+                                                *ngIf="searchAgentCallLogger.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchAgentCallLogger.value"
                                                 class="btn btn-sm border btn-light"><i
                                                     class="fas fa-search"></i></button>
                                         </div>
@@ -510,7 +510,7 @@
                                 </div>
                             </div>
                             <!-- agent call log filter end here   -->
-                            <!-- <ng-container>
+                            <ng-container>
                                 <table class="table table-hover mb-0">
                                     <thead>
                                         <tr>
@@ -524,27 +524,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Anil Jadhav</td>
-                                            <td>9876543210</td>
-                                            <td>15/07/2021 12:45 PM</td>
-                                            <td>14:25</td>
-                                            <td>Outgoing</td>
-                                            <td><i class="fas fa-ban text-danger"></i></td>
+                                        <tr *ngFor="let callList of getCallLoggerList | paginate: {id: 'agentCallLogsPagination', itemsPerPage: 10, currentPage: callLoggerPaginationNo, totalItems:getCallLoggerTotal}">                                            <td>{{callList?.SrNo}}</td>
+                                            <td>{{callList?.CallerName}}</td>
+                                            <td>{{callList?.MobileNo}}</td>
+                                            <td>{{callList?.CallDate}}</td>
+                                            <td>{{callList?.CallDuration}} Sec</td>
+                                            <td>{{callList?.CallType}}</td>
+                                            <td>
+                                                <ng-container *ngIf="callList?.IsAlert  == 1"; else elseBlock> <i class="fas fa-ban text-danger"></i>
+                                                </ng-container>
+                                                <ng-template #elseBlock> - </ng-template>
+                                                </td>
+                                               
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Sunil Jadhav</td>
-                                            <td>9876543210</td>
-                                            <td>15/07/2021 12:45 PM</td>
-                                            <td>1:55</td>
-                                            <td>Incoming</td>
-                                            <td></td>
-                                        </tr>
+                                       
                                     </tbody>
                                 </table>
-                            </ng-container> -->
+                            </ng-container>
+
+                        <div class="mt-2 text-end" *ngIf="getCallLoggerList?.length == 0">
+                            <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                        </div>
+                        <pagination-controls id="agentCallLogsPagination" *ngIf="getCallLoggerList?.length != 0"
+                            previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintionAgentCallLogger(callLoggerPageSize = $event)">
+                        </pagination-controls>
                         </div>
                     </div>
                 </div>
@@ -577,7 +581,17 @@
             <div class="card mb-3">
                 <div class="card-header">App Location Track</div>
                 <div class="card-body">
-                    <table class="table table-hover mb-0">
+                    <!-- [zoom]="zoom" -->
+                    <agm-map [fitBounds]="true" [latitude]="lat" [longitude]="lng" [mapTypeId]="'roadmap'" style="height:500px;">
+                        <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
+                            <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
+                                <agm-info-window #infowindow>
+                                    <strong>Address -</strong>
+                                </agm-info-window>
+                            </agm-marker>
+                        </div>
+                    </agm-map>
+                    <!-- <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th>Sr. No.</th>
@@ -596,7 +610,7 @@
                                 <td>Ramji Vasti</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                 </div>
             </div>
         </div>

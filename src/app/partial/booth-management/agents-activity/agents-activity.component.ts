@@ -57,6 +57,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   searchVoters = new FormControl('');
   searchNewVoters = new FormControl('');
   searchFamilyVoters = new FormControl('');
+  searchAgentCallLogger = new FormControl('');
 
   allowClearBoothIdFlag: boolean = true;
   allowClearSubAgentsFlag: boolean = true;
@@ -71,6 +72,18 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   clientDropDownDis: boolean = true;
   clientDropDownCloseIcon: boolean = false;
 
+  getCallLoggerList:any;
+  callLoggerPaginationNo = 1;
+  callLoggerPageSize: number = 10;
+  getCallLoggerTotal: any;
+
+  lat: any = 19.75117687556874;
+  lng: any = 75.71630325927731;
+  // zoom: any =12;
+  previous:any;
+
+  boothAgentTrackingList:any;
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
   }
@@ -81,6 +94,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.deafultVoterProfilefilterForm();
     this.topFilterForm();
     this.getClientName();
+    this.searchVoterFilter('false');
+    this.searchNewVotersFilters('false');
+    this.searchAgentCallLoggerFilters('false');
   }
 
   //--------------------------------------------------  top filter method's start  here -----------------------------------------------------------//
@@ -115,7 +131,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   get filterFormControls() { return this.filterForm.controls };
 
   getClientName() {
-    debugger;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -145,7 +160,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getAllAgentList() {
-    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -176,24 +190,22 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   areaSubAgentByAgentId() {
-    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
     this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      debugger;
       if (res.data == 0) {
         this.spinner.hide();
         this.allSubAgentsByAgentId = res.data1;
         // if agent is find sub agent info
         if (this.allSubAgentsByAgentId.length == 1) {
           this.filterForm.controls['subAreaAgentId'].setValue(this.allSubAgentsByAgentId[0].Id); // Id men's agent Id
-          this.getAgentProfileData();
         } else {
           this.filterForm.controls['subAreaAgentId'].setValue(0);
-          this.getAgentProfileData();
         }
+        this.boothAgentTracking();
+        this.getAgentProfileData();
         this.getAgentByBooths();
 
       } else {
@@ -201,6 +213,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.allSubAgentsByAgentId = [];
         this.getAgentByBooths();
         this.getAgentProfileData();
+        this.boothAgentTracking();
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -212,6 +225,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getAgentByBooths() {
+    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
@@ -281,7 +295,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   checkSubAreaAgentId() {
-    debugger;
     let fromData = this.filterForm.value;
     if (fromData.subAreaAgentId == "" || fromData.subAreaAgentId == null || fromData.subAreaAgentId == undefined || fromData.subAreaAgentId == 0) {
       return fromData.AgentId
@@ -297,7 +310,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   //-------------------------------------------------- agent Profile method's start here left side  data -----------------------------------------------------------//
 
   getAgentProfileData() {
-    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.checkSubAreaAgentId() + '&clientid=' + formData.ClientId, false, false, false, 'electionServiceForWeb');
@@ -320,7 +332,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getAgentProfileCardData() {
-    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let checkBoothId: any
@@ -792,13 +803,88 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   //--------------------------------------------------------- New Voters  list with filter End here  -------------------------------------------//
 
-  //--------------------------------------------------------- app use track start here --------------------------------------------------------- //
- 
-  //--------------------------------------------------------- app use track end here --------------------------------------------------------- //
+  //--------------------------------------------------------- Agents call tab  with filter start here --------------------------------------------------------- //
+  
+  agentCallLogger() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchAgentCallLogger.value + '&nopage=' + this.callLoggerPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_CallLogger?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.getCallLoggerList = res.data1;
+        this.getCallLoggerTotal = res.data2[0].TotalCount;
+      } else {
+        this.getCallLoggerList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionAgentCallLogger(pageNo: any) {
+    this.callLoggerPaginationNo = pageNo;
+    this.agentCallLogger();
+  }
+
+  onKeyUpFilterAgentCallLogger() {
+    this.subject.next();
+  }
+
+  searchAgentCallLoggerFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchAgentCallLogger.value == "" || this.searchAgentCallLogger.value == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject.pipe(debounceTime(700)).subscribe(() => {
+      this.searchAgentCallLogger.value;
+      this.agentCallLogger();
+    });
+  }
+
+  //--------------------------------------------------------- Agents call tab  with filter end here --------------------------------------------------------- //
+
+  //--------------------------------------------------------- App Location Track start here --------------------------------------------------------- //
+  boothAgentTracking() {
+    this.spinner.show();
+    let formData = this.filterForm.value;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_Tracking?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothAgentTrackingList = res.data1;
+        console.log(this.boothAgentTrackingList);
+      } else {
+        this.boothAgentTrackingList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  clickedMarker(infowindow:any) {
+    if (this.previous) {
+        this.previous.close();
+    }
+    this.previous = infowindow;
+ }
+  //--------------------------------------------------------- App Location Track end here --------------------------------------------------------- //
 
   //-------------------------------------------------- agent Profile method's end here  left side data -----------------------------------------------------------//
   ngOnDestroy() {
-    // sessionStorage.removeItem('agents-activity');
+    sessionStorage.removeItem('agents-activity');
   }
 
   clearFilters(flag: any) {
@@ -814,6 +900,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.familyPaginationNo = 1;
       this.searchFamilyVoters.setValue('');
       this.clickOnFamiliyCard();
+    } else if (flag == 'clearSearchAgentCallLogger') {
+      this.callLoggerPaginationNo = 1;
+      this.searchAgentCallLogger.setValue('');
+      this.agentCallLogger();
     }
     this.deafultVoterProfilefilterForm();
   }

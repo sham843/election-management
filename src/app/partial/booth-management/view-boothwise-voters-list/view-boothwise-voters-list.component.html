@@ -306,10 +306,12 @@
                                                             <!-- <td>{{boothVoterList?.SrNo}}</td> -->
 
                                                             <td>
-                                                                <a (click)="redirectToVoterPrfile(boothVoterList)"
+                                                                <p class="mb-0">
+                                                                    <a (click)="redirectToVoterPrfile(boothVoterList)"
                                                                     class="text-main">{{boothVoterList?.EnglishName}}</a>
-                                                                <small class="text-muted">{{boothVoterList?.Leader}}
-                                                                    {{boothVoterList?.LeaderImportance}}</small>
+                                                                </p>
+                                                                <small class="text-muted" *ngIf="boothVoterList?.Leader == 'yes'">{{boothVoterList?.Leader}}
+                                                                    {{boothVoterList?.LeaderImportance}} <i class="fas fa-star"></i></small>
                                                             </td>
                                                             <!-- <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <td>
