@@ -93,7 +93,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       subAreaAgentId: [0],
       
     });
-    debugger;
     if(this.agentInfo){ // If data is find on session set deafult value
       if (this.agentInfo.SubUserTypeId == 3) {
         this.filterForm.controls['AgentId'].setValue(this.agentInfo.BoothAgentId);
@@ -176,6 +175,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   areaSubAgentByAgentId(flag:any) {
+    debugger
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
@@ -210,7 +210,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getAgentByBooths(flag:any) {
-    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
@@ -241,32 +240,33 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   selBoothByAgent(data:any) {
+    debugger;
     this.getAgentByBoothsData.filter((ele: any) => {
       if (data == ele.BoothId) {
         this.filterForm.controls['AssemblyId'].setValue(ele.AssemblyId)
-        this.getAgentAssBoothActivityGraph();
+       // this.getAgentAssBoothActivityGraph();
       }
     })
   }
 
-  clearFilter(flag: any) {
+  clearTopFilter(flag: any) {
     if (flag == 'clientId') {
-      this.topFilterForm();
       sessionStorage.removeItem('agents-activity');
-    }
-    if (flag == 'Agent') {
+      this.filterForm.controls["ClientId"].setValue(0);
+      this.filterForm.controls["subAreaAgentId"].setValue(0);
+      this.filterForm.controls["BoothId"].setValue(0);
+      this.filterForm.controls["AgentId"].setValue(0);
+    }else if (flag == 'Agent') {
       sessionStorage.removeItem('agents-activity');
-      this.filterForm.patchValue({subAreaAgentId: 0,  BoothId: 0, AgentId:0});
-    } else if (flag == 'subAgent') {this.filterForm.patchValue({subAgent:0, BoothId: 0});
+      this.filterForm.controls["subAreaAgentId"].setValue(0);
+      this.filterForm.controls["BoothId"].setValue(0);
+      this.filterForm.controls["AgentId"].setValue(0);
+    } else if (flag == 'subAgent') {
+      this.filterForm.controls["subAreaAgentId"].setValue(0);
+      this.filterForm.controls["BoothId"].setValue(0);
     }
-    this.getClientName();
   }
 
-  // AgentId: 0
-  // AssemblyId: 0
-  // BoothId: null
-  // ClientId: 1
-  // subAreaAgentId: null
   //--------------------------------------------------  top filter method's End  here -----------------------------------------------------------//
 
  //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
@@ -289,6 +289,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   }
 
+  
   //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
 
   //-------------------------------------------------- agent Profile method's start here left side  data -----------------------------------------------------------//
@@ -320,7 +321,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
-    let obj = 'AgentId=' +  formData.AgentId + '&ClientId='+formData.ClientId + '&BoothId=' + formData.BoothId + '&AssemblyId=' + formData.AssemblyId;
+    let checkBoothId:any
+    formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
+    let obj = 'AgentId=' +  formData.AgentId + '&ClientId='+formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
