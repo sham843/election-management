@@ -11,7 +11,7 @@
                     <div class="col-sm">
                         <ngx-select [items]="clientNameArray" [allowClear]="clientNameArray?.length > 2"
                             formControlName="ClientId" 
-                            (remove)="clearTopFilter('clientId')" (select)="clearTopFilter('Agent');getAllAgentList()"
+                            (remove)="clearTopFilter('clientId');defaultAgentActivityDivHide = false" (select)="clearTopFilter('Agent');getAllAgentList()"
                             optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
@@ -270,7 +270,7 @@
                                     New Voters
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation" *ngIf="agentCAllLogFlag">
                                 <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-calllog" type="button" role="tab"
                                     aria-controls="pills-calllog" aria-selected="false"    (click)="callLoggerPaginationNo = 1; this.searchAgentCallLogger.setValue(''); agentCallLogger()">
@@ -573,8 +573,8 @@
                             <tr *ngFor="let appUseTrackRes of boothAgentAppUseTrackRes  | paginate: {id: 'boothAgentPagination', itemsPerPage: 10, currentPage: appUsesActivityPaginationNo, totalItems:getCallLoggerTotal}"> 
                                 <td>{{appUseTrackRes?.SrNo}}</td>
                                 <td>Android</td>
-                                <td>12-05-2021, 10:20 AM</td>
-                                <td>05:30</td>
+                                <td>{{appUseTrackRes?.StartDate}} -  {{appUseTrackRes?.EndDate}}</td>
+                                <td>{{appUseTrackRes?.difference}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -597,7 +597,7 @@
                         <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
                             <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
                                 <agm-info-window #infowindow>
-                                    <strong>Date Time - {{boothAgentTracking?.LocationDate |  date :'dd/mm/yyyy hh : mm'}}</strong>
+                                    <strong>Date Time - {{boothAgentTracking?.LocationDate}}</strong>
                                 </agm-info-window>
                             </agm-marker>
                         </div>

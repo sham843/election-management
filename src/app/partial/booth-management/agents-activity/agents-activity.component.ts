@@ -18,7 +18,7 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
 @Component({
   selector: 'app-agents-activity',
   templateUrl: './agents-activity.component.html',
-  styleUrls: ['./agents-activity.component.css']
+  styleUrls: ['./agents-activity.component.css'],
 })
 export class AgentsActivityComponent implements OnInit, OnDestroy {
   agentProfileCardData: any;
@@ -90,14 +90,25 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   appUsesActivityTotal:any;
   
   defaultAgentActivityDivHide: boolean = false;
+  agentCAllLogFlag:boolean = true;
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
+
+
   }
 
   ngOnInit(): void {
-    this.agentInfo = sessionStorage.getItem('agents-activity');
-    this.agentInfo = JSON.parse(this.agentInfo);
+    let ReceiveDataSnapshot = this.route.snapshot.params.Data;
+    if(ReceiveDataSnapshot){
+      this.agentInfo = this.commonService.decrypt(ReceiveDataSnapshot);
+      this.agentInfo  = JSON.parse(this.agentInfo);
+    }
+    this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
+// agentCAllLogFlag
+    // this.agentInfo = sessionStorage.getItem('agents-activity');
+    // this.agentInfo = JSON.parse(this.agentInfo);
+
     this.deafultVoterProfilefilterForm();
     this.topFilterForm();
     this.getClientName();
@@ -145,6 +156,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientNameArray = res.data1;
+
+        if (this.clientNameArray.length == 1) {
+          this.filterForm.controls['ClientId'].setValue(this.clientNameArray[0].id); // Id men's agent Id
+          this. getAllAgentList();
+        }
 
         if (this.commonService.loggedInSubUserTypeId() == 1) {
           this.clientDropDownDis = false;
@@ -249,6 +265,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         // if sub agent is find show all booths
         if (this.getAgentByBoothsData.length == 1) {
           this.filterForm.controls['BoothId'].setValue(this.getAgentByBoothsData[0].BoothId); // Id men's agent Id
+          this.defaultAgentActivityDivHide = true;
           this.getAgentProfileData();
         }
         this.spinner.hide();
@@ -326,6 +343,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   }
 
+  dateTimeTransform(date:any){
+    return this.datePipe.transform(this.commonService.dateTimeTransform(date), 'dd/mm/YYYY hh :mm a');
+  }
 
   //--------------------------------------------------   global page method's call here   -------------------------------------------------------//
 
@@ -924,7 +944,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.boothAgentTrackingList = res.data1;
-        console.log(this.boothAgentTrackingList)
         this.spinner.hide();
       } else {
         this.boothAgentTrackingList = [];
