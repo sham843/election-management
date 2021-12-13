@@ -255,7 +255,7 @@ a.text-main:hover {
 .chartbox .card .card-body .list-group-item {
     font-size: .85rem;
     box-shadow: none;
-    border: 1px solid #ced4da;
+    /* border: 1px solid #ced4da; */
 }
 
 .chartbox .card .card-header .input-group .form-control {
