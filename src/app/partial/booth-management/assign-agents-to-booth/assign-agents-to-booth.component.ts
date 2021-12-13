@@ -66,6 +66,9 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentwiseAssigBoothArray: any = [];
   agentwiseAssigBoothHide : boolean = false;
   defaultAgentDataFlag : boolean = false;
+  disabledNoOfCasesDiv : boolean = false;
+
+  globalHeaderId:any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -90,7 +93,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   agentToBoothForm() {
     this.assAgentToBoothForm = this.fb.group({
       Id:[0],
-      ClientId: [0, [Validators.required]],
+      ClientId: ['', [Validators.required]],
       UserId: ['', [Validators.required]],
       ElectionId: ['', [Validators.required]],
       ConstituencyId: ['', [Validators.required]],
@@ -109,6 +112,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.clearAssemblyBooth();
     this.agentwiseAssigBoothArray = [];
     this.agentwiseAssigBoothHide = false;
+    this.disabledNoOfCasesDiv = false;
   }
 
   getClientName() {
@@ -155,8 +159,10 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getAgentwiseAssignedBooth() {//getAgentwiseAssigBooth
+    debugger;
     this.spinner.show();
     this.agentwiseAssigBoothArray = [];
+    this.nullishFilterForm();
     let data = this.assAgentToBoothForm.value;
     this.callAPIService.setHttp('get', 'Web_get_Agentwise_AssignedBooth?AgentId=' + data.UserId + '&ClientId=' + data.ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -164,6 +170,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.spinner.hide();
         let agentwiseAssigBoothArray = res.data1;
         this.agentwiseAssigBoothHide = true;
+        this.disabledNoOfCasesDiv = false;
+        this.globalHeaderId = agentwiseAssigBoothArray[0].HeaderId
         agentwiseAssigBoothArray.map((ele:any)=>{
           if(ele.BoothName || ele.ElectionName || ele.ConstituencyName){
             let BoothName = ele.BoothName;
@@ -174,6 +182,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
         })
       } else {
         this.agentwiseAssigBoothArray = [];
+        this.disabledNoOfCasesDiv = true;
+        this.agentwiseAssigBoothHide = false;
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -187,6 +197,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   getClientAgentList() {
     this.agentwiseAssigBoothArray = [];
     this.agentwiseAssigBoothHide = false;
+    this.disabledNoOfCasesDiv = false;
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + this.globalClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -211,8 +222,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getElectionName() {
-    this.getAgentwiseAssignedBooth();
-    this.btnText == 'Update agent' ?  this.clearAssemblyBooth() : '';
+    debugger;
+    this.btnText == 'Update agent' ?  (this.clearAssemblyBooth(), this.disabledNoOfCasesDiv = true) : '';
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.assAgentToBoothForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -237,6 +248,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   getConstituencyName() {
     this.spinner.show();
+    this.nullishFilterForm();
     this.callAPIService.setHttp('get', 'Web_Get_Constituency_byClientId_ddl?ClientId=' + this.assAgentToBoothForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.assAgentToBoothForm.value.ElectionId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -371,12 +383,13 @@ export class AssignAgentsToBoothComponent implements OnInit {
   getClientAgentWithBooths() {
     this.spinner.show();
     let data = this.filterForm.value;
-    this.callAPIService.setHttp('get', 'Web_Client_AgentWithBooths?ClientId=' + data.ClientId +
+    this.callAPIService.setHttp('get', 'Web_Client_AgentWithBooths?ClientId=' + data.ClientId+
       '&UserId=' + this.commonService.loggedInUserId() + '&Search=' + data.Search + '&nopage=' + this.paginationNo, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientAgentWithBoothArray = res.data1;
+        console.log(this.clientAgentWithBoothArray);
         this.total = res.data2[0].TotalCount;
       } else {
         this.clientAgentWithBoothArray = [];
@@ -456,7 +469,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      ClientId: [0],
+      ClientId: [this.commonService.getlocalStorageData().ClientId],
       Search: [''],
     })
   }
@@ -486,6 +499,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       this.agentToBoothForm();
       this.agentwiseAssigBoothArray = [];
       this.agentwiseAssigBoothHide = false;
+      this.disabledNoOfCasesDiv = false;
     } else if (flag == 'agentName') {
       this.assAgentToBoothForm.controls['UserId'].setValue(0);
       this.assAgentToBoothForm.controls['ElectionId'].setValue(0);
@@ -493,6 +507,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       this.clearAssemblyBooth();
       this.agentwiseAssigBoothArray = [];
       this.agentwiseAssigBoothHide = false;
+      this.disabledNoOfCasesDiv = false;
     }
     else if (flag == 'electionName') {
       this.assAgentToBoothForm.controls['ElectionId'].setValue(0);
@@ -502,8 +517,21 @@ export class AssignAgentsToBoothComponent implements OnInit {
       this.assAgentToBoothForm.controls['ConstituencyId'].setValue(0);
       this.clearAssemblyBooth();
     }
+    console.log(this.assAgentToBoothForm.value);
     this.paginationNo = 1;
   }
+
+  nullishFilterForm() {
+    let fromData = this.assAgentToBoothForm.value;
+    fromData.ClientId ?? this.assAgentToBoothForm.controls['ClientId'].setValue(this.commonService.getlocalStorageData().ClientId); 
+    fromData.UserId ?? this.assAgentToBoothForm.controls['UserId'].setValue(0); 
+    fromData.ElectionId ?? this.assAgentToBoothForm.controls['ElectionId'].setValue(0); 
+    fromData.ConstituencyId ?? this.assAgentToBoothForm.controls['ConstituencyId'].setValue(0); 
+    fromData.AssemblyId ?? this.assAgentToBoothForm.controls['AssemblyId'].setValue(0); 
+    fromData.boothId ?? this.assAgentToBoothForm.controls['boothId'].setValue(0); 
+    fromData.CreatedBy ?? this.assAgentToBoothForm.controls['CreatedBy'].setValue(0); 
+  }
+
   clearAssemblyBooth() {
     this.boothListMergeArray = [];
     this.assemblyArray = [];
@@ -547,7 +575,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   //------------------------------------------ edit Assign Booth Election form   ------------------------------------------  //
-  patchAssBoothElection(HeaderId: any) {
+  patchAssBoothElection(HeaderId: any, flag:any) {
     this.clearAssemblyBooth();
     this.defaultAgentDataFlag = true;
     this.btnText = 'Update agent';
@@ -556,7 +584,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.editAssignBoothsPatchValue(res.data1[0]);
+        this.editAssignBoothsPatchValue(res.data1[0], flag);
 
       } else {
         this.spinner.hide();
@@ -569,12 +597,13 @@ export class AssignAgentsToBoothComponent implements OnInit {
     })
   }
 
-  editAssignBoothsPatchValue(objData: any) {
+  editAssignBoothsPatchValue(objData: any, flag:any) {
     this.globalEditObj = objData;
     this.assAgentToBoothForm.patchValue({
       Id: objData.HeaderId,
     });
-    this.getClientName();
+    flag  != 'Add agent with Booths' ?  (this.getClientName(), this.btnText = 'Update agent'): this.getElectionName();
+
     let checkAssemblyComma = objData.Assembly.includes(",");
     checkAssemblyComma == true ? this.ConstituencyIdArray = objData.Assembly.split(',') : this.ConstituencyIdArray = objData.Assembly.split(' ');
     let checkBoothComma = objData.BoothId.includes(",");
@@ -689,6 +718,13 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+
+  showAssignBoots(){
+    this.disabledNoOfCasesDiv = true;
+    // this.btnText = 'Update agent';
+    this.patchAssBoothElection(this.globalHeaderId, 'Add agent with Booths')
   }
 }
 

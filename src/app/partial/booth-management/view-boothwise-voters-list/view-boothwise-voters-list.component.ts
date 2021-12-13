@@ -1,3 +1,4 @@
+import { cos } from '@amcharts/amcharts4/.internal/core/utils/Math';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,7 +31,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   IsSubElectionApplicable: any;
   villageDropdown: any;
   cardData: any;
-  selVillage = new FormControl(0);
   clickBoothListArray: any;
   voterListFlag = 1;
   boothVoterListArray: any;
@@ -104,11 +104,14 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       ClientId: [0],
       ElectionId: [0],
       ConstituencyId: [0],
+      village: [0],
+      getBoothId: [0],
       Search: ['']
     })
   }
 
   getClientName() {
+    this.nullishFilterForm(); //Check all value null || undefind || empty
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -128,6 +131,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   getElectionName() {
+    this.nullishFilterForm(); //Check all value null || undefind || empty
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -148,6 +152,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   getConstituencyName() {
+    this.nullishFilterForm(); //Check all value null || undefind || empty
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Constituency_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -156,7 +161,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.constituencyNameArray = res.data1;
         // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
-        this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.boothSummary()): '';
+        this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.boothSummary()) : '';
         //this.boothSummary();
       } else {
         this.constituencyNameArray = [];
@@ -172,6 +177,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
 
   boothSummary() {
+    this.nullishFilterForm(); //Check all value null || undefind || empty
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
     this.spinner.show();
@@ -198,12 +204,15 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   ClientWiseBoothList() {
     this.HighlightRow = 0;
+    this.nullishFilterForm(); //Check all value null || undefind || empty
+    debugger;
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.selVillage.value
+      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.filterForm.value.village
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
+        debugger;
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
         this.dataNotFound = true;
@@ -229,12 +238,42 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       this.filterForm.reset()
     } else if (flag == 'electionId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId })
+    } else if (flag == 'constituencyId') {
+      this.filterForm.reset({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: this.filterForm.value.ElectionId,
+      })
+    } else if (flag == 'village') {
+      this.filterForm.reset({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: this.filterForm.value.ElectionId,
+        ConstituencyId: this.filterForm.value.ConstituencyId,
+      });
+      this.ClientWiseBoothList();
+    }else if (flag == 'BoothId') {
+      this.filterForm.reset({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: this.filterForm.value.ElectionId,
+        ConstituencyId: this.filterForm.value.ConstituencyId,
+        village: this.filterForm.value.village,
+      })
     }
     this.dataNotFound = false;
+    
     // this.paginationNo = 1;
     // this.getClientAgentWithBooths();
   }
 
+  nullishFilterForm() {
+    let fromData = this.filterForm.value;
+    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
+    fromData.ElectionId ?? this.filterForm.controls['ElectionId'].setValue(0); 
+    fromData.ConstituencyId ?? this.filterForm.controls['ConstituencyId'].setValue(0); 
+    fromData.village ?? this.filterForm.controls['village'].setValue(0); 
+    fromData.Search ?? this.filterForm.controls['Search'].setValue(''); 
+    fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0); 
+  }
+  
   filterData() {
     this.paginationNo = 1;
     // this.getClientAgentWithBooths();
@@ -264,16 +303,18 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
-  clickBoothList(data: any) {
+  selBoothList(BoothId: any) {
+    debugger
+    let boothDetailsById = this.clientWiseBoothListArray.filter((ele:any) => { if(ele.BoothId == BoothId) return ele})
     // Start Data Filled Filed Checkbox code
     this.isChecked.setValue(false);
     this.fillDataId = 0;
     this.votersPaginationNo = 1;
     //End Data Filled Filed Checkbox code
 
-    this.globalboothVoterData = data;
-    this.HighlightRow = data?.BoothId;
-    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + data?.BoothId;
+    this.globalboothVoterData = boothDetailsById[0];
+    this.HighlightRow = boothDetailsById[0]?.BoothId;
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' +  this.filterForm.value?.getBoothId;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothDetails?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -281,7 +322,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.boothDataHide = true;
         this.spinner.hide();
         this.clickBoothListArray = res.data1[0];
-        setTimeout(() => { this.defaultShowVoterList();}, 100);
+        // setTimeout(() => { this.defaultShowVoterList(); }, 100);
       } else {
         this.boothDataHide = false;
         this.spinner.hide();
@@ -297,6 +338,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
   boothVoterList() {
+    debugger
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
       '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo + '&IsFilled=' + this.fillDataId;
 
@@ -319,9 +361,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       }
     })
   }
-  
-  onCheckFillData(event: any){
-    event.target.checked == true ? this.fillDataId = 1 : this.fillDataId = 0 ; this.votersPaginationNo = 1 ;
+
+  onCheckFillData(event: any) {
+    event.target.checked == true ? this.fillDataId = 1 : this.fillDataId = 0; this.votersPaginationNo = 1;
     this.boothVoterList();
   }
 
@@ -563,10 +605,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         return
       }
     }
-    this.subject .pipe(debounceTime(700)).subscribe(() => {
-        this.searchAgent.value;
-        this.boothAgentList();
-      });
+    this.subject.pipe(debounceTime(700)).subscribe(() => {
+      this.searchAgent.value;
+      this.boothAgentList();
+    });
   }
   // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
 
@@ -587,12 +629,13 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'clearFiltersAgent') {
       this.searchAgent.setValue('');
       this.boothAgentList();
-    } else if (flag == 'village') {
-      this.selVillage.setValue(0);
-      this.ClientWiseBoothList();
-      this.boothDataHide =false;
     }
- 
+    //  else if (flag == 'village') {
+    //   this.selVillage.setValue(0);
+    //   this.ClientWiseBoothList();
+    //   this.boothDataHide =false;
+    // }
+
   }
 
   getIsSubEleAppId(eleId: any) {
@@ -663,22 +706,26 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     }
   }
 
-  redirectToAgentDetails(obj:any){
+  redirectToAgentDetails(obj: any) {
     sessionStorage.setItem('agents-activity', JSON.stringify(obj))
     this.router.navigate(['../agents-activity']);
   }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
-  redirectToVoterPrfile(obj:any){
-    this.encryptData =this.commonService.encrypt(obj);
-    const url = this.router.createUrlTree(['voters-profile', {Data:this.encryptData}])
-     window.open(url.toString(), '_blank');
+  redirectToVoterPrfile(obj: any) {
+    this.encryptData = this.commonService.encrypt(obj);
+    const url = this.router.createUrlTree(['voters-profile', { Data: this.encryptData }])
+    window.open(url.toString(), '_blank');
   }
 
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {
-    const dialogRef = this.dialog.open(VoterCallEntriesComponent);
+    const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
+      panelClass: 'fullscreen-dialog',
+      height: '98vh',
+      width: '99%'
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

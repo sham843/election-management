@@ -9,36 +9,37 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
-                        <ngx-select [allowClear]="clientNameArray?.length > 2" [items]="clientNameArray"
-                            formControlName="ClientId" [disabled]="clientNameArray?.length == 0"
-                            (remove)="clearFilter('clientId')" (select)="getAllAgentList('sel')" optionValueField="id"
-                            optionTextField="Fullname" placeholder="Select Client">
+                        <ngx-select [items]="clientNameArray" [allowClear]="clientNameArray?.length > 2"
+                            formControlName="ClientId" 
+                            (remove)="clearTopFilter('clientId')" (select)="clearTopFilter('Agent');getAllAgentList()"
+                            optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select  [items]="allAgentLists" [allowClear]="allAgentLists?.length > 2" formControlName="AgentId"
-                            [disabled]="allAgentLists?.length == 0"
-                            optionValueField="AgentId" (select)="areaSubAgentByAgentId('sel')"
-                            optionTextField="FullName" placeholder="Select Agent"
-                            (remove)="clearFilter('Agent');getAgentProfileData();">
+                        <ngx-select [items]="allAgentLists" [allowClear]="allAgentLists?.length > 2"
+                            formControlName="AgentId"  optionValueField="AgentId"
+                            (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId()" optionTextField="FullName"
+                            placeholder="Select Agent" (remove)="clearTopFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                         <!-- getAgentProfileData(); -->
                     </div>
                     <div class="col-sm">
                         <div class="col-sm">
-                            <ngx-select  [items]="allSubAgentsByAgentId" [allowClear]="allSubAgentsByAgentId?.length > 2"
-                                [disabled]="allSubAgentsByAgentId?.length == 0" formControlName="subAreaAgentId"
-                                optionValueField="Id" optionTextField="FullName" (remove)="clearFilter('subAgent')"
-                                (select)="getAgentByBooths('sel');" placeholder="Select Area  Agent">
+                            <ngx-select [items]="allSubAgentsByAgentId" [allowClear]="true"
+                               
+                                formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
+                                (remove)="clearTopFilter('subAgent'); getAgentByBooths();getAgentProfileData()"
+                                (select)="clearTopFilter('Booth'); getAgentByBooths()"
+                                placeholder="Select Area  Agent">
                             </ngx-select>
                             <!--   getAgentProfileData() -->
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select  [items]="getAgentByBoothsData" [allowClear]="getAgentByBoothsData?.length > 2" 
-                            [disabled]="getAgentByBoothsData?.length == 0"
-                            formControlName="BoothId" optionValueField="BoothId" (select)="selBoothByAgent($event)"
-                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearFilter('Booth')">
+                        <ngx-select [items]="getAgentByBoothsData" [allowClear]="getAgentByBoothsData?.length > 2"
+                          
+                            formControlName="BoothId" optionValueField="BoothId" (select)="selBoothByAgent()"
+                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearTopFilter('Booth')">
                         </ngx-select>
                         <!-- [disabled]="subAreaAgentIdDisabledFlag" -->
                     </div>
@@ -168,6 +169,447 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row justify-content-end">
+                        <!-- <div class="col-sm">
+                            <div class="form-check">
+                                <input class="form-check-input mt-2" type="checkbox" value="" id="chkNewvoters">
+                                <label class="form-check-label" for="chkNewvoters">
+                                    Show New Voters
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="form-check">
+                                <input class="form-check-input mt-2" type="checkbox" value="" id="chkRemaining">
+                                <label class="form-check-label" for="chkRemaining">
+                                    Show Remaining Voters
+                                </label>
+                            </div>
+                        </div> -->
+                        <form [formGroup]="voterProfilefilterForm">
+                            <div class="row g-1 mb-2 border-bottom pb-2">
+                                <div class="offset-sm-8 col-sm-4">
+                                    <div class="input-group">
+                                        <input [owlDateTime]="dt3" formControlName="weekRangePicker"
+                                            [selectMode]="'range'"
+                                            (dateTimeChange)="voterDateRangeSelect(this.voterProfilefilterForm.value.weekRangePicker)"
+                                            class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date"
+                                            [max]="maxDate">
+                                        <button class="btn btn-light border btn-sm" type="button"
+                                            *ngIf="defaultCalenderIconFlag == false" [owlDateTimeTrigger]="dt3">
+                                            <i class="fas fa-calendar-alt"></i></button>
+                                        <button class="btn btn-light border btn-sm" type="button"
+                                            *ngIf="defaultCalenderIconFlag  == true"
+                                            (click)="clearFilterDateRangepicker()">
+                                            <i class="fas fa-times"></i></button>
+                                    </div>
+                                    <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                                </div>
+                                <!-- <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" formControlName="Search"
+                                            placeholder="Search..." (keyup)="onKeyUpSearchFilter()" />
+                                        <button type="button" class="btn btn-light border btn-sm"
+                                            
+                                            *ngIf="voterProfilefilterForm.value.Search"><i
+                                                class="fas fa-times"></i></button>
+                                        <button type="button" *ngIf="!voterProfilefilterForm.value.Search"
+                                            class="btn btn-sm border btn-light" (click)="searchVoterFilter(true)"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body profile-info">
+
+                    <div class="card mb-3 shadow-none border">
+                        <div class="card-header pb-0">
+                            Agent Performance
+                        </div>
+                        <div class="card-body pt-1">
+                            <div class="agentPerformancediv chart-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="card-header p-0 pb-2" id="boothdetails">
+                        <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-migrated-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-migrated" type="button" role="tab"
+                                    aria-controls="pills-migrated" aria-selected="true"
+                                    (click)="votersPaginationNo = 1;this.searchVoters.setValue(''); getClientBoothAgentVoterList()">
+                                    <h5 class="mb-0">{{this.votersCardData?.TotalVoters}}</h5>
+                                    Voters
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-pending" type="button" role="tab"
+                                    aria-controls="pills-pending" aria-selected="false"
+                                    (click)="familyPaginationNo = 1; this.searchFamilyVoters.setValue(''); clickOnFamiliyCard()">
+                                    <h5 class="mb-0">{{this.votersCardData?.TotalFamiliy}}</h5>
+                                    Families
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-agents" type="button" role="tab" aria-controls="pills-agents"
+                                    aria-selected="false"
+                                    (click)="newVotersPaginationNo = 1; this.searchNewVoters.setValue(''); clickOnNewVotersList()">
+                                    <h5 class="mb-0">{{this.votersCardData?.NewVoters}}</h5>
+                                    New Voters
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-calllog" type="button" role="tab"
+                                    aria-controls="pills-calllog" aria-selected="false"    (click)="callLoggerPaginationNo = 1; this.searchAgentCallLogger.setValue(''); agentCallLogger()">
+                                    <h5 class="mb-0">{{this.votersCardData?.TotalCallLogs}}</h5>
+                                    Agents Call Log
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="pills-tabContent">
+                        <!-- Voters tab start here   -->
+                        <div class="tab-pane fade show active" id="pills-migrated" role="tabpanel"
+                            aria-labelledby="pills-migrated">
+                            <!-- Voters filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchVoters" (keyup)="onKeyUpFilterVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchVoters')"
+                                                *ngIf="searchVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Voters filter end here   -->
+                            <ng-container>
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Voters Full Name</th>
+                                            <th>Visit Time</th>
+                                            <th>Voter NO.</th>
+                                            <th>Gender</th>
+                                            <th>Contact No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {id: 'votersPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
+                                            <td>{{clientBooth?.SrNo}}</td>
+                                            <td>{{clientBooth?.EnglishName | titlecase}}</td>
+                                            <td>{{clientBooth?.SurveyDate}}</td>
+                                            <td>{{clientBooth?.VoterNo}}</td>
+                                            <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                            <td>{{clientBooth?.MobileNo1}} {{clientBooth?.MobileNo2}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                            <div class="mt-2 text-end" *ngIf="clientBoothAgentVoterList?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                            </div>
+                            <pagination-controls id="votersPagination" *ngIf="clientBoothAgentVoterList?.length != 0"
+                                previousLabel="" nextLabel=""
+                                (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                            </pagination-controls>
+                        </div>
+
+                        <!-- families tab start here   -->
+                        <div class="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending">
+                            <!-- new Family filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchFamilyVoters"
+                                                (keyup)="onKeyUpFilterFamilyVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchFamilyVoters')"
+                                                *ngIf="searchFamilyVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchFamilyVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- new Voter filter end here   -->
+                            <div class="accordion accordion-flush" id="familytreeaccordion">
+                                <div class="row familytree-header">
+                                    <div class="col-sm-1">Sr. No.</div>
+                                    <div class="col-sm-3">Voter Name</div>
+                                    <div class="col-sm-2">Mobile No.</div>
+                                    <div class="col-sm-1"></div>
+                                </div>
+                                <div class="accordion-item"
+                                    *ngFor="let familiyList of clientBoothAgentFamiliyList  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
+
+                                    <div class="accordion-header familytree-row">
+                                        <div class="row">
+                                            <div class="col-sm-1">{{familiyList.SrNo}}
+                                            </div>
+                                            <div class="col-sm-3">{{familiyList.Family | titlecase}}
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div *ngIf="familiyList?.MobileNo1"><a class="calltomember"
+                                                        href="tel:{{familiyList?.MobileNo1}}">{{familiyList?.MobileNo1}}</a>
+                                                </div>
+                                                <div *ngIf="!familiyList?.MobileNo1">-</div>
+                                            </div>
+
+                                            <div class="col-sm-1">
+                                                <a class="accordion-button collapsed" data-bs-toggle="collapse"
+                                                    [attr.data-bs-target]="'#flush-collapseOne'+i" aria-expanded="false"
+                                                    aria-controls="flush-collapseOne"
+                                                    (click)="familiyList.expanded = !familiyList.expanded; familyDetails(familiyList.ParentVoterId)">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="flush-collapseOne{{i}}" class="accordion-collapse collapse"
+                                        aria-labelledby="family-1" data-bs-parent="#familytreeaccordion">
+                                        <div class="accordion-body p-0">
+
+                                            <div class="row familytree-details"
+                                                *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                <div class="col-sm-1">
+                                                    {{boothFamilyDetails?.SrNo}}</div>
+                                                <div class="col-sm-3">
+                                                    {{boothFamilyDetails?.Family}}</div>
+                                                <div class="col-sm-2">
+                                                    <div *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember"
+                                                            href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a>
+                                                    </div>
+                                                    <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    {{boothFamilyDetails?.Occupation | titlecase}}</div>
+                                                <div class="col-sm-2">
+                                                    {{boothFamilyDetails?.Qualification | titlecase}}
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    {{boothFamilyDetails?.Migrated | titlecase}}</div>
+                                                <div class="col-sm-1"></div>
+                                            </div>
+                                            <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-end" *ngIf="clientBoothAgentFamiliyList?.length == 0">
+                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                    </div>
+                                </div>
+                                <pagination-controls id="familyPagination"
+                                    *ngIf="clientBoothAgentFamiliyList?.length != 0" previousLabel="" nextLabel=""
+                                    (pageChange)="onClickPagintionFamily(familyPageSize = $event)">
+                                </pagination-controls>
+
+                            </div>
+                        </div>
+
+                        <!-- New Voters tab start here   -->
+                        <div class="tab-pane fade show" id="pills-agents" role="tabpanel"
+                            aria-labelledby="pills-agents">
+                            <!-- new Voter filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchNewVoters" (keyup)="onKeyUpFilterNewVoters()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchNewVoters')"
+                                                *ngIf="searchNewVoters.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchNewVoters.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- new Voter filter end here   -->
+                            <ng-container>
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Voters Full Name</th>
+                                            <th>Visit Time</th>
+                                            <th>Voter NO.</th>
+                                            <th>Gender</th>
+                                            <th>Contact No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let newVotersList of getnewVotersList | paginate: {id: 'newVotersPagination', itemsPerPage: 10, currentPage: newVotersPaginationNo, totalItems:newVotersTotal}">
+                                            <td>{{newVotersList?.SrNo}}</td>
+                                            <td>{{newVotersList?.EnglishName | titlecase}}</td>
+                                            <td>{{newVotersList?.SurveyDate}}</td>
+                                            <td>{{newVotersList?.VoterNo}}</td>
+                                            <td>{{newVotersList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                            <td>{{newVotersList?.MobileNo1}} {{newVotersList?.MobileNo2}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                            <div class="mt-2 text-end" *ngIf="getnewVotersList?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                            </div>
+                            <pagination-controls id="newVotersPagination" *ngIf="getnewVotersList?.length != 0"
+                                previousLabel="" nextLabel=""
+                                (pageChange)="onClickPagintionNewVoters(newVotersPageSize = $event)">
+                            </pagination-controls>
+                        </div>
+
+                        <!-- Agents Call Log tab start here   -->
+                        <div class="tab-pane fade show" id="pills-calllog" role="tabpanel"
+                            aria-labelledby="pills-calllog">
+                            <!-- agent call log filter start here   -->
+                            <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-4">
+                                    <div class="form-container">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search..."
+                                                [formControl]="searchAgentCallLogger" (keyup)="onKeyUpFilterAgentCallLogger()" />
+                                            <button type="button" class="btn btn-light border btn-sm"
+                                                (click)="clearFilters('clearSearchAgentCallLogger')"
+                                                *ngIf="searchAgentCallLogger.value"><i class="fas fa-times"></i></button>
+                                            <button type="button" *ngIf="!searchAgentCallLogger.value"
+                                                class="btn btn-sm border btn-light"><i
+                                                    class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- agent call log filter end here   -->
+                            <ng-container>
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Receiver Name</th>
+                                            <th>Mobile No.</th>
+                                            <th>Date & Time</th>
+                                            <th>Call Duration</th>
+                                            <th>Call Type</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let callList of getCallLoggerList | paginate: {id: 'agentCallLogsPagination', itemsPerPage: 10, currentPage: callLoggerPaginationNo, totalItems:getCallLoggerTotal}">                                            <td>{{callList?.SrNo}}</td>
+                                            <td>{{callList?.CallerName}}</td>
+                                            <td>{{callList?.MobileNo}}</td>
+                                            <td>{{callList?.CallDate}}</td>
+                                            <td>{{callList?.CallDuration}} Sec</td>
+                                            <td>{{callList?.CallType}}</td>
+                                            <td>
+                                                <ng-container *ngIf="callList?.IsAlert  == 1" else elseBlock> <i class="fas fa-ban text-danger"></i>
+                                                </ng-container>
+                                                <ng-template #elseBlock> - </ng-template>
+                                                </td>
+                                               
+                                        </tr>
+                                       
+                                    </tbody>
+                                </table>
+                            </ng-container>
+
+                        <div class="mt-2 text-end" *ngIf="getCallLoggerList?.length == 0">
+                            <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                        </div>
+                        <pagination-controls id="agentCallLogsPagination" *ngIf="getCallLoggerList?.length != 0"
+                            previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintionAgentCallLogger(callLoggerPageSize = $event)">
+                        </pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">App Use Track</div>
+                <div class="card-body">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>App Device</th>
+                                <th>App Open Date & Time</th>
+                                <th>App Use Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Android</td>
+                                <td>12-05-2021, 10:20 AM</td>
+                                <td>05:30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">App Location Track</div>
+                <div class="card-body">
+                    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'" style="height:500px;">
+                        <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
+                            <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
+                                <agm-info-window #infowindow>
+                                    <strong>Address -</strong>
+                                </agm-info-window>
+                            </agm-marker>
+                        </div>
+                    </agm-map>
+                    <!-- <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>App Device</th>
+                                <th>App Open Date & Time</th>
+                                <th>Location From</th>
+                                <th>Location To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Android</td>
+                                <td>12-05-2021, 10:20 AM</td>
+                                <td>Mokashi Vasti</td>
+                                <td>Ramji Vasti</td>
+                            </tr>
+                        </tbody>
+                    </table> -->
                 </div>
             </div>
         </div>

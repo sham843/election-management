@@ -45,6 +45,7 @@ a.text-main:hover {
     background-color: var(--main-color);
     color: #fff;
     font-size: 0.85rem;
+    border: solid 1px var(--main-color);
 }
 
 .btn-main:hover {
@@ -70,8 +71,9 @@ a.text-main:hover {
     font-weight: 500
 }
 
-.form-container .btn {
-    font-size: .85rem
+.form-container .btn, .btn {
+    font-size: .85rem;
+    box-shadow: none !important;
 }
 .form-container .input-group{
     border: 1px solid #ced4da;
@@ -635,3 +637,16 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     z-index: 9;
     object-fit: cover;
 }
+.mat-dialog-container{
+    background-color:#fff;
+    padding:15px;
+}
+.mat-dialog-content {
+    max-height: 89vh !important;
+    height: 89vh !important;
+  }
+  .table-feedbacks{
+    height: 47vh;
+    max-height: 47vh;
+    overflow-y: auto;
+  }
