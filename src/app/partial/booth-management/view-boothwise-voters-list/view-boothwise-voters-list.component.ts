@@ -131,7 +131,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   getElectionName() {
-    this.nullishFilterForm(); //Check all value null || undefind || empty
+  this.nullishFilterForm(); //Check all value null || undefind || empty
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -159,10 +159,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
-        // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
         this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.boothSummary()) : '';
-        //this.boothSummary();
       } else {
         this.constituencyNameArray = [];
         this.spinner.hide();
@@ -177,6 +175,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
 
   boothSummary() {
+    debugger;
     this.nullishFilterForm(); //Check all value null || undefind || empty
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
@@ -186,7 +185,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.cardData = res.data1[0];
-        this.villageDropdown = res.data2;
+        res.data2 == "" ? this.villageDropdown = [] :  this.villageDropdown = res.data2;
         this.dataNotFound = true;
         this.ClientWiseBoothList();
       } else {
@@ -233,7 +232,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------filter data all methodes start here ------------------------------ //
 
-  clearFilter(flag: any) {
+  clearTopFilter(flag: any) {
     if (flag == 'clientId') {
       this.filterForm.reset()
     } else if (flag == 'electionId') {
@@ -250,16 +249,15 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         ConstituencyId: this.filterForm.value.ConstituencyId,
       });
       this.ClientWiseBoothList();
-    }else if (flag == 'BoothId') {
+    } else if (flag == 'BoothId') {
       this.filterForm.reset({
         ClientId: this.filterForm.value.ClientId,
         ElectionId: this.filterForm.value.ElectionId,
         ConstituencyId: this.filterForm.value.ConstituencyId,
-        village: this.filterForm.value.village,
       })
     }
     this.dataNotFound = false;
-    
+
     // this.paginationNo = 1;
     // this.getClientAgentWithBooths();
   }
