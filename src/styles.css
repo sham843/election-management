@@ -614,10 +614,10 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     font-size: 0.85rem;
 }
 
-.mat-dialog-container{
+/*.mat-dialog-container{
     background-color:#fff;
-    padding:15px;
-}
+     padding:15px;
+} */
 .mat-dialog-content {
     max-height: 89vh !important;
     height: 89vh !important;
