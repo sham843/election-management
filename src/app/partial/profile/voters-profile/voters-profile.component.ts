@@ -57,12 +57,13 @@ export class VotersProfileComponent implements OnInit {
     this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
-    this.checkedActiveClass = this.voterListData.AgentId;
+    // this.checkedActiveClass = this.voterListData.AgentId;
   }
 
 
 
   agentFilledData(data:any){
+    this.voterVisitDetailDataArray = [];
     this.checkedActiveClass = data.AgentId;
     this.voterListData.AgentId = data.AgentId;
     this.getVoterProfileData();
