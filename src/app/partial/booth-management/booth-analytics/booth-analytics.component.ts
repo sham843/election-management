@@ -191,7 +191,7 @@ export class BoothAnalyticsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        this.clientWiseBoothListArray.length == 1 ? ((this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false), this.boothSummary(), this.boothSummaryGraphs()) : '';     
+        this.clientWiseBoothListArray.length == 1 ? ((this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false), this.bindData()) : '';
       } else {
         this.clientWiseBoothListArray = [];
         this.spinner.hide();
@@ -205,6 +205,11 @@ export class BoothAnalyticsComponent implements OnInit {
     })
   }
 
+  bindData() {
+    this.boothSummary()
+    this.boothSummaryGraphs()
+    this.bindMigrationPattern()
+  }
   boothSummary() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
     this.spinner.show();
@@ -319,7 +324,7 @@ export class BoothAnalyticsComponent implements OnInit {
     chart.colors.step = 2;
 
     chart.legend = new am4charts.Legend()
-    chart.legend.position = 'top'
+    chart.legend.position = 'bottom'
     chart.legend.paddingBottom = 20
     chart.legend.labels.template.maxWidth = 95
 
@@ -328,9 +333,11 @@ export class BoothAnalyticsComponent implements OnInit {
     xAxis.renderer.cellStartLocation = 0.1
     xAxis.renderer.cellEndLocation = 0.9
     xAxis.renderer.grid.template.location = 0;
+    xAxis.renderer.labels.template.fontSize = 10;
 
     var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.min = 0;
+    yAxis.renderer.labels.template.fontSize = 10;
 
     function createSeries(value:any, name:any) {
       var series = chart.series.push(new am4charts.ColumnSeries())
@@ -342,15 +349,15 @@ export class BoothAnalyticsComponent implements OnInit {
      // series.events.on("shown", arrangeColumns);
 
       var bullet = series.bullets.push(new am4charts.LabelBullet())
-      bullet.interactionsEnabled = false
-      bullet.dy = 30;
-      bullet.label.text = '{valueY}'
-      bullet.label.fill = am4core.color('#ffffff')  
+      //bullet.interactionsEnabled = false
+      //bullet.dy = 30;
+     // bullet.label.text = '{valueY}'
+      //bullet.label.fill = am4core.color('#ffffff')  
       return series;
     }
     chart.data = obj;
-    createSeries('gender', 'Gender');
-    createSeries('Total', 'Total');
+    createSeries('TotalFemale', 'Female');
+    createSeries('TotalMale', 'Male');
    // createSeries('last24HoursVehicleCount', 'Last 24 Hours Vehicles');
 
     //function arrangeColumns() {
@@ -409,6 +416,89 @@ export class BoothAnalyticsComponent implements OnInit {
         this.isReligionwiseChart = false
         this.isCasteWiseChart = false
         this.boothGraphsData = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  migrationPatternList: any;
+  professionFamiliesList: any;
+  partyVotersList: any;
+  isPartyVotersChart: boolean = false;
+
+  partywiseVotersChart(obj:any) {
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart instance
+    let chart = am4core.create("partywiseVoterschartdiv", am4charts.XYChart);
+
+    // Add data
+    chart.data = obj;
+
+    // Create axes
+    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "Partyshortcode";
+    categoryAxis.numberFormatter.numberFormat = "#";
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.cellStartLocation = 0.1;
+    categoryAxis.renderer.cellEndLocation = 0.9;
+
+    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.opposite = true;
+
+    // Create series
+    function createSeries(field:any, name:any) {
+      let series = chart.series.push(new am4charts.ColumnSeries());
+      series.dataFields.valueX = field;
+      series.dataFields.categoryY = "Partyshortcode";
+      series.name = name;
+      series.columns.template.tooltipText = "{name}: [bold]{valueX}[/]";
+      series.columns.template.height = am4core.percent(100);
+      series.sequencedInterpolation = true;
+
+      let valueLabel = series.bullets.push(new am4charts.LabelBullet());
+     // valueLabel.label.text = "{valueX}";
+      valueLabel.label.horizontalCenter = "left";
+      valueLabel.label.dx = 10;
+      valueLabel.label.hideOversized = false;
+      valueLabel.label.truncate = false;
+
+      let categoryLabel = series.bullets.push(new am4charts.LabelBullet());
+      //categoryLabel.label.text = "{name}";
+      categoryLabel.label.horizontalCenter = "right";
+      categoryLabel.label.dx = -10;
+      categoryLabel.label.fill = am4core.color("#fff");
+      categoryLabel.label.hideOversized = false;
+      categoryLabel.label.truncate = false;
+    }
+
+    createSeries("TotalFamily", "Family");
+    createSeries("TotalVoter", "Voter");
+  }
+
+  bindMigrationPattern() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Migration?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.migrationPatternList = res.data1;
+        this.professionFamiliesList = res.data2;
+        this.partyVotersList = res.data3;
+        this.partyVotersList.length > 0 ? (this.partywiseVotersChart(this.partyVotersList), this.isPartyVotersChart = true) : this.isPartyVotersChart = false;
+      } else {        
+        this.migrationPatternList = [];
+        this.professionFamiliesList = [];
+        this.partyVotersList = [];
+        this.isPartyVotersChart = false
         this.spinner.hide();
       }
     }, (error: any) => {

@@ -10,17 +10,17 @@
         <div class="row g-2 justify-content-end">
           <div class="col-sm-3">
             <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-              (remove)="clearFilter('clientId')" (select)="HighlightRow=0; boothDataHide =false; getElectionName()"
-              [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
-              placeholder="Select Client">
+                        (remove)="clearFilter('clientId')" (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName()"
+                        [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
+                        placeholder="Select Client">
             </ngx-select>
           </div>
           <div class="col-sm-3">
             <ngx-select [allowClear]="electionFlag" [items]="electionNameArray" (remove)="clearFilter('electionId')"
-              (select)="HighlightRow=0; boothDataHide =false;  getConstituencyName()" formControlName="ElectionId"
-              optionValueField="ElectionId" optionTextField="ElectionName"
-              [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
-              placeholder="Select Election">
+                        (select)="HighlightRow=0; boothDataHide =false; clearFilter('constituencyId');  getConstituencyName()" formControlName="ElectionId"
+                        optionValueField="ElectionId" optionTextField="ElectionName"
+                        [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                        placeholder="Select Election">
             </ngx-select>
             <!--<select class="form-select">
               <option value="">Select Election</option>
@@ -28,9 +28,9 @@
           </div>
           <div class="col-sm-2">
             <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-              (remove)="clearFilter('constituencyId')" (select)="HighlightRow=0; boothDataHide =false; getVillageName()"
-              formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
-              [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
+                        (remove)="clearFilter('constituencyId')" (select)="HighlightRow=0; boothDataHide =false; clearFilter('VillageId'); getVillageName()"
+                        formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
+                        [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
             </ngx-select>
             <!--<select class="form-select">
               <option value="">Select Constituency</option>
@@ -38,9 +38,9 @@
           </div>
           <div class="col-sm-2">
             <ngx-select [allowClear]="villageFlag" [items]="villageNameArray" (remove)="clearFilter('VillageId')"
-              formControlName="VillageId" (select)="ClientWiseBoothList();boothDataHide=false"
-              optionValueField="VillageId" optionTextField="VillageName"
-              [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                        formControlName="VillageId" (select)="clearFilter('BoothId'); ClientWiseBoothList();boothDataHide=false"
+                        optionValueField="VillageId" optionTextField="VillageName"
+                        [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
             </ngx-select>
             <!--<select class="form-select">
               <option value="">Select Village</option>
@@ -48,9 +48,9 @@
           </div>
           <div class="col-sm-2">
             <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="clearFilter('BoothId')"
-              formControlName="BoothId" (select)="boothSummary(); boothSummaryGraphs(); boothDataHide=false"
-              optionValueField="BoothId" optionTextField="BoothName" [disabled]="!this.filterForm.value.VillageId"
-              placeholder="Select Booth">
+                        formControlName="BoothId" (select)="bindData(); boothDataHide=false"
+                        optionValueField="BoothId" optionTextField="BoothNickName" [disabled]="!this.filterForm.value.VillageId"
+                        placeholder="Select Booth">
             </ngx-select>
             <!--<select class="form-select">
               <option value="">Select Booth</option>
@@ -146,7 +146,7 @@
                         <div [hidden]="!isAgewiseChart" id="chartdiv" style="width: 100%;  height:250px"></div>
                         <ng-container *ngIf="!isAgewiseChart">
                           <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
-                        </ng-container>                       
+                        </ng-container>
                       </div>
                     </div>
                   </div>
@@ -159,7 +159,7 @@
                       <div class="card-body">
                         <!--Religion vs Percentage of Voters-->
                         <div [hidden]="!isReligionwiseChart" id="religionwisediv"
-                          style="width: 100%;  height:250px"></div>
+                             style="width: 100%;  height:250px"></div>
                         <ng-container *ngIf="!isReligionwiseChart">
                           <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
                         </ng-container>
@@ -173,7 +173,7 @@
                       </div>
                       <div class="card-body">
                         <div [hidden]="!isCasteWiseChart" id="castewisediv"
-                          style="width: 100%;  height: 400px"></div>
+                             style="width: 100%;  height: 400px"></div>
                         <ng-container *ngIf="!isCasteWiseChart">
                           <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
                         </ng-container>
@@ -196,33 +196,16 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>Mumbai</td>
-                              <td>272</td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                              <td>Pune</td>
-                              <td>132</td>
-                            </tr>
-                            <tr>
-                              <td>3</td>
-                              <td>Nagpur</td>
-                              <td>12</td>
-                            </tr>
-                            <tr>
-                              <td>4</td>
-                              <td>Satara</td>
-                              <td>22</td>
-                            </tr>
-                            <tr>
-                              <td>5</td>
-                              <td>Banglore</td>
-                              <td>32</td>
+                            <tr *ngFor="let row of migrationPatternList">
+                              <td>{{row?.SrNo}}</td>
+                              <td>{{row?.Migratedcity}}</td>
+                              <td>{{row?.TotalVoters}}</td>
                             </tr>
                           </tbody>
                         </table>
+                        <div class="mt-2 text-end" *ngIf="migrationPatternList?.length == 0">
+                          <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -241,33 +224,16 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>Mumbai</td>
-                              <td>272</td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                              <td>Pune</td>
-                              <td>132</td>
-                            </tr>
-                            <tr>
-                              <td>3</td>
-                              <td>Nagpur</td>
-                              <td>12</td>
-                            </tr>
-                            <tr>
-                              <td>4</td>
-                              <td>Satara</td>
-                              <td>22</td>
-                            </tr>
-                            <tr>
-                              <td>5</td>
-                              <td>Banglore</td>
-                              <td>32</td>
-                            </tr>
+                            <tr *ngFor="let row of professionFamiliesList">
+                              <td>{{row?.SrNo}}</td>
+                              <td>{{row?.Profession}}</td>
+                              <td>{{row?.TotalVoters}}</td>
+                            </tr>                           
                           </tbody>
                         </table>
+                        <div class="mt-2 text-end" *ngIf="professionFamiliesList?.length == 0">
+                          <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -289,42 +255,28 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td>Nationalist Congress Party</td>
-                                  <td>22</td>
-                                  <td>272</td>
-                                </tr>
-                                <tr>
-                                  <td>2</td>
-                                  <td>Bhartiya Janata Party</td>
-                                  <td>12</td>
-                                  <td>132</td>
-                                </tr>
-                                <tr>
-                                  <td>3</td>
-                                  <td>Indian National Congress</td>
-                                  <td>18</td>
-                                  <td>132</td>
-                                </tr>
-                                <tr>
-                                  <td>4</td>
-                                  <td>Shivsena</td>
-                                  <td>22</td>
-                                  <td>232</td>
-                                </tr>
-                                <tr>
-                                  <td>5</td>
-                                  <td>Other</td>
-                                  <td>32</td>
-                                  <td>320</td>
+                                <tr *ngFor="let row of partyVotersList">
+                                  <td>{{row?.SrNo}}</td>
+                                  <td>{{row?.PartyName}}</td>
+                                  <td>{{row?.TotalFamily}}</td>
+                                  <td>{{row?.TotalVoter}}</td>
                                 </tr>
                               </tbody>
                             </table>
+                            <div class="mt-2 text-end" *ngIf="partyVotersList?.length == 0">
+                              <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
+                            </div>
                           </div>
                           <div class="col-sm-6">
-                            bar chart
-                            (partyname vs families & voters)
+                            <div class="card-header pb-0">
+                              Party wise voters Chart
+                            </div>
+                            <div [hidden]="!isPartyVotersChart" id="partywiseVoterschartdiv" style="width: 100%;  height:250px"></div>
+                            <ng-container *ngIf="!isPartyVotersChart">
+                              <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                            </ng-container>
+                            <!--bar chart
+  (partyname vs families & voters)-->
                           </div>
                         </div>
                       </div>
@@ -596,10 +548,13 @@
             </div>
           </div>
         </div>
-        </div>
       </div>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!dataNotFound">
+    <div class="alert alert-danger text-center py-2 mb-0">Pease select the Booth..!</div>
+  </ng-container>
+</div>
 
 
 
