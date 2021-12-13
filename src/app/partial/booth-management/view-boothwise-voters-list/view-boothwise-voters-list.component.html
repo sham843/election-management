@@ -10,15 +10,15 @@
                 <div class="row g-2">
                     <div class="col-sm">
                         <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-                            (remove)="clearFilter('clientId')"
-                            (select)="clearFilter('electionId'); HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName()" optionValueField="id"
+                            (remove)="clearTopFilter('clientId')"
+                            (select)="getElectionName()" optionValueField="id"
                             optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
-                            (remove)="clearFilter('electionId')"
-                            (select)="clearFilter('constituencyId'); HighlightRow=0; boothDataHide =false; clearFilter('constituencyId'); getConstituencyName()"
+                            (remove)="clearTopFilter('electionId')"
+                            (select)="getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                             placeholder="Select Election">
@@ -26,8 +26,8 @@
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-                            (remove)="clearFilter('constituencyId')"
-                            (select)="clearFilter('village'); HighlightRow=0; boothDataHide =false; boothSummary();"
+                            (remove)="clearTopFilter('constituencyId')"
+                            (select)="boothSummary()"
                             formControlName="ConstituencyId" optionValueField="ConstituencyId"
                             optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"
                             placeholder="Select Constituency">
@@ -35,16 +35,16 @@
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="villageDropdown" [disabled]="!this.filterForm.value.ConstituencyId"
-                        (remove)="clearFilter('village');boothDataHide =false;" formControlName="village"
-                        (select)="clearFilter('BoothId'); boothDataHide =false; ClientWiseBoothList();"
+                        (remove)="clearTopFilter('village');boothDataHide =false;" formControlName="village"
+                        (select)="ClientWiseBoothList()"
                         optionValueField="VillageId" optionTextField="VillageName"
                         placeholder="Select Village">
                     </ngx-select>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
-                            formControlName="getBoothId"  optionValueField="BoothId" (remove)="clearFilter('BoothId')" 
-                            optionTextField="BoothNickName" (select)="selBoothList($event);  boothVoterList()"
+                            formControlName="getBoothId"  optionValueField="BoothId" (remove)="clearTopFilter('BoothId')" 
+                            optionTextField="BoothNickName"
                             placeholder="Select Booth">
                         </ngx-select>
                     </div>
@@ -137,7 +137,7 @@
                                     </a>
                                 </div>
                             </div> -->
-                            <div class="col-sm-12" id="boothdetails" *ngIf="boothDataHide">
+                            <div class="col-sm-12" id="boothdetails">
                                 <div class="card shadow-none border">
                                     <div class="card-header border-bottom">
                                         <h6 class="mb-0 fw-bold text-main">187 - काळचौंडी</h6>
