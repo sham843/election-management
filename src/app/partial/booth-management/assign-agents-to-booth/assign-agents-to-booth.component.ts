@@ -560,6 +560,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   clearAggentForm() {
     this.submitted = false;
+    this.btnText = 'Add agent';
     this.agentForm();
   }
 
