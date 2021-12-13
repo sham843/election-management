@@ -360,7 +360,6 @@ export class MyProfileComponent implements OnInit {
   get cp() { return this.changePasswordForm.controls };
 
   onSubmit() {
-    debugger
     this.spinner.show();
     this.submittedChangePassword = true;
     if (this.changePasswordForm.invalid) {
