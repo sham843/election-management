@@ -31,6 +31,9 @@ export class VotersProfileComponent implements OnInit {
   MigInfoHide : boolean = false;
   voterProfileBoothAgentData: any;
   VPMemberDetailsData: any;
+  AgentId  : any;
+  globlAgentId: any;
+  checkedActiveClass: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -54,11 +57,25 @@ export class VotersProfileComponent implements OnInit {
     this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
+    this.checkedActiveClass = this.voterListData.AgentId;
+  }
+
+
+
+  agentFilledData(data:any){
+    this.checkedActiveClass = data.AgentId;
+    this.voterListData.AgentId = data.AgentId;
+    this.getVoterProfileData();
+    this.getVPPoliticalInfluenceData();
+    this.getVoterHasVisitTypeData();
+    this.getVPVotersonmap();
+    this.getVoterprofileFamilyData();
   }
 
                                 // Get Voter Profile Data.....................
 
   getVoterProfileData() {
+    debugger
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientID + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
