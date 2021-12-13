@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
-                            formControlName="getBoothId"  optionValueField="BoothId" (remove)="clearTopFilter('BoothId')" 
+                            formControlName="getBoothId"  optionValueField="BoothId" (select)="selBoothList($event)" (remove)="clearTopFilter('BoothId')" 
                             optionTextField="BoothNickName"
                             placeholder="Select Booth">
                         </ngx-select>

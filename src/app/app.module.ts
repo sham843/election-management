@@ -20,8 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteComponent } from './partial/dialogs/delete/delete.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { NameCorrectionComponent } from './partial/dialogs/delete/name-correction/name-correction.component';
-import { VoterCallEntriesComponent } from './partial/dialogs/delete/voter-call-entries/voter-call-entries.component';
+import { NameCorrectionDialogComponent } from './partial/dialogs/name-correction-dialog/name-correction-dialog.component';
+import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/voter-call-entries.component';
 
 
 @NgModule({
@@ -32,8 +32,8 @@ import { VoterCallEntriesComponent } from './partial/dialogs/delete/voter-call-e
     SidebarComponent,
     FooterComponent,
     DeleteComponent,
-    NameCorrectionComponent,
-    VoterCallEntriesComponent
+    VoterCallEntriesComponent,
+    NameCorrectionDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -9,8 +9,8 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
-import { NameCorrectionComponent } from '../../dialogs/delete/name-correction/name-correction.component';
-import { VoterCallEntriesComponent } from '../../dialogs/delete/voter-call-entries/voter-call-entries.component';
+import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dialog/name-correction-dialog.component';
+import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
 
 @Component({
   selector: 'app-view-boothwise-voters-list',
@@ -185,7 +185,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.cardData = res.data1[0];
-        res.data2 == "" ? this.villageDropdown = [] :  this.villageDropdown = res.data2;
+        this.villageDropdown = res.data2;
         this.dataNotFound = true;
         this.ClientWiseBoothList();
       } else {
@@ -731,7 +731,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   openDialogNameCorrection() {
-    const dialogRef = this.dialog.open(NameCorrectionComponent);
+    const dialogRef = this.dialog.open(NameCorrectionDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

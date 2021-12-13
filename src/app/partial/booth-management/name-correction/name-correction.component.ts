@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dialog/name-correction-dialog.component';
 @Component({
   selector: 'app-name-correction',
   templateUrl: './name-correction.component.html',
@@ -15,7 +16,7 @@ export class NameCorrectionComponent implements OnInit {
   }
 
   openDialogNameCorrection() {
-    const dialogRef = this.dialog.open(NameCorrectionComponent);
+    const dialogRef = this.dialog.open(NameCorrectionDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

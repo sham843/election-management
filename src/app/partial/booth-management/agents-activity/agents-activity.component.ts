@@ -83,6 +83,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   previous:any;
   
   boothAgentTrackingList:any;
+  boothAgentAppUseTrackRes:any;
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
@@ -853,8 +854,36 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   //--------------------------------------------------------- Agents call tab  with filter end here --------------------------------------------------------- //
 
+  //--------------------------------------------------------- App Use Track start here --------------------------------------------------------- //
+    
+  boothAgentAppUseTrack() {
+    debugger;
+      this.spinner.show();
+      let formData = this.filterForm.value;
+      let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+      this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_AppUsesActivity?' + obj, false, false, false, 'electionServiceForWeb');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.data == 0) {
+          this.spinner.hide();
+          this.boothAgentAppUseTrackRes = res.data1;
+          console.log(this.boothAgentAppUseTrackRes);
+        } else {
+          this.boothAgentAppUseTrackRes = [];
+          this.spinner.hide();
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        if (error.status == 500) {
+          this.router.navigate(['../500'], { relativeTo: this.route });
+        }
+      })
+    }
+
+    //--------------------------------------------------------- App Use Track start here --------------------------------------------------------- //
+
   //--------------------------------------------------------- App Location Track start here --------------------------------------------------------- //
   boothAgentTracking() {
+    this.boothAgentAppUseTrack();
     this.spinner.show();
     let formData = this.filterForm.value;
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
