@@ -255,7 +255,7 @@ a.text-main:hover {
 .chartbox .card .card-body .list-group-item {
     font-size: .85rem;
     box-shadow: none;
-    border: 1px solid #ced4da;
+    /* border: 1px solid #ced4da; */
 }
 
 .chartbox .card .card-header .input-group .form-control {
@@ -616,11 +616,11 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 
 .mat-dialog-container{
     background-color:#fff;
-    padding:15px;
+     /* padding:15px; */
 }
 .mat-dialog-content {
     max-height: 89vh !important;
-    height: 89vh !important;
+    /* height: 89vh !important; */
   }
   .table-feedbacks{
     height: 47vh;
