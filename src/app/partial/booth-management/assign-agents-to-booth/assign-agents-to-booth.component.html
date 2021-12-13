@@ -27,7 +27,7 @@
                                     <label class="form-label required-field">Select Leader</label>
                                     <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                         [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
-                                        (select)=" getClientAgentList();" optionValueField="id"
+                                        (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList();" optionValueField="id"
                                         optionTextField="Fullname" placeholder="Select Leader"
                                         (remove)="clearAggentToBooth('clientName')">
                                     </ngx-select>
@@ -41,7 +41,7 @@
                                     <ngx-select [allowClear]="true" [items]="ClientAgentListddl"
                                         formControlName="UserId" optionValueField="AgentId" [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                         [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
-                                        class="w-75" (select)="getElectionName();" placeholder="Select Agent"
+                                        class="w-75" (select)="clearAggentToBooth('electionName'); getElectionName(); getAgentwiseAssignedBooth();" placeholder="Select Agent"
                                         (remove)="clearAggentToBooth('agentName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
@@ -62,7 +62,12 @@
                                         <p class="text-main fw-bold mb-1">
                                             {{agentwiseAssigBoothArray[0]?.ElectionName}}
                                             <small class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
+                                            <span type="button" class="btn btn-light text-edit rounded mx-1"
+                                            (click)="showAssignBoots()" title="Edit Client">
+                                            <i class="fas fa-pen"></i></span>
                                         </p>
+                                       
+
                                         <div class="form-container">
                                             <label class="form-label">Booths Assigned</label>
                                             <ul class="list-column">
@@ -72,7 +77,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <ng-container  class="disabledNoOfCasesDiv">
+                            <ng-container  *ngIf="disabledNoOfCasesDiv" class="disabledNoOfCasesDiv">
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
@@ -84,7 +89,7 @@
                                         </div> -->
                                     <ngx-select [allowClear]="true" [items]="electionNameArray"
                                         [disabled]="!this.assAgentToBoothForm.value.UserId"
-                                        (select)="getConstituencyName();clearAggentToBooth('constituencyName')"
+                                        (select)="clearAggentToBooth('constituencyName'); getConstituencyName()"
                                         (remove)="clearAggentToBooth('electionName')" formControlName="ElectionId"
                                         optionValueField="ElectionId" optionTextField="ElectionName"
                                         placeholder="Select Election"
@@ -264,7 +269,7 @@
                                             <i class="fas fa-plus"></i>
                                         </button> -->
                                         <button type="button" class="btn btn-light text-edit rounded mx-1"
-                                            (click)="patchAssBoothElection(clientABooths.HeaderId)" title="Edit Client">
+                                            (click)="patchAssBoothElection(clientABooths.HeaderId, false)" title="Edit Client">
                                             <i class="fas fa-pen"></i>
                                         </button>
                                         <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->

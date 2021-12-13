@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row mx-0 px-0" id="pageheader">
         <div class="col-sm-auto">
-            <span class="page-name">View BoothWise Voters List
+            <span class="page-name">BoothWise Voters List
             </span>
         </div>
         <!-- id="pageheader" -->
@@ -11,14 +11,14 @@
                     <div class="col-sm">
                         <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
                             (remove)="clearFilter('clientId')"
-                            (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName()" optionValueField="id"
+                            (select)="clearFilter('electionId'); HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName()" optionValueField="id"
                             optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
                             (remove)="clearFilter('electionId')"
-                            (select)="HighlightRow=0; boothDataHide =false; clearFilter('constituencyId'); getConstituencyName()"
+                            (select)="clearFilter('constituencyId'); HighlightRow=0; boothDataHide =false; clearFilter('constituencyId'); getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                             placeholder="Select Election">
@@ -27,27 +27,24 @@
                     <div class="col-sm">
                         <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
                             (remove)="clearFilter('constituencyId')"
-                            (select)="HighlightRow=0; boothDataHide =false; boothSummary()"
+                            (select)="clearFilter('village'); HighlightRow=0; boothDataHide =false; boothSummary();"
                             formControlName="ConstituencyId" optionValueField="ConstituencyId"
                             optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"
                             placeholder="Select Constituency">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
-                            (remove)="clearFilter('electionId')"
-                            (select)="HighlightRow=0; boothDataHide =false; clearFilter('constituencyId'); getConstituencyName()"
-                            formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
-                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
-                            placeholder="Select Village">
-                        </ngx-select>
+                        <ngx-select [allowClear]="true" [items]="villageDropdown" [disabled]="!this.filterForm.value.ConstituencyId"
+                        (remove)="clearFilter('village');boothDataHide =false;" formControlName="village"
+                        (select)="clearFilter('BoothId'); boothDataHide =false; ClientWiseBoothList();"
+                        optionValueField="VillageId" optionTextField="VillageName"
+                        placeholder="Select Village">
+                    </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-                            (remove)="clearFilter('constituencyId')"
-                            (select)="HighlightRow=0; boothDataHide =false; boothSummary()"
-                            formControlName="ConstituencyId" optionValueField="ConstituencyId"
-                            optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"
+                        <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
+                            formControlName="getBoothId"  optionValueField="BoothId" (remove)="clearFilter('BoothId')" 
+                            optionTextField="BoothNickName" (select)="selBoothList($event);  boothVoterList()"
                             placeholder="Select Booth">
                         </ngx-select>
                     </div>
@@ -117,19 +114,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row align-items-start">
-                            <div class="col-sm-3" id="boothlist">
-                                <div class="mb-3 form-container">
+                              <!--  <div class="col-sm-3" id="boothlist">
+                             <div class="mb-3 form-container">
                                     <ngx-select [allowClear]="true" [items]="villageDropdown"
                                         (remove)="clearFiltersBooth('village')" [formControl]="selVillage"
                                         (select)="ClientWiseBoothList();boothDataHide=false"
                                         optionValueField="VillageId" optionTextField="VillageName"
                                         placeholder="Select Village">
                                     </ngx-select>
-                                </div>
-                                <div class="list-group">
+                                </div> -->
+                                <!-- <div class="list-group">
                                     <a class="list-group-item d-flex justify-content-between align-items-start"
                                         aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"
-                                        (click)="this.searchVoters.setValue('');clickBoothList(boothList); boothVoterList()"
+                                        (click)="this.searchVoters.setValue('');selBoothList(boothList); boothVoterList()"
                                         [class.active]="boothList.BoothId == HighlightRow">
                                         <div class="ms-2 me-auto">
                                             <div class="fw-bold">{{boothList?.BoothNickName}}</div>
@@ -139,8 +136,8 @@
                                             class="badge bg-light text-dark rounded-pill">{{boothList?.VoterCount}}</span>
                                     </a>
                                 </div>
-                            </div>
-                            <div class="col-sm-9" id="boothdetails" *ngIf="boothDataHide">
+                            </div> -->
+                            <div class="col-sm-12" id="boothdetails" *ngIf="boothDataHide">
                                 <div class="card shadow-none border">
                                     <div class="card-header border-bottom">
                                         <h6 class="mb-0 fw-bold text-main">187 - काळचौंडी</h6>
