@@ -259,6 +259,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       })
     }
     this.dataNotFound = false;
+    
     // this.paginationNo = 1;
     // this.getClientAgentWithBooths();
   }
