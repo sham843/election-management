@@ -244,17 +244,19 @@ label>span {
 }
 
 .accordion-button {
-    padding: 15px 15px;
+    padding: 15px 0;
     color: #000;
     font-size: 0.80rem !important;
     background-color: transparent;
     box-shadow: none !important;
 }
-
+.accordion-button .side-icon{
+    width: 67px;
+    display:inline-block;
+    text-align: center;
+}
 .accordion-button i {
     color: #333;
-    margin-right: 20px;
-    padding: 12px 11px;
 }
 
 .accordion-button:hover i {
