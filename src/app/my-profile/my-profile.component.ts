@@ -102,7 +102,7 @@ export class MyProfileComponent implements OnInit {
       LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       IsRural: [],
       ConstituencyNo: [''],
-      Gender: [''],
+      Gender: ['',[Validators.required]],
       EmailId: ['', [Validators.required, Validators.email]],
       Address: [''],
     })
@@ -360,6 +360,7 @@ export class MyProfileComponent implements OnInit {
   get cp() { return this.changePasswordForm.controls };
 
   onSubmit() {
+    debugger
     this.spinner.show();
     this.submittedChangePassword = true;
     if (this.changePasswordForm.invalid) {

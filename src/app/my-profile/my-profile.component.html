@@ -144,6 +144,11 @@
                                                                     <label class="form-check-label"
                                                                         for="rgender">{{gender.name}}</label>
                                                                 </div>
+                                                            <div *ngIf="submitted && f.Gender.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="f.Gender.errors.required">Gender is required
+                                                                </div>
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -259,11 +264,11 @@
                             </div>
                             <div class="card-body form-container">
                                 <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()" autocomplete="off">
-                                    <div class="mb-3">
+                                    <!-- <div class="mb-3">
                                         <label class="form-label" for="txtUserName">UserName</label>
                                         <input type="email" class="form-control" [readonly]="true"
                                             formControlName="userName" placeholder="UserName">
-                                    </div>
+                                    </div> -->
                                     <div class="mb-3">
                                         <label class="form-label" for="txtOldPassword">Old Password<span
                                                 class="text-center text-danger">*</span></label>
@@ -285,7 +290,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="mb-3">
                                         <label class="form-label" for="txtNewPassword">New Password<span
