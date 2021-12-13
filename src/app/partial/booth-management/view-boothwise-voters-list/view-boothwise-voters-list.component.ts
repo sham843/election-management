@@ -716,6 +716,13 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     window.open(url.toString(), '_blank');
   }
 
+  redirectToAgentActvity(obj: any) {
+    this.encryptData = this.commonService.encrypt(obj);
+    const url = this.router.createUrlTree(['voters-profile', { Data: this.encryptData }])
+    window.open(url.toString(), '_blank');
+  }
+
+
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {

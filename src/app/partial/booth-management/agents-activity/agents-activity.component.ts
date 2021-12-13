@@ -85,6 +85,12 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   boothAgentTrackingList:any;
   boothAgentAppUseTrackRes:any;
 
+  appUsesActivityPaginationNo = 1;
+  appUsesActivityPageSize: number = 10;
+  appUsesActivityTotal:any;
+  
+  defaultAgentActivityDivHide: boolean = false;
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
   }
@@ -120,12 +126,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.filterForm.controls['ClientId'].setValue(this.agentInfo.ClientId)
         this.filterForm.controls['subAreaAgentId'].setValue(this.agentInfo.BoothAgentId);
       }
-    } else {
-      let localStorageAgenData = this.commonService.getlocalStorageData();
-      this.filterForm.controls['AgentId'].setValue(localStorageAgenData.Id)
-      this.filterForm.controls['ClientId'].setValue(localStorageAgenData.ClientId)
-      this.filterForm.controls['subAreaAgentId'].setValue(0);
-    }
+    } 
+    // else {
+    //   let localStorageAgenData = this.commonService.getlocalStorageData();
+    //   this.filterForm.controls['AgentId'].setValue(localStorageAgenData.Id)
+    //   this.filterForm.controls['ClientId'].setValue(localStorageAgenData.ClientId)
+    //   this.filterForm.controls['subAreaAgentId'].setValue(0);
+    // }
     this.getAgentProfileData();
   }
 
@@ -163,6 +170,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getAllAgentList() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -193,6 +201,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   areaSubAgentByAgentId() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
     this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -226,9 +235,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   getAgentByBooths() {
-    debugger;
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let obj: any = 'ClientId=' + formData.ClientId + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBoothsList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -279,11 +288,21 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
       this.filterForm.controls["AgentId"].setValue(0);
+      this.defaultAgentActivityDivHide = false;
     } else if (flag == 'subAgent') {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
     }
     this.getAgentAssBoothActivityGraph();
+  }
+
+  nullishTopFilterForm() {
+    let fromData = this.filterForm.value;
+    fromData.AgentId ?? this.filterForm.controls['AgentId'].setValue(this.commonService.getlocalStorageData().ClientId); 
+    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
+    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
+    fromData.AssemblyId ?? this.filterForm.controls['AssemblyId'].setValue(0); 
+    fromData.subAreaAgentId ?? this.filterForm.controls['subAreaAgentId'].setValue(0); 
   }
 
   //--------------------------------------------------  top filter method's End  here -----------------------------------------------------------//
@@ -315,12 +334,12 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getAgentProfileData() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     this.callAPIService.setHttp('get', 'Web_get_Agent_Profile?UserId=' + this.checkSubAreaAgentId() + '&clientid=' + formData.ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.agentProfileData = res.data1[0];
-        console.log(this.agentProfileData);
       } else {
         this.agentProfileData = [];
         this.spinner.hide();
@@ -337,6 +356,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getAgentProfileCardData() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
 
@@ -500,6 +520,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getAgentAssBoothActivityGraph() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
     let obj = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
@@ -619,6 +640,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getVotersCardData() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId+ '&AssemblyId=' + formData.AssemblyId
@@ -648,6 +670,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   getClientBoothAgentVoterList() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId
@@ -692,6 +715,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   clickOnFamiliyCard() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId
@@ -721,6 +745,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   familyDetails(ParentVoterId: any) {
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + formData.AgentId;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
@@ -763,6 +788,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   clickOnNewVotersList() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchNewVoters.value + '&nopage=' + this.newVotersPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_NewVoterList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -811,6 +837,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   agentCallLogger() {
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchAgentCallLogger.value + '&nopage=' + this.callLoggerPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_CallLogger?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -857,16 +884,16 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   //--------------------------------------------------------- App Use Track start here --------------------------------------------------------- //
     
   boothAgentAppUseTrack() {
-    debugger;
       this.spinner.show();
       let formData = this.filterForm.value;
-      let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+      this.nullishTopFilterForm();
+      let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate+'&nopage='+this.appUsesActivityPaginationNo;
       this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_AppUsesActivity?' + obj, false, false, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.spinner.hide();
           this.boothAgentAppUseTrackRes = res.data1;
-          console.log(this.boothAgentAppUseTrackRes);
+          this.appUsesActivityTotal = res.data2[0].TotalCount;
         } else {
           this.boothAgentAppUseTrackRes = [];
           this.spinner.hide();
@@ -879,6 +906,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       })
     }
 
+    onClickPagintionAppUseTrack(pageNo: any) {
+      this.appUsesActivityPaginationNo = pageNo;
+      this.boothAgentAppUseTrack();
+    }
+
     //--------------------------------------------------------- App Use Track start here --------------------------------------------------------- //
 
   //--------------------------------------------------------- App Location Track start here --------------------------------------------------------- //
@@ -886,13 +918,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.boothAgentAppUseTrack();
     this.spinner.show();
     let formData = this.filterForm.value;
+    this.nullishTopFilterForm();
     let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_Tracking?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        this.spinner.hide();
         this.boothAgentTrackingList = res.data1;
-        console.log(this.boothAgentTrackingList);
+        console.log(this.boothAgentTrackingList)
+        this.spinner.hide();
       } else {
         this.boothAgentTrackingList = [];
         this.spinner.hide();

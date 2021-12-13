@@ -18,7 +18,8 @@
                     <div class="col-sm">
                         <ngx-select [items]="allAgentLists" [allowClear]="allAgentLists?.length > 2"
                             formControlName="AgentId"  optionValueField="AgentId"
-                            (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId()" optionTextField="FullName"
+                            [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
+                            (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId();defaultAgentActivityDivHide = true" optionTextField="FullName"
                             placeholder="Select Agent" (remove)="clearTopFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                         <!-- getAgentProfileData(); -->
@@ -26,7 +27,7 @@
                     <div class="col-sm">
                         <div class="col-sm">
                             <ngx-select [items]="allSubAgentsByAgentId" [allowClear]="true"
-                               
+                               [disabled]="allSubAgentsByAgentId?.length == 0 || !this.filterForm.value.AgentId"
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
                                 (remove)="clearTopFilter('subAgent'); getAgentByBooths();getAgentProfileData()"
                                 (select)="clearTopFilter('Booth'); getAgentByBooths()"
@@ -36,8 +37,9 @@
                         </div>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [items]="getAgentByBoothsData" [allowClear]="getAgentByBoothsData?.length > 2"
-                          
+                        <ngx-select [items]="getAgentByBoothsData" 
+                        [disabled]="getAgentByBoothsData?.length == 0 ||  !this.filterForm.value.AgentId" 
+                        [allowClear]="getAgentByBoothsData?.length > 2"
                             formControlName="BoothId" optionValueField="BoothId" (select)="selBoothByAgent()"
                             optionTextField="BoothName" placeholder="Select Booth" (remove)="clearTopFilter('Booth')">
                         </ngx-select>
@@ -48,8 +50,8 @@
             </form>
         </div>
     </div>
-
-    <div class="row chartbox mb-3">
+    <!--  -->
+    <div class="row chartbox mb-3" *ngIf="defaultAgentActivityDivHide else noDataFound">
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
@@ -524,7 +526,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let callList of getCallLoggerList | paginate: {id: 'agentCallLogsPagination', itemsPerPage: 10, currentPage: callLoggerPaginationNo, totalItems:getCallLoggerTotal}">                                            <td>{{callList?.SrNo}}</td>
+                                        <tr *ngFor="let callList of getCallLoggerList | paginate: {id: 'agentCallLogsPagination', itemsPerPage: 10, currentPage: callLoggerPaginationNo, totalItems:getCallLoggerTotal}">                                           
+                                            <td>{{callList?.SrNo}}</td>
                                             <td>{{callList?.CallerName}}</td>
                                             <td>{{callList?.MobileNo}}</td>
                                             <td>{{callList?.CallDate}}</td>
@@ -567,14 +570,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr>
-                                <td>1</td>
+                            <tr *ngFor="let appUseTrackRes of boothAgentAppUseTrackRes  | paginate: {id: 'boothAgentPagination', itemsPerPage: 10, currentPage: appUsesActivityPaginationNo, totalItems:getCallLoggerTotal}"> 
+                                <td>{{appUseTrackRes?.SrNo}}</td>
                                 <td>Android</td>
                                 <td>12-05-2021, 10:20 AM</td>
                                 <td>05:30</td>
-                            </tr> -->
+                            </tr>
                         </tbody>
                     </table>
+
+                    <div class="mt-2 text-end" *ngIf="boothAgentAppUseTrackRes?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                    </div>
+                    <pagination-controls id="boothAgentPagination" *ngIf="boothAgentAppUseTrackRes?.length != 0"
+                    previousLabel="" nextLabel=""
+                    (pageChange)="onClickPagintionAppUseTrack(appUsesActivityPageSize = $event)">
+                </pagination-controls>
+
                 </div>
             </div>
 
@@ -585,7 +597,7 @@
                         <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
                             <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
                                 <agm-info-window #infowindow>
-                                    <strong>Address -</strong>
+                                    <strong>Date Time - {{boothAgentTracking?.LocationDate |  date :'dd/mm/yyyy hh : mm'}}</strong>
                                 </agm-info-window>
                             </agm-marker>
                         </div>
@@ -615,4 +627,8 @@
         </div>
 
     </div>
+    <ng-template #noDataFound>
+        <div class="alert alert-danger text-center py-2 mb-0">No Agent Information Found..!</div>
+    </ng-template>
+
 </div>
