@@ -11,13 +11,13 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
-
 @Component({
   selector: 'app-booth-analytics',
   templateUrl: './booth-analytics.component.html',
   styleUrls: ['./booth-analytics.component.css']
 })
-export class BoothAnalyticsComponent implements OnInit {
+
+export class BoothAnalyticsComponent implements OnInit { 
   clientNameArray: any;
   electionNameArray: any;
   constituencyNameArray: any;
@@ -43,7 +43,44 @@ export class BoothAnalyticsComponent implements OnInit {
   isReligionwiseChart: boolean = false;
   isCasteWiseChart: boolean = false;
 
-  //selVillage = new FormControl(0);
+  impLeadersList: any;
+  impLeadersTotal: any;
+  impLeadersPaginationNo = 1;
+  impLeadersPageSize: number = 5;
+  areaWiseVotersPageSize: number = 5;
+  votersPageSize: number = 10;
+  comnIssuePageSize: number = 10;
+  areaWiseVotersList: any;
+  areaWiseVotersTotal: any;
+  commonIssuesList: any;
+  migrationPatternList: any;
+  professionFamiliesList: any;
+  partyVotersList: any;
+  isPartyVotersChart: boolean = false;
+  isocialMediaSuprtChart: boolean = false;
+
+  areaWiseVoterConfig: any;
+  votersConfig: any;
+  comnIssueConfig: any;
+  socialMediaSuprtList: any;
+  votersList: any;
+  supportToid: any;
+
+  selectedBoot: any[] = []
+  selectedVillage: any;
+  // reverseOrder: boolean = true;
+  //sortField = 'LeaderImportance';
+  //order: string = 'info.name';
+  //reverse: boolean = false;
+  //caseInsensitive: boolean = false;
+  
+ 
+  //sort(sortField: any) {
+  //  this.reverseOrder = (this.sortField === sortField) ? !this.reverseOrder : false;
+  //  this.sortField = sortField;
+  //};
+
+ 
   constructor(
     private spinner: NgxSpinnerService,
     private callAPIService: CallAPIService,
@@ -52,14 +89,19 @@ export class BoothAnalyticsComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) {
+ 
+  }
+  //setOrder(value: string) {
+  //  if (this.order === value) {
+  //    this.reverse = !this.reverse;
+  //  }
 
-  ngOnInit(): void {
+  //  this.order = value;
+  //}
+  ngOnInit(): void { 
     this.defaultFilterForm();
     this.getClientName();
-   // this.agewiseVotersChart();
-    //this.religionwiseChart([]);
-    //this.casteWiseChart([]);
     if (this.commonService.loggedInSubUserTypeId() == 2) {
       this.clientIdFlag = false
       this.clientIdDisabled = true
@@ -67,8 +109,8 @@ export class BoothAnalyticsComponent implements OnInit {
       this.clientIdFlag = true
       this.clientIdDisabled = false
     }
+    am4core.addLicense("ch-custom-attribution");
   }
-
   defaultFilterForm() {
     this.filterForm = this.fb.group({
       ClientId: [0],
@@ -79,8 +121,6 @@ export class BoothAnalyticsComponent implements OnInit {
       Search: ['']
     })
   }
-  
-
   getClientName() {
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -120,15 +160,6 @@ export class BoothAnalyticsComponent implements OnInit {
     })
   }
 
-  clearFiltersBooth(flag: any) {
-    if (flag == 'village') {
-      this.filterForm.value.VillageId.setValue(0);
-      this.ClientWiseBoothList();
-      this.boothDataHide = false;
-    }
-
-  }
-
   getIsSubEleAppId(eleId: any) {
     this.electionNameArray.filter((item: any) => {
       if (item.ElectionId == eleId) {
@@ -144,7 +175,6 @@ export class BoothAnalyticsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
-        // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
         this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.getVillageName()) : '';
       } else {
@@ -184,14 +214,15 @@ export class BoothAnalyticsComponent implements OnInit {
 
   ClientWiseBoothList() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.filterForm.value.VillageId
+      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + (this.filterForm.value.VillageId || 0)
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        this.clientWiseBoothListArray.length == 1 ? ((this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false), this.bindData()) : '';
+        //this.clientWiseBoothListArray.length == 1 ? ( this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false, this.bindData()) : '';
+        this.clientWiseBoothListArray.length == 1 ? (this.boothFlag = false) : '';
       } else {
         this.clientWiseBoothListArray = [];
         this.spinner.hide();
@@ -204,12 +235,45 @@ export class BoothAnalyticsComponent implements OnInit {
       }
     })
   }
-
+  
   bindData() {
-    this.boothSummary()
-    this.boothSummaryGraphs()
-    this.bindMigrationPattern()
+    this.selectedBoot = [];  
+    if (this.filterForm.value.BoothId) {
+      this.clientWiseBoothListArray.filter((ele: any) => {
+        if (this.filterForm.value.BoothId == ele.BoothId) {
+          this.selectedBoot.push(ele)
+        }
+      })
+      this.filterForm.value.BoothId.forEach((value: any) => {
+        this.clientWiseBoothListArray.filter((ele: any) => {
+          if (value == ele.BoothId) {
+            this.selectedBoot.push(ele)
+          }
+        })
+      });
+
+      this.villageNameArray.filter((ele: any) => {
+        if (this.filterForm.value.VillageId == ele.VillageId) {
+          this.selectedVillage = ele;
+        }
+      })
+
+      this.areaWiseVoterConfig = { id: 'areaWiseVoterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
+      this.votersConfig = { id: 'votersListPagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
+      this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
+
+      this.boothSummary()
+      this.boothSummaryGraphs()
+      this.bindMigrationPattern()
+      this.bindImpLeaders()
+      this.bindAreaWiseVoters()
+      this.bindSocialMediaSuprt()
+      this.bindAreaWiseCommonIssues();
+    } else {
+      this.clearForm();
+    }
   }
+
   boothSummary() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
     this.spinner.show();
@@ -253,6 +317,8 @@ export class BoothAnalyticsComponent implements OnInit {
     pieSeries.labels.template.fill = am4core.color("white");
 
     chart.legend = new am4charts.Legend();
+    chart.legend.position = "bottom";
+    chart.legend.contentAlign = "left";  
   }
 
   religionwiseChart(obj: any)  {
@@ -296,29 +362,16 @@ export class BoothAnalyticsComponent implements OnInit {
     });
 
     chart.legend = new am4charts.Legend();
-    let marker = chart.legend.markers.template.children.getIndex(0);
-    //marker.cornerRadius(15, 15, 15, 15);
-    //marker.width = 12;
-    //marker.height = 12;
-    //marker.fontSize = 8;
-
-  
+    let marker = chart.legend.markers.template.children.getIndex(0);  
 
     chart.legend.position = "bottom";
     chart.legend.valueLabels.template.text = "{value.value}";
     chart.legend.valueLabels.template.align = "right";
     chart.legend.valueLabels.template.textAlign = "end";
 
-
-    //var label = chart.seriesContainer.createChild(am4core.Label);
-    //label.text = totalVehicleCnt + '\n Vehicles';
-    //label.horizontalCenter = "middle";
-    //label.verticalCenter = "middle";
-    //label.fontSize = '16';
-    //label.fontWeight = "900";
   }
 
-  agewiseVotersChart(obj: any) {
+  agewiseVotersChart(obj: any) {  
     am4core.useTheme(am4themes_animated);
     var chart = am4core.create('chartdiv', am4charts.XYChart)
     chart.colors.step = 2;
@@ -358,44 +411,7 @@ export class BoothAnalyticsComponent implements OnInit {
     chart.data = obj;
     createSeries('TotalFemale', 'Female');
     createSeries('TotalMale', 'Male');
-   // createSeries('last24HoursVehicleCount', 'Last 24 Hours Vehicles');
-
-    //function arrangeColumns() {
-    //  let series = chart.series.getIndex(0);
-    //  let w = 1 - xAxis.renderer.cellStartLocation - (1 - xAxis.renderer.cellEndLocation);
-    //  if (series.dataItems.length > 1) {
-    //    var x0 = xAxis.getX(series.dataItems.getIndex(0), "categoryX");
-    //    var x1 = xAxis.getX(series.dataItems.getIndex(1), "categoryX");
-    //    var delta = ((x1 - x0) / chart.series.length) * w;
-    //    if (am4core.isNumber(delta)) {
-    //      var middle = chart.series.length / 2;
-
-    //      var newIndex = 0;
-    //      chart.series.each(function (series) {
-    //        if (!series.isHidden && !series.isHiding) {
-    //          series.dummyData = newIndex;
-    //          newIndex++;
-    //        }
-    //        else {
-    //          series.dummyData = chart.series.indexOf(series);
-    //        }
-    //      })
-    //      var visibleCount = newIndex;
-    //      var newMiddle = visibleCount / 2;
-
-    //      chart.series.each(function (series) {
-    //        var trueIndex = chart.series.indexOf(series);
-    //        var newIndex = series.dummyData;
-
-    //        var dx = (newIndex - trueIndex + middle - newMiddle) * delta
-
-    //        series.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
-    //        series.bulletsContainer.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
-    //      })
-    //    }
-    //  }
-    //}
-
+  
     chart.scrollbarX = new am4core.Scrollbar();
 
   }
@@ -405,13 +421,17 @@ export class BoothAnalyticsComponent implements OnInit {
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Graphs?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.data == 0) { 
         this.spinner.hide();
         this.boothGraphsData = res;
-        this.boothGraphsData.data1.length > 0 ? (this.agewiseVotersChart(this.boothGraphsData.data1), this.isAgewiseChart = true) : this.isAgewiseChart = false;
-        this.boothGraphsData.data2.length > 0 ? (this.religionwiseChart(this.boothGraphsData.data2), this.isReligionwiseChart = true) : this.isReligionwiseChart = false ;
-        this.boothGraphsData.data3.length > 0 ? (this.casteWiseChart(this.boothGraphsData.data3), this.isCasteWiseChart = true) : this.isCasteWiseChart = false;
-      } else {
+
+        setTimeout(() => { // bind charts
+        this.boothGraphsData.data1.length > 0 ? (this.isAgewiseChart = true, this.agewiseVotersChart(this.boothGraphsData.data1)) : this.isAgewiseChart = false;
+        this.boothGraphsData.data2.length > 0 ? (this.isReligionwiseChart = true, this.religionwiseChart(this.boothGraphsData.data2)) : this.isReligionwiseChart = false ;
+        this.boothGraphsData.data3.length > 0 ? (this.isCasteWiseChart = true, this.casteWiseChart(this.boothGraphsData.data3)) : this.isCasteWiseChart = false;
+        }, 500);
+
+       } else {
         this.isAgewiseChart = false
         this.isReligionwiseChart = false
         this.isCasteWiseChart = false
@@ -425,10 +445,6 @@ export class BoothAnalyticsComponent implements OnInit {
       }
     })
   }
-  migrationPatternList: any;
-  professionFamiliesList: any;
-  partyVotersList: any;
-  isPartyVotersChart: boolean = false;
 
   partywiseVotersChart(obj:any) {
     // Themes begin
@@ -493,7 +509,10 @@ export class BoothAnalyticsComponent implements OnInit {
         this.migrationPatternList = res.data1;
         this.professionFamiliesList = res.data2;
         this.partyVotersList = res.data3;
-        this.partyVotersList.length > 0 ? (this.partywiseVotersChart(this.partyVotersList), this.isPartyVotersChart = true) : this.isPartyVotersChart = false;
+        setTimeout(() => { // bind charts
+          this.partyVotersList.length > 0 ? (this.isPartyVotersChart = true, this.partywiseVotersChart(this.partyVotersList)) : this.isPartyVotersChart = false;
+        }, 500)
+       
       } else {        
         this.migrationPatternList = [];
         this.professionFamiliesList = [];
@@ -508,13 +527,182 @@ export class BoothAnalyticsComponent implements OnInit {
       }
     })
   }
+
+  onClickPagintionImpLeaders(pageNo: any) {
+    this.impLeadersPaginationNo = pageNo;
+    this.bindImpLeaders();
+  }
+
+  bindImpLeaders() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&nopage=' + this.impLeadersPaginationNo
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_ImpLeaders?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.impLeadersList = res.data1;
+        this.impLeadersTotal = res.data2[0].TotalCount;
+      } else {
+        this.impLeadersList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionareaWiseVoters(pageNo: any) {
+    this.areaWiseVoterConfig.currentPage = pageNo;
+    this.bindAreaWiseVoters();
+  }
+
+  bindAreaWiseVoters() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&nopage=' + this.areaWiseVoterConfig.currentPage
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Voters?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.areaWiseVotersList = res.data1;
+        this.areaWiseVoterConfig.totalItems = res.data2[0].TotalCount;
+      } else {
+        this.areaWiseVotersList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+ 
+  onClickPagintionVoters(pageNo: any) {
+    this.votersConfig.currentPage = pageNo;
+    this.showVotersList(this.supportToid);
+  }
+
+  showVotersList(Supportid: number) {
+    this.votersList = [];
+    this.supportToid = Supportid;
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&SupportToid=' + this.supportToid + '&nopage=' + this.votersConfig.currentPage
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Media_Support_Voterlist?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.votersList = res.data1;
+        this.votersConfig.totalItems = res.data2[0].TotalCount;
+      } else {
+        this.votersList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  
+  socialMediaSuprtChart(obj: any) {
+    //SrNo: 1
+    //Support: 1
+    //SupporterName: "Personal"
+    //TotalVoter: 1
+    //supportToid: 4
+
+    // Create chart instance
+    let chart = am4core.create("socialMediaSuprtdiv", am4charts.PieChart);
+
+    // Add data
+    chart.data = obj;
+
+    // Add and configure Series
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "Support";
+    pieSeries.dataFields.category = "SupporterName";
+
+    pieSeries.ticks.template.disabled = true;
+    pieSeries.alignLabels = false;
+    //pieSeries.labels.template.text = "{value}";
+    pieSeries.labels.template.fontSize = 8;
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+    pieSeries.labels.template.radius = am4core.percent(-40);
+    pieSeries.labels.template.fill = am4core.color("white");
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "bottom";
+    chart.legend.contentAlign = "left";
+    chart.legend.valueLabels.template.text = "{category.category}";
+  }
+
+  bindSocialMediaSuprt() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Social_Media_Support?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.socialMediaSuprtList = res.data1;
+        setTimeout(() => { // bind charts
+          this.socialMediaSuprtList.length > 0 ? (this.isocialMediaSuprtChart = true, this.socialMediaSuprtChart(this.socialMediaSuprtList)) : this.isocialMediaSuprtChart = false;
+        }, 500)
+      } else {
+        this.isocialMediaSuprtChart = false
+        this.socialMediaSuprtList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionCommonIssues(pageNo: any) {
+    this.comnIssueConfig.currentPage = pageNo;
+    this.bindAreaWiseCommonIssues();
+  }
+
+  bindAreaWiseCommonIssues() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&nopage=' + this.comnIssueConfig.currentPage
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Common_Issues?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.commonIssuesList = res.data1;
+        this.comnIssueConfig.totalItems = res.data2[0].TotalCount;
+      } else {
+        this.commonIssuesList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  
   // ------------------------------------------filter data all methodes start here ------------------------------ //
   
   clearForm() { 
-    this.clientWiseBoothListArray = [];
     this.cardData = [];
     this.boothGraphsData = [];
+    this.impLeadersList = [];
+    this.commonIssuesList = [];
+    this.socialMediaSuprtList = [];   
+    this.votersList = [];
+    this.areaWiseVotersList = [];
+    this.impLeadersList = [];
     this.dataNotFound = false;
+    this.impLeadersPaginationNo = 1;
   }
 
   clearFilter(flag: any) {
@@ -526,7 +714,11 @@ export class BoothAnalyticsComponent implements OnInit {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId })
     } else if (flag == 'VillageId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
-    }  
+    } else if (flag == 'BoothId') {
+      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId, VillageId: this.filterForm.value.VillageId })
+      this.clientWiseBoothListArray = [];
+      this.filterForm.controls['BoothId'].setValue(0);
+    }
     this.clearForm();
   }
 

@@ -9,6 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSelectModule } from 'ngx-select-ex';
 
 
+
 @NgModule({
   declarations: [
     BoothAnalyticsComponent
