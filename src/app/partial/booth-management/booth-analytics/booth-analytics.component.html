@@ -31,8 +31,8 @@
             </ngx-select>
           </div>
           <div class="col-sm-2">
-            <ngx-select [allowClear]="villageFlag" [items]="villageNameArray" (remove)="clearFilter('VillageId')"
-                        formControlName="VillageId" (select)="clearFilter('BoothId'); ClientWiseBoothList();boothDataHide=false"
+            <ngx-select [allowClear]="villageFlag" [items]="villageNameArray" (remove)="clearFilter('VillageId'); ClientWiseBoothList();"
+                        formControlName="VillageId" (select)="clearFilter('BoothId'); ClientWiseBoothList(); boothDataHide=false"
                         optionValueField="VillageId" optionTextField="VillageName"
                         [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
             </ngx-select>

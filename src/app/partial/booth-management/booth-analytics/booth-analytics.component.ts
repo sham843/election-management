@@ -17,7 +17,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
   styleUrls: ['./booth-analytics.component.css']
 })
 
-export class BoothAnalyticsComponent implements OnInit {
+export class BoothAnalyticsComponent implements OnInit { 
   clientNameArray: any;
   electionNameArray: any;
   constituencyNameArray: any;
@@ -99,7 +99,7 @@ export class BoothAnalyticsComponent implements OnInit {
 
   //  this.order = value;
   //}
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.defaultFilterForm();
     this.getClientName();
     if (this.commonService.loggedInSubUserTypeId() == 2) {
@@ -221,7 +221,8 @@ export class BoothAnalyticsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        this.clientWiseBoothListArray.length == 1 ? ((this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false), this.bindData()) : '';
+        //this.clientWiseBoothListArray.length == 1 ? ( this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false, this.bindData()) : '';
+        this.clientWiseBoothListArray.length == 1 ? (this.boothFlag = false) : '';
       } else {
         this.clientWiseBoothListArray = [];
         this.spinner.hide();
@@ -237,7 +238,12 @@ export class BoothAnalyticsComponent implements OnInit {
   
   bindData() {
     this.selectedBoot = [];  
-    if (this.filterForm.value.BoothId.length > 0) {
+    if (this.filterForm.value.BoothId) {
+      this.clientWiseBoothListArray.filter((ele: any) => {
+        if (this.filterForm.value.BoothId == ele.BoothId) {
+          this.selectedBoot.push(ele)
+        }
+      })
       this.filterForm.value.BoothId.forEach((value: any) => {
         this.clientWiseBoothListArray.filter((ele: any) => {
           if (value == ele.BoothId) {
@@ -291,7 +297,6 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   casteWiseChart(obj: any) {
-    debugger
     // Create chart instance
     let chart = am4core.create("castewisediv", am4charts.PieChart);
 
@@ -711,6 +716,8 @@ export class BoothAnalyticsComponent implements OnInit {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
     } else if (flag == 'BoothId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId, VillageId: this.filterForm.value.VillageId })
+      this.clientWiseBoothListArray = [];
+      this.filterForm.controls['BoothId'].setValue(0);
     }
     this.clearForm();
   }
