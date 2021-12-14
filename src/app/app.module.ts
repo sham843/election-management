@@ -24,6 +24,7 @@ import { NameCorrectionDialogComponent } from './partial/dialogs/name-correction
 import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/voter-call-entries.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +34,7 @@ import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/
     FooterComponent,
     DeleteComponent,
     VoterCallEntriesComponent,
-    NameCorrectionDialogComponent
+    NameCorrectionDialogComponent,
   ],
   imports: [
     BrowserModule,
