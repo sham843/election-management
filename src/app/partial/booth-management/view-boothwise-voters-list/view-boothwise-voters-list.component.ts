@@ -729,7 +729,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       height: '98vh',
       width: '99%'
     });
-
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
