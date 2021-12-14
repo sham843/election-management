@@ -199,10 +199,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
             this.filterForm.controls['AgentId'].setValue(element.AgentId);
           }
         });
-        if(this.agentInfo){
-          this.defaultAgentActivityDivHide = true;
-         // this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId();
-        }
+        this.allAgentLists.length == 1 ?  (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId),  this.defaultAgentActivityDivHide = true) : '';
+        // if(this.agentInfo){// this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId(); // }
         this.areaSubAgentByAgentId();
       } else {
         this.allAgentLists = [];
