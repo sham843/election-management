@@ -82,6 +82,13 @@ export class CommonService {
         return new Date(year, month - 1, day);
     }
 
+
+    dateTimeTransform(date_string: any) {
+        var date_components = date_string.split(" ");
+        var date = date_components[0].split("/").reverse().join('-');
+        return new Date(date + ' '+ date_components[1]);
+    }
+
     changeDateFormat(date: string) {
         const dateParts = date.substring(0, 10).split("/");
         const ddMMYYYYDate = new Date(+dateParts[2], parseInt(dateParts[1]) - 1, +dateParts[0]);
@@ -94,6 +101,12 @@ export class CommonService {
         return dateFormtchange;
     }
 
+    dateTimeTransformPipe(date_string: any) {
+        let dateFormtchange: any;
+        dateFormtchange = this.datePipe.transform(date_string, 'dd/MM/YYYY');
+        return dateFormtchange;
+    }
+    
     createCaptchaCarrerPage() {
         //clear the contents of captcha div first
         let id: any = document.getElementById('captcha');

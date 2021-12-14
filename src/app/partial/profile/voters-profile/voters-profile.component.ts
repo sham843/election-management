@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -31,6 +31,10 @@ export class VotersProfileComponent implements OnInit {
   MigInfoHide : boolean = false;
   voterProfileBoothAgentData: any;
   VPMemberDetailsData: any;
+  AgentId  : any;
+  globlAgentId: any;
+  checkedActiveClass: any;
+  clickOnCardFlag:boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -56,19 +60,43 @@ export class VotersProfileComponent implements OnInit {
     this.getVoterprofileFamilyData();
   }
 
+
+
+  agentFilledData(data:any){
+    this.voterVisitDetailDataArray = [];
+    this.checkedActiveClass = data.AgentId;
+    this.voterListData.AgentId = data.AgentId;
+    this.MigInfoHide = false;
+    this.getVoterProfileData();
+    this.getVPPoliticalInfluenceData();
+    this.getVoterHasVisitTypeData();
+    this.getVPVotersonmap();
+    this.getVoterprofileFamilyData();
+  }
+
                                 // Get Voter Profile Data.....................
 
   getVoterProfileData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientID + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.voterProfileData = res.data1[0];
+        let obj  = res.data1[0];
+        this.checkValueNullOrUnd(obj);
         this.voterProfileBoothAgentData = res.data2;
-      } else {
+        // click on first agent 
+       setTimeout(() => {
+         if(this.clickOnCardFlag == false){
+            let clickFirstCard =  document.getElementById('btnradio0');
+            clickFirstCard?.click();
+            this.clickOnCardFlag = true
+         }
+       }, 500);
+
+     } else {
         this.spinner.hide();
-        this.voterProfileData = [];
+        this.voterProfileBoothAgentData = [];
       }
     }, (error: any) => {
       this.spinner.hide();
@@ -78,6 +106,17 @@ export class VotersProfileComponent implements OnInit {
     })
   }
 
+     //.........................  check Value Null Or Undefine Only Single Object  .........................//
+
+  checkValueNullOrUnd(obj:any){
+    Object.keys(obj).map((key:any)=> {
+      if (obj[key]==undefined || obj[key]==null) {
+        obj[key] = "";
+        return obj[key];
+      }
+    });
+    this.voterProfileData = obj;
+  }
                                     // data1: get ostive Negative Influence & data2: get Comment Data  //
 
   getVPPoliticalInfluenceData() {

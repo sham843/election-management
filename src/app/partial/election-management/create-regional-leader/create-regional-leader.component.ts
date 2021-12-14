@@ -214,9 +214,10 @@ export class CreateRegionalLeaderComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.toastrService.success(res.data1[0].Msg);
-          this.getClientData();
           this.spinner.hide();
           this.defaultAddClientForm();
+          this.defaultFilterForm();
+          this.getClientData();
           this.submitted = false;
           this.btnText = 'Add Client';
         } else {

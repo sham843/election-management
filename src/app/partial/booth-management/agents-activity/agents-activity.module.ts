@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { AgentsActivityRoutingModule } from './agents-activity-routing.module';
 import { AgentsActivityComponent } from './agents-activity.component';
@@ -11,11 +11,13 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { OwlNativeDateTimeModule, OwlDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgmCoreModule } from '@agm/core';
+import { DateTransformPipe } from 'src/app/pipes/date-transform.pipe';
 
 
 @NgModule({
   declarations: [
-    AgentsActivityComponent
+    AgentsActivityComponent,
+    DateTransformPipe,
   ],
   imports: [
     CommonModule,
@@ -29,11 +31,12 @@ import { AgmCoreModule } from '@agm/core';
     Ng2SearchPipeModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
+
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
       language: 'en',
       libraries: ['geometry','places']
     }),
-  ]
+  ],
 })
 export class AgentsActivityModule { }

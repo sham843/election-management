@@ -23,11 +23,12 @@
             <div class="card">
                 <div class="card-body p-2">
                     <div class="btn-group voter-repeat" role="group" aria-label="Basic radio toggle button group">
-                        <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
-                                checked>
-                            <label class="btn btn-outline-secondary text-start" for="btnradio1">
-                                <small>{{VPBoothAgent.SurveyDate | date:'dd-MM-yyyy hh:mm a'}}</small>
+                        <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index" (click)="agentFilledData(VPBoothAgent)">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off"
+                               [checked]="VPBoothAgent.AgentId == checkedActiveClass">
+                            <label class="btn btn-outline-secondary text-start" for="btnradio{{i}}">
+                                <!-- | date:'dd-MM-yyyy hh:mm a' -->
+                                <small>{{VPBoothAgent.SurveyDate}}</small>
                                 <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
                             </label>
                         </div>
@@ -83,13 +84,14 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 1 :</span>
-                            <span class="voter-data"><i class="fab fa-whatsapp me-1 text-primary"></i>
+                            <span class="voter-data"><i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
                                 {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 2 :</span>
-                            <span class="voter-data">{{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 :
+                            <span class="voter-data"><i *ngIf="voterProfileData?.WatsApp2" class="fab fa-whatsapp me-1 text-primary"></i>
+                                {{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 :
                                 '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -297,7 +299,7 @@
 
             <div class="card mb-3" *ngIf="MigInfoHide">
                 <div class="card-header">
-                    <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.Family}}</h6>
+                    <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.MarathiName}}</h6>
                 </div>
                 <div class="card-body form-container pt-0">
                     <div class="row">
@@ -357,6 +359,9 @@
                 <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'">
                     <div *ngFor="let votersonmap of VPVotersonmapData">
                         <agm-marker [latitude]="votersonmap?.Latitude" [longitude]="votersonmap?.Longitude">
+                            <!-- <agm-info-window>
+                                <strong>{{votersonmap.VoterId}}</strong>
+                            </agm-info-window> -->
                         </agm-marker>
                     </div>
                 </agm-map>
