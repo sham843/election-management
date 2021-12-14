@@ -103,6 +103,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     if(ReceiveDataSnapshot){
       this.agentInfo = this.commonService.decrypt(ReceiveDataSnapshot);
       this.agentInfo  = JSON.parse(this.agentInfo);
+      console.log(this.agentInfo);
     }
     this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
 // agentCAllLogFlag
@@ -198,9 +199,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
             this.filterForm.controls['AgentId'].setValue(element.AgentId);
           }
         });
-        // if(this.agentInfo){
-        //   this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId();
-        // }
+        this.allAgentLists.length == 1 ?  (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId),  this.defaultAgentActivityDivHide = true) : '';
+        // if(this.agentInfo){// this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId(); // }
         this.areaSubAgentByAgentId();
       } else {
         this.allAgentLists = [];
@@ -913,7 +913,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         if (res.data == 0) {
           this.spinner.hide();
           this.boothAgentAppUseTrackRes = res.data1;
-          this.appUsesActivityTotal = res.data2[0].TotalCount;
+          this.getCallLoggerTotal = res.data2[0].TotalCount;
         } else {
           this.boothAgentAppUseTrackRes = [];
           this.spinner.hide();
