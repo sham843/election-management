@@ -1,90 +1,64 @@
-    <div class="modal-content">
-        <div class="modal-header bg-transparent border-bottom-0">
-            <span class="modal-title">Voter Name Correction</span>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                (click)="onNoClick('No')"></button>
-        </div>
-        <div class="modal-body">
-            <div class="form-container">
-                <div class="card shadow-none border mb-2 chartbox">
-                    <div class="card-header border-bottom-0 bg-transparent pb-0">Old Name</div>
-                    <div class="card-body pt-1">
-                        <div class="row mb-3 g-2">
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">First Name</label>
-                                <input type="text" class="form-control" placeholder="First Name">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">Middle Name</label>
-                                <input type="text" class="form-control" placeholder="Middle Name">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name">
-                            </div>
-                        </div>
-                        <div class="row g-2">
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">नाव</label>
-                                <input type="text" class="form-control" placeholder="नाव">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">मधले नाव</label>
-                                <input type="text" class="form-control" placeholder="मधले नाव">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">आडनाव</label>
-                                <input type="text" class="form-control" placeholder="आडनाव">
-                            </div>
-                        </div>
+<h6 mat-dialog-title>Name Correction Requests</h6>
+<mat-dialog-content>
+    <div class="form-container mb-3">
+        <div class="card shadow-none border mb-2 chartbox">
+            <div class="card-header border-bottom-0 bg-transparent pb-0 small text-main">Old Name</div>
+            <div class="card-body pt-1">
+                <div class="row g-2">
+                    <div class="col-sm-6">
+                        <label class="form-label required-field">Full Name (English)</label>
+                        <p class="mb-0">Anil Rajaram Shinde</p>
                     </div>
-                </div>
-                
-                <div class="card shadow-none border">
-                    <div class="card-header border-bottom-0 bg-transparent pb-0">New Names</div>
-                    <div class="card-body pt-1">
-                        <div class="row mb-3 g-2">
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">First Name</label>
-                                <input type="text" class="form-control" placeholder="First Name">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">Middle Name</label>
-                                <input type="text" class="form-control" placeholder="Middle Name">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name">
-                            </div>
-                        </div>
-                        <div class="row g-2">
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">नाव</label>
-                                <input type="text" class="form-control" placeholder="नाव">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">मधले नाव</label>
-                                <input type="text" class="form-control" placeholder="मधले नाव">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label required-field">आडनाव</label>
-                                <input type="text" class="form-control" placeholder="आडनाव">
-                            </div>
-                        </div>
+                    <div class="col-sm-6">
+                        <label class="form-label required-field">पूर्ण नाव (मराठी)</label>
+                        <p class="mb-0">अनिल राजाराम शिंदे </p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-footer d-block">
-            <div class="row g-0">
-                <div class="col-sm-6 text-start">
-                    <button class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" type="button" (click)="onNoClick('No')"
-                    data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+        
+        <div class="card shadow-none border">
+            <div class="card-header border-bottom-0 bg-transparent pb-0 small text-main">New Name</div>
+            <div class="card-body pt-1">
+                <div class="row mb-3 g-2">
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">First Name</label>
+                        <input type="text" class="form-control" placeholder="First Name">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">Middle Name</label>
+                        <input type="text" class="form-control" placeholder="Middle Name">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Last Name">
+                    </div>
                 </div>
-                <div class="col-sm-6 text-end">
-                    <button class="btn btn-main btns-m" type="button" data-bs-dismiss="modal" (click)="onNoClick('Yes')"
-                    aria-label="Close" type="button" data-bs-dismiss="modal" aria-label="Close">Update Name</button>
+                <div class="row g-2">
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">नाव</label>
+                        <input type="text" class="form-control" placeholder="नाव">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">मधले नाव</label>
+                        <input type="text" class="form-control" placeholder="मधले नाव">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">आडनाव</label>
+                        <input type="text" class="form-control" placeholder="आडनाव">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row g-0">
+        <div class="col-sm-6 text-start">
+            <button class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" type="button" (click)="onNoClick('No')"
+            data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+        <div class="col-sm-6 text-end">
+            <button class="btn btn-main btns-m" type="button" data-bs-dismiss="modal" (click)="onNoClick('Yes')"
+            aria-label="Close" type="button" data-bs-dismiss="modal" aria-label="Close">Update Name</button>
+        </div>
+    </div>
+</mat-dialog-content>
