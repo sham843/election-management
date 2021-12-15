@@ -315,7 +315,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   nullishTopFilterForm() {
     let fromData = this.filterForm.value;
-    fromData.AgentId ?? this.filterForm.controls['AgentId'].setValue(this.commonService.getlocalStorageData().ClientId); 
+    fromData.AgentId ?? this.filterForm.controls['AgentId'].setValue(0); 
     fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
     fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
     fromData.AssemblyId ?? this.filterForm.controls['AssemblyId'].setValue(0); 

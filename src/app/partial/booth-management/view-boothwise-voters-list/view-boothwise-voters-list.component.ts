@@ -77,6 +77,21 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   isChecked = new FormControl(false);
   encryptData: any;
 
+  // crm tab var start 
+  followupStatusDropDownData = [{id:1, name:'Todays Followups', class:'text-main'},{id:2, name:'Upcoming Followups', class:'text-success'},{id:3, name:'Missed Followups', class:'text-dark'},{id:4, name:'Not To Call', class:'text-danger'},{id:5, name:'New', class:'text-info'}]
+  crmFilterForm!:FormGroup;
+ 
+  getCrmTableListrTotal:any;
+  getCrmTableList:any;
+  crmPaginationNo:any = 1;
+  crmPageSize: number = 10;
+
+  getFeedbacksList:any
+  getFeedbacksListTotal:any;
+  feedbacksPaginationNo:any = 1;
+  feedbacksPageSize: number = 10;
+
+
   constructor(
     private spinner: NgxSpinnerService,
     private callAPIService: CallAPIService,
@@ -90,6 +105,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   ngOnInit(): void {
     this.defaultFilterForm();
+    this.deafultCrmFilterForm();
     this.getClientName();
     this.searchVotersFilters('false');
     this.searchMigratedFilters('false');
@@ -175,7 +191,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
 
   boothSummary() {
-    debugger;
     this.nullishFilterForm(); //Check all value null || undefind || empty
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
@@ -204,14 +219,12 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   ClientWiseBoothList() {
     this.HighlightRow = 0;
     this.nullishFilterForm(); //Check all value null || undefind || empty
-    debugger;
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.filterForm.value.village
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        debugger;
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
         this.dataNotFound = true;
@@ -302,7 +315,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   selBoothList(BoothId: any) {
-    debugger
     let boothDetailsById = this.clientWiseBoothListArray.filter((ele:any) => { if(ele.BoothId == BoothId) return ele})
     // Start Data Filled Filed Checkbox code
     this.isChecked.setValue(false);
@@ -336,7 +348,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
   boothVoterList() {
-    debugger
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
       '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo + '&IsFilled=' + this.fillDataId;
 
@@ -610,6 +621,115 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
   // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
 
+  // ------------------------------------------  CRM with filter start here  ------------------------------------------//
+
+  deafultCrmFilterForm(){
+    this.crmFilterForm = this.fb.group({
+      Followupstatusid:'',
+      SearchText:'',
+    })
+  }
+
+  onKeyUpFilterCrmSearch() {
+    this.subject.next();
+  }
+
+  searchFilterCrmText(flag: any) {
+    if (flag == 'true') {
+      if (this.crmFilterForm.value.SearchText == "" || this.crmFilterForm.value.SearchText  == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.crmFilterForm.value.SearchText 
+        this.getCrmTableData();
+      }
+      );
+  }
+  
+  clearCrmFilter(flag:any){
+
+  }
+
+  getCrmTableData(){
+    this.spinner.show();
+    let formDataTopFilter = this.filterForm.value;
+    let formDataCrmFilter = this.crmFilterForm.value;
+    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+'&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+this.globalboothVoterData.AssemblyId+'+&IsSubElectionApplicable='+ this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
+    '&Search=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
+    this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.getCrmTableList = res.data1;
+        this.getCrmTableListrTotal = res.data2[0].TotalCount;
+      } else {
+        this.getCrmTableList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  Get_Electioncrm_1_0(){
+    this.spinner.show();
+    let formDataTopFilter = this.filterForm.value;
+    let formDataCrmFilter = this.crmFilterForm.value;
+    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+'&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+this.globalboothVoterData.AssemblyId+'+&IsSubElectionApplicable='+ this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
+    '&Search=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
+    this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.getCrmTableList = res.data1;
+        this.getCrmTableListrTotal = res.data2[0].TotalCount;
+      } else {
+        this.getCrmTableList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  enterNewFeedback(){
+    this.spinner.show();
+    let formDataTopFilter = this.filterForm.value;
+    let formDataCrmFilter = this.crmFilterForm.value;
+    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+'&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+this.globalboothVoterData.AssemblyId+'+&IsSubElectionApplicable='+ this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
+    '&Search=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
+    this.callAPIService.setHttp('get', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.getCrmTableList = res.data1;
+        this.getCrmTableListrTotal = res.data2[0].TotalCount;
+      } else {
+        this.getCrmTableList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+
+
+  // ------------------------------------------  CRM with filter start here  ------------------------------------------//
+
   // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag: any) {
     if (flag == 'clearSearchVoters') {
@@ -724,7 +844,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {
+    let obj = {voterId:1}
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
+      data:obj,
       panelClass: 'fullscreen-dialog',
       height: '98vh',
       width: '99%'
