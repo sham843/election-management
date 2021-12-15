@@ -16,7 +16,6 @@ export class NameCorrectionDialogComponent implements OnInit {
   nameCorrectionForm!: FormGroup;
   submitted = false;
 
-
   constructor(
     public dialogRef: MatDialogRef<NameCorrectionDialogComponent>,
     private spinner: NgxSpinnerService,
