@@ -1,12 +1,12 @@
 <div class="container-fluid">
     <form [formGroup]="filterForm">
     <div class="row mx-0 px-0" id="pageheader">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <span class="page-name">
                 Voters Name Correction
             </span>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-9">
            
             <div class="row g-2">
                 <div class="col-sm">
@@ -41,7 +41,7 @@
                   <div class="col-sm">
                     <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="clearFilter('BoothId')"
                                 formControlName="BoothId" 
-                                optionValueField="BoothId" optionTextField="BoothNickName" [disabled]="!this.filterForm.value.VillageId"
+                                optionValueField="BoothId" optionTextField="BoothNickName" (select)="getClientHaveSubEleOrNonSubEle()" [disabled]="!this.filterForm.value.VillageId"
                                 placeholder="Select Booth">
                     </ngx-select>
                   </div>
@@ -59,9 +59,9 @@
                         <div class="col-sm-4">
                             Name Change Requests
                         </div>
-                        <div class="col-sm-2 offset-1">
+                        <div class="col-sm-3">
                             <ngx-select [items]="NameChangeTypeArray" [allowClear]="nameChangeFlag"
-                            formControlName="NameChangeType"  optionValueField="id"
+                            formControlName="NameChangeType"  optionValueField="id" (select)="getClientHaveSubEleOrNonSubEle()"
                              optionTextField="name"
                             placeholder="Select Correction Type" (remove)="clearFilter('NameChangeType')">
                         </ngx-select>
@@ -71,7 +71,7 @@
                             <ngx-select [items]="allAgentLists" [allowClear]="agentFlag"
                                 formControlName="AgentId"  optionValueField="AgentId"
                                 [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
-                                 optionTextField="FullName"
+                                 optionTextField="FullName" (select)="getClientHaveSubEleOrNonSubEle()"
                                 placeholder="Select Agent" (remove)="clearFilter('Agent')">
                             </ngx-select>
                         </div>
@@ -87,15 +87,37 @@
                                     class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
-
+                      
                     </div>
                 </div>
                 <div class="card-body pt-1">
-                    
-                    <table class="table table-hover mb-0">
+                       
+                    <table class="table table-hover mb-0 caption-top">
+                        <caption>
+                            <!-- <span class="text-main me-4">
+                                <i class="fas fa-square me-1"></i>
+                                Todays Followups
+                            </span> -->
+                            <span class="text-success me-4">
+                                <i class="fas fa-square me-1"></i>
+                               Changed
+                            </span>
+                            <span class="text-dark me-4">
+                                <i class="fas fa-square me-1"></i>
+                                From VoterList
+                            </span>
+                            <span class="text-danger me-4">
+                                <i class="fas fa-square me-1"></i>
+                                Requested
+                            </span>
+                            <!-- <span class="text-info">
+                                <i class="fas fa-square me-1"></i>
+                                New
+                            </span> -->
+                        </caption>
                         <thead>
                             <tr>
-                                <th>Sr. No.</th>
+                                <!-- <th>Sr. No.</th> -->
                                 <th>Voter No.</th>
                                 <th>Voters Old Name</th>
                                 <th>Voters New Name</th>
@@ -110,11 +132,12 @@
                         <tbody>
 
 
-                            <tr *ngFor="let CHaveSubEOrNonSubE of clientHaveSubEOrNonSubEArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index">
+                            <tr *ngFor="let CHaveSubEOrNonSubE of clientHaveSubEOrNonSubEArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
+                           >
                                 <!-- [class.active]="constituency.Id == highlightedRow" -->
-                                <td>{{CHaveSubEOrNonSubE.SrNo}}</td>
+                                <!-- <td>{{CHaveSubEOrNonSubE.SrNo}}</td> -->
                                 <td>{{CHaveSubEOrNonSubE.VoterNo}}</td>
-                                <td>
+                                <td  [ngClass]="{'text-success' : CHaveSubEOrNonSubE.NameChanged == 1, 'text-dark' : CHaveSubEOrNonSubE.NameChanged == 3 ,'text-danger' : CHaveSubEOrNonSubE.NameChanged == 2}">
                                     <a routerLink="#">
                                         <p class="mb-0">{{CHaveSubEOrNonSubE.OldEnglishName}}</p>
                                         <p class="mb-0">{{CHaveSubEOrNonSubE.OldMarathiName}}</p>

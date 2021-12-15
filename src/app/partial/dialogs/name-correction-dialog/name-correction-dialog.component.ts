@@ -29,6 +29,7 @@ export class NameCorrectionDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    console.log(this.data);
     this.nameCorrectionFormData();
   }
 
@@ -41,7 +42,7 @@ export class NameCorrectionDialogComponent implements OnInit {
       // Id:[''],
       VoterId: ['' || this.data.Id],
       ModifiedBy: ['' || this.commonService.loggedInUserId()],
-      IsNameChange: ['' || this.data.NameChanged],
+      IsNameChange: [1 || this.data.NameChanged],
       
       NewFirstName: ['' || this.data.ChangeFirstName],
       NewMiddleName: ['' || this.data.ChangeMiddleName],
@@ -52,11 +53,11 @@ export class NameCorrectionDialogComponent implements OnInit {
       OldMiddleName: ['' || this.data.MiddleName],
       OldLastName: ['' || this.data.LastName],
       OldEnglishName: ['' || this.data.OldEnglishName],
-      ClientId: [0],
-      ConstituencyId: [0],
+      ClientId: ['' || this.data.ClientId],
+      ConstituencyId: ['' || this.data.AssemblyId],
 
       NewEFirstName: ['' || this.data.EFirst,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-      NewEMiddleName: ['' || this.data.EMiddle,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      NewEMiddleName: ['' || this.data.EMiddle,Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       NewELastName: ['' || this.data.ELast,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       NewMarathiName: ['' || this.data.NewMarathiName],
     })
@@ -86,7 +87,7 @@ export class NameCorrectionDialogComponent implements OnInit {
       this.callAPIService.setHttp('get', 'Web_Election_Update_VoterList?'+ obj, false, false, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
-          //this.toastrService.success(res.data1[0].Msg);
+          this.toastrService.success(res.data1[0].Msg);
           this.spinner.hide();
           this.nameCorrectionFormData();
           this.closeModel();
