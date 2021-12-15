@@ -750,28 +750,23 @@
                                             <div class="tab-pane fade" id="pills-crm" role="tabpanel"
                                                 aria-labelledby="pills-crm-tab">
                                                 <div class="form-container">
+                                                   <form  [formGroup]="crmFilterForm">
                                                     <div class="row justify-content-end mb-3 g-2">
                                                         <div class="col-sm-3">
-                                                            <select class="form-select">
-                                                                <option value="Select Followup Status">Select Followup
-                                                                    Status</option>
-                                                                <option value="Todays">Todays</option>
-                                                                <option value="Upcoming">Upcoming</option>
-                                                                <option value="Missed Followups">Missed Followups</option>
-                                                                <option value="Not To Call">Not To Call</option>
-                                                                <option value="New">New</option>
-                                                            </select>
+                                                            <ngx-select [allowClear]="true" (select)="getCrmTableData()" [items]="followupStatusDropDownData" 
+                                                            optionTextField="name" optionValueField="id" formControlName="Followupstatusid" placeholder="Select Followup Status">
+                                                        </ngx-select>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="form-container">
                                                                 <div class="input-group">
                                                                     <input class="form-control" type="text"
                                                                         placeholder="Search..."
-                                                                        [formControl]="searchAgent"
-                                                                        (keyup)="onKeyUpFilterAgent()" />
+                                                                        formControlName="SearchText"
+                                                                        (keyup)="onKeyUpFilterCrmSearch()" />
                                                                     <button type="button"
                                                                         class="btn btn-light border btn-sm"
-                                                                        (click)="clearFiltersBooth('clearFiltersAgent')"
+                                                                        (click)="clearCrmFilter('clearFiltersAgent')"
                                                                         *ngIf="searchAgent.value"><i
                                                                             class="fas fa-times"></i></button>
                                                                     <button type="button" *ngIf="!searchAgent.value"
@@ -781,10 +776,17 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                   </form>
                                                 </div>
                                                 <!-- CRM table start here  -->
                                                 <table class="table table-hover mb-0 caption-top">
                                                     <caption>
+                                                        <span *ngFor="let dropDownData of followupStatusDropDownData"  class="me-4 {{dropDownData.class}}">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            {{dropDownData?.name}}
+                                                        </span>
+                                                    </caption>
+                                                    <!-- <caption>
                                                         <span class="text-main me-4">
                                                             <i class="fas fa-square me-1"></i>
                                                             Todays Followups
@@ -805,7 +807,7 @@
                                                             <i class="fas fa-square me-1"></i>
                                                             New
                                                         </span>
-                                                    </caption>
+                                                    </caption> -->
                                                     <thead>
                                                         <tr>
                                                             <th>Voter No.</th>

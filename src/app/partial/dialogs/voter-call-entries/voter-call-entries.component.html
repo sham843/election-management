@@ -124,64 +124,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
+                    <tr *ngFor="let feedbacksList  of getFeedbacksList">
+                        <td>{{feedbacksList?.SrNo}}</td>
                         <td>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <small class="text-muted">12-10-2021 12:17 PM</small>
+                                    <small class="text-muted">{{feedbacksList?.FeedBackDate}}</small>
                                 </div>
                                 <div class="col-sm-6 text-end">
-                                    <span class="badge rounded-pill bg-success fw-normal">Positive</span>
+                                    <span class="badge rounded-pill bg-success fw-normal">{{feedbacksList?.FeedBackType | titlecase}}</span>
                                 </div>
                                 <div class="col-sm-12">
-                                    Need borewell in our area. Need cleanliness in our area. Public transport issue
-                                    should be resolved as soon as possible.
+                                    {{feedbacksList?.Description ? (feedbacksList?.Description | titlecase) : '-'}}
                                 </div>
                             </div>
                         </td>
                         <td>
-                            15-12-2021
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <small class="text-muted">12-10-2021 12:17 PM</small>
-                                </div>
-                                <div class="col-sm-6 text-end">
-                                    <span class="badge rounded-pill bg-danger fw-normal">Negitive</span>
-                                </div>
-                                <div class="col-sm-12">
-                                    Need borewell in our area. Need cleanliness in our area. Public transport issue
-                                    should be resolved as soon as possible.
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            15-12-2021
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <small class="text-muted">12-10-2021 12:17 PM</small>
-                                </div>
-                                <div class="col-sm-6 text-end">
-                                    <span class="badge rounded-pill bg-warning text-dark fw-normal">Neutral</span>
-                                </div>
-                                <div class="col-sm-12">
-                                    Need borewell in our area. Need cleanliness in our area. Public transport issue
-                                    should be resolved as soon as possible.
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            15-12-2021
+                            {{feedbacksList?.FollowupDate}}
                         </td>
                     </tr>
                 </tbody>
@@ -189,48 +148,50 @@
         </div>
         <div class="card shadow-none border">
             <div class="card-header pb-0">Enter New Feedback</div>
-            <div class="card-body pt-1">
-                <div class="form-container">
-                    <div class="row mb-2 g-2">
-                        <div class="col-sm-4">
-                            <label class="form-label">Do Not Call</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="chkDoNotCall">
-                                <label class="form-check-label" for="chkDoNotCall">
-                                  Do Not Call
-                                </label>
-                              </div>
+            <form  [formGroup]="enterNewFeedbackForm" (ngSubmit)="onSubmitFeedbackForm()">
+                <div class="card-body pt-1">
+                    <div class="form-container">
+                        <div class="row mb-2 g-2">
+                            <div class="col-sm-4">
+                                <label class="form-label">Do Not Call</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="chkDoNotCall" (change)="doNotCall($event)">
+                                    <label class="form-check-label" for="chkDoNotCall">
+                                      Do Not Call
+                                    </label>
+                                  </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="form-label">Followup Date-Time</label>
+                                <input type="datetime-local" class="form-control" formControlName="FollowupDate" placeholder="dd/mM/yyyy hh:mm:ss">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="form-label">Feedback Type</label>
+                                <select class="form-select" formControlName="FeedBackType">
+                                    <option value="Select Feedback Type">Select Feedback Type</option>
+                                    <option value="Positive">Positive</option>
+                                    <option value="Negitive">Negitive</option>
+                                    <option value="Neutral">Neutral</option>
+                                </select>
+                            </div>
+                            
                         </div>
-                        <div class="col-sm-4">
-                            <label class="form-label">Followup Date-Time</label>
-                            <input type="datetime-local" class="form-control" placeholder="dd/mM/yyyy hh:mm:ss">
+                        <div class="mb-2">
+                            <label class="form-label">Feedback</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter Feedback" formControlName="Description"></textarea>
                         </div>
-                        <div class="col-sm-4">
-                            <label class="form-label">Feedback Type</label>
-                            <select class="form-select">
-                                <option value="Select Feedback Type">Select Feedback Type</option>
-                                <option value="Positive">Positive</option>
-                                <option value="Negitive">Negitive</option>
-                                <option value="Neutral">Neutral</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Feedback</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter Feedback"></textarea>
-                    </div>
-                    <div class="mb-0 row">
-                        <div class="col-sm-6">
-                            <button type="button" mat-dialog-close class="btn btn-secondary btn-sm me-2">Cancel</button>
-                        </div>
-                        <div class="col-sm-6 text-end">
-                            <button type="submit" [mat-dialog-close]="true" class="btn btn-sm btn-main">Submit
-                                Feedback</button>
+                        <div class="mb-0 row">
+                            <div class="col-sm-6">
+                                <button type="button" mat-dialog-close class="btn btn-secondary btn-sm me-2">Cancel</button>
+                            </div>
+                            <div class="col-sm-6 text-end">
+                                <button type="submit" [mat-dialog-close]="true" class="btn btn-sm btn-main">Submit
+                                    Feedback</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
