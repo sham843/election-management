@@ -41,7 +41,7 @@ export class NameCorrectionComponent implements OnInit {
   total: any;
   NameChangeTypeArray = [{ id: 1, name: "Requested" }, { id: 2, name: "Changed" }, { id: 3, name: "From VoterList" }];
   clientHaveSubEOrNonSubEArray: any;
-
+ 
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -68,7 +68,7 @@ export class NameCorrectionComponent implements OnInit {
       ConstituencyId: [0],
       VillageId: [0],
       BoothId: [0],
-      NameChangeType: [0],
+      NameChangeType: [1],
       AgentId: [0],
       Search: [''],
     })
@@ -224,10 +224,10 @@ export class NameCorrectionComponent implements OnInit {
   getClientHaveSubEleOrNonSubEle() {
     let formData = this.filterForm.value;
     let obj = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + formData.ElectionId + '&ConstituencyId=' + formData.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + formData.BoothId
-      + '&NameChangeFlag=' + formData.NameChangeType + '&AgentId=' + formData.AgentId + '&Search=' + formData.Search + '&nopage=' + this.paginationNo
+      + '&AssemblyId=' + 0 + '&BoothId=' + formData.BoothId + '&NameChangeFlag=' + formData.NameChangeType 
+      + '&AgentId=' + formData.AgentId + '&Search=' + formData.Search + '&nopage=' + this.paginationNo
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_ClientHaveSubEle_NameChangeVoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_ClientHaveNosubEle_NameChangeVoterList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => { 
       if (res.data == 0) {
         this.spinner.hide();
@@ -257,9 +257,9 @@ export class NameCorrectionComponent implements OnInit {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
     }  else if (flag == 'AgentId') {
       //this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
-      this.filterForm.controls['AgentId'].setValue('');
+      this.filterForm.controls['AgentId'].setValue(0);
     }  else if (flag == 'NameChangeType'){
-      this.filterForm.controls['NameChangeType'].setValue('');
+      this.filterForm.controls['NameChangeType'].setValue(1);
     } else if (flag == 'search') {
       this.filterForm.controls['Search'].setValue('');
     }
@@ -280,12 +280,20 @@ export class NameCorrectionComponent implements OnInit {
       }
       );
   }
+
+  onClickPagintion(pageNo: number) {
+    this.paginationNo = pageNo;
+    this.getClientHaveSubEleOrNonSubEle();
+  }
   
-  openDialogNameCorrection() {
-    const dialogRef = this.dialog.open(NameCorrectionDialogComponent);
+  openDialogNameCorrection(obj:any) {
+    const dialogRef = this.dialog.open(NameCorrectionDialogComponent, {
+       data: obj
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      this.getClientHaveSubEleOrNonSubEle();
     });
   }
+
 }

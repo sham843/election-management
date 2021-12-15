@@ -99,7 +99,7 @@
                                 <th>Voter No.</th>
                                 <th>Voters Old Name</th>
                                 <th>Voters New Name</th>
-                                <th>Constituency</th>
+                                <!-- <th>Constituency</th> -->
                                 <th>Booth</th>
                                 <th>Area</th>
                                 <th>Agent Name</th>
@@ -108,98 +108,49 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>34566</td>
+
+
+                            <tr *ngFor="let CHaveSubEOrNonSubE of clientHaveSubEOrNonSubEArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index">
+                                <!-- [class.active]="constituency.Id == highlightedRow" -->
+                                <td>{{CHaveSubEOrNonSubE.SrNo}}</td>
+                                <td>{{CHaveSubEOrNonSubE.VoterNo}}</td>
                                 <td>
                                     <a routerLink="#">
-                                        <p class="mb-0">Vijay Ramesh Patil</p>
-                                        <p class="mb-0">विजय रमेश पाटील</p>
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.OldEnglishName}}</p>
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.OldMarathiName}}</p>
                                     </a>
                                 </td>
                                 <td>
-                                    <p class="mb-0">Vijaykumar Patil</p>
-                                    <p class="mb-0">विजयकुमार रमेश पाटील</p>
+                                    <p class="mb-0">{{CHaveSubEOrNonSubE.NewEnglishName}}</p>
+                                    <p class="mb-0">{{CHaveSubEOrNonSubE.NewMarathiName}}</p>
                                 </td>
-                                <td>Salgar Gan</td>
-                                <td>359 -  Chitali</td>
-                                <td>Amalgaon, Satara</td>
+                                <!-- <td>{{CHaveSubEOrNonSubE.NewMarathiName}}</td> -->
+                                <td>{{CHaveSubEOrNonSubE.boothnickname}}</td>
+                                <td>{{CHaveSubEOrNonSubE.AreaName}}</td>
                                 <td>
-                                    <a routerLink="#">Anil Chavan</a>
+                                    <a routerLink="#">{{CHaveSubEOrNonSubE.AgentName}}</a>
                                 </td>
                                 <!-- <td>
                                     <h6 class="mb-0"><span class="badge rounded-pill bg-primary fw-normal">Requested</span></h6>
                                 </td> -->
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" (click)="openDialogNameCorrection()" class="btn btn-light btn-sm text-dark me-1 rounded">
+                                        <button type="button" (click)="openDialogNameCorrection(CHaveSubEOrNonSubE)" class="btn btn-light btn-sm text-dark me-1 rounded">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>34566</td>
-                                <td>
-                                    <a routerLink="#">
-                                        <p class="mb-0">Vijay Ramesh Patil</p>
-                                        <p class="mb-0">विजय रमेश पाटील</p>
-                                    </a>
-                                </td>
-                                <td>
-                                    <p class="mb-0">Vijaykumar Patil</p>
-                                    <p class="mb-0">विजयकुमार रमेश पाटील</p>
-                                </td>
-                                <td>Salgar Gan</td>
-                                <td>359 -  Chitali</td>
-                                <td>Amalgaon, Satara</td>
-                                <td>
-                                    <a routerLink="#">Anil Chavan</a>
-                                </td>
-                                <!-- <td>
-                                    <h6 class="mb-0"><span class="badge rounded-pill bg-warning text-dark fw-normal">From Voters List</span></h6>
-                                </td> -->
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" (click)="openDialogNameCorrection()" class="btn btn-light btn-sm text-dark me-1 rounded">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>34566</td>
-                                <td>
-                                    <a routerLink="#">
-                                        <p class="mb-0">Vijay Ramesh Patil</p>
-                                        <p class="mb-0">विजय रमेश पाटील</p>
-                                    </a>
-                                </td>
-                                <td>
-                                    <p class="mb-0">Vijaykumar Patil</p>
-                                    <p class="mb-0">विजयकुमार रमेश पाटील</p>
-                                </td>
-                                <td>Salgar Gan</td>
-                                <td>359 -  Chitali</td>
-                                <td>Amalgaon, Satara</td>
-                                <td>
-                                    <a routerLink="#">Anil Chavan</a>
-                                </td>
-                                <!-- <td>
-                                    <h6 class="mb-0"><span class="badge rounded-pill bg-success fw-normal">Changed</span></h6>
-                                </td> -->
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" (click)="openDialogNameCorrection()" class="btn btn-light btn-sm text-dark me-1 rounded">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="clientHaveSubEOrNonSubEArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="clientHaveSubEOrNonSubEArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
                 </div>
             </div>
         </div>
