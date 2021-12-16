@@ -93,8 +93,9 @@ export class CreateConstituenyComponent implements OnInit {
 
   ngOnInit(): void {
     this.defaultConstituencyForm();
-    this.getElection();
     this.defaultFilterForm();
+    this.getElection();
+  
     this.getConstituency();
     this.searchFilters('false');
 
@@ -121,7 +122,7 @@ export class CreateConstituenyComponent implements OnInit {
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      ElectionNameId: [0],
+      ElectionNameId: [0 || this.ElectionId],
       Search: [''],
     })
   }
@@ -161,7 +162,9 @@ export class CreateConstituenyComponent implements OnInit {
   getConstituency() {
     let data = this.filterForm.value;
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_GetConstituency?ElectionId=' + data.ElectionNameId + '&UserId=' + this.commonService.loggedInUserId() + '&Search=' + data.Search + '&nopage=' + this.paginationNo, false, false, false, 'electionServiceForWeb');
+    let eleId:any;
+    data.ElectionNameId == undefined || data.ElectionNameId ==""  || data.ElectionNameId == null  ? eleId = 0: eleId = data.ElectionNameId
+    this.callAPIService.setHttp('get', 'Web_Election_GetConstituency?ElectionId=' + eleId + '&UserId=' + this.commonService.loggedInUserId() + '&Search=' + data.Search + '&nopage=' + this.paginationNo, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();

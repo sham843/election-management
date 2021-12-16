@@ -22,6 +22,7 @@ import { DeleteComponent } from './partial/dialogs/delete/delete.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { NameCorrectionDialogComponent } from './partial/dialogs/name-correction-dialog/name-correction-dialog.component';
 import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/voter-call-entries.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -47,6 +48,7 @@ import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/
     MatDialogModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
+    NgxPaginationModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       closeButton: true,

@@ -1,0 +1,10 @@
+.btn-modal-close{
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 1.5rem;
+    position: absolute;
+    top: -20px;
+    right: -14px;
+    color: #555;
+}

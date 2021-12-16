@@ -9,7 +9,11 @@
         </div>
     </div>
 </div> -->
-
+<div class="position-relative">
+    <button class="btn-modal-close" mat-dialog-close>
+        <i class="far fa-times-circle"></i>
+    </button>
+</div>
 <mat-dialog-content>
     <div class="row chartbox">
         <div class="col-sm-5">
@@ -53,7 +57,7 @@
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <label class="form-label">Religion (Caste)</label>
-                                <div class="form-data"> {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})</div>
+                                <div class="form-data" *ngIg="voterProfileData?.ReligionName"> {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})</div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label">Qualification</label>
@@ -93,10 +97,11 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="mb-2">
                             <span class="form-label">Family Information</span>
                             <span class="form-data">
-                                {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members)
+                                <!-- {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members) -->
                             </span>
                             <table class="table table-hover mb-0 table-sm">
                                 <thead>
@@ -139,7 +144,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let feedbacksList  of getFeedbacksList">
+                        <tr *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
                             <td>{{feedbacksList?.SrNo}}</td>
                             <td>
                                 <div class="row">
@@ -162,6 +167,14 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length == 0">
+                    <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                </div>
+                <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length != 0">
+                    <pagination-controls previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintion(feedbacksPageSize = $event)"> 
+                    </pagination-controls>
+                </div>
             </div>
             <div class="card shadow-none border">
                 <div class="card-header pb-0">Enter New Feedback</div>
@@ -207,8 +220,6 @@
                                 </div>
 
 
-
-
                                 <div class="col-sm-4">
                                     <label class="form-label">Feedback Type</label>
                                     <ngx-select [allowClear]="true" [items]="feedbackTypeArray"
@@ -225,8 +236,7 @@
                             </div>
                             <div class="mb-0 row">
                                 <div class="col-sm-6">
-                                    <button type="button" mat-dialog-close
-                                        class="btn btn-secondary btn-sm me-2" (click)="clearForm()">Cancel</button>
+                                    <button type="button" class="btn btn-secondary btn-sm me-2" (click)="clearForm()">Cancel</button>
                                 </div>
                                 <div class="col-sm-6 text-end">
                                     <button type="submit" [mat-dialog-close]="true" class="btn btn-sm btn-main">Submit
