@@ -39,7 +39,7 @@ export class NameCorrectionComponent implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   total: any;
-  NameChangeTypeArray = [{ id: 2, name: "Requested" }, { id: 1, name: "Changed" }, { id: 3, name: "From VoterList" }];
+  NameChangeTypeArray = [{ id: 2, name: "Requested" }, { id: 1, name: "Changed" }, { id: 3, name: "From Voter List" }];
   clientHaveSubEOrNonSubEArray: any;
  
 

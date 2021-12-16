@@ -213,8 +213,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   areaSubAgentByAgentId() {
     this.spinner.show();
-    let formData = this.filterForm.value;
     this.nullishTopFilterForm();
+    let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
     this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -697,6 +697,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientBoothAgentVoterList = res.data1;
+        this.clientBoothAgentVoterList
         this.votersTotal = res.data2[0].TotalCount;
       } else {
         this.clientBoothAgentVoterList = [];
@@ -910,6 +911,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         if (res.data == 0) {
           this.spinner.hide();
           this.boothAgentAppUseTrackRes = res.data1;
+          // this.boothAgentAppUseTrackRes
           this.getCallLoggerTotal = res.data2[0].TotalCount;
         } else {
           this.boothAgentAppUseTrackRes = [];

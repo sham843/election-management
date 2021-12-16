@@ -37,7 +37,7 @@ const routes: Routes = [
       { path: 'my-profile', loadChildren: () => import('./my-profile/my-profile.module').then(m => m.MyProfileModule),data:{ title:'My Profile',allowedRoles:['1','2'] } },
       { path: 'notifications', loadChildren: () => import('./partial/booth-management/notifications/notifications.module').then(m => m.NotificationsModule), data: { title: 'Notifications', allowedRoles: ['1','2'] } },
       { path: 'forward-activities', loadChildren: () => import('./partial/booth-management/forward-activities/forward-activities.module').then(m => m.ForwardActivitiesModule), data: { title: 'Forward Activities', allowedRoles: ['1','2'] } },
-      { path: 'name-correction', loadChildren: () => import('./partial/booth-management/name-correction/name-correction.module').then(m => m.NameCorrectionModule), data: { title: 'Name Correction', allowedRoles: ['1','2'] } },
+      { path: 'name-correction', loadChildren: () => import('./partial/booth-management/name-correction/name-correction.module').then(m => m.NameCorrectionModule), data: { title: 'Voter Name Correction', allowedRoles: ['1','2'] } },
       ]
   },
   { path: '500', component: ServerErrorComponent },
