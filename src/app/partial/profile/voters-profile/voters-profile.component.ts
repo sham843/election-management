@@ -47,7 +47,8 @@ export class VotersProfileComponent implements OnInit {
     public gallery: Gallery,
     public lightbox: Lightbox,
   ) { 
-    let ReceiveDataSnapshot = this.route.snapshot.params.Data;
+    debugger;
+    let ReceiveDataSnapshot = this.route.snapshot.params.id;
     this.voterListData = this.commonService.decrypt(ReceiveDataSnapshot);
     this.voterListData = JSON.parse(this.voterListData);
 }

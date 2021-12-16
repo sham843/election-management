@@ -835,7 +835,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   redirectToVoterPrfile(obj: any) {
     this.encryptData = this.commonService.encrypt(obj);
-    const url = this.router.createUrlTree(['voters-profile', { Data: this.encryptData }])
+    const url = this.router.createUrlTree(['voters-profile/', this.encryptData])
     window.open(url.toString(), '_blank');
   }
 
