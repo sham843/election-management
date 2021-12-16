@@ -83,7 +83,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
  
   getCrmTableListrTotal:any;
   getCrmTableList:any;
-  crmPaginationNo:any = 1;
+  crmPaginationNo: number = 1;
   crmPageSize: number = 10;
 
   getFeedbacksList:any
@@ -112,6 +112,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.searchPendingFilters('false');
     this.searchAgentFilters('false');
     this.searchFamilyFilters('false');
+    this.searchCrmFilter('false');
     this.agentForm();
   }
 
@@ -625,8 +626,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   deafultCrmFilterForm(){
     this.crmFilterForm = this.fb.group({
-      Followupstatusid:'',
-      SearchText:'',
+      Followupstatusid:[0],
+      SearchText:[''],
     })
   }
 
@@ -634,34 +635,41 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.subject.next();
   }
 
-  searchFilterCrmText(flag: any) {
-    if (flag == 'true') {
-      if (this.crmFilterForm.value.SearchText == "" || this.crmFilterForm.value.SearchText  == null) {
-        this.toastrService.error("Please search and try again");
-        return
-      }
-    }
+  searchCrmFilter(flag: any) {
     this.subject
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmFilterForm.value.SearchText 
+        this.crmPaginationNo = 1;
         this.getCrmTableData();
       }
       );
   }
   
   clearCrmFilter(flag:any){
+    if(flag == 'clearFiltersCrm'){
+      this.crmFilterForm.controls["SearchText"].setValue('');
+      this.crmPaginationNo = 1;
+      this.getCrmTableData();
+    }
 
+  }
+
+  onClickPagintionCrm(pageNo: any) {
+    this.crmPaginationNo = pageNo;
+    this.getCrmTableData();
   }
 
   getCrmTableData(){
     this.spinner.show();
     let formDataTopFilter = this.filterForm.value;
     let formDataCrmFilter = this.crmFilterForm.value;
-    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+'&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+this.globalboothVoterData.AssemblyId+'+&IsSubElectionApplicable='+ this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
-    '&Search=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
+    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+
+    '&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+ 0 +'+&IsSubElectionApplicable='+
+     this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
+    '&SearchText=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
     this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
+    this.callAPIService.getHttp().subscribe((res: any) => { 
       if (res.data == 0) {
         this.spinner.hide();
         this.getCrmTableList = res.data1;
@@ -677,55 +685,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       }
     })
   }
-
-  Get_Electioncrm_1_0(){
-    this.spinner.show();
-    let formDataTopFilter = this.filterForm.value;
-    let formDataCrmFilter = this.crmFilterForm.value;
-    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+'&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+this.globalboothVoterData.AssemblyId+'+&IsSubElectionApplicable='+ this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
-    '&Search=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
-    this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.getCrmTableList = res.data1;
-        this.getCrmTableListrTotal = res.data2[0].TotalCount;
-      } else {
-        this.getCrmTableList = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
-
-  enterNewFeedback(){
-    this.spinner.show();
-    let formDataTopFilter = this.filterForm.value;
-    let formDataCrmFilter = this.crmFilterForm.value;
-    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+'&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+this.globalboothVoterData.AssemblyId+'+&IsSubElectionApplicable='+ this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
-    '&Search=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
-    this.callAPIService.setHttp('get', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.getCrmTableList = res.data1;
-        this.getCrmTableListrTotal = res.data2[0].TotalCount;
-      } else {
-        this.getCrmTableList = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
-
 
 
   // ------------------------------------------  CRM with filter start here  ------------------------------------------//
@@ -824,6 +783,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     }
   }
 
+
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
  
@@ -838,8 +798,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
-  openDialogVoterCallEntries() {
-    let obj = {VoterId:344612 ,ClientID:2 ,AgentId:10  }
+  openDialogVoterCallEntries(obj:any) {
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
       data:obj,
       panelClass: 'fullscreen-dialog',

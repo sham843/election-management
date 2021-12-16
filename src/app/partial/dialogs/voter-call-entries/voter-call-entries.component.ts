@@ -62,9 +62,6 @@ export class VoterCallEntriesComponent implements OnInit {
       Description:[''],	
       FollowupDate:[''],
       NotToCall:[0],
-       // VoterId:[this.voterListData.VoterId],	
-      // FeedBackDate:	['2021/12/16'],
-       // CreatedBy:[''],	
     })
   }
 
@@ -74,7 +71,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
   feedbacksList(){
     this.spinner.show();
-    let obj: any = 'VoterId='+ this.voterListData.VoterId +'&nopage='+this.feedbacksPaginationNo;
+    let obj: any = 'VoterId='+ this.voterListData.VoterId +'&nopage='+this.feedbacksPaginationNo + '&ClientId='+ this.voterListData.ClientId ;
     this.callAPIService.setHttp('get', 'Get_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -109,7 +106,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
        this.Date = this.datePipe.transform(this.Date, 'yyyy/MM/dd');
        let obj = 'Id='+ data.Id + '&VoterId='+ this.voterListData.VoterId + '&FeedBackDate='+ this.Date + '&FeedBackType='+ data.FeedBackType 
-       + '&Description='+ data.Description + '&FollowupDate='+ data.FollowupDate + '&CreatedBy='+ this.commonService.loggedInUserId() + '&NotToCall='+ data.NotToCall ;
+       + '&Description='+ data.Description + '&FollowupDate='+ data.FollowupDate + '&CreatedBy='+ this.commonService.loggedInUserId() + '&NotToCall='+ data.NotToCall + '&ClientId='+ this.voterListData.ClientId ;
 
        this.callAPIService.setHttp('get', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
        this.callAPIService.getHttp().subscribe((res: any) => {
@@ -134,7 +131,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
   getVoterProfileData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientId + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -167,7 +164,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
   getVoterprofileFamilyData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Family?ClientId=' + this.voterListData.ClientID + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Family?ClientId=' + this.voterListData.ClientId + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -188,7 +185,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
   getVPPoliticalInfluenceData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Political_Influence?ClientId=' + this.voterListData.ClientID + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Political_Influence?ClientId=' + this.voterListData.ClientId + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
