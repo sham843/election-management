@@ -18,8 +18,8 @@ export class VoterCallEntriesComponent implements OnInit {
 
   getFeedbacksList:any;
   getFeedbacksListTotal:any;
-  feedbacksPaginationNo:any = 1;
-  feedbacksPageSize: number = 10;
+  feedbacksPaginationNo:number = 1;
+  feedbacksPageSize:number = 10;
   
   feedbackTypeArray = [{id:1, name:'Positive'},{id:2, name:'Negitive'},{id:3, name:'Neutral'}]
   enterNewFeedbackForm!:FormGroup;
@@ -41,6 +41,7 @@ export class VoterCallEntriesComponent implements OnInit {
     public dialog: MatDialog,
     private fb:FormBuilder,
     private commonService: CommonService,
+    private toastrService : ToastrService,
     public dateTimeAdapter: DateTimeAdapter<any>,
     private datePipe: DatePipe,
     ) { dateTimeAdapter.setLocale('en-IN');
@@ -61,12 +62,14 @@ export class VoterCallEntriesComponent implements OnInit {
       FeedBackType:	[''],
       Description:[''],	
       FollowupDate:[''],
-      CreatedBy:[this.commonService.loggedInUserId()],	
+      CreatedBy:[''],	
       NotToCall:[false]
     })
   }
 
   get f() { return this.enterNewFeedbackForm.controls };
+
+                    //............................. Get Feedbacks List................................//
 
   feedbacksList(){
     this.spinner.show();
@@ -89,7 +92,40 @@ export class VoterCallEntriesComponent implements OnInit {
     })
   }
 
-                                     //........................ Get Voter Profile Data.....................//
+                         //............................. Insert Feedbacks Election Data................................//
+  
+ onSubmitFeedbackForm(){
+     console.log(this.enterNewFeedbackForm.value);
+     this.submitted = true;
+     if (this.enterNewFeedbackForm.invalid) {
+       this.spinner.hide();
+       return;
+     } else {
+       this.spinner.show();
+       let data = this.enterNewFeedbackForm.value;
+       let obj = 'Id='+ data.Id + '&VoterId='+ data.VoterId + '&FeedBackDate='+ data.FeedBackDate + '&FeedBackType='+ data.FeedBackType 
+       + '&Description='+ data.Description + '&FollowupDate='+ data.FollowupDate + '&CreatedBy='+ this.commonService.loggedInUserId() + '&NotToCall='+ data.NotToCall ;
+
+       this.callAPIService.setHttp('Post', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+       this.callAPIService.getHttp().subscribe((res: any) => {
+         if (res.data == 0) {
+           this.toastrService.success(res.data1[0].Msg);
+           this.spinner.hide();
+           this.feedbacksList();
+           this.clearForm();
+           this.submitted = false;
+         } else {
+           this.spinner.hide();
+         }
+       }, (error: any) => {
+         if (error.status == 500) {
+           this.router.navigate(['../500'], { relativeTo: this.route });
+         }
+       })
+     }
+   }
+
+                              //........................ Get Voter Profile Data.....................//
 
   getVoterProfileData() {
     this.spinner.show();
@@ -177,8 +213,9 @@ export class VoterCallEntriesComponent implements OnInit {
     this.submitted = false;
   }
 
-  onSubmitFeedbackForm(){
-    console.log(this.enterNewFeedbackForm.value)
+  onClickPagintion(pageNo: number) {
+    this.feedbacksPaginationNo = pageNo;
+    this.feedbacksList();
   }
 
   voterDateRangeSelect(asd:any){
