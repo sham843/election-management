@@ -824,30 +824,19 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     }
   }
 
-  // redirectToAgentDetails(obj: any) {
-  //   this.encryptData = this.commonService.encrypt(obj);
-  //   const url = this.router.createUrlTree(['agents-activity', { Data: this.encryptData }])
-  //   window.open(url.toString(), '_blank');
-  // }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
-  // redirectToVoterPrfile(obj: any) {
-  //   this.encryptData = this.commonService.encrypt(obj);
-  //   const url = this.router.createUrlTree(['voters-profile', { Data: this.encryptData }])
-  //   window.open(url.toString(), '_blank');
-  // }
+ 
 
-
-
-  redirectToAgentDetails(obj:any){
-    sessionStorage.setItem('agents-activity', JSON.stringify(obj))
-    this.router.navigate(['../agents-activity']);
+  redirectToAgentDetails(agentList:any){
+    window.open('../agents-activity/'+agentList.ClientId+'.'+agentList.BoothAgentId+'.'+agentList.Addedby+'.'+agentList.SubUserTypeId);
   }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
   redirectToVoterPrfile(obj:any){
     sessionStorage.setItem('voter-profile', JSON.stringify(obj));
-    this.router.navigate(['voters-profile'])
+    // this.router.navigate(['voters-profile'])
+    window.open('voters-profile', '_blank');
   }
 
 

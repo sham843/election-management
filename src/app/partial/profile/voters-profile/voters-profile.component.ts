@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,7 +13,7 @@ import { Lightbox } from '@ngx-gallery/lightbox';
   templateUrl: './voters-profile.component.html',
   styleUrls: ['./voters-profile.component.css']
 })
-export class VotersProfileComponent implements OnInit {
+export class VotersProfileComponent implements OnInit, OnDestroy {
   voterProfileData: any;
   voterListData: any;
   posNegativeInfData: any;
@@ -293,5 +293,8 @@ export class VotersProfileComponent implements OnInit {
   ngOnDestroy() {
     localStorage.removeItem('voter-profile');
   }
+
+
+
 
 }

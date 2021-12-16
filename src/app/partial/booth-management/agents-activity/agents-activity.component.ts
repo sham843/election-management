@@ -94,30 +94,26 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
-
-
+    let ReceiveDataSnapshot: any = this.route.snapshot.params.id;
+    if(ReceiveDataSnapshot){
+      ReceiveDataSnapshot = ReceiveDataSnapshot.split('.');
+      this.agentInfo = {'ClientId':+ReceiveDataSnapshot[0], 'BoothAgentId':+ReceiveDataSnapshot[1],'Addedby':+ReceiveDataSnapshot[2],'SubUserTypeId':+ReceiveDataSnapshot[3]}
+    }
   }
 
-  ngOnInit(): void {
-    let ReceiveDataSnapshot = this.route.snapshot.params.Data;
-    if(ReceiveDataSnapshot){
-      this.agentInfo = this.commonService.decrypt(ReceiveDataSnapshot);
-      this.agentInfo  = JSON.parse(this.agentInfo);
-      console.log(this.agentInfo);
-    }
-    this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
-    
-    // agentCAllLogFlag
-    // this.agentInfo = localStorage.getItem('agents-activity');
-    // this.agentInfo = JSON.parse(this.agentInfo);
 
+  ngOnInit(): void {
+    this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
     this.deafultVoterProfilefilterForm();
     this.topFilterForm();
     this.getClientName();
     this.searchVoterFilter('false');
     this.searchNewVotersFilters('false');
     this.searchAgentCallLoggerFilters('false');
+    console.log( this.agentInfo);
   }
+
+
 
   //--------------------------------------------------  top filter method's start  here -----------------------------------------------------------//
 
