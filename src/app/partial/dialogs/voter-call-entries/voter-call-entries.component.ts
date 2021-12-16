@@ -29,6 +29,7 @@ export class VoterCallEntriesComponent implements OnInit {
   voterProfileFamilyData: any;
   VPCommentData: any;
   posNegativeInfData: any;
+  Date:any = new Date();
 
 
   constructor(
@@ -57,13 +58,13 @@ export class VoterCallEntriesComponent implements OnInit {
   defaultFeedbackForm(){
     this.enterNewFeedbackForm = this.fb.group({
       Id:[0],	
-      VoterId:[this.voterListData.VoterId],	
-      FeedBackDate:	['16/12/2021'],
       FeedBackType:	[''],
       Description:[''],	
-      FollowupDate:['16/12/2021'],
-      CreatedBy:[''],	
-      NotToCall:[0]
+      FollowupDate:[''],
+      NotToCall:[0],
+       // VoterId:[this.voterListData.VoterId],	
+      // FeedBackDate:	['2021/12/16'],
+       // CreatedBy:[''],	
     })
   }
 
@@ -103,10 +104,14 @@ export class VoterCallEntriesComponent implements OnInit {
      } else {
        this.spinner.show();
        let data = this.enterNewFeedbackForm.value;
-       let obj = 'Id='+ data.Id + '&VoterId='+ data.VoterId + '&FeedBackDate='+ data.FeedBackDate + '&FeedBackType='+ data.FeedBackType 
+       data.NotToCall == true ? data.NotToCall = 1 : data.NotToCall = 0 ;
+       data.FollowupDate = this.datePipe.transform(data.FollowupDate, 'yyyy/MM/dd hh:mm:ss a');
+
+       this.Date = this.datePipe.transform(this.Date, 'yyyy/MM/dd');
+       let obj = 'Id='+ data.Id + '&VoterId='+ this.voterListData.VoterId + '&FeedBackDate='+ this.Date + '&FeedBackType='+ data.FeedBackType 
        + '&Description='+ data.Description + '&FollowupDate='+ data.FollowupDate + '&CreatedBy='+ this.commonService.loggedInUserId() + '&NotToCall='+ data.NotToCall ;
 
-       this.callAPIService.setHttp('Post', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+       this.callAPIService.setHttp('get', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
        this.callAPIService.getHttp().subscribe((res: any) => {
          if (res.data == 0) {
            this.toastrService.success(res.data1[0].Msg);
@@ -201,9 +206,7 @@ export class VoterCallEntriesComponent implements OnInit {
     })
   }
 
-  // doNotCall(event:any){
-  //   console.log(event.target.checked)
-  // }
+
   onNoClick(text:any): void {
     this.dialogRef.close(text);
   }

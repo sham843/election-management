@@ -162,6 +162,7 @@
                                 </div>
                             </td>
                             <td>
+                                <!-- | date:'dd-MM-yyyy hh:mm a' -->
                                 {{feedbacksList?.FollowupDate}}
                             </td>
                         </tr>
@@ -216,7 +217,7 @@
                                             (click)="clearFilterDateRangepicker()">
                                             <i class="fas fa-times"></i></button> -->
                                     </div>
-                                    <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                                    <owl-date-time #dt3></owl-date-time>
                                 </div>
 
 
@@ -239,8 +240,8 @@
                                     <button type="button" class="btn btn-secondary btn-sm me-2" (click)="clearForm()">Cancel</button>
                                 </div>
                                 <div class="col-sm-6 text-end">
-                                    <button type="submit" [mat-dialog-close]="true" class="btn btn-sm btn-main">Submit
-                                        Feedback</button>
+                                    <!-- [mat-dialog-close]="true" -->
+                                    <button type="submit" class="btn btn-sm btn-main">Submit Feedback</button>
                                 </div>
                             </div>
                         </div>
