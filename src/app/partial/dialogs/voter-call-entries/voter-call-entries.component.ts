@@ -56,14 +56,14 @@ export class VoterCallEntriesComponent implements OnInit {
 
   defaultFeedbackForm(){
     this.enterNewFeedbackForm = this.fb.group({
-      Id:[''],	
-      VoterId:[''],	
-      FeedBackDate:	[''],
+      Id:[0],	
+      VoterId:[this.voterListData.VoterId],	
+      FeedBackDate:	['16/12/2021'],
       FeedBackType:	[''],
       Description:[''],	
-      FollowupDate:[''],
+      FollowupDate:['16/12/2021'],
       CreatedBy:[''],	
-      NotToCall:[false]
+      NotToCall:[0]
     })
   }
 

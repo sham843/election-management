@@ -47,11 +47,15 @@ export class VotersProfileComponent implements OnInit {
     public gallery: Gallery,
     public lightbox: Lightbox,
   ) { 
-    debugger;
-    let ReceiveDataSnapshot = this.route.snapshot.params.id;
-    this.voterListData = this.commonService.decrypt(ReceiveDataSnapshot);
-    this.voterListData = JSON.parse(this.voterListData);
-}
+    // let ReceiveDataSnapshot = this.route.snapshot.params.Data;
+    // this.voterListData = this.commonService.decrypt(ReceiveDataSnapshot);
+    // this.voterListData = JSON.parse(this.voterListData);
+
+    let getsessionStorageData: any = sessionStorage.getItem('voter-profile');
+    let getStorageData= JSON.parse(getsessionStorageData); 
+    //this.voterListData = {'AgentId': getStorageData.AgentId ,'ClientID': getStorageData.ClientID, 'VoterId': getStorageData.VoterId}
+    this.voterListData = getStorageData;
+  }
 
   ngOnInit(): void {
     this.getVoterProfileData();

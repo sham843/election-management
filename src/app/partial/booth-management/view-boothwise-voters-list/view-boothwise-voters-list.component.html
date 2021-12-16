@@ -704,16 +704,16 @@
                                                         <tr *ngFor="let agentList of boothAgentListArray">
                                                             <td>{{agentList?.SrNo}}</td>
                                                             <td>
-                                                                <a target="_blank"
-                                                                    (click)="redirectToAgentDetails(agentList)">
+                                                                <!-- (click)="redirectToAgentDetails(agentList)" -->
+                                                                <a target="_blank" >
                                                                     <span *ngIf="agentList?.SubUserTypeId==3"
                                                                         class="text-main" style=" cursor: pointer;">
                                                                         <i class="fas fa-star me-1"></i>
                                                                         {{agentList?.FullName}}
                                                                     </span>
                                                                 </a>
-                                                                <a target="_blank"
-                                                                    (click)="redirectToAgentDetails(agentList)">
+                                                                <!-- (click)="redirectToAgentDetails(agentList)" -->
+                                                                <a target="_blank" >
                                                                     <span *ngIf="agentList?.SubUserTypeId==4"
                                                                         class="text-main" style=" cursor: pointer;">
                                                                         <i class="far fa-star me-1"></i>
