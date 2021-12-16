@@ -104,10 +104,12 @@ export class VoterCallEntriesComponent implements OnInit {
      } else {
        this.spinner.show();
        let data = this.enterNewFeedbackForm.value;
+ 
        data.NotToCall == true ? data.NotToCall = 1 : data.NotToCall = 0 ;
-       data.FollowupDate = this.datePipe.transform(data.FollowupDate, 'yyyy/MM/dd hh:mm:ss a');
+       data.FollowupDate = this.datePipe.transform(data.FollowupDate, 'yyyy/MM/dd HH:mm:ss');
+   
+       this.Date = this.datePipe.transform(this.Date, 'yyyy/MM/dd HH:mm:ss');
 
-       this.Date = this.datePipe.transform(this.Date, 'yyyy/MM/dd');
        let obj = 'Id='+ data.Id + '&VoterId='+ this.voterListData.VoterId + '&FeedBackDate='+ this.Date + '&FeedBackType='+ data.FeedBackType 
        + '&Description='+ data.Description + '&FollowupDate='+ data.FollowupDate + '&CreatedBy='+ this.commonService.loggedInUserId() + '&NotToCall='+ data.NotToCall ;
 

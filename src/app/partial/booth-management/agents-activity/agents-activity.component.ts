@@ -168,7 +168,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
           this.clientDropDownDis = true;
           this.clientDropDownCloseIcon = false;
         }
-        this.getAllAgentList();
+        // this.getAllAgentList();
         //this.clientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.clientNameArray[0].id }), this.getAllAgentList(), this.clientIdFlag = false) : '';
       } else {
         this.spinner.hide();
@@ -307,7 +307,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
     }
-    this.getAgentAssBoothActivityGraph();
+    // this.getAgentAssBoothActivityGraph();
   }
 
   nullishTopFilterForm() {
