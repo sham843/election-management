@@ -68,7 +68,7 @@ export class NameCorrectionComponent implements OnInit {
       ConstituencyId: [0],
       VillageId: [0],
       BoothId: [0],
-      NameChangeType: [2],
+      NameChangeType: [0],
       AgentId: [0],
       Search: [''],
     })
@@ -96,9 +96,9 @@ export class NameCorrectionComponent implements OnInit {
   getElectionName() {
     this.getAllAgentList();
     this.spinner.show();
-    let fromData = this.filterForm.value;
-    debugger;
     this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+  
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -119,8 +119,9 @@ export class NameCorrectionComponent implements OnInit {
 
   getConstituencyName() {
     this.spinner.show();
-    let fromData = this.filterForm.value;
     this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+
     this.callAPIService.setHttp('get', 'Web_Get_Constituency_byClientId_ddl?ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -160,8 +161,9 @@ export class NameCorrectionComponent implements OnInit {
   }
 
   getVillageName() {
-    let fromData = this.filterForm.value;
     this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+    
     let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
     this.spinner.show();
@@ -184,8 +186,9 @@ export class NameCorrectionComponent implements OnInit {
   }
 
   ClientWiseBoothList() {
-    let fromData = this.filterForm.value;
     this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+
     let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + fromData.VillageId
     this.spinner.show();
@@ -211,8 +214,9 @@ export class NameCorrectionComponent implements OnInit {
 
   getAllAgentList() {
     this.spinner.show();
-    let fromData = this.filterForm.value;
     this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+
     this.callAPIService.setHttp('get', 'Web_Client_AllAgentList_ddl?ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -235,8 +239,8 @@ export class NameCorrectionComponent implements OnInit {
 
   getClientHaveSubEleOrNonSubEle() {
     this.spinner.show();
-    let fromData = this.filterForm.value;
     this.nullishFilterForm();
+    let fromData = this.filterForm.value;
     debugger;
     let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
       + '&AssemblyId=' + 0 + '&BoothId=' + fromData.BoothId + '&VillageId='+fromData?.VillageId+'&NameChangeFlag=' + fromData.NameChangeType 
@@ -276,28 +280,28 @@ export class NameCorrectionComponent implements OnInit {
 
 
   clearFilter(flag: any) {
+    debugger;
     if (flag == 'clientId') {
       this.defaultFilterForm();
     } else if (flag == 'electionId') {
-      this.filterForm.patchValue({ ClientId: this.filterForm.value.ClientId })
+      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId })
     } else if (flag == 'constituencyId') {
-      this.filterForm.patchValue({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId });
-      this.getClientHaveSubEleOrNonSubEle();
+      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId });
     } else if (flag == 'VillageId') {
-      this.filterForm.patchValue({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
-      this.getClientHaveSubEleOrNonSubEle();
+      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
     }  else if (flag == 'AgentId') {
       //this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
-      this.filterForm.controls['AgentId'].setValue('');
-      this.getClientHaveSubEleOrNonSubEle();
+      this.filterForm.controls['AgentId'].setValue(0);
     }  else if (flag == 'NameChangeType'){
-      this.filterForm.controls['NameChangeType'].setValue('');
-      this.getClientHaveSubEleOrNonSubEle();
+      this.filterForm.controls['NameChangeType'].setValue(0);
     } else if (flag == 'search') {
       this.filterForm.controls['Search'].setValue('');
-      this.getClientHaveSubEleOrNonSubEle();
+    }else if (flag == 'BoothId'){
+      this.filterForm.controls['BoothId'].setValue(0);
     }
-   
+    this.getClientHaveSubEleOrNonSubEle();
+    
+
   }
 
 

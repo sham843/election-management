@@ -11,35 +11,38 @@
             <div class="row g-2">
                 <div class="col-sm">
                     <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-                                (remove)="clearFilter('clientId')" (select)="clearFilter('electionId'); getElectionName()"
+                                (remove)="clearFilter('clientId')" (select)="getElectionName()"
                                 optionValueField="id" optionTextField="Fullname"
                                 placeholder="Select Client">
                     </ngx-select>
                   </div>
                   <div class="col-sm">
                     <ngx-select [allowClear]="electionFlag" [items]="electionNameArray" (remove)="clearFilter('electionId')"
-                                (select)="clearFilter('constituencyId');  getConstituencyName()" formControlName="ElectionId"
+                                (select)="getConstituencyName()" formControlName="ElectionId"
                                 optionValueField="ElectionId" optionTextField="ElectionName"
                                 [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                                 placeholder="Select Election">
                     </ngx-select>
                   </div>
                   <div class="col-sm">
-                    <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-                                (remove)="clearFilter('constituencyId')" (select)="clearFilter('VillageId'); getVillageName()"
+                    <!-- [allowClear]="constituencyFlag"  -->
+                    <ngx-select [allowClear]="true" [items]="constituencyNameArray"
+                                (remove)="clearFilter('constituencyId')" (select)="getVillageName()"
                                 formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
                                 [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
                     </ngx-select>
                   </div>
                   <div class="col-sm">
-                    <ngx-select [allowClear]="villageFlag" [items]="villageNameArray" (remove)="clearFilter('VillageId')"
-                                formControlName="VillageId" (select)="clearFilter('BoothId'); ClientWiseBoothList()"
+                    <!-- [allowClear]="villageFlag" -->
+                    <ngx-select [allowClear]="true" [items]="villageNameArray" (remove)="clearFilter('VillageId')"
+                                formControlName="VillageId" (select)="ClientWiseBoothList()"
                                 optionValueField="VillageId" optionTextField="VillageName"
                                 [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
                     </ngx-select>
                   </div>
                   <div class="col-sm">
-                    <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="clearFilter('BoothId')"
+                    <!-- [allowClear]="boothFlag" -->
+                    <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" (remove)="clearFilter('BoothId')"
                                 formControlName="BoothId" 
                                 optionValueField="BoothId" optionTextField="BoothNickName" (select)="getClientHaveSubEleOrNonSubEle()" [disabled]="!this.filterForm.value.VillageId"
                                 placeholder="Select Booth">
@@ -51,7 +54,7 @@
         </div>
     </div>
 
-    <div class="row chartbox mb-3">
+    <div class="row chartbox mb-3" *ngIf="clientHaveSubEOrNonSubEArray">
         <div class="col-sm-12">
             <div class="card shadow-none border">
                 <div class="card-header">
