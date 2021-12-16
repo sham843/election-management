@@ -227,7 +227,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   logOut() {
-    sessionStorage.clear();
+    localStorage.clear();
     this.router.navigate(['/login'], { relativeTo: this.route })
   }
 
@@ -424,7 +424,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   redirectOrgDetails(bodyId: any, BodyOrgCellName: any) {
     let obj = { bodyId: bodyId, BodyOrgCellName: BodyOrgCellName }
-    sessionStorage.setItem('bodyId', JSON.stringify(obj))
+    localStorage.setItem('bodyId', JSON.stringify(obj))
     this.router.navigate(['../committee/details'], { relativeTo: this.route })
     //}
   }

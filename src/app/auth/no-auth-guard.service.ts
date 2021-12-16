@@ -11,7 +11,7 @@ export class NoAuthGuardService {
   constructor(private auth: AuthService,
     private router: Router ,private commonService:CommonService){
   }
-  logInUserType:any =  sessionStorage.getItem('loggedInDetails');
+  logInUserType:any =  localStorage.getItem('loggedInDetails');
 
     canActivate(): any {
       if(this.auth.isLoggedIn()){

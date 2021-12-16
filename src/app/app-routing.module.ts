@@ -24,6 +24,7 @@ const routes: Routes = [
       { path: 'election-dashboard', loadChildren: () => import('./partial/election-management/election-dashboard/election-dashboard.module').then(m => m.ElectionDashboardModule),data: { title: 'Election Dashboard', allowedRoles: ['1'] } },
       { path: 'assign-booth-to-village', loadChildren: () => import('./partial/election-management/assign-booth-to-village/assign-booth-to-village.module').then(m => m.AssignBoothToVillageModule),data: { title: 'Assign Booth To Village', allowedRoles: ['1'] }  },
       //booth manag
+      { path: 'agents-activity/:id', loadChildren: () => import('./partial/booth-management/agents-activity/agents-activity.module').then(m => m.AgentsActivityModule),data:{ title:'Agents Activity',allowedRoles:['1','2'] }},
       { path: 'agents-activity', loadChildren: () => import('./partial/booth-management/agents-activity/agents-activity.module').then(m => m.AgentsActivityModule),data:{ title:'Agents Activity',allowedRoles:['1','2'] }},
       { path: 'assign-agents-to-booth', loadChildren: () => import('./partial/booth-management/assign-agents-to-booth/assign-agents-to-booth.module').then(m => m.AssignAgentsToBoothModule),data:{ title:'Assign Agents To Booth',allowedRoles:['1','2'] } },
       { path: 'assign-candidate-to-constituency', loadChildren: () => import('./partial/booth-management/assign-candidate-to-constituency/assign-candidate-to-constituency.module').then(m => m.AssignCandidateToConstituencyModule),data:{ title:'Assign Candidate To Constituency',allowedRoles:['1','2'] } },
@@ -31,14 +32,13 @@ const routes: Routes = [
       { path: 'client-dashboard', loadChildren: () => import('./partial/booth-management/booth-dashboard/booth-dashboard.module').then(m => m.BoothDashboardModule),data:{ title:'Booth Dashboard',allowedRoles:['1','2'] } },
       { path: 'candidate-registration', loadChildren: () => import('./partial/booth-management/candidate-registration/candidate-registration.module').then(m => m.CandidateRegistrationModule),data:{ title:'Candidate Registration',allowedRoles:['1','2'] } },
       { path: 'view-boothwise-voters-list', loadChildren: () => import('./partial/booth-management/view-boothwise-voters-list/view-boothwise-voters-list.module').then(m => m.ViewBoothwiseVotersListModule),data:{ title:'View Booth Wise Voters List',allowedRoles:['1','2'] } },
-      { path: 'voters-profile', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2'] } },
+      { path: 'voters-profile/:id', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2'] } },
       { path: 'restricted-mobile', loadChildren: () => import('./partial/settings/restricted-mobile/restricted-mobile.module').then(m => m.RestrictedMobileModule),data:{ title:'Restricted Mobile',allowedRoles:['1','2'] } },
       { path: 'my-profile', loadChildren: () => import('./my-profile/my-profile.module').then(m => m.MyProfileModule),data:{ title:'My Profile',allowedRoles:['1','2'] } },
       { path: 'notifications', loadChildren: () => import('./partial/booth-management/notifications/notifications.module').then(m => m.NotificationsModule), data: { title: 'Notifications', allowedRoles: ['1','2'] } },
       { path: 'forward-activities', loadChildren: () => import('./partial/booth-management/forward-activities/forward-activities.module').then(m => m.ForwardActivitiesModule), data: { title: 'Forward Activities', allowedRoles: ['1','2'] } },
       { path: 'name-correction', loadChildren: () => import('./partial/booth-management/name-correction/name-correction.module').then(m => m.NameCorrectionModule), data: { title: 'Name Correction', allowedRoles: ['1','2'] } },
- 
-    ]
+      ]
   },
   { path: '500', component: ServerErrorComponent },
  

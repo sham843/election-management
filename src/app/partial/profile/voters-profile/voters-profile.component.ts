@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,7 +13,7 @@ import { Lightbox } from '@ngx-gallery/lightbox';
   templateUrl: './voters-profile.component.html',
   styleUrls: ['./voters-profile.component.css']
 })
-export class VotersProfileComponent implements OnInit {
+export class VotersProfileComponent implements OnInit, OnDestroy {
   voterProfileData: any;
   voterListData: any;
   posNegativeInfData: any;
@@ -47,14 +47,13 @@ export class VotersProfileComponent implements OnInit {
     public gallery: Gallery,
     public lightbox: Lightbox,
   ) { 
-    // let ReceiveDataSnapshot = this.route.snapshot.params.Data;
-    // this.voterListData = this.commonService.decrypt(ReceiveDataSnapshot);
-    // this.voterListData = JSON.parse(this.voterListData);
 
-    let getsessionStorageData: any = sessionStorage.getItem('voter-profile');
-    let getStorageData= JSON.parse(getsessionStorageData); 
-    //this.voterListData = {'AgentId': getStorageData.AgentId ,'ClientID': getStorageData.ClientID, 'VoterId': getStorageData.VoterId}
-    this.voterListData = getStorageData;
+    let getUrlData: any = this.route.snapshot.params.id;
+    if(getUrlData){
+        getUrlData = getUrlData.split('.');
+        console.log(getUrlData);
+        this.voterListData = {'AgentId': +getUrlData[0] ,'ClientID': +getUrlData[1], 'VoterId': +getUrlData[2]}
+    }
   }
 
   ngOnInit(): void {
@@ -291,7 +290,10 @@ export class VotersProfileComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    sessionStorage.removeItem('voter-profile');
+    localStorage.removeItem('voter-profile');
   }
+
+
+
 
 }
