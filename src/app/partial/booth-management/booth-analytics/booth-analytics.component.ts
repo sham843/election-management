@@ -67,6 +67,7 @@ export class BoothAnalyticsComponent implements OnInit {
   supportToid: any;
 
   selectedBoot: any[] = []
+  boothArray:any[] = []
   selectedVillage: any;
   // reverseOrder: boolean = true;
   //sortField = 'LeaderImportance';
@@ -79,7 +80,7 @@ export class BoothAnalyticsComponent implements OnInit {
   //  this.reverseOrder = (this.sortField === sortField) ? !this.reverseOrder : false;
   //  this.sortField = sortField;
   //};
-
+  searchAssembly = '';
  
   constructor(
     private spinner: NgxSpinnerService,
@@ -221,6 +222,10 @@ export class BoothAnalyticsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
+        this.clientWiseBoothListArray.map((ele:any)=> {
+          ele['checked'] = false;
+        })
+        console.log( this.clientWiseBoothListArray);
         //this.clientWiseBoothListArray.length == 1 ? ( this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false, this.bindData()) : '';
         this.clientWiseBoothListArray.length == 1 ? (this.boothFlag = false) : '';
       } else {
@@ -237,30 +242,52 @@ export class BoothAnalyticsComponent implements OnInit {
   }
   
   bindData() {
-    this.selectedBoot = [];  
-    if (this.filterForm.value.BoothId) {
-      this.clientWiseBoothListArray.filter((ele: any) => {
-        if (this.filterForm.value.BoothId == ele.BoothId) {
-          this.selectedBoot.push(ele)
-        }
-      })
-      this.filterForm.value.BoothId.forEach((value: any) => {
-        this.clientWiseBoothListArray.filter((ele: any) => {
-          if (value == ele.BoothId) {
-            this.selectedBoot.push(ele)
-          }
-        })
-      });
+    // this.selectedBoot = [];  
+    // if (this.filterForm.value.BoothId) {
+    //   this.clientWiseBoothListArray.filter((ele: any) => {
+    //     if (this.filterForm.value.BoothId == ele.BoothId) {
+    //       this.selectedBoot.push(ele)
+    //     }
+    //   })
+    //   this.filterForm.value.BoothId.forEach((value: any) => {
+    //     this.clientWiseBoothListArray.filter((ele: any) => {
+    //       if (value == ele.BoothId) {
+    //         this.selectedBoot.push(ele)
+    //       }
+    //     })
+    //   });
 
-      this.villageNameArray.filter((ele: any) => {
-        if (this.filterForm.value.VillageId == ele.VillageId) {
-          this.selectedVillage = ele;
-        }
-      })
+    //   this.villageNameArray.filter((ele: any) => {
+    //     if (this.filterForm.value.VillageId == ele.VillageId) {
+    //       this.selectedVillage = ele;
+    //     }
+    //   })
+
+    //   this.areaWiseVoterConfig = { id: 'areaWiseVoterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
+    //   this.votersConfig = { id: 'votersListPagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
+    //   this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
+
+    //   this.filterForm.patchValue({
+    //     BoothId:'358,357,359'
+    //   })
+
+    //   this.boothSummary()
+    //   this.boothSummaryGraphs()
+    //   this.bindMigrationPattern()
+    //   this.bindImpLeaders()
+    //   this.bindAreaWiseVoters()
+    //   this.bindSocialMediaSuprt()
+    //   this.bindAreaWiseCommonIssues();
+    // } else {
+    //   this.clearForm();
+    // }
+
 
       this.areaWiseVoterConfig = { id: 'areaWiseVoterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.votersConfig = { id: 'votersListPagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
       this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
+
+
 
       this.boothSummary()
       this.boothSummaryGraphs()
@@ -269,13 +296,10 @@ export class BoothAnalyticsComponent implements OnInit {
       this.bindAreaWiseVoters()
       this.bindSocialMediaSuprt()
       this.bindAreaWiseCommonIssues();
-    } else {
-      this.clearForm();
-    }
   }
 
   boothSummary() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + '358,357,359'
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -727,4 +751,16 @@ export class BoothAnalyticsComponent implements OnInit {
     // this.getClientAgentWithBooths();
   }
 
+
+  onCheckChangeAssembly(event: any, boothId:any) {
+    if (event.target.checked){
+      this.boothArray.push(boothId);
+      this.filterForm.patchValue({
+        BoothId:this.boothArray.join()
+      })
+    }else{
+    }
+    this.bindData();
+
+  }
 }
