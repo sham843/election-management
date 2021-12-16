@@ -12,7 +12,7 @@ export class DateTransformPipe implements PipeTransform {
     var date_components = value.split(" ");
     var date = date_components[0].split("/").reverse().join('-');
    
-   return  this.datePipe.transform( new Date(date + ' '+ date_components[1]), 'dd/mm/YYYY hh:mm a');
+   return  this.datePipe.transform(new Date(date + ' '+ date_components[1]), 'dd/mm/YYYY hh:mm a');
   }
 
 }

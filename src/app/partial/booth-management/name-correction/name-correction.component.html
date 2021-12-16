@@ -140,15 +140,17 @@
                                 <!-- [class.active]="constituency.Id == highlightedRow" -->
                                 <!-- <td>{{CHaveSubEOrNonSubE.SrNo}}</td> -->
                                 <td>{{CHaveSubEOrNonSubE.VoterNo}}</td>
-                                <td  [ngClass]="{'text-success' : CHaveSubEOrNonSubE.NameChanged == 1, 'text-dark' : CHaveSubEOrNonSubE.NameChanged == 3 ,'text-danger' : CHaveSubEOrNonSubE.NameChanged == 2}">
-                                    <a routerLink="#">
-                                        <p class="mb-0">{{CHaveSubEOrNonSubE.OldEnglishName}}</p>
+                                <td  >
+                                    <a>
+                                        <p class="mb-0" >{{CHaveSubEOrNonSubE.OldEnglishName}}</p>
                                         <p class="mb-0">{{CHaveSubEOrNonSubE.OldMarathiName}}</p>
                                     </a>
                                 </td>
                                 <td>
-                                    <p class="mb-0">{{CHaveSubEOrNonSubE.NewEnglishName}}</p>
-                                    <p class="mb-0">{{CHaveSubEOrNonSubE.NewMarathiName}}</p>
+                                    <a  [ngClass]="{'text-success' : CHaveSubEOrNonSubE.NameChanged == 1, 'text-dark' : CHaveSubEOrNonSubE.NameChanged == 3 ,'text-danger' : CHaveSubEOrNonSubE.NameChanged == 2}">
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.NewEnglishName}}</p>
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.NewMarathiName}}</p>
+                                    </a>
                                 </td>
                                 <!-- <td>{{CHaveSubEOrNonSubE.NewMarathiName}}</td> -->
                                 <td>{{CHaveSubEOrNonSubE.boothnickname}}</td>

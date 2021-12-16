@@ -573,7 +573,7 @@
                             <tr *ngFor="let appUseTrackRes of boothAgentAppUseTrackRes  | paginate: {id: 'boothAgentPagination', itemsPerPage: 10, currentPage: appUsesActivityPaginationNo, totalItems:getCallLoggerTotal}"> 
                                 <td>{{appUseTrackRes?.SrNo}}</td>
                                 <td>Android</td>
-                                <td>{{appUseTrackRes?.StartDate | dateTransform}} -  {{appUseTrackRes?.EndDate | dateTransform}}</td>
+                                <td>{{appUseTrackRes?.StartDate}} -  {{appUseTrackRes?.EndDate}}</td>
                                 <td>{{appUseTrackRes?.difference}}</td>
                             </tr>
                         </tbody>
@@ -597,7 +597,7 @@
                         <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
                             <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
                                 <agm-info-window #infowindow>
-                                    <strong>Date Time - {{boothAgentTracking?.LocationDate | dateTransform}}</strong>
+                                    <strong>Date Time - {{boothAgentTracking?.LocationDate}}</strong>
                                 </agm-info-window>
                             </agm-marker>
                         </div>

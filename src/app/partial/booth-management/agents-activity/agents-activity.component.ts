@@ -168,7 +168,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
           this.clientDropDownDis = true;
           this.clientDropDownCloseIcon = false;
         }
-        this.getAllAgentList();
+        // this.getAllAgentList();
         //this.clientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.clientNameArray[0].id }), this.getAllAgentList(), this.clientIdFlag = false) : '';
       } else {
         this.spinner.hide();
@@ -213,8 +213,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   areaSubAgentByAgentId() {
     this.spinner.show();
-    let formData = this.filterForm.value;
     this.nullishTopFilterForm();
+    let formData = this.filterForm.value;
     let obj: any = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothAgentId=' + formData.AgentId;
     this.callAPIService.setHttp('get', 'Web_Client_Area_AgentList_ddl?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -307,7 +307,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
     }
-    this.getAgentAssBoothActivityGraph();
+    // this.getAgentAssBoothActivityGraph();
   }
 
   nullishTopFilterForm() {
@@ -697,6 +697,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientBoothAgentVoterList = res.data1;
+        this.clientBoothAgentVoterList
         this.votersTotal = res.data2[0].TotalCount;
       } else {
         this.clientBoothAgentVoterList = [];
@@ -910,6 +911,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         if (res.data == 0) {
           this.spinner.hide();
           this.boothAgentAppUseTrackRes = res.data1;
+          // this.boothAgentAppUseTrackRes
           this.getCallLoggerTotal = res.data2[0].TotalCount;
         } else {
           this.boothAgentAppUseTrackRes = [];
