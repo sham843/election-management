@@ -183,7 +183,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
         })
       } else {
         this.agentwiseAssigBoothArray = [];
-        this.disabledNoOfCasesDiv = true;
+        this.disabledNoOfCasesDiv = false;
         this.agentwiseAssigBoothHide = false;
         this.spinner.hide();
       }
@@ -198,7 +198,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   getClientAgentList() {
     this.agentwiseAssigBoothArray = [];
     this.agentwiseAssigBoothHide = false;
-    this.disabledNoOfCasesDiv = false;
+    // this.disabledNoOfCasesDiv = false;
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + this.globalClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
