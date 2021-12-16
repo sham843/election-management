@@ -27,7 +27,7 @@
                                     <label class="form-label required-field">Select Leader</label>
                                     <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                         [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
-                                        (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList();" optionValueField="id"
+                                        (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList(); disabledNoOfCasesDiv = false;" optionValueField="id"
                                         optionTextField="Fullname" placeholder="Select Leader"
                                         (remove)="clearAggentToBooth('clientName')">
                                     </ngx-select>
@@ -41,7 +41,7 @@
                                     <ngx-select [allowClear]="true" [items]="ClientAgentListddl"
                                         formControlName="UserId" optionValueField="AgentId" [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                         [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
-                                        class="w-75" (select)="clearAggentToBooth('electionName'); getElectionName(); getAgentwiseAssignedBooth();" placeholder="Select Agent"
+                                        class="w-75" (select)="clearAggentToBooth('electionName'); getElectionName(); getAgentwiseAssignedBooth(); disabledNoOfCasesDiv = false;" placeholder="Select Agent"
                                         (remove)="clearAggentToBooth('agentName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
