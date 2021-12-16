@@ -241,7 +241,6 @@ export class NameCorrectionComponent implements OnInit {
     this.spinner.show();
     this.nullishFilterForm();
     let fromData = this.filterForm.value;
-    debugger;
     let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
       + '&AssemblyId=' + 0 + '&BoothId=' + fromData.BoothId + '&VillageId='+fromData?.VillageId+'&NameChangeFlag=' + fromData.NameChangeType 
       + '&AgentId=' + fromData.AgentId + '&Search=' + fromData.Search + '&nopage=' + this.paginationNo
@@ -280,7 +279,6 @@ export class NameCorrectionComponent implements OnInit {
 
 
   clearFilter(flag: any) {
-    debugger;
     if (flag == 'clientId') {
       this.defaultFilterForm();
     } else if (flag == 'electionId') {
