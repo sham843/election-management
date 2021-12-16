@@ -824,20 +824,35 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     }
   }
 
-  redirectToAgentDetails(obj: any) {
-    this.encryptData = this.commonService.encrypt(obj);
-    const url = this.router.createUrlTree(['agents-activity', { Data: this.encryptData }])
-    window.open(url.toString(), '_blank');
-    // sessionStorage.setItem('agents-activity', JSON.stringify(obj))
-    // this.router.navigate(['../agents-activity']);
+  // redirectToAgentDetails(obj: any) {
+  //   this.encryptData = this.commonService.encrypt(obj);
+  //   const url = this.router.createUrlTree(['agents-activity', { Data: this.encryptData }])
+  //   window.open(url.toString(), '_blank');
+  // }
+  //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
+
+  // redirectToVoterPrfile(obj: any) {
+  //   this.encryptData = this.commonService.encrypt(obj);
+  //   const url = this.router.createUrlTree(['voters-profile', { Data: this.encryptData }])
+  //   window.open(url.toString(), '_blank');
+  // }
+
+
+
+  redirectToAgentDetails(obj:any){
+    sessionStorage.setItem('agents-activity', JSON.stringify(obj))
+    this.router.navigate(['../agents-activity']);
   }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
-  redirectToVoterPrfile(obj: any) {
-    this.encryptData = this.commonService.encrypt(obj);
-    const url = this.router.createUrlTree(['voters-profile', { Data: this.encryptData }])
-    window.open(url.toString(), '_blank');
+  redirectToVoterPrfile(obj:any){
+    sessionStorage.setItem('voter-profile', JSON.stringify(obj));
+    this.router.navigate(['voters-profile'])
   }
+
+
+
+
 
 
 
