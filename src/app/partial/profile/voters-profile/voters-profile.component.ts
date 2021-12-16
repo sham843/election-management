@@ -47,14 +47,13 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     public gallery: Gallery,
     public lightbox: Lightbox,
   ) { 
-    // let ReceiveDataSnapshot = this.route.snapshot.params.Data;
-    // this.voterListData = this.commonService.decrypt(ReceiveDataSnapshot);
-    // this.voterListData = JSON.parse(this.voterListData);
 
-    let getsessionStorageData: any = sessionStorage.getItem('voter-profile');
-    let getStorageData= JSON.parse(getsessionStorageData); 
-    //this.voterListData = {'AgentId': getStorageData.AgentId ,'ClientID': getStorageData.ClientID, 'VoterId': getStorageData.VoterId}
-    this.voterListData = getStorageData;
+    let getUrlData: any = this.route.snapshot.params.id;
+    if(getUrlData){
+        getUrlData = getUrlData.split('.');
+        console.log(getUrlData);
+        this.voterListData = {'AgentId': +getUrlData[0] ,'ClientID': +getUrlData[1], 'VoterId': +getUrlData[2]}
+    }
   }
 
   ngOnInit(): void {

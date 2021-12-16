@@ -834,17 +834,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
   redirectToVoterPrfile(obj:any){
-    sessionStorage.setItem('voter-profile', JSON.stringify(obj));
-    // this.router.navigate(['voters-profile'])
-    window.open('voters-profile', '_blank');
+    window.open('../voters-profile/'+obj.AgentId+'.'+obj.ClientID+'.'+obj.VoterId);
   }
-
-
-
-
-
-
-
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {
