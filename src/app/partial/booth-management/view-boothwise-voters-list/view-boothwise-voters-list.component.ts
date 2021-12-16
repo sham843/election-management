@@ -844,7 +844,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries() {
-    let obj = {voterId:1}
+    let obj = {VoterId:344612 ,ClientID:2 ,AgentId:10  }
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
       data:obj,
       panelClass: 'fullscreen-dialog',

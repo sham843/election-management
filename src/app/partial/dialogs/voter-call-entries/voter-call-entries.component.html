@@ -19,70 +19,84 @@
                     <div class="card-body pt-1">
                         <div class="mb-2">
                             <label class="form-label">Voters Full Name</label>
-                            <div class="form-data">आक्काताई नितीन केंगार</div>
+                            <div class="form-data">{{voterProfileData?.MarathiName}}</div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-4">
                                 <label class="form-label">DOB</label>
-                                <div class="form-data">11-01-1988</div>
+                                <div class="form-data">{{voterProfileData?.DateOfBirth ? voterProfileData?.DateOfBirth :
+                                    '-'}}</div>
                             </div>
                             <div class="col-sm-4">
                                 <label class="form-label">Age</label>
-                                <div class="form-data">25</div>
+                                <div class="form-data">{{voterProfileData?.Age ? voterProfileData?.Age : '-'}}</div>
                             </div>
                             <div class="col-sm-4">
                                 <label class="form-label">Gender</label>
-                                <div class="form-data">Female</div>
+                                <div class="form-data">
+                                    <span class="voter-data" *ngIf="voterProfileData?.Gender == 'F'">Female</span>
+                                    <span class="voter-data" *ngIf="voterProfileData?.Gender == 'M'">Male</span>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Contact No.</label>
-                            <div class="form-data"><i class="fab fa-whatsapp me-1 text-primary"></i> 987543210,
-                                987653210
+                            <div class="form-data">
+                                <i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
+                                    {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </div>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Area</label>
-                            <div class="form-data">काळचौडी गावंठाण मारूती मंदिरा शेजारी काळचौडी</div>
+                            <div class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <label class="form-label">Religion (Caste)</label>
-                                <div class="form-data">Hindu (Maratha)</div>
+                                <div class="form-data"> {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})</div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label">Qualification</label>
-                                <div class="form-data">BA Economics</div>
+                                <div class="form-data">{{voterProfileData?.Qualification ? voterProfileData?.Qualification
+                                    : '-'}}</div>
                             </div>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Comments</label>
                             <div class="form-data">
-                                <ul class="mb-0 ps-3 text-main">
-                                    <li>Need water supply facility in our area.</li>
+                                <ul *ngFor="let VPComments of VPCommentData" class="list-group list-group-flush mb-0">
+                                    <li class="list-group-item ps-0" *ngIf="VPComments?.CommentDetails">
+                                        <i class="fas fa-check me-2"></i>
+                                        {{VPComments?.CommentDetails}}
+                                    </li>
                                 </ul>
+                                <span class="text-danger" *ngIf="VPCommentData?.length == 0">No Comments</span>
                             </div>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Political Information</label>
-                            <div class="form-data">
-                                Nationalist Congress Party, Leader (5 <i class="fas fa-star"></i>)
+                            <div class="form-data" *ngIf="voterProfileData?.partyname">
+                                {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-6 text-success">
                                 <label class="form-label">Party/Person Favouring</label>
-                                <div class="form-data">NCP, Sharad Pawar</div>
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.Support}}</span>
+                                </div>
                             </div>
                             <div class="col-sm-6 text-danger">
                                 <label class="form-label">Party/Person Opposing</label>
-                                <div class="form-data">BJP, Chandrakant Patil</div>
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.Support}}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-2">
                             <span class="form-label">Family Information</span>
                             <span class="form-data">
-                                Family Head (3 Members)
+                                {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members)
                             </span>
                             <table class="table table-hover mb-0 table-sm">
                                 <thead>
@@ -95,15 +109,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>12422</td>
+                                    <tr *ngFor="let voterProfileFamily of voterProfileFamilyData">
+                                        <td>{{voterProfileFamily.VoterNo}}</td>
                                         <td>
-                                            <p class="mb-0">Vijay Chavan (M)</p>
-                                            <small>9876543210</small>
+                                            <p class="mb-0">{{voterProfileFamily.Family}}</p>
+                                            <small>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</small>
                                         </td>
-                                        <td>Mumbai</td>
-                                        <td>BE Civil</td>
-                                        <td>Service</td>
+                                        <td>{{voterProfileFamily.Address ? voterProfileFamily.Address : '-'}}</td>
+                                        <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification :
+                                            '-'}}</td>
+                                        <td>{{voterProfileFamily.Occupation ? voterProfileFamily.Occupation : '-'}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -178,7 +193,6 @@
                                     <div class="input-group">
                                        
                                         <input [owlDateTime]="dt3" formControlName="FollowupDate"
-                                            [selectMode]="'range'"
                                             (dateTimeChange)="voterDateRangeSelect(this.enterNewFeedbackForm.value.FollowupDate)"
                                             class="form-control" [owlDateTimeTrigger]="dt3" placeholder="dd/mM/yyyy hh:mm:ss">
                                         <!-- <button class="btn btn-light border btn-sm" type="button"
@@ -191,16 +205,6 @@
                                     </div>
                                     <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
                                 </div>
-
-
-
-
-
-
-
-
-
-
 
 
 

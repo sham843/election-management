@@ -15,9 +15,8 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
   styleUrls: ['./voter-call-entries.component.css']
 })
 export class VoterCallEntriesComponent implements OnInit {
-  voterId:any
-  
-  getFeedbacksList:any
+
+  getFeedbacksList:any;
   getFeedbacksListTotal:any;
   feedbacksPaginationNo:any = 1;
   feedbacksPageSize: number = 10;
@@ -25,6 +24,11 @@ export class VoterCallEntriesComponent implements OnInit {
   feedbackTypeArray = [{id:1, name:'Positive'},{id:2, name:'Negitive'},{id:3, name:'Neutral'}]
   enterNewFeedbackForm!:FormGroup;
   submitted:boolean = false;
+  voterListData: any;
+  voterProfileData: any;
+  voterProfileFamilyData: any;
+  VPCommentData: any;
+  posNegativeInfData: any;
 
 
   constructor(
@@ -39,12 +43,14 @@ export class VoterCallEntriesComponent implements OnInit {
     private commonService: CommonService,
     public dateTimeAdapter: DateTimeAdapter<any>,
     private datePipe: DatePipe,
-    ) { dateTimeAdapter.setLocale('en-IN') }
+    ) { dateTimeAdapter.setLocale('en-IN');
+        this.voterListData = this.data;}
 
   ngOnInit(): void {
-    this.voterId = this.data.voterId;
     this.defaultFeedbackForm();
     this.feedbacksList();
+    this.getVoterProfileData();
+    this.getVoterprofileFamilyData();
   }
 
   defaultFeedbackForm(){
@@ -56,7 +62,7 @@ export class VoterCallEntriesComponent implements OnInit {
       Description:[''],	
       FollowupDate:[''],
       CreatedBy:[this.commonService.loggedInUserId()],	
-      NotToCall:['']
+      NotToCall:[false]
     })
   }
 
@@ -64,7 +70,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
   feedbacksList(){
     this.spinner.show();
-    let obj: any = 'VoterId='+ this.voterId +'&nopage='+this.feedbacksPaginationNo;
+    let obj: any = 'VoterId='+ this.voterListData.VoterId +'&nopage='+this.feedbacksPaginationNo;
     this.callAPIService.setHttp('get', 'Get_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -73,6 +79,82 @@ export class VoterCallEntriesComponent implements OnInit {
         this.getFeedbacksListTotal = res.data2[0].TotalCount;
       } else {
         this.getFeedbacksList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+                                     //........................ Get Voter Profile Data.....................//
+
+  getVoterProfileData() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        let obj  = res.data1[0];
+        this.checkValueNullOrUnd(obj);
+       // this.voterProfileBoothAgentData = res.data2;
+     } else {
+        this.spinner.hide();
+      //  this.voterProfileBoothAgentData = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  checkValueNullOrUnd(obj:any){
+    Object.keys(obj).map((key:any)=> {
+      if (obj[key]==undefined || obj[key]==null) {
+        obj[key] = "";
+        return obj[key];
+      }
+    });
+    this.voterProfileData = obj;
+  }
+
+                          //............. get get Voterprofile Family Data ...............//    
+
+  getVoterprofileFamilyData() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Family?ClientId=' + this.voterListData.ClientID + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.voterProfileFamilyData = res.data1;
+      } else {
+        this.voterProfileFamilyData = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+                              // data1: get ostive Negative Influence & data2: get Comment Data  //
+
+  getVPPoliticalInfluenceData() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Political_Influence?ClientId=' + this.voterListData.ClientID + '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId , false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.VPCommentData = res.data1;
+        this.posNegativeInfData = res.data2;
+      } else {
+        this.VPCommentData = [];
         this.spinner.hide();
       }
     }, (error: any) => {

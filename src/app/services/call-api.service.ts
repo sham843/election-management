@@ -15,7 +15,7 @@ export class CallAPIService {
   getBaseurl(url: string) {
     switch (url) {
       //development server base url 
-      case 'electionServiceForWeb': return 'http://electionwservice.erpguru.in/service.asmx/'; break;
+      case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
       default: return ''; break;
     }
   }
