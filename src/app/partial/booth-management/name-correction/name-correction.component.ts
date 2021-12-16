@@ -280,24 +280,33 @@ export class NameCorrectionComponent implements OnInit {
 
   clearFilter(flag: any) {
     if (flag == 'clientId') {
-      this.defaultFilterForm();
+      this.filterForm.reset();
+      this.clientHaveSubEOrNonSubEArray = [];
     } else if (flag == 'electionId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId })
+      this.clientHaveSubEOrNonSubEArray = [];
     } else if (flag == 'constituencyId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId });
+      this.getClientHaveSubEleOrNonSubEle();
     } else if (flag == 'VillageId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
+      this.getClientHaveSubEleOrNonSubEle();
     }  else if (flag == 'AgentId') {
+      debugger;
       //this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
       this.filterForm.controls['AgentId'].setValue(0);
+      this.getClientHaveSubEleOrNonSubEle();
     }  else if (flag == 'NameChangeType'){
       this.filterForm.controls['NameChangeType'].setValue(0);
+      this.getClientHaveSubEleOrNonSubEle();
     } else if (flag == 'search') {
       this.filterForm.controls['Search'].setValue('');
+      this.getClientHaveSubEleOrNonSubEle();
     }else if (flag == 'BoothId'){
       this.filterForm.controls['BoothId'].setValue(0);
+      this.getClientHaveSubEleOrNonSubEle();
     }
-    this.getClientHaveSubEleOrNonSubEle();
+
     
 
   }
