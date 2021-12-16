@@ -39,7 +39,7 @@ export class NameCorrectionComponent implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   total: any;
-  NameChangeTypeArray = [{ id: 1, name: "Requested" }, { id: 2, name: "Changed" }, { id: 3, name: "From VoterList" }];
+  NameChangeTypeArray = [{ id: 2, name: "Requested" }, { id: 1, name: "Changed" }, { id: 3, name: "From VoterList" }];
   clientHaveSubEOrNonSubEArray: any;
  
 
@@ -68,7 +68,7 @@ export class NameCorrectionComponent implements OnInit {
       ConstituencyId: [0],
       VillageId: [0],
       BoothId: [0],
-      NameChangeType: [1],
+      NameChangeType: [0],
       AgentId: [0],
       Search: [''],
     })
@@ -96,7 +96,10 @@ export class NameCorrectionComponent implements OnInit {
   getElectionName() {
     this.getAllAgentList();
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+  
+    this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -116,13 +119,17 @@ export class NameCorrectionComponent implements OnInit {
 
   getConstituencyName() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Constituency_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId, false, false, false, 'electionServiceForWeb');
+    this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+
+    this.callAPIService.setHttp('get', 'Web_Get_Constituency_byClientId_ddl?ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
         // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
+        this.getClientHaveSubEleOrNonSubEle();
         this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.getVillageName()) : '';
       } else {
         this.constituencyNameArray = [];
@@ -154,7 +161,10 @@ export class NameCorrectionComponent implements OnInit {
   }
 
   getVillageName() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+    
+    let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
       + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothVillages?' + obj, false, false, false, 'electionServiceForWeb');
@@ -176,8 +186,11 @@ export class NameCorrectionComponent implements OnInit {
   }
 
   ClientWiseBoothList() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.filterForm.value.VillageId
+    this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+
+    let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
+      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + fromData.VillageId
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -190,6 +203,7 @@ export class NameCorrectionComponent implements OnInit {
         this.spinner.hide();
         //this.clearForm();
       }
+      this.getClientHaveSubEleOrNonSubEle();
     }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
@@ -200,13 +214,15 @@ export class NameCorrectionComponent implements OnInit {
 
   getAllAgentList() {
     this.spinner.show();
-    let formData = this.filterForm.value;
-    this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+
+    this.callAPIService.setHttp('get', 'Web_Client_AllAgentList_ddl?ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        this.allAgentLists.length == 1 ?  (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId),  this.agentFlag = false) : '';
+        //this.allAgentLists.length == 1 ?  (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId),  this.agentFlag = false) : '';
       } else {
         this.allAgentLists = [];
         this.spinner.hide();
@@ -222,12 +238,18 @@ export class NameCorrectionComponent implements OnInit {
                   //...........  Get ClientHavesubEle NameChangeVoterList & Get ClientHaveNosubEle NameChangeVoterList ........//
 
   getClientHaveSubEleOrNonSubEle() {
-    let formData = this.filterForm.value;
-    let obj = 'ClientId=' + formData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + formData.ElectionId + '&ConstituencyId=' + formData.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + formData.BoothId + '&NameChangeFlag=' + formData.NameChangeType 
-      + '&AgentId=' + formData.AgentId + '&Search=' + formData.Search + '&nopage=' + this.paginationNo
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_ClientHaveNosubEle_NameChangeVoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.nullishFilterForm();
+    let fromData = this.filterForm.value;
+    let obj = 'ClientId=' + fromData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + fromData.ElectionId + '&ConstituencyId=' + fromData.ConstituencyId
+      + '&AssemblyId=' + 0 + '&BoothId=' + fromData.BoothId + '&VillageId='+fromData?.VillageId+'&NameChangeFlag=' + fromData.NameChangeType 
+      + '&AgentId=' + fromData.AgentId + '&Search=' + fromData.Search + '&nopage=' + this.paginationNo
+    this.spinner.show();
+    let url:any;
+
+    this.getIsSubElectionApplicable() == 1 ? url = 'Web_Get_ClientHaveSubEle_NameChangeVoterList?' : url = 'Web_Get_ClientHaveNosubEle_NameChangeVoterList?';
+    
+    this.callAPIService.setHttp('get', url + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => { 
       if (res.data == 0) {
         this.spinner.hide();
@@ -245,24 +267,52 @@ export class NameCorrectionComponent implements OnInit {
     })
   }
 
+  getIsSubElectionApplicable() {
+    let eleIsSubElectionApplicable: any;
+    this.electionNameArray.filter((ele: any) => {
+      if (ele.ElectionId == this.filterForm.value.ElectionId) {
+        eleIsSubElectionApplicable = ele.IsSubElectionApplicable
+      };
+    })
+    return eleIsSubElectionApplicable;
+  }
+
 
   clearFilter(flag: any) {
     if (flag == 'clientId') {
-      this.filterForm.reset()
+      this.defaultFilterForm();
     } else if (flag == 'electionId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId })
     } else if (flag == 'constituencyId') {
-      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId })
+      this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId });
     } else if (flag == 'VillageId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
     }  else if (flag == 'AgentId') {
       //this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
       this.filterForm.controls['AgentId'].setValue(0);
     }  else if (flag == 'NameChangeType'){
-      this.filterForm.controls['NameChangeType'].setValue(1);
+      this.filterForm.controls['NameChangeType'].setValue(0);
     } else if (flag == 'search') {
       this.filterForm.controls['Search'].setValue('');
+    }else if (flag == 'BoothId'){
+      this.filterForm.controls['BoothId'].setValue(0);
     }
+    this.getClientHaveSubEleOrNonSubEle();
+    
+
+  }
+
+
+  nullishFilterForm(){
+    let fromData = this.filterForm.value;
+    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
+    fromData.ElectionId ?? this.filterForm.controls['ElectionId'].setValue(0); 
+    fromData.ConstituencyId ?? this.filterForm.controls['ConstituencyId'].setValue(0); 
+    fromData.VillageId ?? this.filterForm.controls['VillageId'].setValue(0); 
+    fromData.BoothId ?? this.filterForm.controls['BoothId'].setValue(0); 
+    fromData.NameChangeType ?? this.filterForm.controls['NameChangeType'].setValue(0); 
+    fromData.AgentId ?? this.filterForm.controls['AgentId'].setValue(0); 
+    fromData.Search ?? this.filterForm.controls['Search'].setValue(''); 
   }
 
   onKeyUpFilter() {
