@@ -13,8 +13,8 @@ export class AuthorizationService {
       return true;
     }
     // get token from local storage or state management
-    let getsessionStorageData: any = sessionStorage.getItem('loggedInDetails');
-    let userRole = JSON.parse(JSON.parse(getsessionStorageData).data1[0].SubUserTypeId)
+    let getlocalStorageData: any = localStorage.getItem('loggedInDetails');
+    let userRole = JSON.parse(JSON.parse(getlocalStorageData).data1[0].SubUserTypeId)
     const token = userRole.toString();
 
     // decode token to read the payload details

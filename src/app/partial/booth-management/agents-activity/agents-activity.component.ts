@@ -106,8 +106,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       console.log(this.agentInfo);
     }
     this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
-// agentCAllLogFlag
-    // this.agentInfo = sessionStorage.getItem('agents-activity');
+    
+    // agentCAllLogFlag
+    // this.agentInfo = localStorage.getItem('agents-activity');
     // this.agentInfo = JSON.parse(this.agentInfo);
 
     this.deafultVoterProfilefilterForm();
@@ -295,13 +296,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   clearTopFilter(flag: any) {
     if (flag == 'clientId') {
-      sessionStorage.removeItem('agents-activity');
+      localStorage.removeItem('agents-activity');
       this.filterForm.controls["ClientId"].setValue(0);
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
       this.filterForm.controls["AgentId"].setValue(0);
     } else if (flag == 'Agent') {
-      sessionStorage.removeItem('agents-activity');
+      localStorage.removeItem('agents-activity');
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
       this.filterForm.controls["AgentId"].setValue(0);
@@ -967,7 +968,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   //-------------------------------------------------- agent Profile method's end here  left side data -----------------------------------------------------------//
   ngOnDestroy() {
-    sessionStorage.removeItem('agents-activity');
+    localStorage.removeItem('agents-activity');
   }
 
   clearFilters(flag: any) {

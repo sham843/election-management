@@ -17,16 +17,16 @@ export class CommonService {
     secretKey = "YourSecretKeyForEncryption&Descryption";
     
     getlocalStorageData() {
-        let loginObj = JSON.parse(sessionStorage.loggedInDetails).data1[0];
+        let loginObj = JSON.parse(localStorage.loggedInDetails).data1[0];
         return loginObj;
     }
     getLoginType() {
-        let LoginType = JSON.parse(sessionStorage.loggedInDetails).data1[0];
+        let LoginType = JSON.parse(localStorage.loggedInDetails).data1[0];
         return LoginType.LoginType;
     }
 
     getAllPageName() {
-        let getAllPageName = JSON.parse(sessionStorage.loggedInDetails).data2;
+        let getAllPageName = JSON.parse(localStorage.loggedInDetails).data2;
         return getAllPageName;
     }
 
@@ -52,15 +52,15 @@ export class CommonService {
     }
 
     getFullName() {
-        let sessionStorage = this.getlocalStorageData();
-        let fName_lName = sessionStorage.FullName.split(' ')
-        let obj = { 'FName': fName_lName[0], 'LName': fName_lName[2], 'ProfilePhoto': sessionStorage.ProfilePhoto }
+        let localStorage = this.getlocalStorageData();
+        let fName_lName = localStorage.FullName.split(' ')
+        let obj = { 'FName': fName_lName[0], 'LName': fName_lName[2], 'ProfilePhoto': localStorage.ProfilePhoto }
         return obj;
     }
 
     getCommiteeInfo() {
-        let sessionStorage = this.getlocalStorageData();
-        let obj = { 'CommiteeId': sessionStorage.CommiteeId, 'CommiteeName': sessionStorage.CommiteeName }
+        let localStorage = this.getlocalStorageData();
+        let obj = { 'CommiteeId': localStorage.CommiteeId, 'CommiteeName': localStorage.CommiteeName }
         return obj;
     }
 

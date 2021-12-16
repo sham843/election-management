@@ -107,12 +107,12 @@ export class MyProfileComponent implements OnInit {
 
   profileFormPathValue(data: any) {
     // for img upload 
-    let loginObj: any = sessionStorage.getItem('loggedInDetails');
+    let loginObj: any = localStorage.getItem('loggedInDetails');
     loginObj = JSON.parse(loginObj);
     loginObj.data1[0].ProfilePhoto = data.ProfilePhoto;
-    sessionStorage.setItem('loggedInDetails', JSON.stringify(loginObj));
+    localStorage.setItem('loggedInDetails', JSON.stringify(loginObj));
     this.commonService.pathchange(this.ImgUrl);
-    sessionStorage.setItem('imgUrl', this.ImgUrl);
+    localStorage.setItem('imgUrl', this.ImgUrl);
 
 
     this.selGender = data.Gender;
@@ -258,10 +258,10 @@ export class MyProfileComponent implements OnInit {
         if (res.data == 0) {
          //set username in session storage
           this.commonService.sendFullName(this.editProfileForm.value.Name);
-          let loginObj: any = sessionStorage.getItem('loggedInDetails');
+          let loginObj: any = localStorage.getItem('loggedInDetails');
           loginObj = JSON.parse(loginObj);
           loginObj.data1[0].FullName = this.editProfileForm.value.Name;
-          sessionStorage.setItem('loggedInDetails', JSON.stringify(loginObj))
+          localStorage.setItem('loggedInDetails', JSON.stringify(loginObj))
 
           this.disabledEditForm = true;
           this.profilePhotoChange = null;

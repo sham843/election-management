@@ -287,7 +287,7 @@ export class VotersProfileComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    sessionStorage.removeItem('voter-profile');
+    localStorage.removeItem('voter-profile');
   }
 
 }
