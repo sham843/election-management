@@ -1,24 +1,24 @@
 <div class="container-fluid">
     <form [formGroup]="filterForm">
     <div class="row mx-0 px-0" id="pageheader">
-        <div class="col-sm-3">
+        <div class="col-sm-auto">
             <span class="page-name">
-                Voters Name Correction
+                Name Correction
             </span>
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm">
            
             <div class="row g-2">
                 <div class="col-sm">
                     <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-                                (remove)="clearFilter('clientId')" (select)="getElectionName()"
+                                (remove)="clearFilter('clientId')" (select)="clearFilter('electionId');getElectionName()"
                                 optionValueField="id" optionTextField="Fullname"
                                 placeholder="Select Client">
                     </ngx-select>
                   </div>
                   <div class="col-sm">
                     <ngx-select [allowClear]="electionFlag" [items]="electionNameArray" (remove)="clearFilter('electionId')"
-                                (select)="getConstituencyName()" formControlName="ElectionId"
+                                (select)="clearFilter('constituencyId');getConstituencyName()" formControlName="ElectionId"
                                 optionValueField="ElectionId" optionTextField="ElectionName"
                                 [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                                 placeholder="Select Election">
@@ -27,14 +27,14 @@
                   <div class="col-sm">
                     <!-- [allowClear]="constituencyFlag"  -->
                     <ngx-select [allowClear]="true" [items]="constituencyNameArray"
-                                (remove)="clearFilter('constituencyId')" (select)="getVillageName()"
+                                (remove)="clearFilter('constituencyId')" (select)="clearFilter('VillageId');getVillageName()"
                                 formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
                                 [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
                     </ngx-select>
                   </div>
                   <div class="col-sm">
                     <!-- [allowClear]="villageFlag" -->
-                    <ngx-select [allowClear]="true" [items]="villageNameArray" (remove)="clearFilter('VillageId')"
+                    <ngx-select [allowClear]="true" [items]="villageNameArray" (remove)="clearFilter('BoothId');clearFilter('VillageId')"
                                 formControlName="VillageId" (select)="ClientWiseBoothList()"
                                 optionValueField="VillageId" optionTextField="VillageName"
                                 [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
@@ -75,7 +75,7 @@
                                 formControlName="AgentId"  optionValueField="AgentId"
                                 [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
                                  optionTextField="FullName" (select)="getClientHaveSubEleOrNonSubEle()"
-                                placeholder="Select Agent" (remove)="clearFilter('Agent')">
+                                placeholder="Select Agent" (remove)="clearFilter('AgentId')">
                             </ngx-select>
                         </div>
 

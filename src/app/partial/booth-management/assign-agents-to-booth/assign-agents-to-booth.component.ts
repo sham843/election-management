@@ -69,6 +69,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   disabledNoOfCasesDiv : boolean = false;
 
   globalHeaderId:any;
+  getMobileNoOnSelAgent:any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -222,7 +223,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getElectionName() {
-    debugger;
     this.btnText == 'Update agent' ?  (this.clearAssemblyBooth(), this.disabledNoOfCasesDiv = true) : '';
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
@@ -235,6 +235,12 @@ export class AssignAgentsToBoothComponent implements OnInit {
           this.assAgentToBoothForm.controls['ElectionId'].setValue(this.globalEditObj.ElectionId);
           this.getConstituencyName();
         }
+        //send link 
+        this.ClientAgentListddl.forEach((element:any) => {
+          if(element.AgentId == this.assAgentToBoothForm.value.UserId){
+            this.getMobileNoOnSelAgent = element.MobileNo;
+          }
+        });
       } else {
         this.spinner.hide();
       }
@@ -436,6 +442,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
           this.boothListMergeArray = [];
           this.resetAssignAgentForm();
           this.getClientAgentWithBooths();
+          this.sendDownloadLink(this.getMobileNoOnSelAgent)
         } else {
           this.spinner.hide();
           //this.toastrService.error("Data is not available");
@@ -447,6 +454,25 @@ export class AssignAgentsToBoothComponent implements OnInit {
       })
     }
   }
+
+  sendDownloadLink(mobileNo:any){
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Send_App_Download_link?mobileno=' + mobileNo, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.toastrService.success(res.data1);
+      } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
 
   // ---------------------------------------------  filter's method's start here  --------------------------------------------- //
 

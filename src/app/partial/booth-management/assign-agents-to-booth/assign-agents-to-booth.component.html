@@ -268,16 +268,19 @@
                                             data-bs-toggle="modal" data-bs-target="#AddAgentsToBoothModal">
                                             <i class="fas fa-plus"></i>
                                         </button> -->
-                                        <button type="button" class="btn btn-light text-edit rounded mx-1"
+                                        <button type="button" class="btn btn-light text-edit rounded"
                                             (click)="patchAssBoothElection(clientABooths.HeaderId, false)" title="Edit Client">
                                             <i class="fas fa-pen"></i>
                                         </button>
                                         <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
-                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
+                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
                                             [ngClass]="{'text-danger':clientABooths?.Isblock == 1 , 'text-main' :clientABooths?.Isblock == 0}"
                                             data-bs-toggle="modal" data-bs-target="#agentBlock"
                                             (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
                                             {{clientABooths?.Isblock == 1 ? 'Blocked' : 'Active'}}
+                                        </button>
+                                        <button  type="button" title="Send Link"  class="btn btn-sm btn-light text-main rounded fw-bold ml-2" (click)="sendDownloadLink(clientABooths?.MobileNo)">
+                                            <i class="fas fa-paper-plane"></i>
                                         </button>
                                     </div>
                                 </td>
