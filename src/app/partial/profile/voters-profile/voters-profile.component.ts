@@ -35,6 +35,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   globlAgentId: any;
   checkedActiveClass: any;
   clickOnCardFlag:boolean = false;
+  
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -85,7 +86,8 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         let obj  = res.data1[0];
         this.checkValueNullOrUnd(obj);
-        this.voterProfileBoothAgentData = res.data2;
+        // this.voterProfileBoothAgentData = res.data2
+        this.clickOnCardFlag == false ?  this.voterProfileBoothAgentData = res.data2 : '';
         // click on first agent 
        setTimeout(() => {
          if(this.clickOnCardFlag == false){
@@ -195,7 +197,6 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
 
   familyMemberData(FMobjData:any){
     if(FMobjData.VoterId != this.voterListData.VoterId){
-      // this.familyMemberDataObject = FMobjData;
       this.HighlightRow = FMobjData.SrNo;
       this.MigInfoHide = true;
       this.getVPMemberDetailsData(FMobjData);

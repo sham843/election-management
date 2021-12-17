@@ -24,9 +24,8 @@
                     <div class="btn-group voter-repeat" role="group">
                         <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index" (click)="agentFilledData(VPBoothAgent)">
                             <input type="radio" class="btn-check" name="btnradio" autocomplete="off"
-                               [checked]="VPBoothAgent.AgentId == checkedActiveClass || i == 0">
+                               [checked]="VPBoothAgent.AgentId == checkedActiveClass">
                             <label class="btn btn-outline-secondary text-start" for="btnradio{{i}}">
-                                <!-- | date:'dd-MM-yyyy hh:mm a' -->
                                 <small>{{VPBoothAgent.SurveyDate}}</small>
                                 <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
                             </label>
@@ -114,6 +113,11 @@
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
                             <div class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="voter-label">Migrated Address :</div>
+                            <div class="voter-data"> {{voterProfileData?.MigratedArea ? voterProfileData?.MigratedArea : '-'}}
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -299,6 +303,10 @@
             <div class="card mb-3" *ngIf="MigInfoHide">
                 <div class="card-header">
                     <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.MarathiName}}</h6>
+                </div>
+                <div class="flex-shrink-0">
+                    <img *ngIf="VPMemberDetailsData?.VoterPhoto" src="{{VPMemberDetailsData?.VoterPhoto}}">
+                    <img *ngIf="!VPMemberDetailsData?.VoterPhoto" src="assets/images/Profile-Photo.jpg">
                 </div>
                 <div class="card-body form-container pt-0">
                     <div class="row">
