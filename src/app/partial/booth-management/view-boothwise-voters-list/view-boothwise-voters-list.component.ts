@@ -374,6 +374,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    //this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList_1_0?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
