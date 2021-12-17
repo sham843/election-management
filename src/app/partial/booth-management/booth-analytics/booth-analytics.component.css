@@ -16,3 +16,16 @@
     fill: #fff;
     filter: #fff;
 }
+.ChekBox{
+    z-index: 9999;
+    position: relative;
+    background: white;
+    border-radius: 5px;
+    max-height: 15rem;
+    overflow-y: scroll;
+    text-align: left;
+}
+.checkboxdd{
+    border: 1px solid #ced4da !important;
+    height:33.2px;
+}

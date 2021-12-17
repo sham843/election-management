@@ -8,7 +8,7 @@
     <div class="col-sm-10 text-end">
       <form [formGroup]="filterForm">
         <div class="row g-2 justify-content-end">
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
                         (remove)="clearFilter('clientId')" (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName()"
                         [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
@@ -37,8 +37,8 @@
                         [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
             </ngx-select>
           </div>
-          <div class="col-sm-2">
-            <input type="text" formControlName="BoothId" [(ngModel)]="searchAssembly" placeholder="Search Assemblies" class="form-control form-control-sm border-0">
+          <div class="col-sm-3">
+            <input type="text" formControlName="BoothId" [(ngModel)]="searchAssembly" placeholder="Select Booths" class="form-control form-control-sm border-0 checkboxdd">
             
             <div class="card-body py-2 ChekBox" *ngIf="(clientWiseBoothListArray | filter:searchAssembly ) as assemblyResult">
               <div class="form-check" *ngFor="let assemblyData of assemblyResult">
