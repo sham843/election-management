@@ -9,10 +9,10 @@ export class DateTransformPipe implements PipeTransform {
   constructor(private datePipe:DatePipe){ }
 
   transform(value: any, ...args: unknown[]): unknown { // Date time transform 
-    var date_components = value.split(" ");
-    var date = date_components[0].split("/").reverse().join('-');
-   
-   return  this.datePipe.transform(new Date(date + ' '+ date_components[1]), 'dd/mm/YYYY hh:mm a');
+    let a: any = value.split(' ');
+    let b: any = a[0].split('/');
+    let dd = b[1] + '/' + b[0] + '/' + b[2] + ' ' + a[1];
+    return this.datePipe.transform(dd,'dd/MM/yyyy hh:mm a');
   }
 
 }

@@ -307,7 +307,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
     }
-    // this.getAgentAssBoothActivityGraph();
+    this.getAgentAssBoothActivityGraph();
   }
 
   nullishTopFilterForm() {
@@ -377,7 +377,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
 
-    let obj = 'AgentId=' + formData.AgentId + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
+    let obj = 'AgentId=' + this.checkSubAreaAgentId()  + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId;
     this.callAPIService.setHttp('get', 'Web_Client_AgentWithAssignedBooths_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
