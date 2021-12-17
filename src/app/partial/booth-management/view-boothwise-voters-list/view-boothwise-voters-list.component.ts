@@ -325,9 +325,16 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
     this.globalboothVoterData = boothDetailsById[0];
     this.HighlightRow = boothDetailsById[0]?.BoothId;
-    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' +  this.filterForm.value?.getBoothId;
+    // let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' +  this.filterForm.value?.getBoothId;
+    let formDataCrmFilter = this.crmFilterForm.value;
+    let formDataTopFilter = this.filterForm.value;
+
+    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+
+    '&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+ 0 +'+&IsSubElectionApplicable='+
+     this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&VillageId='+formDataTopFilter.village;
+      
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Client_BoothDetails?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_Client_BoothDetails_1_0?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.boothDataHide = true;

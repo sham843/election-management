@@ -38,11 +38,25 @@
             </ngx-select>
           </div>
           <div class="col-sm-3">
-            <input type="text" formControlName="BoothId" [(ngModel)]="searchAssembly" placeholder="Select Booths" class="form-control form-control-sm border-0 checkboxdd">
+            <!-- <div (mouseleave)="showDropDown = false;" class="">
+                <button class="drop-toggle btn flat w-100" (click)="showDropDown=!showDropDown">
+                    <span *ngIf="boothArray.length<=0">Select</span>
+                    <span *ngIf="boothArray.length>0">{{boothArray.join(', ')}}</span>
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <div class="drop-show" *ngIf="showDropDown">
+                    <label *ngFor="let a of clientWiseBoothListArray">
+                        <input type="checkbox" [(ngModel)]="a.checked" 
+                            (change)="getSelectedValue(a?.checked,a?.BoothNickName, a?.BoothId)" formControlName="BoothId" />
+                        <span>{{a?.checked}}{{a?.BoothNickName}}</span>
+                    </label>
+                </div>
+            </div> -->
+            <!-- <input type="text" formControlName="BoothId" [(ngModel)]="searchAssembly" placeholder="Search Assemblies" class=" checkboxdd form-control form-control-sm border-0">
             
             <div class="card-body py-2 ChekBox" *ngIf="(clientWiseBoothListArray | filter:searchAssembly ) as assemblyResult">
               <div class="form-check" *ngFor="let assemblyData of assemblyResult">
-                  <input class="form-check-input" type="checkbox" [checked]="assemblyData.checked" (change)="onCheckChangeAssembly($event, assemblyData.BoothNickName)">
+                  <input class="form-check-input" type="checkbox" [checked]="assemblyData.checked" (change)="onCheckChangeAssembly($event, assemblyData.BoothId, assemblyData.BoothNickName)">
                   <label class="form-check-label" for="flexCheckDefault">
                   {{assemblyData.BoothNickName}}
               </label>
@@ -50,13 +64,13 @@
               <div *ngIf="assemblyResult.length === 0">
                   <div class="alert alert-danger text-center py-2">No Data Found..!</div>
               </div>
-          </div>
+          </div> -->
 
-            <!-- <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="bindData();"
+            <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="bindData();"
                         formControlName="BoothId" (select)="bindData(); boothDataHide=false"
                         optionValueField="BoothId" optionTextField="BoothNickName" [disabled]="!this.filterForm.value.ConstituencyId"
                         placeholder="Select Booth">
-            </ngx-select> -->
+            </ngx-select>
           </div>
         </div>
       </form>

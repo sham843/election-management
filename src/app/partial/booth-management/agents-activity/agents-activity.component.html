@@ -9,17 +9,17 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
-                        <ngx-select [items]="clientNameArray" [allowClear]="clientNameArray?.length > 2"
+                        <ngx-select [items]="clientNameArray" [allowClear]="true"
                             formControlName="ClientId" 
                             (remove)="clearTopFilter('clientId');defaultAgentActivityDivHide = false" (select)="clearTopFilter('Agent');getAllAgentList()"
                             optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [items]="allAgentLists" [allowClear]="allAgentLists?.length > 2"
+                        <ngx-select [items]="allAgentLists" [allowClear]="true"
                             formControlName="AgentId"  optionValueField="AgentId"
                             [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
-                            (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId();defaultAgentActivityDivHide = true" optionTextField="FullName"
+                            (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId();defaultAgentActivityDivHide = true; getAgentProfileData()" optionTextField="FullName"
                             placeholder="Select Agent" (remove)="clearTopFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                         <!-- getAgentProfileData(); -->
@@ -30,7 +30,7 @@
                                [disabled]="allSubAgentsByAgentId?.length == 0 || !this.filterForm.value.AgentId"
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
                                 (remove)="clearTopFilter('subAgent'); getAgentByBooths();getAgentProfileData()"
-                                (select)="clearTopFilter('Booth'); getAgentByBooths()"
+                                (select)="clearTopFilter('Booth'); getAgentByBooths(); getAgentProfileData()"
                                 placeholder="Select Area  Agent">
                             </ngx-select>
                             <!--   getAgentProfileData() -->
@@ -573,7 +573,7 @@
                             <tr *ngFor="let appUseTrackRes of boothAgentAppUseTrackRes  | paginate: {id: 'boothAgentPagination', itemsPerPage: 10, currentPage: appUsesActivityPaginationNo, totalItems:getCallLoggerTotal}"> 
                                 <td>{{appUseTrackRes?.SrNo}}</td>
                                 <td>Android</td>
-                                <td>{{appUseTrackRes?.StartDate}} -  {{appUseTrackRes?.EndDate}}</td>
+                                <td>{{appUseTrackRes?.StartDate | dateTransform}} -  {{appUseTrackRes?.EndDate | dateTransform}}</td>
                                 <td>{{appUseTrackRes?.difference}}</td>
                             </tr>
                         </tbody>
@@ -597,7 +597,7 @@
                         <div *ngFor="let  boothAgentTracking of boothAgentTrackingList">
                             <agm-marker [agmFitBounds]="true" [latitude]=" boothAgentTracking?.Latitude" [longitude]=" boothAgentTracking?.Longitude" (markerClick)="clickedMarker(infowindow)">
                                 <agm-info-window #infowindow>
-                                    <strong>Date Time - {{boothAgentTracking?.LocationDate}}</strong>
+                                    <strong>Date Time - {{boothAgentTracking?.LocationDate | dateTransform}}</strong>
                                 </agm-info-window>
                             </agm-marker>
                         </div>
