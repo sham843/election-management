@@ -52,6 +52,7 @@ export class VoterCallEntriesComponent implements OnInit {
     this.defaultFeedbackForm();
     this.feedbacksList();
     this.getVoterProfileData();
+    this.getVPPoliticalInfluenceData();
     this.getVoterprofileFamilyData();
   }
 
@@ -93,18 +94,17 @@ export class VoterCallEntriesComponent implements OnInit {
                          //............................. Insert Feedbacks Election Data................................//
   
  onSubmitFeedbackForm(){
-     console.log(this.enterNewFeedbackForm.value);
      this.submitted = true;
-     if (this.enterNewFeedbackForm.invalid) {
+     let data = this.enterNewFeedbackForm.value;
+     if (data.FeedBackType == '' && data.Description == '' && data.FollowupDate == '') {
+       this.toastrService.error("Please Enter Field");
        this.spinner.hide();
        return;
      } else {
        this.spinner.show();
        let data = this.enterNewFeedbackForm.value;
- 
        data.NotToCall == true ? data.NotToCall = 1 : data.NotToCall = 0 ;
        data.FollowupDate = this.datePipe.transform(data.FollowupDate, 'yyyy/MM/dd HH:mm:ss');
-   
        this.Date = this.datePipe.transform(this.Date, 'yyyy/MM/dd HH:mm:ss');
 
        let obj = 'Id='+ data.Id + '&VoterId='+ this.voterListData.VoterId + '&FeedBackDate='+ this.Date + '&FeedBackType='+ data.FeedBackType 
@@ -133,7 +133,7 @@ export class VoterCallEntriesComponent implements OnInit {
 
   getVoterProfileData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile?ClientId=' + this.voterListData.ClientId + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile_CRM?ClientId=' + this.voterListData.ClientId + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();

@@ -11,6 +11,7 @@ import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dialog/name-correction-dialog.component';
 import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-view-boothwise-voters-list',
@@ -79,18 +80,25 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // crm tab var start 
   followupStatusDropDownData = [{id:1, name:'Todays Followups', class:'text-main'},{id:2, name:'Upcoming Followups', class:'text-success'},{id:3, name:'Missed Followups', class:'text-dark'},{id:4, name:'Not To Call', class:'text-danger'},{id:5, name:'New', class:'text-info'}]
+  
   crmFilterForm!:FormGroup;
- 
   getCrmTableListrTotal:any;
   getCrmTableList:any;
   crmPaginationNo: number = 1;
   crmPageSize: number = 10;
 
+  crmHistoryFilterForm!:FormGroup;
+  getCrmHistoryTableListrTotal:any;
+  getCrmHistoryTableList:any;
+  crmHistoryPaginationNo: number = 1;
+  crmHistoryPageSize: number = 10;
+  feedbackTypeArray = [{id:1, name:'Positive'},{id:2, name:'Negitive'},{id:3, name:'Neutral'}];
+  defaultCloseBtn:boolean = false;
+
   getFeedbacksList:any
   getFeedbacksListTotal:any;
   feedbacksPaginationNo:any = 1;
   feedbacksPageSize: number = 10;
-
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -100,12 +108,14 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
     this.defaultFilterForm();
     this.deafultCrmFilterForm();
+    this.deafultCrmHistoryFilterForm();
     this.getClientName();
     this.searchVotersFilters('false');
     this.searchMigratedFilters('false');
@@ -113,6 +123,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.searchAgentFilters('false');
     this.searchFamilyFilters('false');
     this.searchCrmFilter('false');
+    this.searchCrmHistoryFilter('false');
     this.agentForm();
   }
 
@@ -620,7 +631,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       this.boothAgentList();
     });
   }
-  // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
+  // ------------------------------------------  Agent  list with filter End here  ------------------------------------------//
 
   // ------------------------------------------  CRM with filter start here  ------------------------------------------//
 
@@ -647,12 +658,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
   
   clearCrmFilter(flag:any){
-    if(flag == 'clearFiltersCrm'){
-      this.crmFilterForm.controls["SearchText"].setValue('');
-      this.crmPaginationNo = 1;
-      this.getCrmTableData();
-    }
-
+    if(flag == 'Followupstatus'){
+      this.crmFilterForm.controls["Followupstatusid"].setValue(0);
+    } 
+    this.crmPaginationNo = 1;
+    this.getCrmTableData();
   }
 
   onClickPagintionCrm(pageNo: any) {
@@ -687,7 +697,87 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
 
-  // ------------------------------------------  CRM with filter start here  ------------------------------------------//
+  // ------------------------------------------  CRM with filter End here  ------------------------------------------//
+
+    // ------------------------------------------  CRM History with filter start here  ------------------------------------------//
+
+    deafultCrmHistoryFilterForm(){
+      this.crmHistoryFilterForm = this.fb.group({
+        Followupstatusid:[0],
+        SearchText:[''],
+        feedbackstatus:[0],
+        date:['']
+      })
+    }
+  
+    onKeyUpFilterCrmHistorySearch() {
+      this.subject.next();
+    }
+  
+    searchCrmHistoryFilter(flag: any) {
+      this.subject
+        .pipe(debounceTime(700))
+        .subscribe(() => {
+          this.crmHistoryFilterForm.value.SearchText 
+          this.crmHistoryPaginationNo = 1;
+          this.getCrmHistoryTableData();
+        }
+        );
+    }
+
+    filterDateData(flag:any){
+      flag == 'range' ?  this.defaultCloseBtn = true :  this.defaultCloseBtn = false; 
+      this.crmHistoryPaginationNo = 1;
+      this.getCrmHistoryTableData();
+    }
+    
+    clearCrmHistoryFilter(flag:any){
+      if(flag == 'Followupstatus'){
+        this.crmHistoryFilterForm.controls["Followupstatusid"].setValue(0);
+      } else if(flag == 'feedbackstatus'){
+        this.crmHistoryFilterForm.controls["feedbackstatus"].setValue(0);
+      } else if(flag == 'dateRangePIcker'){
+        this.crmHistoryFilterForm.controls["date"].setValue('');
+      }
+      this.crmHistoryPaginationNo = 1;
+      this.getCrmHistoryTableData();
+    }
+  
+    onClickPagintionCrmHistory(pageNo: any) {
+      this.crmHistoryPaginationNo = pageNo;
+      this.getCrmHistoryTableData();
+    }
+  
+    getCrmHistoryTableData(){
+      this.spinner.show();
+      let formDataTopFilter = this.filterForm.value;
+      let formDataCrmHistoryFilter = this.crmHistoryFilterForm.value;
+      // let BoothId = formDataTopFilter.getBoothId ? formDataTopFilter.getBoothId : 0 ;
+      formDataCrmHistoryFilter.date = formDataCrmHistoryFilter.date ? this.datePipe.transform(formDataCrmHistoryFilter.date, 'yyyy/MM/dd') : '';
+      let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+
+      '&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+ 0 +'+&IsSubElectionApplicable='+
+       this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmHistoryFilter.Followupstatusid+
+      '&SearchText=' + formDataCrmHistoryFilter.SearchText + '&nopage=' + this.crmHistoryPaginationNo + '&feedbackstatus=' + formDataCrmHistoryFilter.feedbackstatus + '&date=' + formDataCrmHistoryFilter.date;
+      this.callAPIService.setHttp('get', 'Get_crmhistory_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+      this.callAPIService.getHttp().subscribe((res: any) => { 
+        if (res.data == 0) {
+          this.spinner.hide();
+          this.getCrmHistoryTableList = res.data1;
+          this.getCrmHistoryTableListrTotal = res.data2[0].TotalCount;
+        } else {
+          this.getCrmHistoryTableList = [];
+          this.spinner.hide();
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        if (error.status == 500) {
+          this.router.navigate(['../500'], { relativeTo: this.route });
+        }
+      })
+    }
+  
+  
+    // ------------------------------------------  CRM History with filter End here  ------------------------------------------//
 
   // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag: any) {
