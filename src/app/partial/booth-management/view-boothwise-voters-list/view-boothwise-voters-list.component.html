@@ -2,7 +2,6 @@
     <div class="row mx-0 px-0" id="pageheader">
         <div class="col-sm-auto">
             <span class="page-name">BoothWise Voters
-                <a (click)="openDialogVoterCallEntries()">sdfdb</a>
             </span>
         </div>
         <!-- id="pageheader" -->
@@ -189,7 +188,7 @@
                                                     Agents
                                                 </button>
                                             </li>
-                                            <li class="nav-item" role="presentation">
+                                            <li class="nav-item" role="presentation" (click)="getCrmTableData()">
                                                 <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-crm" type="button" role="tab"
                                                     aria-controls="pills-crm" aria-selected="false">
@@ -767,7 +766,7 @@
                                                                         (keyup)="onKeyUpFilterCrmSearch()" />
                                                                     <button type="button"
                                                                         class="btn btn-light border btn-sm"
-                                                                        (click)="clearCrmFilter('clearFiltersAgent')"
+                                                                        (click)="clearCrmFilter('clearFiltersCrm')"
                                                                         *ngIf="searchAgent.value"><i
                                                                             class="fas fa-times"></i></button>
                                                                     <button type="button" *ngIf="!searchAgent.value"
@@ -822,68 +821,32 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr class="text-main">
-                                                            <td>182267</td>
-                                                            <td>विश्वास रमेश चव्हाण</td>
-                                                            <td>987654210</td>
-                                                            <td>M</td>
-                                                            <td>Mokashi Vasti</td>
-                                                            <td>25-05-2021 12:14 PM</td>
-                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
+                                                        <tr *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
+                                                            <td >{{crmTableList.VoterNo}}</td>
+                                                            <td [ngClass]="{'text-success' : crmTableList.NameChanged == 1, 'text-dark' : crmTableList.NameChanged == 3 ,'text-danger' : crmTableList.NameChanged == 2}">{{crmTableList.MarathiName}}</td>
+                                                            <td>{{crmTableList.MobileNo}}</td>
+                                                            <td>{{crmTableList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                                            <td>{{crmTableList.AreaName}}</td>
+                                                            <td>{{crmTableList.FollowupDate ? crmTableList.FollowupDate : '-'}}</td>
+                                                            <td>{{crmTableList.LastFeedback ? crmTableList.LastFeedback : '-'}}</td>
                                                             <td>
                                                                 <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
-                                                                    <i class="fas fa-phone-alt"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="text-success">
-                                                            <td>182268</td>
-                                                            <td>विश्वास रमेश चव्हाण</td>
-                                                            <td>987654210</td>
-                                                            <td>M</td>
-                                                            <td>Mokashi Vasti</td>
-                                                            <td>25-05-2021 12:14 PM</td>
-                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                            <td>
-                                                                <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
-                                                                    <i class="fas fa-phone-alt"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="text-dark">
-                                                            <td>182269</td>
-                                                            <td>विश्वास रमेश चव्हाण</td>
-                                                            <td>987654210</td>
-                                                            <td>M</td>
-                                                            <td>Mokashi Vasti</td>
-                                                            <td>25-05-2021 12:14 PM</td>
-                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                            <td>
-                                                                <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
-                                                                    <i class="fas fa-phone-alt"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="text-danger">
-                                                            <td>182270</td>
-                                                            <td>विश्वास रमेश चव्हाण</td>
-                                                            <td>987654210</td>
-                                                            <td>M</td>
-                                                            <td>Mokashi Vasti</td>
-                                                            <td>25-05-2021 12:14 PM</td>
-                                                            <td>Person Not Available in area. Migrated to Mumbai</td>
-                                                            <td>
-                                                                <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    (click)="openDialogVoterCallEntries(crmTableList)">
                                                                     <i class="fas fa-phone-alt"></i>
                                                                 </button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                <div class="mt-2 text-end" *ngIf="getCrmTableList?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="crmPagination"
+                                                    *ngIf="getCrmTableList?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionCrm(crmPageSize  = $event)">
+                                                </pagination-controls>
                                             </div>
                                             <!-- CRM History tab start here   -->
                                             <div class="tab-pane fade" id="pills-crm-history" role="tabpanel"
@@ -981,7 +944,7 @@
                                                             <td>Person Not Available in area. Migrated to Mumbai</td>
                                                             <td>
                                                                 <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    (click)="openDialogVoterCallEntries('false')">
                                                                     <i class="fas fa-phone-alt"></i>
                                                                 </button>
                                                             </td>
@@ -996,7 +959,7 @@
                                                             <td>Person Not Available in area. Migrated to Mumbai</td>
                                                             <td>
                                                                 <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    (click)="openDialogVoterCallEntries('false')">
                                                                     <i class="fas fa-phone-alt"></i>
                                                                 </button>
                                                             </td>
@@ -1011,7 +974,7 @@
                                                             <td>Person Not Available in area. Migrated to Mumbai</td>
                                                             <td>
                                                                 <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    (click)="openDialogVoterCallEntries('false')">
                                                                     <i class="fas fa-phone-alt"></i>
                                                                 </button>
                                                             </td>
@@ -1026,7 +989,7 @@
                                                             <td>Person Not Available in area. Migrated to Mumbai</td>
                                                             <td>
                                                                 <button class="btn btn-light btn-sm text-main"
-                                                                    (click)="openDialogVoterCallEntries()">
+                                                                    (click)="openDialogVoterCallEntries('false')">
                                                                     <i class="fas fa-phone-alt"></i>
                                                                 </button>
                                                             </td>
