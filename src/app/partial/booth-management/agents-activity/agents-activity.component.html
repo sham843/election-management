@@ -76,7 +76,10 @@
                         <div class="mb-3">
                             <small class="text-muted">Booths(s) Assigned :</small>
                             <p class="area">{{agentProfileData?.Booths}}</p>
-                            <p class="area" *ngIf="agentProfileData?._Area">{{agentProfileData?._Area}}</p>
+                            <ng-container *ngIf="agentProfileData?._Area">
+                                <small class="text-muted">Area :</small>
+                                <p class="area">{{agentProfileData?._Area}}</p>
+                            </ng-container>
                         </div>
                         <div class="row row-cols-1 row-cols-md-3 g-2 mb-3">
                             <div class="col">

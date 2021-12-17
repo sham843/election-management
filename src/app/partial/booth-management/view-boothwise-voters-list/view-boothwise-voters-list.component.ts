@@ -12,6 +12,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dialog/name-correction-dialog.component';
 import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
 import { DatePipe } from '@angular/common';
+import { DateTimeAdapter } from 'ng-pick-datetime';
 
 @Component({
   selector: 'app-view-boothwise-voters-list',
@@ -110,7 +111,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private datePipe: DatePipe,
-  ) { }
+    public dateTimeAdapter: DateTimeAdapter<any>,
+  ) { dateTimeAdapter.setLocale('en-IN'); }
 
   ngOnInit(): void {
     this.defaultFilterForm();

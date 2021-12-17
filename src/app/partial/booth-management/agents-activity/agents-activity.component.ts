@@ -110,7 +110,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.searchVoterFilter('false');
     this.searchNewVotersFilters('false');
     this.searchAgentCallLoggerFilters('false');
-    console.log( this.agentInfo);
   }
 
 
@@ -282,6 +281,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   selBoothByAgent() {
+    this.getAgentProfileCardData();
     this.getAgentByBoothsData.filter((ele: any) => {
       if (this.filterForm.value.BoothId == ele.BoothId) {
         this.filterForm.controls['AssemblyId'].setValue(ele.AssemblyId)
