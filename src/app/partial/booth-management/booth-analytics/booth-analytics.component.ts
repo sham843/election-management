@@ -752,18 +752,19 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
 
-  onCheckChangeAssembly(event: any, boothId:any, boothName:any) {
-    if (event.target.checked){
-      this.boothArray.push({'id':boothId, 'name':boothName});
-      this.filterForm.patchValue({
-        BoothId:this.boothArray.join()
-      })
-    }else{
-      var index = this.boothArray.indexOf(boothId);
-      this.boothArray.splice(index,1);
-    }
-    console.log(this.boothArray);
-    // this.bindData();
+  onCheckChangeAssembly(event: any, boothId:any) {
+    // , boothName:any
+  //   if (event.target.checked){
+  //     this.boothArray.push({'id':boothId, 'name':boothName});
+  //     this.filterForm.patchValue({
+  //       BoothId:this.boothArray.join()
+  //     })
+  //   }else{
+  //     var index = this.boothArray.indexOf(boothId);
+  //     this.boothArray.splice(index,1);
+  //   }
+  //   console.log(this.boothArray);
+  //   // this.bindData();
 
-  }
+   }
 }
