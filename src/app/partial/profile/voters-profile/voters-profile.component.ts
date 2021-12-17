@@ -51,7 +51,6 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     let getUrlData: any = this.route.snapshot.params.id;
     if(getUrlData){
         getUrlData = getUrlData.split('.');
-        console.log(getUrlData);
         this.voterListData = {'AgentId': +getUrlData[0] ,'ClientID': +getUrlData[1], 'VoterId': +getUrlData[2]}
     }
   }
