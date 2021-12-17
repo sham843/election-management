@@ -59,3 +59,11 @@
 agm-map {
     height: 300px;
 }
+.voter-family-photo img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+    margin: 0 auto;
+    border-radius: 5px;
+}
