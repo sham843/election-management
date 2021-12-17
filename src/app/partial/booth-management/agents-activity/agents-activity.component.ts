@@ -990,5 +990,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.deafultVoterProfilefilterForm();
   }
 
+
 }
 
