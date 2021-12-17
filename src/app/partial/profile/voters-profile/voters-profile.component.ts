@@ -64,8 +64,6 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.getVoterprofileFamilyData();
   }
 
-
-
   agentFilledData(data:any){
     this.voterVisitDetailDataArray = [];
     this.checkedActiveClass = data.AgentId;

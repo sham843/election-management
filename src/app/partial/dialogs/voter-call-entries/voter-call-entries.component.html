@@ -21,9 +21,16 @@
                 <div class="card shadow-none border">
                     <div class="card-header pb-0">Voter Information</div>
                     <div class="card-body pt-1">
-                        <div class="mb-2">
-                            <label class="form-label">Voters Full Name</label>
-                            <div class="form-data">{{voterProfileData?.MarathiName}}</div>
+                        <div class=" row mb-2">
+                            <div class="col-sm-6">
+                                <label class="form-label">Voters Full Name</label>
+                                <div class="form-data">{{voterProfileData?.MarathiName}}</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">Booth Name</label>
+                                <div class="form-data">{{voterProfileData?.BoothName ? voterProfileData?.BoothName : '-'}}</div>
+                            </div>
+                           
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-4">
@@ -155,9 +162,9 @@
                                         <small class="text-muted">{{feedbacksList?.FeedBackDate}}</small>
                                     </div>
                                     <div class="col-sm-6 text-end">
-                                        <span
-                                            class="badge rounded-pill bg-success fw-normal">{{feedbacksList?.FeedBackType
-                                            | titlecase}}</span>
+                                            <span class="badge rounded-pill bg-success fw-normal" *ngIf="feedbacksList?.FeedBackTypeId == 1"> {{feedbacksList?.FeedBackType | titlecase}}</span>
+                                            <span class="badge rounded-pill bg-danger fw-normal" *ngIf="feedbacksList?.FeedBackTypeId == 2"> {{feedbacksList?.FeedBackType | titlecase}}</span>
+                                            <span class="badge rounded-pill bg-warning fw-normal text-dark" *ngIf="feedbacksList?.FeedBackTypeId == 3"> {{feedbacksList?.FeedBackType | titlecase}}</span>
                                     </div>
                                     <div class="col-sm-12">
                                         {{feedbacksList?.Description ? (feedbacksList?.Description | titlecase) : '-'}}
@@ -165,7 +172,6 @@
                                 </div>
                             </td>
                             <td>
-                                <!-- | date:'dd-MM-yyyy hh:mm a' -->
                                 {{feedbacksList?.FollowupDate}}
                             </td>
                         </tr>
@@ -196,14 +202,6 @@
                                         </label>
                                     </div>
                                 </div>
-                                <!-- <div class="col-sm-4">
-                                    <label class="form-label">Followup Date-Time</label>
-                                    <input type="datetime-local" class="form-control" formControlName="FollowupDate"
-                                        placeholder="dd/mM/yyyy hh:mm:ss">
-                                </div> -->
-
-
-
 
                                 <div class="col-sm-4">
                                     <label class="form-label">Followup Date-Time</label>
@@ -212,13 +210,6 @@
                                         <input [owlDateTime]="dt3" formControlName="FollowupDate"
                                             (dateTimeChange)="voterDateRangeSelect(this.enterNewFeedbackForm.value.FollowupDate)"
                                             class="form-control" [owlDateTimeTrigger]="dt3" placeholder="dd/mM/yyyy hh:mm:ss">
-                                        <!-- <button class="btn btn-light border btn-sm" type="button"
-                                            *ngIf="defaultCalenderIconFlag == false" [owlDateTimeTrigger]="dt3">
-                                            <i class="fas fa-calendar-alt"></i></button>
-                                        <button class="btn btn-light border btn-sm" type="button"
-                                            *ngIf="defaultCalenderIconFlag  == true"
-                                            (click)="clearFilterDateRangepicker()">
-                                            <i class="fas fa-times"></i></button> -->
                                     </div>
                                     <owl-date-time #dt3></owl-date-time>
                                 </div>
