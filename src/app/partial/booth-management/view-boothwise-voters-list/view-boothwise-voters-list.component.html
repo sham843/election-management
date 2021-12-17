@@ -822,7 +822,7 @@
                                                     <tbody>
                                                         <tr *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
                                                             <td >{{crmTableList.VoterNo}}</td>
-                                                            <td [ngClass]="{'text-success' : crmTableList.NameChanged == 1, 'text-dark' : crmTableList.NameChanged == 3 ,'text-danger' : crmTableList.NameChanged == 2}">{{crmTableList.MarathiName}}</td>
+                                                            <td [ngClass]="{'text-main' : crmTableList.Followupstatus == 'Todays Followup','text-success' : crmTableList.Followupstatus == 'Upcomming Followup','text-danger' : crmTableList.Followupstatus == 'Not To Call','text-info' : crmTableList.Followupstatus == 'New', 'text-dark' : crmTableList.Followupstatus == 'Missed Followup'}">{{crmTableList.MarathiName}}</td>
                                                             <td>{{crmTableList.MobileNo}}</td>
                                                             <td>{{crmTableList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
                                                             <td>{{crmTableList.AreaName}}</td>
@@ -947,7 +947,7 @@
                                                     <tbody>
                                                         <tr *ngFor="let CrmHistoryTableList of getCrmHistoryTableList | paginate: {id: 'crmHistoryPagination', itemsPerPage: 10, currentPage: crmHistoryPaginationNo, totalItems:getCrmHistoryTableListrTotal};">
                                                             <td>{{CrmHistoryTableList.VoterNo}}</td>
-                                                            <td>{{CrmHistoryTableList.MarathiName}}</td>
+                                                            <td [ngClass]="{'text-main' : CrmHistoryTableList.Followupstatus == 'Todays Followup','text-success' : CrmHistoryTableList.Followupstatus == 'Upcomming Followup','text-danger' : CrmHistoryTableList.Followupstatus == 'Not To Call','text-info' : CrmHistoryTableList.Followupstatus == 'New', 'text-dark' : CrmHistoryTableList.Followupstatus == 'Missed Followup'}">{{CrmHistoryTableList.MarathiName}}</td>
                                                             <td>{{CrmHistoryTableList.MobileNo}}</td>
                                                             <td>{{CrmHistoryTableList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
                                                             <!-- <td>{{CrmHistoryTableList.LastFeedback}}</td> -->

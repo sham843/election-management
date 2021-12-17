@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -10,7 +10,6 @@ import { CommonService } from 'src/app/services/common.service';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import { eachContinue } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 
 @Component({
   selector: 'app-booth-analytics',
@@ -24,7 +23,7 @@ export class BoothAnalyticsComponent implements OnInit {
   constituencyNameArray: any;
   IsSubElectionApplicable: any;
   villageNameArray: any;
-  @Input() clientWiseBoothListArray!:any[];
+  clientWiseBoothListArray: any;
   cardData: any;
   boothGraphsData: any;
 
@@ -68,13 +67,7 @@ export class BoothAnalyticsComponent implements OnInit {
   supportToid: any;
 
   selectedBoot: any[] = []
-  boothArray: any[] = []
   selectedVillage: any;
-
-  showDropDown:any;
-  @Output() shareCheckedList = new EventEmitter();
-  @Output() shareIndividualCheckedList = new EventEmitter();
-  currentSelected:any;
   // reverseOrder: boolean = true;
   //sortField = 'LeaderImportance';
   //order: string = 'info.name';
@@ -86,7 +79,7 @@ export class BoothAnalyticsComponent implements OnInit {
   //  this.reverseOrder = (this.sortField === sortField) ? !this.reverseOrder : false;
   //  this.sortField = sortField;
   //};
-  searchAssembly = '';
+
  
   constructor(
     private spinner: NgxSpinnerService,
@@ -228,10 +221,6 @@ export class BoothAnalyticsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        // this.clientWiseBoothListArray.map((ele:any)=> {
-        //   ele['checked'] = false;
-        // })
-        console.log(this.clientWiseBoothListArray);
         //this.clientWiseBoothListArray.length == 1 ? ( this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false, this.bindData()) : '';
         this.clientWiseBoothListArray.length == 1 ? (this.boothFlag = false) : '';
       } else {
@@ -255,13 +244,13 @@ export class BoothAnalyticsComponent implements OnInit {
           this.selectedBoot.push(ele)
         }
       })
-      this.filterForm.value.BoothId.forEach((value: any) => {
-        this.clientWiseBoothListArray.filter((ele: any) => {
-          if (value == ele.BoothId) {
-            this.selectedBoot.push(ele)
-          }
-        })
-      });
+      // this.filterForm.value.BoothId.forEach((value: any) => {
+      //   this.clientWiseBoothListArray.filter((ele: any) => {
+      //     if (value == ele.BoothId) {
+      //       this.selectedBoot.push(ele)
+      //     }
+      //   })
+      // });
 
       this.villageNameArray.filter((ele: any) => {
         if (this.filterForm.value.VillageId == ele.VillageId) {
@@ -273,10 +262,6 @@ export class BoothAnalyticsComponent implements OnInit {
       this.votersConfig = { id: 'votersListPagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
       this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
 
-      this.filterForm.patchValue({
-        BoothId:'358,357,359'
-      })
-
       this.boothSummary()
       this.boothSummaryGraphs()
       this.bindMigrationPattern()
@@ -287,11 +272,10 @@ export class BoothAnalyticsComponent implements OnInit {
     } else {
       this.clearForm();
     }
-
   }
 
   boothSummary() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + '358,357,359'
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -743,30 +727,4 @@ export class BoothAnalyticsComponent implements OnInit {
     // this.getClientAgentWithBooths();
   }
 
-  //added  by sham j
-
-  getSelectedValue(status:Boolean,BoothNickName:String, BoothId:any){
-    // debugger;
-    if(status){
-      this.boothArray.push(BoothNickName);  
-      this.checkBoxCheckTrueOrFalse(BoothId, true)
-    }else{
-        var index = this.boothArray.indexOf(BoothNickName);
-        this.boothArray.splice(index,1);
-       this.checkBoxCheckTrueOrFalse(BoothId, false)
-    }
-    console.log(this.boothArray);
-}
-
-  checkBoxCheckTrueOrFalse(boothId:any, flag:any){
-  this.clientWiseBoothListArray.map((ele:any)=> {
-      if(flag == true){
-        ele.BoothId == boothId ? ele['checked'] = true : ''
-      }else{
-       ele.BoothId == boothId? ele['checked'] = false : ''
-      }
-    });
-  }
-
-  // defaultChecked(){}
 }
