@@ -653,7 +653,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.getVotersCardData();
   }
 
-
   getVotersCardData() {
     this.spinner.show();
     let formData = this.filterForm.value;
