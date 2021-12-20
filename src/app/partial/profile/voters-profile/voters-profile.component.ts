@@ -35,6 +35,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   globlAgentId: any;
   checkedActiveClass: any;
   clickOnCardFlag:boolean = false;
+  profileImgImg: any;
   
 
   constructor(
@@ -291,7 +292,12 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     localStorage.removeItem('voter-profile');
   }
 
-
-
+       // Show Profile Photo in FullSize in LightBox
+           
+       showProfileLightbox(asd:any){
+        this.profileImgImg = [asd];
+        this.profileImgImg = this.commonService.imgesDataTransform(this.profileImgImg,'array');
+        this.gallery.ref('lightbox').load(this.profileImgImg);
+      }
 
 }
