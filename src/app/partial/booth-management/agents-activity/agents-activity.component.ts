@@ -567,6 +567,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
     // Create chart instance
     let chart = am4core.create("agentPerformancediv", am4charts.XYChart);
+   
 
     // Add data
 
@@ -578,8 +579,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         ele.Date = transformDate;
       }
     })
-
-    chart.data = data;
 
 
     // Create category axis
@@ -598,7 +597,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let series1 = chart.series.push(new am4charts.LineSeries());
     series1.dataFields.valueY = "VoterCount";
     series1.dataFields.categoryX = "Date";
-    series1.name = "VoterCount";
+    series1.name = "Voter Count";
     series1.bullets.push(new am4charts.CircleBullet());
     series1.tooltipText = "{valueY}";
     series1.legendSettings.valueText = "{valueY}";
@@ -612,7 +611,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let series2 = chart.series.push(new am4charts.LineSeries());
     series2.dataFields.valueY = "FamilyCount";
     series2.dataFields.categoryX = "Date";
-    series2.name = 'FamilyCount';
+    series2.name = 'Family Count';
     series2.bullets.push(new am4charts.CircleBullet());
     series2.tooltipText = "{valueY}";
     series2.legendSettings.valueText = "{valueY}";
