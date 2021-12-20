@@ -67,8 +67,9 @@ export class CreateRegionalLeaderComponent implements OnInit {
       LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       Address: ['', [Validators.required,Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
       Gender: ['', Validators.required],
-      MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
-      ContactNo2: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      // MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
+      ContactNo2: ['', [Validators.pattern('[6-9]\\d{9}')]],
       EmailId: ['', [Validators.required, Validators.email]],
       // emailID: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       DistrictId: ['', Validators.required],
@@ -86,6 +87,16 @@ export class CreateRegionalLeaderComponent implements OnInit {
       Search: [''],
     })
   }
+
+                     // Accept Only Integer Value Not Charector Accept
+
+  Vali_AcceptOnlyNumber(event: any) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+        event.preventDefault();
+    }
+}
 
   getDistrict() {
     this.spinner.show();
