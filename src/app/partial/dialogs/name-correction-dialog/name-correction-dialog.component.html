@@ -78,15 +78,26 @@
                 <div class="row g-2">
                     <div class="col-sm-4">
                         <label class="form-label required-field">नाव</label>
-                        <input type="text" formControlName="NewFirstName" class="form-control" placeholder="नाव">
+                        <input type="text" formControlName="NewFirstName" class="form-control" placeholder="नाव" [ngClass]="{ 'is-invalid': submitted && f.NewFirstName.errors }">
+                        <div *ngIf="submitted && f.NewFirstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewFirstName.errors.required">First Name is required </div>
+                            <div *ngIf="f.NewFirstName.errors.pattern">First Name can not contain space</div>
+                        </div>
                     </div>
                     <div class="col-sm-4">
-                        <label class="form-label required-field">मधले नाव</label>
-                        <input type="text" formControlName="NewMiddleName" class="form-control" placeholder="मधले नाव">
+                        <label class="form-label">मधले नाव</label>
+                        <input type="text" formControlName="NewMiddleName" class="form-control" placeholder="मधले नाव" [ngClass]="{ 'is-invalid': submitted && f.NewMiddleName.errors }">
+                        <div *ngIf="submitted && f.NewMiddleName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewMiddleName.errors.pattern">Middle Name can not contain space</div>
+                        </div>
                     </div>
                     <div class="col-sm-4">
                         <label class="form-label required-field">आडनाव</label>
-                        <input type="text" formControlName="NewLastName" class="form-control" placeholder="आडनाव">
+                        <input type="text" formControlName="NewLastName" class="form-control" placeholder="आडनाव" [ngClass]="{ 'is-invalid': submitted && f.NewLastName.errors }">
+                        <div *ngIf="submitted && f.NewLastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewLastName.errors.required">Last Name is required</div>
+                            <div *ngIf="f.NewLastName.errors.pattern">Last Name can not contain space</div>
+                        </div>
                     </div>
                 </div>
             </div>
