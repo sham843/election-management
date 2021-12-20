@@ -574,7 +574,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
     // Add data
 
-
     data.map((ele: any) => {
       if (ele.Date) {
         let DateFormate = this.commonService.changeDateFormat(ele.Date);
@@ -582,7 +581,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         ele.Date = transformDate;
       }
     })
-
 
     // Create category axis
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
