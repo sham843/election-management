@@ -291,6 +291,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   clearTopFilter(flag: any) {
+    debugger;
     if (flag == 'clientId') {
       localStorage.removeItem('agents-activity');
       this.filterForm.controls["ClientId"].setValue(0);
@@ -305,6 +306,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       this.defaultAgentActivityDivHide = false;
     } else if (flag == 'subAgent') {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
+      this.filterForm.controls["BoothId"].setValue(0);
+    } else if (flag == 'Booth') {
       this.filterForm.controls["BoothId"].setValue(0);
     }
     this.getAgentAssBoothActivityGraph();
