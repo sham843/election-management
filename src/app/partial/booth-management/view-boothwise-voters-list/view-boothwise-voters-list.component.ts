@@ -80,25 +80,25 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   encryptData: any;
 
   // crm tab var start 
-  followupStatusDropDownData = [{id:1, name:'Todays Followups', class:'text-main'},{id:2, name:'Upcoming Followups', class:'text-success'},{id:3, name:'Missed Followups', class:'text-dark'},{id:4, name:'Not To Call', class:'text-danger'},{id:5, name:'New', class:'text-info'}]
-  
-  crmFilterForm!:FormGroup;
-  getCrmTableListrTotal:any;
-  getCrmTableList:any;
+  followupStatusDropDownData = [{ id: 1, name: 'Todays Followups', class: 'text-main' }, { id: 2, name: 'Upcoming Followups', class: 'text-success' }, { id: 3, name: 'Missed Followups', class: 'text-dark' }, { id: 4, name: 'Not To Call', class: 'text-danger' }, { id: 5, name: 'New', class: 'text-info' }]
+
+  crmFilterForm!: FormGroup;
+  getCrmTableListrTotal: any;
+  getCrmTableList: any;
   crmPaginationNo: number = 1;
   crmPageSize: number = 10;
 
-  crmHistoryFilterForm!:FormGroup;
-  getCrmHistoryTableListrTotal:any;
-  getCrmHistoryTableList:any;
+  crmHistoryFilterForm!: FormGroup;
+  getCrmHistoryTableListrTotal: any;
+  getCrmHistoryTableList: any;
   crmHistoryPaginationNo: number = 1;
   crmHistoryPageSize: number = 10;
-  feedbackTypeArray = [{id:1, name:'Positive'},{id:2, name:'Negitive'},{id:3, name:'Neutral'}];
-  defaultCloseBtn:boolean = false;
+  feedbackTypeArray = [{ id: 1, name: 'Positive' }, { id: 2, name: 'Negitive' }, { id: 3, name: 'Neutral' }];
+  defaultCloseBtn: boolean = false;
 
-  getFeedbacksList:any
-  getFeedbacksListTotal:any;
-  feedbacksPaginationNo:any = 1;
+  getFeedbacksList: any
+  getFeedbacksListTotal: any;
+  feedbacksPaginationNo: any = 1;
   feedbacksPageSize: number = 10;
 
   constructor(
@@ -161,7 +161,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   getElectionName() {
-  this.nullishFilterForm(); //Check all value null || undefind || empty
+    this.nullishFilterForm(); //Check all value null || undefind || empty
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -291,14 +291,14 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   nullishFilterForm() {
     let fromData = this.filterForm.value;
-    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0); 
-    fromData.ElectionId ?? this.filterForm.controls['ElectionId'].setValue(0); 
-    fromData.ConstituencyId ?? this.filterForm.controls['ConstituencyId'].setValue(0); 
-    fromData.village ?? this.filterForm.controls['village'].setValue(0); 
-    fromData.Search ?? this.filterForm.controls['Search'].setValue(''); 
-    fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0); 
+    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0);
+    fromData.ElectionId ?? this.filterForm.controls['ElectionId'].setValue(0);
+    fromData.ConstituencyId ?? this.filterForm.controls['ConstituencyId'].setValue(0);
+    fromData.village ?? this.filterForm.controls['village'].setValue(0);
+    fromData.Search ?? this.filterForm.controls['Search'].setValue('');
+    fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0);
   }
-  
+
   filterData() {
     this.paginationNo = 1;
     // this.getClientAgentWithBooths();
@@ -329,7 +329,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   selBoothList(BoothId: any) {
-    let boothDetailsById = this.clientWiseBoothListArray.filter((ele:any) => { if(ele.BoothId == BoothId) return ele})
+    let boothDetailsById = this.clientWiseBoothListArray.filter((ele: any) => { if (ele.BoothId == BoothId) return ele })
     // Start Data Filled Filed Checkbox code
     this.isChecked.setValue(false);
     this.fillDataId = 0;
@@ -342,10 +342,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     let formDataCrmFilter = this.crmFilterForm.value;
     let formDataTopFilter = this.filterForm.value;
 
-    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+
-    '&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+ 0 +'+&IsSubElectionApplicable='+
-     this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&VillageId='+formDataTopFilter.village;
-      
+    let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
+      '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
+      this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&VillageId=' + formDataTopFilter.village;
+
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothDetails_1_0?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -645,10 +645,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------  CRM with filter start here  ------------------------------------------//
 
-  deafultCrmFilterForm(){
+  deafultCrmFilterForm() {
     this.crmFilterForm = this.fb.group({
-      Followupstatusid:[0],
-      SearchText:[''],
+      Followupstatusid: [0],
+      SearchText: [''],
     })
   }
 
@@ -660,17 +660,17 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.subject
       .pipe(debounceTime(700))
       .subscribe(() => {
-        this.crmFilterForm.value.SearchText 
+        this.crmFilterForm.value.SearchText
         this.crmPaginationNo = 1;
         this.getCrmTableData();
       }
       );
   }
-  
-  clearCrmFilter(flag:any){
-    if(flag == 'Followupstatus'){
+
+  clearCrmFilter(flag: any) {
+    if (flag == 'Followupstatus') {
       this.crmFilterForm.controls["Followupstatusid"].setValue(0);
-    } 
+    }
     this.crmPaginationNo = 1;
     this.getCrmTableData();
   }
@@ -680,16 +680,16 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.getCrmTableData();
   }
 
-  getCrmTableData(){
+  getCrmTableData() {
     this.spinner.show();
     let formDataTopFilter = this.filterForm.value;
     let formDataCrmFilter = this.crmFilterForm.value;
-    let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+
-    '&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+ 0 +'+&IsSubElectionApplicable='+
-     this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmFilter.Followupstatusid+
-    '&SearchText=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
+    let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
+      '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
+      this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&Followupstatusid=' + formDataCrmFilter.Followupstatusid +
+      '&SearchText=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
     this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => { 
+    this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.getCrmTableList = res.data1;
@@ -709,85 +709,85 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------  CRM with filter End here  ------------------------------------------//
 
-    // ------------------------------------------  CRM History with filter start here  ------------------------------------------//
+  // ------------------------------------------  CRM History with filter start here  ------------------------------------------//
 
-    deafultCrmHistoryFilterForm(){
-      this.crmHistoryFilterForm = this.fb.group({
-        Followupstatusid:[0],
-        SearchText:[''],
-        feedbackstatus:[0],
-        date:['']
-      })
-    }
-  
-    onKeyUpFilterCrmHistorySearch() {
-      this.subject.next();
-    }
-  
-    searchCrmHistoryFilter(flag: any) {
-      this.subject
-        .pipe(debounceTime(700))
-        .subscribe(() => {
-          this.crmHistoryFilterForm.value.SearchText 
-          this.crmHistoryPaginationNo = 1;
-          this.getCrmHistoryTableData();
-        }
-        );
-    }
+  deafultCrmHistoryFilterForm() {
+    this.crmHistoryFilterForm = this.fb.group({
+      Followupstatusid: [0],
+      SearchText: [''],
+      feedbackstatus: [0],
+      date: ['']
+    })
+  }
 
-    filterDateData(flag:any){
-      flag == 'range' ?  this.defaultCloseBtn = true :  this.defaultCloseBtn = false; 
-      this.crmHistoryPaginationNo = 1;
-      this.getCrmHistoryTableData();
-    }
-    
-    clearCrmHistoryFilter(flag:any){
-      if(flag == 'Followupstatus'){
-        this.crmHistoryFilterForm.controls["Followupstatusid"].setValue(0);
-      } else if(flag == 'feedbackstatus'){
-        this.crmHistoryFilterForm.controls["feedbackstatus"].setValue(0);
-      } else if(flag == 'dateRangePIcker'){
-        this.crmHistoryFilterForm.controls["date"].setValue('');
+  onKeyUpFilterCrmHistorySearch() {
+    this.subject.next();
+  }
+
+  searchCrmHistoryFilter(flag: any) {
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.crmHistoryFilterForm.value.SearchText
+        this.crmHistoryPaginationNo = 1;
+        this.getCrmHistoryTableData();
       }
-      this.crmHistoryPaginationNo = 1;
-      this.getCrmHistoryTableData();
+      );
+  }
+
+  filterDateData(flag: any) {
+    flag == 'range' ? this.defaultCloseBtn = true : this.defaultCloseBtn = false;
+    this.crmHistoryPaginationNo = 1;
+    this.getCrmHistoryTableData();
+  }
+
+  clearCrmHistoryFilter(flag: any) {
+    if (flag == 'Followupstatus') {
+      this.crmHistoryFilterForm.controls["Followupstatusid"].setValue(0);
+    } else if (flag == 'feedbackstatus') {
+      this.crmHistoryFilterForm.controls["feedbackstatus"].setValue(0);
+    } else if (flag == 'dateRangePIcker') {
+      this.crmHistoryFilterForm.controls["date"].setValue('');
     }
-  
-    onClickPagintionCrmHistory(pageNo: any) {
-      this.crmHistoryPaginationNo = pageNo;
-      this.getCrmHistoryTableData();
-    }
-  
-    getCrmHistoryTableData(){
-      this.spinner.show();
-      let formDataTopFilter = this.filterForm.value;
-      let formDataCrmHistoryFilter = this.crmHistoryFilterForm.value;
-      // let BoothId = formDataTopFilter.getBoothId ? formDataTopFilter.getBoothId : 0 ;
-      formDataCrmHistoryFilter.date = formDataCrmHistoryFilter.date ? this.datePipe.transform(formDataCrmHistoryFilter.date, 'yyyy/MM/dd') : '';
-      let obj: any = 'UserId='+this.commonService.loggedInUserId()+'&ClientId='+formDataTopFilter.ClientId+'&ElectionId='+formDataTopFilter.ElectionId+
-      '&ConstituencyId='+formDataTopFilter.ConstituencyId+'&AssemblyId='+ 0 +'+&IsSubElectionApplicable='+
-       this.IsSubElectionApplicable +'&BoothId='+formDataTopFilter.getBoothId+'&Followupstatusid='+formDataCrmHistoryFilter.Followupstatusid+
+    this.crmHistoryPaginationNo = 1;
+    this.getCrmHistoryTableData();
+  }
+
+  onClickPagintionCrmHistory(pageNo: any) {
+    this.crmHistoryPaginationNo = pageNo;
+    this.getCrmHistoryTableData();
+  }
+
+  getCrmHistoryTableData() {
+    this.spinner.show();
+    let formDataTopFilter = this.filterForm.value;
+    let formDataCrmHistoryFilter = this.crmHistoryFilterForm.value;
+    // let BoothId = formDataTopFilter.getBoothId ? formDataTopFilter.getBoothId : 0 ;
+    formDataCrmHistoryFilter.date = formDataCrmHistoryFilter.date ? this.datePipe.transform(formDataCrmHistoryFilter.date, 'yyyy/MM/dd') : '';
+    let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
+      '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
+      this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&Followupstatusid=' + formDataCrmHistoryFilter.Followupstatusid +
       '&SearchText=' + formDataCrmHistoryFilter.SearchText + '&nopage=' + this.crmHistoryPaginationNo + '&feedbackstatus=' + formDataCrmHistoryFilter.feedbackstatus + '&date=' + formDataCrmHistoryFilter.date;
-      this.callAPIService.setHttp('get', 'Get_crmhistory_1_0?' + obj, false, false, false, 'electionServiceForWeb');
-      this.callAPIService.getHttp().subscribe((res: any) => { 
-        if (res.data == 0) {
-          this.spinner.hide();
-          this.getCrmHistoryTableList = res.data1;
-          this.getCrmHistoryTableListrTotal = res.data2[0].TotalCount;
-        } else {
-          this.getCrmHistoryTableList = [];
-          this.spinner.hide();
-        }
-      }, (error: any) => {
+    this.callAPIService.setHttp('get', 'Get_crmhistory_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
         this.spinner.hide();
-        if (error.status == 500) {
-          this.router.navigate(['../500'], { relativeTo: this.route });
-        }
-      })
-    }
-  
-  
-    // ------------------------------------------  CRM History with filter End here  ------------------------------------------//
+        this.getCrmHistoryTableList = res.data1;
+        this.getCrmHistoryTableListrTotal = res.data2[0].TotalCount;
+      } else {
+        this.getCrmHistoryTableList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+
+  // ------------------------------------------  CRM History with filter End here  ------------------------------------------//
 
   // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag: any) {
@@ -840,13 +840,23 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       MName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
       LName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
       Address: [''],
-      MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
       IsMemberAddAllow: [''],
       CreatedBy: ['']
     })
   }
 
   get f() { return this.assignAgentForm.controls };
+
+  // Accept Only Integer Value Not Charector Accept
+
+  Vali_AcceptOnlyNumber(event: any) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
 
   addAgent() {
     this.submitted = true;
@@ -886,21 +896,21 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
- 
 
-  redirectToAgentDetails(agentList:any){
-    window.open('../agents-activity/'+agentList.ClientId+'.'+agentList.BoothAgentId+'.'+agentList.Addedby+'.'+agentList.SubUserTypeId);
+
+  redirectToAgentDetails(agentList: any) {
+    window.open('../agents-activity/' + agentList.ClientId + '.' + agentList.BoothAgentId + '.' + agentList.Addedby + '.' + agentList.SubUserTypeId);
   }
   //  ------------------------------------------   Add Agent modal function's end here  ------------------------------------------- //
 
-  redirectToVoterPrfile(obj:any){
-    window.open('../voters-profile/'+obj.AgentId+'.'+obj.ClientID+'.'+obj.VoterId);
+  redirectToVoterPrfile(obj: any) {
+    window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.VoterId);
   }
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
-  openDialogVoterCallEntries(obj:any) {
+  openDialogVoterCallEntries(obj: any) {
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
-      data:obj,
+      data: obj,
       panelClass: 'fullscreen-dialog',
       height: '98vh',
       width: '99%'
