@@ -39,9 +39,9 @@
                     <div class="col-sm">
                         <ngx-select [items]="getAgentByBoothsData" 
                         [disabled]="getAgentByBoothsData?.length == 0 ||  !this.filterForm.value.AgentId" 
-                        [allowClear]="getAgentByBoothsData?.length > 2"
+                        [allowClear]="true"
                             formControlName="BoothId" optionValueField="BoothId" (select)="selBoothByAgent()"
-                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearTopFilter('Booth')">
+                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearTopFilter('Booth'); getAgentByBooths();getAgentProfileData()">
                         </ngx-select>
                         <!-- [disabled]="subAreaAgentIdDisabledFlag" -->
                     </div>
