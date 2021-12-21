@@ -626,7 +626,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.behavior = "zoomY";
 
-
     let hs1 = series1.segments.template.states.create("hover")
     hs1.properties.strokeWidth = 5;
     series1.segments.template.strokeWidth = 1;
