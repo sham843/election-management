@@ -36,6 +36,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   checkedActiveClass: any;
   clickOnCardFlag: boolean = false;
   profileImg: any;
+  GlobalAgentId: any;
 
 
   constructor(
@@ -63,11 +64,16 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
+    this.GlobalAgentId = this.voterListData.AgentId;
   }
 
   agentFilledData(data: any) {
     this.voterVisitDetailDataArray = [];
+    // this.VPCommentData = [];
+    // this.posNegativeInfData = [];
+    this.GlobalAgentId = null;
     this.checkedActiveClass = data.AgentId;
+    console.log(this.checkedActiveClass)
     this.voterListData.AgentId = data.AgentId;
     this.MigInfoHide = false;
     this.getVoterProfileData();
@@ -133,6 +139,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
         this.posNegativeInfData = res.data2;
       } else {
         this.VPCommentData = [];
+        this.posNegativeInfData = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -197,7 +204,8 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   //........ Get Family Member Data ...........//    
 
   familyMemberData(FMobjData: any) {
-    if (FMobjData.VoterId != this.voterListData.VoterId) {
+    // FMobjData.VoterId != this.voterListData.VoterId
+    if (FMobjData.FamilyHead != 1) {
       this.HighlightRow = FMobjData.SrNo;
       this.MigInfoHide = true;
       this.getVPMemberDetailsData(FMobjData);
@@ -206,6 +214,8 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       this.MigInfoHide = false;
     }
   }
+
+
   //.............. Scroll Family member Details ......................//
   ScrollToFamilyMemberData() {
     window.scrollTo({
