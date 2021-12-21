@@ -199,7 +199,7 @@ export class BoothAnalyticsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.villageNameArray = res.data1;
-        this.villageNameArray.length == 1 ? ((this.filterForm.patchValue({ VillageId: this.villageNameArray[0].VillageId }), this.villageFlag = false), this.ClientWiseBoothList()) : '';
+        this.villageNameArray.length == 1 ? ((this.filterForm.patchValue({ VillageId: this.villageNameArray[0].VillageId }), this.villageFlag = false), this.ClientWiseBoothList()) : this.ClientWiseBoothList();
       } else {
         this.villageNameArray = [];
         this.spinner.hide();
@@ -222,7 +222,7 @@ export class BoothAnalyticsComponent implements OnInit {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
         //this.clientWiseBoothListArray.length == 1 ? ( this.filterForm.patchValue({ BoothId: this.clientWiseBoothListArray[0].BoothId }), this.boothFlag = false, this.bindData()) : '';
-        this.clientWiseBoothListArray.length == 1 ? (this.boothFlag = false) : '';
+        this.clientWiseBoothListArray.length == 1 ? (this.boothFlag = false, this.bindData()) : this.bindData();
       } else {
         this.clientWiseBoothListArray = [];
         this.spinner.hide();
@@ -235,15 +235,26 @@ export class BoothAnalyticsComponent implements OnInit {
       }
     })
   }
-  
-  bindData() {
-    this.selectedBoot = [];  
+
+  selectedBoothIds: any;
+  bootwiseVotersConfig: any;
+  bindData() { 
+    this.selectedBoot = [];
+    this.selectedBoothIds = [];
     if (this.filterForm.value.BoothId) {
       this.clientWiseBoothListArray.filter((ele: any) => {
         if (this.filterForm.value.BoothId == ele.BoothId) {
           this.selectedBoot.push(ele)
+          this.selectedBoothIds.push(ele.BoothId);
         }
+       
       })
+    } else {
+      this.selectedBoothIds = this.clientWiseBoothListArray.map(function (ele: any) {
+        return ele.BoothId
+      })
+      //this.clearForm();
+    }
       // this.filterForm.value.BoothId.forEach((value: any) => {
       //   this.clientWiseBoothListArray.filter((ele: any) => {
       //     if (value == ele.BoothId) {
@@ -259,8 +270,9 @@ export class BoothAnalyticsComponent implements OnInit {
       })
 
       this.areaWiseVoterConfig = { id: 'areaWiseVoterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
-      this.votersConfig = { id: 'votersListPagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
-      this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 5, currentPage: 1, totalItems: 0 }
+      this.votersConfig = { id: 'votersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
+      this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
+      this.bootwiseVotersConfig = { id: 'votersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
 
       this.boothSummary()
       this.boothSummaryGraphs()
@@ -268,14 +280,14 @@ export class BoothAnalyticsComponent implements OnInit {
       this.bindImpLeaders()
       this.bindAreaWiseVoters()
       this.bindSocialMediaSuprt()
-      this.bindAreaWiseCommonIssues();
-    } else {
-      this.clearForm();
-    }
+      this.bindAreaWiseCommonIssues()
+
+     // this.viewBoothwiseVotersList()
+    
   }
 
   boothSummary() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -309,12 +321,26 @@ export class BoothAnalyticsComponent implements OnInit {
     pieSeries.dataFields.category = "castname";
 
     pieSeries.ticks.template.disabled = true;
-    pieSeries.alignLabels = false;
+    pieSeries.alignLabels = false;    
     pieSeries.labels.template.text = "{category}";
-    pieSeries.labels.template.fontSize = 8;
+    pieSeries.labels.template.fontSize = 10;
     //pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
     pieSeries.labels.template.radius = am4core.percent(-40);
     pieSeries.labels.template.fill = am4core.color("white");
+
+    pieSeries.labels.template.adapter.add("radius", function (radius, target) {
+      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
+        return 0;
+      }
+      return radius;
+    });
+
+    pieSeries.labels.template.adapter.add("fill", function (color, target) {
+      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
+        return am4core.color("#000");
+      }
+      return color;
+    });
 
     chart.legend = new am4charts.Legend();
     chart.legend.position = "bottom";
@@ -363,11 +389,10 @@ export class BoothAnalyticsComponent implements OnInit {
 
     chart.legend = new am4charts.Legend();
     let marker = chart.legend.markers.template.children.getIndex(0);  
-
     chart.legend.position = "bottom";
     chart.legend.valueLabels.template.text = "{value.value}";
-    chart.legend.valueLabels.template.align = "right";
-    chart.legend.valueLabels.template.textAlign = "end";
+    chart.legend.valueLabels.template.align = "left";
+    //chart.legend.valueLabels.template.textAlign = "end";
 
   }
 
@@ -417,7 +442,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   boothSummaryGraphs() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Graphs?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -454,17 +479,24 @@ export class BoothAnalyticsComponent implements OnInit {
     // Create chart instance
     let chart = am4core.create("partywiseVoterschartdiv", am4charts.XYChart);
 
+    chart.colors.step = 2;
+    
+
     // Add data
     chart.data = obj;
 
     // Create axes
     let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "Partyshortcode";
-    categoryAxis.numberFormatter.numberFormat = "#";
-    categoryAxis.renderer.inversed = true;
+    //categoryAxis.numberFormatter.numberFormat = "#";
+    //categoryAxis.renderer.inversed = true;
+    //categoryAxis.renderer.grid.template.location = 0;
+    //categoryAxis.renderer.cellStartLocation = 0.1;
+    //categoryAxis.renderer.cellEndLocation = 0.9;
+    //categoryAxis.renderer.labels.template.location = 0.0001;
     categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.cellStartLocation = 0.1;
-    categoryAxis.renderer.cellEndLocation = 0.9;
+    categoryAxis.renderer.minGridDistance = 30;
+
 
     let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.opposite = true;
@@ -497,10 +529,15 @@ export class BoothAnalyticsComponent implements OnInit {
 
     createSeries("TotalFamily", "Family");
     createSeries("TotalVoter", "Voter");
+
+    chart.legend = new am4charts.Legend()
+    chart.legend.position = 'bottom'
+   // chart.legend.paddingBottom = 20
+    //chart.legend.labels.template.maxWidth = 95
   }
 
   bindMigrationPattern() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Migration?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -534,7 +571,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   bindImpLeaders() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&nopage=' + this.impLeadersPaginationNo
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.impLeadersPaginationNo
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_ImpLeaders?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -560,7 +597,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   bindAreaWiseVoters() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&nopage=' + this.areaWiseVoterConfig.currentPage
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.areaWiseVoterConfig.currentPage
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Voters?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -588,7 +625,7 @@ export class BoothAnalyticsComponent implements OnInit {
   showVotersList(Supportid: number) {
     this.votersList = [];
     this.supportToid = Supportid;
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&SupportToid=' + this.supportToid + '&nopage=' + this.votersConfig.currentPage
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&SupportToid=' + this.supportToid + '&nopage=' + this.votersConfig.currentPage
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Media_Support_Voterlist?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -598,6 +635,56 @@ export class BoothAnalyticsComponent implements OnInit {
         this.votersConfig.totalItems = res.data2[0].TotalCount;
       } else {
         this.votersList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  //ClientId:
+  //  UserId:
+  //ElectionId:
+  //  ConstituencyId:
+  //AssemblyId:
+  //  BoothId:
+  //VillageId:
+  //  Search:
+  //AreaId:
+  //  Gender:
+  //HaveMobileNo:
+  //  HaveBussiness:
+  //PartyId:
+  //  LeadeImp:
+  //IsYuvak:
+  //  InFavourofId:
+  //InOpposeOfId:
+  //  AgegroupId:
+  //FamilySize:
+  //  ReligionId:
+  //CastId:
+  //  nopage:
+  boothwiseVotersList: any;
+
+  onClickPagintionBoothVoters(pageNo: any) {
+    this.bootwiseVotersConfig.currentPage = pageNo;
+    this.showVotersList(this.supportToid);
+  }
+  viewBoothwiseVotersList() {
+    this.boothwiseVotersList = [];
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseVotersConfig.currentPage + '&Search=""'
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothwiseVotersList = res.data1;
+        this.bootwiseVotersConfig.totalItems = res.data2[0].TotalCount;
+      } else {
+        this.boothwiseVotersList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -629,10 +716,24 @@ export class BoothAnalyticsComponent implements OnInit {
     pieSeries.ticks.template.disabled = true;
     pieSeries.alignLabels = false;
     //pieSeries.labels.template.text = "{value}";
-    pieSeries.labels.template.fontSize = 8;
+    pieSeries.labels.template.fontSize = 10;
     pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
     pieSeries.labels.template.radius = am4core.percent(-40);
     pieSeries.labels.template.fill = am4core.color("white");
+
+    pieSeries.labels.template.adapter.add("radius", function (radius, target) {
+      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
+        return 0;
+      }
+      return radius;
+    });
+
+    pieSeries.labels.template.adapter.add("fill", function (color, target) {
+      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
+        return am4core.color("#000");
+      }
+      return color;
+    });
 
     chart.legend = new am4charts.Legend();
     chart.legend.position = "bottom";
@@ -641,7 +742,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   bindSocialMediaSuprt() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Social_Media_Support?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -670,7 +771,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   bindAreaWiseCommonIssues() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.filterForm.value.BoothId + '&nopage=' + this.comnIssueConfig.currentPage
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.comnIssueConfig.currentPage
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Common_Issues?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
