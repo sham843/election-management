@@ -25,7 +25,7 @@
           </div>
           <div class="col-sm-2">
             <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
-                        (remove)="clearFilter('constituencyId')" (select)="HighlightRow=0; boothDataHide =false; clearFilter('VillageId'); getVillageName(); ClientWiseBoothList()"
+                        (remove)="clearFilter('constituencyId')" (select)="clearFilter('VillageId'); getVillageName();"
                         formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
                         [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
             </ngx-select>
@@ -58,6 +58,12 @@
       </div>
       <div class="col-sm">
         <div class="card card-body">
+          <p>Total Booths</p>
+          <h3>{{cardData?.TotalBooths}}</h3>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card card-body">
           <p>Data Filled</p>
           <h3>{{cardData?.TotalFilled}}</h3>
         </div>
@@ -80,12 +86,12 @@
           <h3>{{cardData?.TotalMigrated}}</h3>
         </div>
       </div>
-      <div class="col-sm">
+      <!--<div class="col-sm">
         <div class="card card-body">
           <p>New Voters</p>
           <h3>{{cardData?.NewVoters}}</h3>
         </div>
-      </div>
+      </div>-->
       <div class="col-sm">
         <div class="card card-body">
           <p>Male</p>
@@ -118,7 +124,8 @@
           <div class="card-header pb-0">
             Booth Analysis
             <span class="float-end text-main">
-              {{selectedVillage?.VillageName}} - <span *ngFor="let boot of selectedBoot">{{boot.BoothNickName}}&nbsp;</span>
+              {{selectedVillage?.VillageName ? selectedVillage?.VillageName + ' - ' : ''}} <span *ngFor="let boot of selectedBoot"> {{boot.BoothNickName}}&nbsp;</span>
+              <span *ngIf="selectedBoot.length <= 0"> All Booths</span>
             </span>
           </div>
           <div class="card-body">
@@ -257,7 +264,7 @@
                             <div class="card-header pb-0">
                               Party wise voters Chart
                             </div>
-                            <div [hidden]="!isPartyVotersChart" id="partywiseVoterschartdiv" style="width: 100%;  height:250px"></div>
+                            <div [hidden]="!isPartyVotersChart" id="partywiseVoterschartdiv" style="width: 100%;  height:280px"></div>
                             <ng-container *ngIf="!isPartyVotersChart">
                               <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
                             </ng-container>
@@ -304,7 +311,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let leader of impLeadersList | paginate: {id: 'LeadersPagination', itemsPerPage: 5, currentPage: impLeadersPaginationNo, totalItems:impLeadersTotal}">
+                            <tr *ngFor="let leader of impLeadersList | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage: impLeadersPaginationNo, totalItems:impLeadersTotal}">
                               <td>{{leader?.SrNo}}</td>
                               <td>{{leader?.LeaderName}}</td>
                               <td>{{leader?.AreaName}}</td>
