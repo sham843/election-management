@@ -149,9 +149,9 @@
                   <div class="col-sm-4">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
-                        Religionwise Voters Chart 
+                        Religionwise Voters Chart
                       </div>
-                      <div class="card-body">                     
+                      <div class="card-body">
                         <div [hidden]="!isReligionwiseChart" id="religionwisediv"
                              style="width: 100%;  height:250px"></div>
                         <ng-container *ngIf="!isReligionwiseChart">
@@ -252,7 +252,7 @@
                                   <td>{{row?.SrNo}}</td>
                                   <td>{{row?.PartyName}}</td>
                                   <td>{{row?.TotalFamily}}</td>
-                                  <td>{{row?.TotalVoter}}</td>
+                                  <td (click)="onClickPartyVoter(row.PartyId, 2)"><a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList"> {{row?.TotalVoter}} </a></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -354,9 +354,9 @@
                             <tr *ngFor="let areaWiseVoter of areaWiseVotersList | paginate: areaWiseVoterConfig">
                               <td>{{areaWiseVoter?.SrNo}}</td>
                               <td>{{areaWiseVoter?.AreaName}}</td>
-                              <td>{{areaWiseVoter?.TotalVoters}}</td>
-                              <td>{{areaWiseVoter?.TotalFamily}}</td>
-                              <td>{{areaWiseVoter?.UpdatedVoters}}</td>
+                              <td (click)="onClickAreaVoter(areaWiseVoter.Id,2)"><a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList"> {{areaWiseVoter?.TotalVoters}} </a> </td>
+                              <td> {{areaWiseVoter?.TotalFamily}} </td>
+                              <td (click)="onClickAreaVoter(areaWiseVoter.Id,1)"><a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList"> {{areaWiseVoter?.UpdatedVoters}} </a> </td>
                               <td>{{areaWiseVoter?.Representative}}</td>
                               <td>{{areaWiseVoter?.Contact}}</td>
                             </tr>
@@ -459,7 +459,7 @@
                             <ng-container *ngIf="!isocialMediaSuprtChart">
                               <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
                             </ng-container>
-                          
+
                           </div>
                         </div>
                       </div>
@@ -489,7 +489,7 @@
                     </table>
                     <div class="mt-2 text-end" *ngIf="commonIssuesList?.length == 0">
                       <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
-                    </div>                   
+                    </div>
                     <pagination-controls id="commonIssuePagination"
                                          *ngIf="commonIssuesList?.length != 0" previousLabel=""
                                          nextLabel=""
@@ -505,15 +505,70 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!dataNotFound">
-    <div class="alert alert-danger text-center py-2 mb-0">Pease select the Booth..!</div>
+    <div class="alert alert-danger text-center py-2 mb-0">Please select the data..!</div>
   </ng-container>
 </div>
 
-
-
 <!-- Modal to show list of voters for social media  -->
-<div class="modal fade" id="ModalVotersList" tabindex="-1" aria-labelledby="ModalVotersListLabel"
-     aria-hidden="true">
+<div class="modal fade" id="BoothModalVotersList" tabindex="-1" aria-labelledby="BoothModalVotersListLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="BoothModalVotersListLabel">Voters List</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="dataNotFound">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Voter No.</th>
+              <th>Voters Name</th>
+              <th>Gender</th>
+              <th>Contact No</th>
+              <th>Occupation</th>
+              <th>Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let voter of boothwiseVotersList  | paginate: bootwiseVotersConfig">
+              <td>{{voter?.VoterNo}}</td>
+              <td>
+                <p class="mb-0">
+                  <a (click)="redirectToVoterPrfile(voter)"
+                     class="text-main">{{voter?.EnglishName}}</a>
+                </p>
+                <small class="text-muted" *ngIf="voter?.Leader == 'yes'">
+                  {{voter?.Leader}}
+                  {{voter?.LeaderImportance}} <i class="fas fa-star"></i>
+                </small>
+              </td>
+              <td> <div>{{voter?.Gender}}</div> </td>
+
+              <td>
+                <div *ngIf="voter?.MobileNo1">
+                  <a class="text-main" href="tel:{{voter?.MobileNo1}}">{{voter?.MobileNo1}}</a>
+                </div>           
+                <div *ngIf="!voter?.MobileNo1">-</div>
+              </td>
+              <td><div>{{voter?.Occupation || '-'}}</div></td>
+              <td><div>{{voter?.Comment || '-'}}</div> </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-2 text-end" *ngIf="boothwiseVotersList?.length == 0">
+          <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
+        </div>
+        <pagination-controls id="boothVotersListPagination"
+                             *ngIf="boothwiseVotersList?.length != 0" previousLabel=""
+                             nextLabel=""
+                             (pageChange)="onClickPagintionBoothVoters(boothvotersPageSize = $event)">
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="ModalVotersList" tabindex="-1" aria-labelledby="ModalVotersListLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
