@@ -49,6 +49,17 @@
                             [disabled]="filterAssembleListArray?.AssemblyId" placeholder="Select Booth">
                         </ngx-select>
                     </div>
+                    <div class="col-sm">
+                        <div class="input-group">
+                            <input type="text" class="form-control" formControlName="Search" placeholder="Search..."
+                                (keyup)="onKeyUpFilter()"/>
+                            <button type="button" class="btn btn-light border btn-sm"
+                                (click)="clearFilter('search');filterClientHaveSubEleOrNonSubEle()" *ngIf="filterForm.value.Search"><i
+                                    class="fas fa-times"></i></button>
+                            <button type="button" *ngIf="!filterForm.value.Search"
+                                class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -58,21 +69,10 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row justify-content-end g-2">
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control" formControlName="Search" placeholder="Search..."
-                                    (keyup)="onKeyUpFilter()" />
-                                <button type="button" class="btn btn-light border btn-sm"
-                                    (click)="clearFilter('search')" *ngIf="filterForm.value.Search"><i
-                                        class="fas fa-times"></i></button>
-                                <button type="button" *ngIf="!filterForm.value.Search"
-                                    class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
-                            </div>
-                        </div>
                         <div class="col-sm-auto">
                             <button class="btn btn-light btn-sm text-main mx-1 rounded" data-bs-toggle="modal"
-                                href="#AddAgentsToBoothModal" role="button">
-                                <i class="fas fa-plus me-2"></i> Add Agent
+                                href="#AddAgentsToBoothModal" role="button" [disabled]="!filterForm.value.ClientId" (click)="Client_AgentList()">
+                                <i class="fas fa-plus me-2"></i> Register Booth Agent
                             </button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Booth Name</th>
-                                <th>Agent Name</th>
+                                <th>Booth Agent Name</th>
                                 <th>Agent Mobile No.</th>
                                 <!-- <th>Area Agent Details</th> -->
                                 <th>Manage Agents</th>
@@ -95,7 +95,7 @@
                                 href="#collapseExample" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 <td>{{clientABooths?.SrNo}}</td>
-                                <td>{{clientABooths?.BoothName}}</td>
+                                <td>{{clientABooths?.BoothNickName}}</td>
                                 <td>{{clientABooths?.FullName}}</td>
                                 <td>{{clientABooths?.MobileNo}}</td>
                                 <!-- <td>
@@ -109,11 +109,16 @@
                                 </td> -->
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal"
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName"
                                             (click)="resetAssignAgentForm();patchAssBoothElection(clientABooths.HeaderId, false)"
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
                                         </button>
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="resetAssignAgentForm();assignAgentToBooth(clientABooths)" *ngIf="!clientABooths?.FullName"
+                                        
+                                        href="#addOrEditAgentModal" role="button">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
 
                                         <button type="button"
                                             class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
@@ -441,7 +446,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addOrEditAgentModalLabel">Assign Agent</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeAssignAgent
                         (click)="resetAssignAgentForm()"></button>
                 </div>
                 <div class="modal-body">
@@ -478,7 +483,7 @@
                                 <div class="text-end">
                                     <button type="button" [disabled]="!this.assAgentToBoothForm.value.ClientId"
                                         class="btn btn-link btn-sm shadow-none" data-bs-target="#AddAgentsToBoothModal"
-                                        data-bs-toggle="modal" data-bs-dismiss="modal" (click)="Client_AgentList()">
+                                        data-bs-toggle="modal" data-bs-dismiss="modal" (click)="this.agentModalFlag = true; Client_AgentList()">
                                         Add Agents</button>
                                 </div>
                             </div>
@@ -508,7 +513,7 @@
                     </div>
                 </div> *ngIf="disabledNoOfCasesDiv" -->
                         <ng-container class="disabledNoOfCasesDiv">
-                            <div class="row mb-3">
+                            <div class="row mb-3 d-none">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
                                     <ngx-select [allowClear]="true" [items]="electionNameArray"
@@ -539,7 +544,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 d-none">
                                     <label for="txtSearchAssembly" class="form-label required-field">Assembly</label>
                                     <div class="card border shadow-none">
                                         <div class="card-header border-bottom p-0 py-1">
@@ -567,7 +572,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div>
                                         <label for="txtSearchBooth" class="form-label required-field">Booth</label>
                                         <div class="card border shadow-none">
