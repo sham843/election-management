@@ -64,7 +64,7 @@
                         </div>
                         <div class="col-sm-3">
                             <ngx-select [items]="NameChangeTypeArray" [allowClear]="nameChangeFlag"
-                            formControlName="NameChangeType"  optionValueField="id" (select)="getClientHaveSubEleOrNonSubEle()"
+                            formControlName="NameChangeType"  optionValueField="id" (select)="paginationNo = 1; getClientHaveSubEleOrNonSubEle()"
                              optionTextField="name"
                             placeholder="Select Correction Type" (remove)="clearFilter('NameChangeType')">
                         </ngx-select>
@@ -74,7 +74,7 @@
                             <ngx-select [items]="allAgentLists" [allowClear]="agentFlag"
                                 formControlName="AgentId"  optionValueField="AgentId"
                                 [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
-                                 optionTextField="FullName" (select)="getClientHaveSubEleOrNonSubEle()"
+                                 optionTextField="FullName" (select)="paginationNo = 1; getClientHaveSubEleOrNonSubEle()"
                                 placeholder="Select Agent" (remove)="clearFilter('AgentId')">
                             </ngx-select>
                         </div>
