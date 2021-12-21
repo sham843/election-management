@@ -251,6 +251,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       this.ScrollToFamilyMemberData();
     } else {
       this.MigInfoHide = false;
+      this.HighlightRow = '';
     }
   }
 
