@@ -49,6 +49,7 @@ export class BoothAnalyticsComponent implements OnInit {
   impLeadersPageSize: number = 5;
   areaWiseVotersPageSize: number = 5;
   votersPageSize: number = 10;
+  boothvotersPageSize: number = 10;
   comnIssuePageSize: number = 10;
   areaWiseVotersList: any;
   areaWiseVotersTotal: any;
@@ -68,6 +69,13 @@ export class BoothAnalyticsComponent implements OnInit {
 
   selectedBoot: any[] = []
   selectedVillage: any;
+  boothwiseVotersList: any;
+  AreaId: any = 0;
+  IsFilled: any = 0;
+  openModal: boolean = false;
+  PartyId: any = 0;
+  selectedBoothIds: any;
+  bootwiseVotersConfig: any;
   // reverseOrder: boolean = true;
   //sortField = 'LeaderImportance';
   //order: string = 'info.name';
@@ -236,8 +244,6 @@ export class BoothAnalyticsComponent implements OnInit {
     })
   }
 
-  selectedBoothIds: any;
-  bootwiseVotersConfig: any;
   bindData() { 
     this.selectedBoot = [];
     this.selectedBoothIds = [];
@@ -272,7 +278,7 @@ export class BoothAnalyticsComponent implements OnInit {
       this.areaWiseVoterConfig = { id: 'areaWiseVoterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.votersConfig = { id: 'votersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
-      this.bootwiseVotersConfig = { id: 'votersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
+      this.bootwiseVotersConfig = { id: 'boothVotersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
 
       this.boothSummary()
       this.boothSummaryGraphs()
@@ -282,7 +288,7 @@ export class BoothAnalyticsComponent implements OnInit {
       this.bindSocialMediaSuprt()
       this.bindAreaWiseCommonIssues()
 
-     // this.viewBoothwiseVotersList()
+      //this.viewBoothwiseVotersList()
     
   }
 
@@ -644,45 +650,46 @@ export class BoothAnalyticsComponent implements OnInit {
       }
     })
   }
-  //ClientId:
-  //  UserId:
-  //ElectionId:
-  //  ConstituencyId:
-  //AssemblyId:
-  //  BoothId:
-  //VillageId:
-  //  Search:
-  //AreaId:
-  //  Gender:
-  //HaveMobileNo:
-  //  HaveBussiness:
-  //PartyId:
-  //  LeadeImp:
-  //IsYuvak:
-  //  InFavourofId:
-  //InOpposeOfId:
-  //  AgegroupId:
-  //FamilySize:
-  //  ReligionId:
-  //CastId:
-  //  nopage:
-  boothwiseVotersList: any;
+  
+  redirectToVoterPrfile(obj: any) {
+    window.open('../voters-profile/' + obj.UserId + '.' + this.filterForm.value.ClientId + '.' + obj.VoterId);
+  }
+
+  onClickPartyVoter(id: any, isFill: any) {
+    this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
+    this.AreaId = 0; this.PartyId = id;
+    this.IsFilled = isFill;
+    this.boothwiseVotersList = [];
+    this.viewBoothwiseVotersList();
+  }
+
+  onClickAreaVoter(id: any, isFill: any) {
+    this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
+    this.PartyId = 0; this.AreaId = id;
+    this.IsFilled = isFill;
+    this.boothwiseVotersList = [];
+    this.viewBoothwiseVotersList(); 
+  }
 
   onClickPagintionBoothVoters(pageNo: any) {
     this.bootwiseVotersConfig.currentPage = pageNo;
-    this.showVotersList(this.supportToid);
+    this.viewBoothwiseVotersList();    
   }
-  viewBoothwiseVotersList() {
-    this.boothwiseVotersList = [];
+
+  viewBoothwiseVotersList() {   
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseVotersConfig.currentPage + '&Search=""'
+      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseVotersConfig.currentPage + '&Search=&AreaId=' + this.AreaId
+      + '&Gender=&HaveMobileNo=0&HaveBussiness=2&PartyId=' + this.PartyId + '&LeadeImp=0&IsYuvak=2&InFavourofId=0&InOpposeOfId=0&AgegroupId=0&FamilySize=0&ReligionId=0&CastId=0&IsFilled=' + this.IsFilled
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    let url = '';
+    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_BoothVoterList_1_0_No_SubConsti?' + obj : url = 'Web_Get_Client_BoothVoterList_1_0?' + obj
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.boothwiseVotersList = res.data1;
-        this.bootwiseVotersConfig.totalItems = res.data2[0].TotalCount;
+        this.bootwiseVotersConfig.totalItems = res.data2[0].TotalCount;     
+        this.openModal = !this.openModal;     
       } else {
         this.boothwiseVotersList = [];
         this.spinner.hide();
