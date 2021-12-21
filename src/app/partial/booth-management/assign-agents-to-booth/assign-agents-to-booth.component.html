@@ -473,7 +473,7 @@
                                     [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                     [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
                                     class="w-75"
-                                    (select)="clearAggentToBooth('electionName'); getElectionName();  disabledNoOfCasesDiv = false;"
+                                    (select)="clearAggentToBooth('electionName'); getElectionName();  disabledNoOfCasesDiv = false; getAgentwiseAssignedBooth();"
                                     placeholder="Select Agent" (remove)="clearAggentToBooth('agentName')">
                                 </ngx-select>
                                 <!-- getAgentwiseAssignedBooth(); -->
@@ -483,12 +483,12 @@
                                 <div class="text-end">
                                     <button type="button" [disabled]="!this.assAgentToBoothForm.value.ClientId"
                                         class="btn btn-link btn-sm shadow-none" data-bs-target="#AddAgentsToBoothModal"
-                                        data-bs-toggle="modal" data-bs-dismiss="modal" (click)="this.agentModalFlag = true; Client_AgentList()">
+                                        data-bs-toggle="modal" data-bs-dismiss="modal" (click)="Client_AgentList()">
                                         Add Agents</button>
                                 </div>
                             </div>
                         </div>
-                        <!-- 
+                      
                 <div class="row mb-3" *ngIf="agentwiseAssigBoothHide">
                     <div class="col-sm-12">
                         <div class="card card-body shadow-none border py-2">
@@ -511,9 +511,9 @@
                             </div>
                         </div>
                     </div>
-                </div> *ngIf="disabledNoOfCasesDiv" -->
+                </div>   <!-- *ngIf="disabledNoOfCasesDiv" -->
                         <ng-container class="disabledNoOfCasesDiv">
-                            <div class="row mb-3 d-none">
+                            <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
                                     <ngx-select [allowClear]="true" [items]="electionNameArray"
