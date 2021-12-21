@@ -358,9 +358,9 @@
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="voter-label">Need Support :</span>
-                                <span class="voter-data">{{VPMemberDetailsData?.NeedSupportFlag == 0 ? 'No' :
-                                    VPMemberDetailsData?.NeedSupportFlag == 1 ? 'Yes' : '-'}}</span>
+                                <span class="voter-label">Party Support :</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.partyname ?
+                                    VPMemberDetailsData?.partyname : '-'}}</span>
                             </div>
                         </li>
                     </ul>

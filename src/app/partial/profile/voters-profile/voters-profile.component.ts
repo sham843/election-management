@@ -67,6 +67,8 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
 
   agentFilledData(data: any) {
     this.voterVisitDetailDataArray = [];
+    // this.VPCommentData = [];
+    // this.posNegativeInfData = [];
     this.checkedActiveClass = data.AgentId;
     this.voterListData.AgentId = data.AgentId;
     this.MigInfoHide = false;
@@ -133,6 +135,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
         this.posNegativeInfData = res.data2;
       } else {
         this.VPCommentData = [];
+        this.posNegativeInfData = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -197,14 +200,14 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   //........ Get Family Member Data ...........//    
 
   familyMemberData(FMobjData: any) {
-    if (FMobjData.VoterId != this.voterListData.VoterId) {
+    // if (FMobjData.VoterId != this.voterListData.VoterId) {
       this.HighlightRow = FMobjData.SrNo;
       this.MigInfoHide = true;
       this.getVPMemberDetailsData(FMobjData);
       this.ScrollToFamilyMemberData();
-    } else {
-      this.MigInfoHide = false;
-    }
+    // } else {
+    //   this.MigInfoHide = false;
+    // }
   }
   //.............. Scroll Family member Details ......................//
   ScrollToFamilyMemberData() {
