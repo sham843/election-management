@@ -201,6 +201,27 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     })
   }
 
+    //.................... Get Voter Profile Member Details Data .......................//
+
+    getVPMemberDetailsData(FMobjData: any) {
+      this.spinner.show();
+      this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile_Member_Details?ClientId=' + FMobjData.ClientId + '&AgentId=' + FMobjData.AgentId + '&VoterId=' + FMobjData.VoterId, false, false, false, 'electionServiceForWeb');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.data == 0) {
+          this.spinner.hide();
+          this.VPMemberDetailsData = res.data1[0];
+        } else {
+          this.VPMemberDetailsData = [];
+          this.spinner.hide();
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        if (error.status == 500) {
+          this.router.navigate(['../500'], { relativeTo: this.route });
+        }
+      })
+    }
+
   //........ Get Family Member Data ...........//    
 
   familyMemberData(FMobjData: any) {
@@ -223,27 +244,6 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       left: 50,
       behavior: 'smooth'
     });
-  }
-
-  //.................... Get Voter Profile Member Details Data .......................//
-
-  getVPMemberDetailsData(FMobjData: any) {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile_Member_Details?ClientId=' + FMobjData.ClientId + '&AgentId=' + FMobjData.AgentId + '&VoterId=' + FMobjData.VoterId, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.VPMemberDetailsData = res.data1[0];
-      } else {
-        this.VPMemberDetailsData = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
   }
 
 
