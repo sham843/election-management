@@ -659,3 +659,7 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 .cdk-overlay-connected-position-bounding-box{
     z-index: 999999;
 }
+
+g[shape-rendering="auto"]{
+    display: none;
+}
