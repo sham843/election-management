@@ -255,6 +255,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- [class.active]="(voterProfileFamily.SrNo == HighlightRow) ?  (voterProfileFamily.SrNo == HighlightRow) : ((voterProfileFamily.VoterId == voterListData.VoterId) && (voterProfileFamily.FamilyHead == 0))" -->
                                     <tr *ngFor="let voterProfileFamily of voterProfileFamilyData"
                                         [class.active]="voterProfileFamily.SrNo == HighlightRow"
                                         (click)="familyMemberData(voterProfileFamily)">

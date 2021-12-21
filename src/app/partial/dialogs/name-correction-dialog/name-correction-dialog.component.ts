@@ -45,7 +45,7 @@ export class NameCorrectionDialogComponent implements OnInit {
       IsNameChange: [1 || this.data.NameChanged],
       
       NewFirstName: ['' || this.data.ChangeFirstName,[Validators.required ,Validators.pattern(/^\S*$/)]],
-      NewMiddleName: ['' || this.data.ChangeMiddleName,[Validators.pattern(/^\S*$/)]],
+      NewMiddleName: ['' || this.data.ChangeMiddleName,[Validators.required ,Validators.pattern(/^\S*$/)]],
       NewLastName: ['' || this.data.ChangeLastName,[Validators.required ,Validators.pattern(/^\S*$/)]],
       NewEnglishName: ['' || this.data.NewEnglishName],
 
@@ -57,7 +57,7 @@ export class NameCorrectionDialogComponent implements OnInit {
       ConstituencyId: ['' || this.data.AssemblyId],
 
       NewEFirstName: ['' || this.data.EFirst,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-      NewEMiddleName: ['' || this.data.EMiddle,Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      NewEMiddleName: ['' || this.data.EMiddle,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       NewELastName: ['' || this.data.ELast,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       NewMarathiName: ['' || this.data.NewMarathiName],
     })
