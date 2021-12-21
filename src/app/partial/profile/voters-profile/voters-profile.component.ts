@@ -37,6 +37,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   clickOnCardFlag: boolean = false;
   profileImg: any;
   GlobalAgentId: any;
+  selectedVoterIdObj: any;
 
 
   constructor(
@@ -189,6 +190,23 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.voterProfileFamilyData = res.data1;
+
+                  //....... this Senario Call to when Family member Div SHOW & call getVPMemberDetailsData().......Start code.........//
+        this.voterProfileFamilyData.map((ele: any) => {
+          if (ele.VoterId == this.voterListData.VoterId) {
+            this.selectedVoterIdObj = { VoterId: ele.VoterId, FamilyHead: ele.FamilyHead,SrNo:ele.SrNo };
+          }
+        })
+
+        if (this.selectedVoterIdObj.FamilyHead == 0 && this.selectedVoterIdObj.VoterId == this.voterListData.VoterId) {
+          let obj = { ClientId: this.voterListData.ClientID, AgentId: this.voterListData.AgentId, VoterId: this.selectedVoterIdObj.VoterId }
+          this.getVPMemberDetailsData(obj);
+          this.MigInfoHide = true;
+          this.HighlightRow = this.selectedVoterIdObj.SrNo
+        }
+
+                  //.........................End Code..............................//
+
       } else {
         this.voterProfileFamilyData = [];
         this.spinner.hide();
@@ -201,26 +219,26 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-    //.................... Get Voter Profile Member Details Data .......................//
+  //.................... Get Voter Profile Member Details Data .......................//
 
-    getVPMemberDetailsData(FMobjData: any) {
-      this.spinner.show();
-      this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile_Member_Details?ClientId=' + FMobjData.ClientId + '&AgentId=' + FMobjData.AgentId + '&VoterId=' + FMobjData.VoterId, false, false, false, 'electionServiceForWeb');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.data == 0) {
-          this.spinner.hide();
-          this.VPMemberDetailsData = res.data1[0];
-        } else {
-          this.VPMemberDetailsData = [];
-          this.spinner.hide();
-        }
-      }, (error: any) => {
+  getVPMemberDetailsData(FMobjData: any) {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Voter_Profile_Member_Details?ClientId=' + FMobjData.ClientId + '&AgentId=' + FMobjData.AgentId + '&VoterId=' + FMobjData.VoterId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
         this.spinner.hide();
-        if (error.status == 500) {
-          this.router.navigate(['../500'], { relativeTo: this.route });
-        }
-      })
-    }
+        this.VPMemberDetailsData = res.data1[0];
+      } else {
+        this.VPMemberDetailsData = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
 
   //........ Get Family Member Data ...........//    
 
