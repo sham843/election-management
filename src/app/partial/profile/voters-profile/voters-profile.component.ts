@@ -36,6 +36,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   checkedActiveClass: any;
   clickOnCardFlag: boolean = false;
   profileImg: any;
+  GlobalAgentId: any;
 
 
   constructor(
@@ -63,13 +64,16 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
+    this.GlobalAgentId = this.voterListData.AgentId;
   }
 
   agentFilledData(data: any) {
     this.voterVisitDetailDataArray = [];
     // this.VPCommentData = [];
     // this.posNegativeInfData = [];
+    this.GlobalAgentId = null;
     this.checkedActiveClass = data.AgentId;
+    console.log(this.checkedActiveClass)
     this.voterListData.AgentId = data.AgentId;
     this.MigInfoHide = false;
     this.getVoterProfileData();

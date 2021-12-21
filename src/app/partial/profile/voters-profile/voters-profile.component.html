@@ -24,7 +24,7 @@
                     <div class="btn-group voter-repeat" role="group">
                         <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index" (click)="agentFilledData(VPBoothAgent)">
                             <input type="radio" class="btn-check" name="btnradio" autocomplete="off"
-                               [checked]="VPBoothAgent.AgentId == checkedActiveClass">
+                               [checked]="VPBoothAgent.AgentId ==  (GlobalAgentId ||  checkedActiveClass)">
                             <label class="btn btn-outline-secondary text-start" for="btnradio{{i}}">
                                 <small>{{VPBoothAgent.SurveyDate}}</small>
                                 <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
