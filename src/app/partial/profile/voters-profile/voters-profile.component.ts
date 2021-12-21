@@ -204,15 +204,18 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   //........ Get Family Member Data ...........//    
 
   familyMemberData(FMobjData: any) {
-    // if (FMobjData.VoterId != this.voterListData.VoterId) {
+    // FMobjData.VoterId != this.voterListData.VoterId
+    if (FMobjData.FamilyHead != 1) {
       this.HighlightRow = FMobjData.SrNo;
       this.MigInfoHide = true;
       this.getVPMemberDetailsData(FMobjData);
       this.ScrollToFamilyMemberData();
-    // } else {
-    //   this.MigInfoHide = false;
-    // }
+    } else {
+      this.MigInfoHide = false;
+    }
   }
+
+
   //.............. Scroll Family member Details ......................//
   ScrollToFamilyMemberData() {
     window.scrollTo({
