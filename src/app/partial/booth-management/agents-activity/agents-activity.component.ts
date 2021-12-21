@@ -306,6 +306,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     } else if (flag == 'subAgent') {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
+    } else if (flag == 'Booth') {
+      this.filterForm.controls["BoothId"].setValue(0);
     }
     this.getAgentAssBoothActivityGraph();
   }
@@ -567,9 +569,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
     // Create chart instance
     let chart = am4core.create("agentPerformancediv", am4charts.XYChart);
+   
 
     // Add data
-
 
     data.map((ele: any) => {
       if (ele.Date) {
@@ -578,9 +580,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         ele.Date = transformDate;
       }
     })
-
-    chart.data = data;
-
 
     // Create category axis
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -598,7 +597,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let series1 = chart.series.push(new am4charts.LineSeries());
     series1.dataFields.valueY = "VoterCount";
     series1.dataFields.categoryX = "Date";
-    series1.name = "VoterCount";
+    series1.name = "Voter Count";
     series1.bullets.push(new am4charts.CircleBullet());
     series1.tooltipText = "{valueY}";
     series1.legendSettings.valueText = "{valueY}";
@@ -612,7 +611,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let series2 = chart.series.push(new am4charts.LineSeries());
     series2.dataFields.valueY = "FamilyCount";
     series2.dataFields.categoryX = "Date";
-    series2.name = 'FamilyCount';
+    series2.name = 'Family Count';
     series2.bullets.push(new am4charts.CircleBullet());
     series2.tooltipText = "{valueY}";
     series2.legendSettings.valueText = "{valueY}";
@@ -652,7 +651,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
     this.getVotersCardData();
   }
-
 
   getVotersCardData() {
     this.spinner.show();
@@ -764,7 +762,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   familyDetails(ParentVoterId: any) {
     let formData = this.filterForm.value;
     this.nullishTopFilterForm();
-    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + formData.AgentId;
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {

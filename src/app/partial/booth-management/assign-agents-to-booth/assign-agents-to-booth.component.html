@@ -1,34 +1,197 @@
 <div class="container-fluid">
-    <div class="row mx-0 px-0" id="pageheader">
-        <div class="col-sm-4">
+    <div class="row" id="pageheader">
+        <div class="col-sm-2">
             <span class="page-name">Assign Agents to Booths
             </span>
         </div>
+        <div class="col-sm-10">
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="filterClientNameArray?.length > 1" [items]="filterClientNameArray"
+                            optionValueField="id" (remove)="clearFilter('clientName')" (select)="fillterElectionName()"
+                            [disabled]="filterClientNameArray?.length  == 1" optionTextField="Fullname"
+                            placeholder="Select Leader" formControlName="ClientId">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="filterElectionNameArray?.length > 1" [items]="filterElectionNameArray"
+                            (remove)="clearFilter('electionId')" [disabled]="filterElectionNameArray?.length  == 1"
+                            (select)="clearFilter('constituencyId');filterConstituencyName()"
+                            formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0 || this.checkLoginClientId != 0"
+                            placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="filterconstituencyNameArray"
+                            (remove)="clearFilter('Constituency')"
+                            (select)="clearFilter('BoothId');filterAssemblyName();filterClientHaveSubEleOrNonSubEle()"
+                            formControlName="ConstituencyId" optionValueField="ConstituencyId"
+                            optionTextField="ConstituencyName"
+                            [disabled]="!this.filterForm.value.ElectionId || filterconstituencyNameArray?.length == 0"
+                            placeholder="Select Constituency">
+                        </ngx-select>
+                    </div>
+                    <!-- AssemblyId -->
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="filterAssemblyArray"
+                            (remove)="clearFilter('AssemblyId');filterClientHaveSubEleOrNonSubEle()" formControlName="AssemblyId" optionValueField="Id"
+                            optionTextField="ConstituencyName"
+                            (select)="filterBoothsByAssembleId();filterClientHaveSubEleOrNonSubEle()"
+                            [disabled]="filterAssemblyArray?.length > 1" placeholder="Select Assembly">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="filterAssembleListArray"
+                            (remove)="clearFilter('BoothId');filterClientHaveSubEleOrNonSubEle()" formControlName="BoothId" optionValueField="BoothId"
+                            optionTextField="BoothNickName" (select)="filterClientHaveSubEleOrNonSubEle()"
+                            [disabled]="filterAssembleListArray?.AssemblyId" placeholder="Select Booth">
+                        </ngx-select>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
     <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row justify-content-end g-2">
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" formControlName="Search" placeholder="Search..."
+                                    (keyup)="onKeyUpFilter()" />
+                                <button type="button" class="btn btn-light border btn-sm"
+                                    (click)="clearFilter('search')" *ngIf="filterForm.value.Search"><i
+                                        class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!filterForm.value.Search"
+                                    class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <button class="btn btn-light btn-sm text-main mx-1 rounded" data-bs-toggle="modal"
+                                href="#AddAgentsToBoothModal" role="button">
+                                <i class="fas fa-plus me-2"></i> Add Agent
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table mb-0 table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Booth Name</th>
+                                <th>Agent Name</th>
+                                <th>Agent Mobile No.</th>
+                                <!-- <th>Area Agent Details</th> -->
+                                <th>Manage Agents</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let clientABooths of clientAgentWithBoothArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}"
+                                [class.active]="clientABooths.HeaderId == HighlightRow" data-bs-toggle="collapse"
+                                href="#collapseExample" role="button" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                <td>{{clientABooths?.SrNo}}</td>
+                                <td>{{clientABooths?.BoothName}}</td>
+                                <td>{{clientABooths?.FullName}}</td>
+                                <td>{{clientABooths?.MobileNo}}</td>
+                                <!-- <td>
+                                    <ng-container
+                                        *ngIf="clientABooths?.AreaAgent != null && clientABooths?.AreaAgent != ''; else elseBlock">
+                                        <p *ngFor="let areaAgent of clientABooths?.AreaAgent.split(',')">
+                                            {{areaAgent}}
+                                        </p>
+                                    </ng-container>
+                                    <ng-template #elseBlock>-</ng-template>
+                                </td> -->
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal"
+                                            (click)="resetAssignAgentForm();patchAssBoothElection(clientABooths.HeaderId, false)"
+                                            href="#addOrEditAgentModal" role="button">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button type="button"
+                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
+                                            [ngClass]="{'text-danger':clientABooths?.IsUserblock == 1 , 'text-main' :clientABooths?.IsUserblock == 0}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.IsUserblock; clientABooths?.IsUserblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
+                                            {{clientABooths?.IsUserblock == 1 ? 'Blocked' : 'Active'}}
+                                        </button>
+                                        <button type="button" title="Send Link"
+                                        class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
+                                        (click)="sendDownloadLink(clientABooths?.MobileNo)">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="6">
+                                    <div *ngIf="clientAgentWithBoothArray?.length == 0">
+                                        <div class="alert alert-danger text-center py-2"> Select Constituency to show booth list.</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- <tr>
+                                    <td>1</td>
+                                    <td>197 - Kukkudwadi</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-light text-dark rounded">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-light text-main mx-1 rounded">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                            <button class="btn btn-light text-danger rounded">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr> -->
+
+                        </tbody>
+                    </table>
+                    <!-- <ng-container *ngIf="clientAgentWithBoothArray?.length != 0">
+                        <div class="alert alert-danger mb-0">
+                            Select Constituency to show booth list.
+                        </div>
+                    </ng-container> -->
+                    <div class="mt-2 text-end" *ngIf="clientAgentWithBoothArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)">
+                        </pagination-controls>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    <div class="row chartbox mb-3">
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">Assign Agent to Booth</div>
                 <div class="card-body">
                     <div class="form-container">
                         <form [formGroup]="assAgentToBoothForm" (ngSubmit)="onSubmitAssAgentToBoothForm()">
-                            <!-- <div class="mb-2">
-                                <label for="txtConstituencyName" class="form-label required-field">Constituency Name</label>
-                                <input type="text" class="form-control" 
-                                    placeholder="Constituency Name" formControlName="ConstituencyName"
-                                    [ngClass]="{ 'is-invalid': submitted && f.ConstituencyName.errors }">
-                                <div *ngIf="submitted && f.ConstituencyName.errors" class="invalid-feedback">
-                                    <div *ngIf="f.ConstituencyName.errors.required">Constituency Name is required</div>
-                                </div>
-                            </div> -->
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Leader</label>
                                     <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                         [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
-                                        (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList(); disabledNoOfCasesDiv = false;" optionValueField="id"
-                                        optionTextField="Fullname" placeholder="Select Leader"
+                                        (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList(); disabledNoOfCasesDiv = false;"
+                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Leader"
                                         (remove)="clearAggentToBooth('clientName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.ClientId.errors" class="invalid-feedback">
@@ -39,10 +202,12 @@
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Agent</label>
                                     <ngx-select [allowClear]="true" [items]="ClientAgentListddl"
-                                        formControlName="UserId" optionValueField="AgentId" [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
+                                        formControlName="UserId" optionValueField="AgentId"
+                                        [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                         [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
-                                        class="w-75" (select)="clearAggentToBooth('electionName'); getElectionName(); getAgentwiseAssignedBooth(); disabledNoOfCasesDiv = false;" placeholder="Select Agent"
-                                        (remove)="clearAggentToBooth('agentName')">
+                                        class="w-75"
+                                        (select)="clearAggentToBooth('electionName'); getElectionName(); getAgentwiseAssignedBooth(); disabledNoOfCasesDiv = false;"
+                                        placeholder="Select Agent" (remove)="clearAggentToBooth('agentName')">
                                     </ngx-select>
                                     <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
                                         <div *ngIf="a.UserId.errors.required">Agent is required</div>
@@ -61,32 +226,291 @@
                                     <div class="card card-body shadow-none border py-2">
                                         <p class="text-main fw-bold mb-1">
                                             {{agentwiseAssigBoothArray[0]?.ElectionName}}
-                                            <small class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
+                                            <small
+                                                class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
                                             <span type="button" class="btn btn-light text-edit rounded mx-1"
-                                            (click)="showAssignBoots()" title="Edit Client">
-                                            <i class="fas fa-pen"></i></span>
+                                                (click)="showAssignBoots()" title="Edit Client">
+                                                <i class="fas fa-pen"></i></span>
                                         </p>
-                                       
+
 
                                         <div class="form-container">
                                             <label class="form-label">Booths Assigned</label>
                                             <ul class="list-column">
-                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">{{agentwiseAssigBooth?.BoothName}}</li>
+                                                <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">
+                                                    {{agentwiseAssigBooth?.BoothName}}</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <ng-container  *ngIf="disabledNoOfCasesDiv" class="disabledNoOfCasesDiv">
+                            <ng-container *ngIf="disabledNoOfCasesDiv" class="disabledNoOfCasesDiv">
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <label class="form-label required-field">Select Election</label>
+                                        <ngx-select [allowClear]="true" [items]="electionNameArray"
+                                            [disabled]="!this.assAgentToBoothForm.value.UserId"
+                                            (select)="clearAggentToBooth('constituencyName'); getConstituencyName()"
+                                            (remove)="clearAggentToBooth('electionName')" formControlName="ElectionId"
+                                            optionValueField="ElectionId" optionTextField="ElectionName"
+                                            placeholder="Select Election"
+                                            [ngClass]="{ 'is-invalid': aAsubmitted && a.ElectionId.errors}">
+                                        </ngx-select>
+                                        <div *ngIf="aAsubmitted && a.ElectionId.errors" class="invalid-feedback">
+                                            <div *ngIf="a.ElectionId.errors.required">Election is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="form-label required-field">Select Constituency</label>
+                                        <ngx-select [allowClear]="true" [items]="constituencyNameArray"
+                                            [disabled]="!this.assAgentToBoothForm.value.ElectionId"
+                                            (select)="getAssemblyName(); defaultAgentDataFlag = true"
+                                            (remove)="clearAggentToBooth('constituencyName')"
+                                            formControlName="ConstituencyId" optionValueField="ConstituencyId"
+                                            optionTextField="ConstituencyName" placeholder="Select Constituency"
+                                            [ngClass]="{ 'is-invalid': aAsubmitted && a.ConstituencyId.errors}">
+                                        </ngx-select>
+                                        <div *ngIf="aAsubmitted && a.ConstituencyId.errors" class="invalid-feedback">
+                                            <div *ngIf="a.ConstituencyId.errors.required">Constituency is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <label for="txtSearchAssembly"
+                                            class="form-label required-field">Assembly</label>
+                                        <div class="card border shadow-none">
+                                            <div class="card-header border-bottom p-0 py-1">
+                                                <input type="text" formControlName="AssemblyId"
+                                                    placeholder="Search Assemblies"
+                                                    class="form-control form-control-sm border-0"
+                                                    [ngClass]="{ 'is-invalid': aAsubmitted && a.AssemblyId.errors}">
+                                            </div>
+                                            <div class="card-body py-2 checkBox"
+                                                *ngIf="( assemblyArray | filter:searchAssembly ) as assemblyResult">
+                                                <div class="form-check" *ngFor="let assemblyData of assemblyResult">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        [checked]="assemblyData.checked"
+                                                        (change)="onCheckChangeAssembly($event, assemblyData.Id)">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        {{assemblyData.ConstituencyName}}
+                                                    </label>
+                                                </div>
+                                                <div *ngIf="assemblyResult?.length === 0">
+                                                    <div class="alert alert-danger text-center py-2 mb-0">No Data
+                                                        Found..!
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <label for="txtSearchBooth" class="form-label required-field">Booth</label>
+                                            <div class="card border shadow-none">
+                                                <div class="card-header border-bottom p-0 py-1">
+                                                    <input type="text" formControlName="boothId"
+                                                        placeholder="Search Booths" [(ngModel)]="searchboothList"
+                                                        class="form-control border-0 form-control-sm">
+                                                </div>
+                                                <div class="card-body py-2 checkBox"
+                                                    *ngIf="( boothListMergeArray | filter:searchboothList ) as boothResult">
+                                                    <div class="form-check" *ngFor="let boothData of boothResult">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            [checked]="boothData.checked"
+                                                            (change)="onCheckChangeBooths($event,boothData.BoothId,boothData.ConstituencyId,boothData.AssemblyId,boothData.ElectionId)">
+                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                            {{boothData.BoothNickName}}
+                                                        </label>
+                                                    </div>
+                                                    <div *ngIf="boothResult?.length === 0">
+                                                        <div class="alert alert-danger text-center py-2 mb-0">No Data
+                                                            Found..!</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                            (click)="resetAssignAgentForm()">Clear</button>
+                                    </div>
+                                    <div class="col-sm-9 text-end">
+                                        <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                  
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Agent</th>
+                                <th>Area Agent</th>
+                                <th>Assigned Booths</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let clientABooths of clientAgentWithBoothArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
+                                [class.active]="clientABooths.HeaderId == HighlightRow">
+                                <td>{{clientABooths.SrNo}}</td>
+                                <td>{{clientABooths.FullName | titlecase}}
+                                    <p class="mb-0 text-muted">{{clientABooths.MobileNo}}</p>
+                                </td>
+                                <td>
+                                    <ng-container
+                                        *ngIf="clientABooths?.AreaAgent != null && clientABooths?.AreaAgent != '' else noData">
+                                        <ol>
+                                            <ng-container
+                                                *ngFor="let subAreaAgentList of clientABooths?.AreaAgent.split(',')">
+                                                <li>{{subAreaAgentList}}</li>
+                                            </ng-container>
+                                        </ol>
+                                    </ng-container>
+                                    <ng-template #noData>
+                                        -
+                                    </ng-template>
+                                </td>
+                                <td>
+                                    <a data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
+                                        (click)="assignedBoothModel(clientABooths)">
+                                        {{clientABooths.TotalBooths}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light text-edit rounded"
+                                            (click)="patchAssBoothElection(clientABooths.HeaderId, false)"
+                                            title="Edit Client">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
+                                        <button type="button"
+                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
+                                            [ngClass]="{'text-danger':clientABooths?.Isblock == 1 , 'text-main' :clientABooths?.Isblock == 0}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
+                                            {{clientABooths?.Isblock == 1 ? 'Blocked' : 'Active'}}
+                                        </button>
+                                        <button type="button" title="Send Link"
+                                            class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
+                                            (click)="sendDownloadLink(clientABooths?.MobileNo)">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <div *ngIf="clientAgentWithBoothArray?.length == 0">
+                                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-2 text-end" *ngIf="clientAgentWithBoothArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+    <!-- add or edit agent modal start here  -->
+
+    <div class="modal fade" id="addOrEditAgentModal" aria-hidden="true" aria-labelledby="addOrEditAgentModalLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addOrEditAgentModalLabel">Assign Agent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        (click)="resetAssignAgentForm()"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="assAgentToBoothForm" (ngSubmit)="onSubmitAssAgentToBoothForm()">
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label required-field">Select Leader</label>
+                                <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
+                                    [allowClear]="clientNameArray?.length > 1" [items]="clientNameArray"
+                                    formControlName="ClientId" [disabled]="clientNameArray?.length == 1"
+                                    (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList(); disabledNoOfCasesDiv = false;"
+                                    optionValueField="id" optionTextField="Fullname" placeholder="Select Leader"
+                                    (remove)="clearAggentToBooth('clientName')">
+                                </ngx-select>
+                                <div *ngIf="aAsubmitted && a.ClientId.errors" class="invalid-feedback">
+                                    <div *ngIf="a.ClientId.errors.required">Client is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label class="form-label required-field">Select Agent</label>
+                                <ngx-select [allowClear]="true" [items]="ClientAgentListddl" formControlName="UserId"
+                                    optionValueField="AgentId"
+                                    [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
+                                    [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
+                                    class="w-75"
+                                    (select)="clearAggentToBooth('electionName'); getElectionName();  disabledNoOfCasesDiv = false;"
+                                    placeholder="Select Agent" (remove)="clearAggentToBooth('agentName')">
+                                </ngx-select>
+                                <!-- getAgentwiseAssignedBooth(); -->
+                                <div *ngIf="aAsubmitted && a.UserId.errors" class="invalid-feedback">
+                                    <div *ngIf="a.UserId.errors.required">Agent is required</div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" [disabled]="!this.assAgentToBoothForm.value.ClientId"
+                                        class="btn btn-link btn-sm shadow-none" data-bs-target="#AddAgentsToBoothModal"
+                                        data-bs-toggle="modal" data-bs-dismiss="modal" (click)="Client_AgentList()">
+                                        Add Agents</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 
+                <div class="row mb-3" *ngIf="agentwiseAssigBoothHide">
+                    <div class="col-sm-12">
+                        <div class="card card-body shadow-none border py-2">
+                            <p class="text-main fw-bold mb-1">
+                                {{agentwiseAssigBoothArray[0]?.ElectionName}}
+                                <small
+                                    class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
+                                <span type="button" class="btn btn-light text-edit rounded mx-1"
+                                    (click)="showAssignBoots()" title="Edit Client">
+                                    <i class="fas fa-pen"></i></span>
+                            </p>
+
+
+                            <div class="form-container">
+                                <label class="form-label">Booths Assigned</label>
+                                <ul class="list-column">
+                                    <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">
+                                        {{agentwiseAssigBooth?.BoothName}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> *ngIf="disabledNoOfCasesDiv" -->
+                        <ng-container class="disabledNoOfCasesDiv">
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
-                                    <!-- <div class="form-check" *ngFor="let elections of electionNameArray">
-                                            <input class="form-check-input" type="checkbox"  (change)="getConstituencyName($event,elections.ElectionId)">
-                                            <label class="form-check-label" for="flexCheckDefault">
-                                                {{elections.ElectionName}}
-                                            </label> 
-                                        </div> -->
                                     <ngx-select [allowClear]="true" [items]="electionNameArray"
                                         [disabled]="!this.assAgentToBoothForm.value.UserId"
                                         (select)="clearAggentToBooth('constituencyName'); getConstituencyName()"
@@ -101,15 +525,10 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Constituency</label>
-                                    <!-- <div class="form-check" *ngFor="let constituency of constituencyNameArray">
-                                            <input class="form-check-input" type="checkbox"  (change)="getAssemblyName($event,constituency.ConstituencyId)">
-                                            <label class="form-check-label" for="flexCheckDefault">
-                                                {{constituency.ConstituencyName}}
-                                            </label> 
-                                        </div> -->
                                     <ngx-select [allowClear]="true" [items]="constituencyNameArray"
                                         [disabled]="!this.assAgentToBoothForm.value.ElectionId"
-                                        (select)="getAssemblyName(); defaultAgentDataFlag = true" (remove)="clearAggentToBooth('constituencyName')"
+                                        (select)="getAssemblyName(); defaultAgentDataFlag = true"
+                                        (remove)="clearAggentToBooth('constituencyName')"
                                         formControlName="ConstituencyId" optionValueField="ConstituencyId"
                                         optionTextField="ConstituencyName" placeholder="Select Constituency"
                                         [ngClass]="{ 'is-invalid': aAsubmitted && a.ConstituencyId.errors}">
@@ -124,7 +543,6 @@
                                     <label for="txtSearchAssembly" class="form-label required-field">Assembly</label>
                                     <div class="card border shadow-none">
                                         <div class="card-header border-bottom p-0 py-1">
-                                            <!-- [(ngModel)]="searchAssembly" -->
                                             <input type="text" formControlName="AssemblyId"
                                                 placeholder="Search Assemblies"
                                                 class="form-control form-control-sm border-0"
@@ -141,13 +559,11 @@
                                                 </label>
                                             </div>
                                             <div *ngIf="assemblyResult?.length === 0">
-                                                <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!
+                                                <div class="alert alert-danger text-center py-2 mb-0">No Data
+                                                    Found..!
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div *ngIf="aAsubmitted && a.assembly.errors" class="invalid-feedback">
-                                            <div *ngIf="a.assembly.errors.required">Assembly is required</div>
-                                        </div> -->
                                     </div>
                                 </div>
 
@@ -156,7 +572,6 @@
                                         <label for="txtSearchBooth" class="form-label required-field">Booth</label>
                                         <div class="card border shadow-none">
                                             <div class="card-header border-bottom p-0 py-1">
-                                                <!--  -->
                                                 <input type="text" formControlName="boothId" placeholder="Search Booths"
                                                     [(ngModel)]="searchboothList"
                                                     class="form-control border-0 form-control-sm">
@@ -190,321 +605,223 @@
                                     <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
                                 </div>
                             </div>
-                            </ng-container>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-header">
-                    <form [formGroup]="filterForm">
-                        <div class="row g-2">
-                            <div class="offset-2 col-sm-5">
-                                <ngx-select [allowClear]="true" [items]="clientNameArray" optionValueField="id"
-                                    (remove)="clearFilter('clientName')" (select)="filterData()"
-                                    optionTextField="Fullname" placeholder="Select Leader" formControlName="ClientId">
-                                </ngx-select>
-
-                            </div>
-                            <div class="col-sm-5">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" formControlName="Search"
-                                        placeholder="Search..." (keyup)="onKeyUpFilter()" />
-                                    <button type="button" class="btn btn-light border btn-sm"
-                                        (click)="clearFilter('search')" *ngIf="filterForm.value.Search"><i
-                                            _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
-                                    <button type="button" *ngIf="!filterForm.value.Search"
-                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                        </ng-container>
                     </form>
+
+
                 </div>
-                <div class="card-body">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Agent</th>
-                                <th>Area Agent</th>
-                                <th>Assigned Booths</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let clientABooths of clientAgentWithBoothArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
-                                [class.active]="clientABooths.HeaderId == HighlightRow">
-                                <td>{{clientABooths.SrNo}}</td>
-                                <td>{{clientABooths.FullName | titlecase}}
-                                    <p class="mb-0 text-muted">{{clientABooths.MobileNo}}</p>
-                                </td>
-                                <td>
-                                    <ng-container *ngIf="clientABooths?.AreaAgent != null && clientABooths?.AreaAgent != '' else noData">
-                                        <ol>
-                                            <ng-container *ngFor="let subAreaAgentList of clientABooths?.AreaAgent.split(',')">
-                                                <li>{{subAreaAgentList}}</li>
-                                            </ng-container>
-                                        </ol>
-                                    </ng-container>
-                                    <ng-template #noData>
-                                        -
-                                    </ng-template>
-                                </td>
-                                <td>
-                                    <a data-bs-toggle="modal" data-bs-target="#ShowBoothsModal"
-                                        (click)="assignedBoothModel(clientABooths)">
-                                        {{clientABooths.TotalBooths}}
-                                    </a>
-                                    <!-- <ul class="mb-0 ps-3 list-column">
-                                        <li *ngFor="let clientAbooth of clientABooths.BoothsAssigned.split(',')">
-                                            {{clientAbooth}}</li>
-                                    </ul> -->
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <!-- <button type="button" class="btn btn-light text-dark rounded" title="Add Client" (click)="clientIdGet(clientABooths.ClientId)"
-                                            data-bs-toggle="modal" data-bs-target="#AddAgentsToBoothModal">
-                                            <i class="fas fa-plus"></i>
-                                        </button> -->
-                                        <button type="button" class="btn btn-light text-edit rounded"
-                                            (click)="patchAssBoothElection(clientABooths.HeaderId, false)" title="Edit Client">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-                                        <!-- [disabled]="clientABooths?.Isblock == 0 ? true :false" -->
-                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
-                                            [ngClass]="{'text-danger':clientABooths?.Isblock == 1 , 'text-main' :clientABooths?.Isblock == 0}"
-                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
-                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.Isblock; clientABooths?.Isblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
-                                            {{clientABooths?.Isblock == 1 ? 'Blocked' : 'Active'}}
-                                        </button>
-                                        <button  type="button" title="Send Link"  class="btn btn-sm btn-light text-main rounded fw-bold ml-2" (click)="sendDownloadLink(clientABooths?.MobileNo)">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5">
-                                    <div *ngIf="clientAgentWithBoothArray?.length == 0">
-                                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="mt-2 text-end" *ngIf="clientAgentWithBoothArray?.length != 0">
-                        <pagination-controls previousLabel="" nextLabel=""
-                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
-</div>
 
+    <!-- <a class="btn btn-primary" >Open first modal</a> -->
+    <!-- add or edit agent modal end here  -->
 
-<!-- Modal to add agents to booth -->
-<div class="modal fade" id="AddAgentsToBoothModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="AddAgentsToBoothModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-            <form [formGroup]="assignAgentForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="AddAgentsToBoothModalLabel">Add Agent</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        (click)="clearAggentForm()"></button>
-                </div>
-                <div class="modal-body chartbox">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-container">
+    <!-- Modal to add agents to booth -->
+    <div class="modal fade" id="AddAgentsToBoothModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="AddAgentsToBoothModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <form [formGroup]="assignAgentForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="AddAgentsToBoothModalLabel">Add Agent</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            (click)="clearAggentForm();openAssignAgentToBooth()" #closeAddAgentModal></button>
+                    </div>
+                    <div class="modal-body chartbox">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-container">
 
-                                <div class="row mb-3 g-2">
-                                    <div class="col-sm-4">
-                                        <label class="form-label required-field">First Name</label>
-                                        <input type="text" class="form-control" formControlName="FName"
-                                            placeholder="First Name"
-                                            [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
-                                        <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
-                                            <div *ngIf="f.FName.errors.required">First Name is required</div>
-                                            <div *ngIf="f.FName.errors.pattern">First Name can not contain space</div>
-                                            <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
+                                    <div class="row mb-3 g-2">
+                                        <div class="col-sm-4">
+                                            <label class="form-label required-field">First Name</label>
+                                            <input type="text" class="form-control" formControlName="FName"
+                                                placeholder="First Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                                            <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.FName.errors.required">First Name is required</div>
+                                                <div *ngIf="f.FName.errors.pattern">First Name can not contain space
+                                                </div>
+                                                <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="txtFullName" class="form-label">Middle Name</label>
-                                        <input type="text" class="form-control" formControlName="MName"
-                                            placeholder="Middle Name"
-                                            [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
-                                        <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
-                                            <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space</div>
-                                            <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
+                                        <div class="col-sm-4">
+                                            <label for="txtFullName" class="form-label">Middle Name</label>
+                                            <input type="text" class="form-control" formControlName="MName"
+                                                placeholder="Middle Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                                            <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space
+                                                </div>
+                                                <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="txtFullName" class="form-label required-field">Last Name</label>
-                                        <input type="text" class="form-control" formControlName="LName"
-                                            placeholder="Last Name"
-                                            [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
-                                        <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
-                                            <div *ngIf="f.LName.errors.required">Last Name is required</div>
-                                            <div *ngIf="f.LName.errors.pattern">Last Name can not contain space</div>
-                                            <div *ngIf="f.LName.errors.onlyEnglish">Use English Language</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="txtContactNo" class="form-label required-field">Contact No.</label>
-                                        <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
-                                            formControlName="MobileNo" placeholder="Contact No."
-                                            [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
-                                        <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
-                                            <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
-                                            <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                        <div class="col-sm-4">
+                                            <label for="txtFullName" class="form-label required-field">Last Name</label>
+                                            <input type="text" class="form-control" formControlName="LName"
+                                                placeholder="Last Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                                            <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.LName.errors.required">Last Name is required</div>
+                                                <div *ngIf="f.LName.errors.pattern">Last Name can not contain space
+                                                </div>
+                                                <div *ngIf="f.LName.errors.onlyEnglish">Use English Language</div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="Address1" class="form-label">Address</label>
-                                    <textarea class="form-control" id="txtAddress" formControlName="Address"
-                                        placeholder="Address"
-                                        [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
-                                    <!-- <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
-                                        <div *ngIf="f.Address.errors.pattern">Address is required</div>
-                                    </div> -->
-                                </div>
-                                <div class="mb-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="IsMemberAddAllow" value="" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Allow add area agent
-                                        </label>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <label for="txtContactNo" class="form-label required-field">Contact
+                                                No.</label>
+                                            <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
+                                                formControlName="MobileNo" placeholder="Contact No."
+                                                [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                                            <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                                <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
+                                                <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile
+                                                    Number.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Address1" class="form-label">Address</label>
+                                        <textarea class="form-control" id="txtAddress" formControlName="Address"
+                                            placeholder="Address"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
+
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                formControlName="IsMemberAddAllow" value="" id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Allow add area agent
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                (click)="clearAggentForm()">Clear</button>
+                                        </div>
+                                        <div class="col-sm-6 text-end">
+                                            <button type="button" class="btn btn-primary btn-main btn-sm"
+                                                (click)="addAgent()">{{btnText}}</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm"
-                                            (click)="clearAggentForm()">Clear</button>
-                                    </div>
-                                    <div class="col-sm-6 text-end">
-                                        <button type="button" class="btn btn-primary btn-main btn-sm"
-                                            (click)="addAgent()">{{btnText}}</button>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="mb-0" *ngIf="clientAgentListFlag">
+                                    <div class="table-sticky">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr. No.</th>
+                                                    <th>Agent Name</th>
+                                                    <th>Contact No</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let agentList of getAllClientAgentList">
+                                                    <td>{{agentList.SrNo}}</td>
+                                                    <td>{{agentList.FullName}}</td>
+                                                    <td>{{agentList?.MobileNo}}</td>
+                                                    <td>
+                                                        <button type="button"
+                                                            class="btn btn-light text-edit btn-sm me-1"
+                                                            (click)="editAgent(agentList)"><i
+                                                                class="fas fa-pen"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-light text-main rounded fw-bold"
+                                                            [ngClass]="{'text-danger':agentList?.IsUserBlock == 1 , 'text-main' :agentList?.IsUserBlock == 0}"
+                                                            (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)">
+                                                            {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <div *ngIf="getAllClientAgentList.length == 0">
+                                                            <div class="alert alert-danger text-center py-2">No Data
+                                                                Found..!</div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
-                            <div class="mb-0" *ngIf="clientAgentListFlag">
-                                <div class="table-sticky">
-                                    <table class="table table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Sr. No.</th>
-                                                <th>Agent Name</th>
-                                                <th>Contact No</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let agentList of getAllClientAgentList">
-                                                <td>{{agentList.SrNo}}</td>
-                                                <td>{{agentList.FullName}}</td>
-                                                <td>{{agentList?.MobileNo}}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-light text-edit btn-sm me-1"
-                                                        (click)="editAgent(agentList)"><i
-                                                            class="fas fa-pen"></i></button>
-                                                    <!-- <button type="button" class="btn btn-light text-danger btn-sm"
-                                                    (click)="blockUser(agentList.ClientId,agentList.UserId, agentBlogStatus)"><i
-                                                        class="fas fa-trash-alt"></i></button> -->
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-light text-main rounded fw-bold"
-                                                        [ngClass]="{'text-danger':agentList?.IsUserBlock == 1 , 'text-main' :agentList?.IsUserBlock == 0}"
-                                                        (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)">
-                                                        {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <div *ngIf="getAllClientAgentList.length == 0">
-                                                        <div class="alert alert-danger text-center py-2">No Data
-                                                            Found..!</div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- open ASSIGN AGENTS TO BOOTHS modal  -->
+    <button type="button" #openAssignAgentToBooths class="btn btn-primary d-none" data-bs-toggle="modal"
+        data-bs-target="#addOrEditAgentModal"></button>
+
+    <!-- Modal to show booths of agents assigned -->
+    <div class="modal fade" id="ShowBoothsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="ShowBoothsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ShowBoothsModalLabel">Show Booths</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-container">
+                        <div class="mb-2">
+                            <label class="form-label">Agent Details</label>
+                            <div class="form-data">
+                                <p class="mb-0 fw-bold">{{assBoothObjData?.FullName}} <span
+                                        class="small text-muted">[{{assBoothObjData?.MobileNo}}]</span></p>
                             </div>
                         </div>
                     </div>
-
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal to show boots of agents assigned -->
-<div class="modal fade" id="ShowBoothsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="ShowBoothsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ShowBoothsModalLabel">Show Booths</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-container">
-                    <div class="mb-2">
-                        <label class="form-label">Agent Details</label>
+                    <div class="mb-0">
+                        <label class="form-label">Booths Assigned</label>
                         <div class="form-data">
-                            <p class="mb-0 fw-bold">{{assBoothObjData?.FullName}} <span
-                                    class="small text-muted">[{{assBoothObjData?.MobileNo}}]</span></p>
+                            <ul class="mb-0 ps-3 list-column">
+                                <li class="ng-star-inserted"
+                                    *ngFor="let boothsAssigned of assBoothObjData?.BoothsAssigned.split(',')">
+                                    {{boothsAssigned}}</li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-                <div class="mb-0">
-                    <label class="form-label">Booths Assigned</label>
-                    <!-- <a  (click)="patchAssBoothElection(clientABooths.HeaderId)">Edit</a> -->
-                    <div class="form-data">
-                        <ul class="mb-0 ps-3 list-column">
-                            <li class="ng-star-inserted" *ngFor="let boothsAssigned of assBoothObjData?.BoothsAssigned.split(',')">
-                                {{boothsAssigned}}</li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal for Agent block -->
-<div class="modal fade" id="agentBlock" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="agentBlockLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="agentBlockLabel">User Block</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body chartbox text-center">
-                <i class="far fa-question-circle fa-5x text-success mb-3"></i>
-                <h5 class="mb-3">Do you really want to {{modalTextChange}} this user?</h5>
-                <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
-                    aria-label="Close">No</button>
-                <button (click)="blockUser(userId,ClientId, agentBlogStatus)" type="button"
-                    class="btn btn-sm btn-main px-4" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+    <!-- Modal for Agent block -->
+    <div class="modal fade" id="agentBlock" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="agentBlockLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agentBlockLabel">User Block</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body chartbox text-center">
+                    <i class="far fa-question-circle fa-5x text-success mb-3"></i>
+                    <h5 class="mb-3">Do you really want to {{modalTextChange}} this user?</h5>
+                    <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
+                        aria-label="Close">No</button>
+                    <button (click)="blockUser(userId,ClientId, agentBlogStatus)" type="button"
+                        class="btn btn-sm btn-main px-4" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                </div>
             </div>
         </div>
     </div>

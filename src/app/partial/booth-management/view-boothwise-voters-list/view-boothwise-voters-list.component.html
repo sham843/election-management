@@ -12,7 +12,7 @@
                         <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
                             (remove)="clearTopFilter('clientId')"
                             (select)="getElectionName()" optionValueField="id"
-                            optionTextField="Fullname" placeholder="Select Client">
+                            optionTextField="Fullname" placeholder="Select Leader">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
@@ -1069,12 +1069,12 @@
                         <div class="row mb-3">
                             <div class="col-sm-12">
                                 <label for="txtContactNo" class="form-label required-field">Contact No.</label>
-                                <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
-                                    formControlName="MobileNo" placeholder="Contact No."
+                                <input type="text" class="form-control" id="txtContactNo1" maxlength="10" (keypress)=Vali_AcceptOnlyNumber($event)
+                                    formControlName="MobileNo" placeholder="Contact No." 
                                     [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
                                 <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
                                     <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
-                                    <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                    <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit valid Number.
                                     </div>
                                 </div>
                             </div>

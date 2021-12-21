@@ -78,18 +78,18 @@
                             <div class="row mb-3 g-2">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Contact No. 1</label>
-                                    <input type="text" class="form-control" id="txtContactNo1" maxlength="10" formControlName="MobileNo" placeholder="Contact No. 1" [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                                    <input type="text" class="form-control" id="txtContactNo1" maxlength="10" (keypress)=Vali_AcceptOnlyNumber($event) formControlName="MobileNo" placeholder="Contact No. 1" [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
                                     <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
                                         <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
-                                        <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                        <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Valid Number.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="txtContactNo2" class="form-label">Contact No. 2</label>
-                                    <input type="text" class="form-control" id="txtContactNo2" maxlength="10" formControlName="ContactNo2" placeholder="Contact No. 2">
+                                    <input type="text" class="form-control" id="txtContactNo2" maxlength="10" (keypress)=Vali_AcceptOnlyNumber($event) formControlName="ContactNo2" placeholder="Contact No. 2">
                                     <div *ngIf="submitted && f.ContactNo2.errors" class="invalid-feedback">
-                                        <div *ngIf="f.ContactNo2.errors.pattern">Please, Enter 10 digit Mobile Number.
+                                        <div *ngIf="f.ContactNo2.errors.pattern">Please, Enter 10 digit Valid Number.
                                         </div>
                                     </div>
                                 </div>

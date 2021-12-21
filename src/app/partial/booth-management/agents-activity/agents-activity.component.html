@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row mx-0 px-0" id="pageheader">
+    <div class="row" id="pageheader">
         <div class="col-sm-3">
             <span class="page-name">
                 Agent Activity
@@ -39,9 +39,9 @@
                     <div class="col-sm">
                         <ngx-select [items]="getAgentByBoothsData" 
                         [disabled]="getAgentByBoothsData?.length == 0 ||  !this.filterForm.value.AgentId" 
-                        [allowClear]="getAgentByBoothsData?.length > 2"
+                        [allowClear]="true"
                             formControlName="BoothId" optionValueField="BoothId" (select)="selBoothByAgent()"
-                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearTopFilter('Booth')">
+                            optionTextField="BoothName" placeholder="Select Booth" (remove)="clearTopFilter('Booth'); getAgentByBooths();getAgentProfileData()">
                         </ngx-select>
                         <!-- [disabled]="subAreaAgentIdDisabledFlag" -->
                     </div>
@@ -312,7 +312,7 @@
                                             <th>Sr. No.</th>
                                             <th>Voters Full Name</th>
                                             <th>Visit Time</th>
-                                            <th>Voter NO.</th>
+                                            <th>Voter No.</th>
                                             <th>Gender</th>
                                             <th>Contact No</th>
                                         </tr>
