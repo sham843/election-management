@@ -503,6 +503,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   defaultFilterForm() {
+  
     this.filterForm = this.fb.group({
       ClientId: [this.commonService.getlocalStorageData().ClientId],
       ElectionId: [0],
