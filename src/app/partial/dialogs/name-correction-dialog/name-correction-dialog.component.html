@@ -47,8 +47,7 @@
                         <input type="text" formControlName="NewEFirstName" class="form-control" placeholder="First Name" 
                           [ngClass]="{ 'is-invalid': submitted && f.NewEFirstName.errors }">
                         <div *ngIf="submitted && f.NewEFirstName.errors" class="invalid-feedback">
-                            <div *ngIf="f.NewEFirstName.errors.required">First Name is required
-                            </div>
+                            <div *ngIf="f.NewEFirstName.errors.required">First Name is required</div>
                             <div *ngIf="f.NewEFirstName.errors.pattern">First Name can not contain space</div>
                             <div *ngIf="f.NewEFirstName.errors.onlyEnglish">Use English Language</div>
                         </div>
@@ -88,6 +87,7 @@
                         <label class="form-label">मधले नाव</label>
                         <input type="text" formControlName="NewMiddleName" class="form-control" placeholder="मधले नाव" [ngClass]="{ 'is-invalid': submitted && f.NewMiddleName.errors }">
                         <div *ngIf="submitted && f.NewMiddleName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewMiddleName.errors.required">Middle Name is required </div>
                             <div *ngIf="f.NewMiddleName.errors.pattern">Middle Name can not contain space</div>
                         </div>
                     </div>

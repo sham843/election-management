@@ -37,6 +37,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   clickOnCardFlag: boolean = false;
   profileImg: any;
   GlobalAgentId: any;
+  selectedVoterIdObj: any;
 
 
   constructor(
@@ -189,6 +190,23 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.voterProfileFamilyData = res.data1;
+
+                  //....... this Senario Call to when Family member Div SHOW & call getVPMemberDetailsData().......Start code.........//
+        this.voterProfileFamilyData.map((ele: any) => {
+          if (ele.VoterId == this.voterListData.VoterId) {
+            this.selectedVoterIdObj = { VoterId: ele.VoterId, FamilyHead: ele.FamilyHead,SrNo:ele.SrNo };
+          }
+        })
+
+        if (this.selectedVoterIdObj.FamilyHead == 0 && this.selectedVoterIdObj.VoterId == this.voterListData.VoterId) {
+          let obj = { ClientId: this.voterListData.ClientID, AgentId: this.voterListData.AgentId, VoterId: this.selectedVoterIdObj.VoterId }
+          this.getVPMemberDetailsData(obj);
+          this.MigInfoHide = true;
+          this.HighlightRow = this.selectedVoterIdObj.SrNo
+        }
+
+                  //.........................End Code..............................//
+
       } else {
         this.voterProfileFamilyData = [];
         this.spinner.hide();
@@ -199,30 +217,6 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
-  }
-
-  //........ Get Family Member Data ...........//    
-
-  familyMemberData(FMobjData: any) {
-    // FMobjData.VoterId != this.voterListData.VoterId
-    if (FMobjData.FamilyHead != 1) {
-      this.HighlightRow = FMobjData.SrNo;
-      this.MigInfoHide = true;
-      this.getVPMemberDetailsData(FMobjData);
-      this.ScrollToFamilyMemberData();
-    } else {
-      this.MigInfoHide = false;
-    }
-  }
-
-
-  //.............. Scroll Family member Details ......................//
-  ScrollToFamilyMemberData() {
-    window.scrollTo({
-      top: 20,
-      left: 50,
-      behavior: 'smooth'
-    });
   }
 
   //.................... Get Voter Profile Member Details Data .......................//
@@ -244,6 +238,31 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+  //........ Get Family Member Data ...........//    
+
+  familyMemberData(FMobjData: any) {
+    // FMobjData.VoterId != this.voterListData.VoterId
+    if (FMobjData.FamilyHead != 1) {
+      this.HighlightRow = FMobjData.SrNo;
+      this.MigInfoHide = true;
+      this.getVPMemberDetailsData(FMobjData);
+      this.ScrollToFamilyMemberData();
+    } else {
+      this.MigInfoHide = false;
+      this.HighlightRow = '';
+    }
+  }
+
+
+  //.............. Scroll Family member Details ......................//
+  ScrollToFamilyMemberData() {
+    window.scrollTo({
+      top: 20,
+      left: 50,
+      behavior: 'smooth'
+    });
   }
 
 

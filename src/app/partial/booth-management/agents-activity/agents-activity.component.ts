@@ -564,13 +564,14 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   LineChartAgentPerformance(data: any) {
     // Themes begin
+    debugger
     am4core.useTheme(am4themes_animated);
     // Themes end
 
     // Create chart instance
     let chart = am4core.create("agentPerformancediv", am4charts.XYChart);
    
-
+    chart.data = data;
     // Add data
 
     data.map((ele: any) => {
@@ -624,7 +625,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     // Add chart cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.behavior = "zoomY";
-
 
     let hs1 = series1.segments.template.states.create("hover")
     hs1.properties.strokeWidth = 5;
