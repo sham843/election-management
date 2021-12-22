@@ -124,6 +124,11 @@
                             <span class="voter-label">Area :</span>
                             <span class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Postal Voting  :</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
+                                VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
+                        </li>
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
                             <div class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}

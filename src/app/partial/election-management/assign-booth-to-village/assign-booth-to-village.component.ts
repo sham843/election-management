@@ -257,6 +257,7 @@ export class AssignBoothToVillageComponent implements OnInit {
 
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
+    this.clearForm();
     this.getBoothListwithVillage();
   }
 
