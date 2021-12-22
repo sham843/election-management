@@ -257,6 +257,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     }, {});
     
     this.boothAssignAgentMergedArray = Object.values(arrayHashmap);
+    console.log(this.boothAssignAgentMergedArray)
     
   }
 
