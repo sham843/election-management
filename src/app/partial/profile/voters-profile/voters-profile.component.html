@@ -214,9 +214,9 @@
                     <div class="card-header p-0">
                         Political Information
                     </div>
-                    <div class="card-body p-0 mb-2" *ngIf="voterProfileData?.partyname">
+                    <div class="card-body p-0 mb-2">
                         <div class="voter-data">
-                            {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
+                          <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span>  <span *ngIf="voterProfileData?.LeaderImportance">Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star text-warning"></i>)</span>
                         </div>
                     </div>
 
