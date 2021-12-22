@@ -15,11 +15,11 @@
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <!-- [disabled]="filterElectionNameArray?.length  == 0" 
-                        
-                        [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0 || this.checkLoginClientId != 0"-->
+                        <!-- [disabled]="filterElectionNameArray?.length  == 0" this.checkLoginClientId != 0"-->
+
                         <ngx-select [allowClear]="filterElectionNameArray?.length > 1" [items]="filterElectionNameArray"
                             (remove)="clearFilter('electionId')" 
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                             (select)="clearFilter('constituencyId');filterConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             
@@ -519,8 +519,8 @@
                                 
                                 <small
                                     class="text-muted">[{{agentwiseAssigBoothArray?.ConstituencyName}}]</small>
-                                <span type="button" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
-                                    (click)="showAssignBoots(agentwiseAssigBoothArray?.HeaderId)" title="Edit Client"> <i class="fas fa-pen"></i></span>
+                                    <span type="button"   (click)="showAssignBoots(agentwiseAssigBoothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
+                                   title="Edit Client"> <i class="fas fa-pen"></i></span>
                                 </p>
 
 
@@ -528,7 +528,8 @@
                                 <label class="form-label">Booths Assigned</label>
                                 <ul class="list-column">
                                     <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray.BoothName">
-                                        {{agentwiseAssigBooth}}</li>
+                                        {{agentwiseAssigBooth}} </li>
+                                      
                                 </ul>
                             </div>
                         </div>
