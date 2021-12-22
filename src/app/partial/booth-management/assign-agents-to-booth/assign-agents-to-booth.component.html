@@ -9,7 +9,7 @@
                 <div class="row g-2">
                     <div class="col-sm">
                         <ngx-select [allowClear]="filterClientNameArray?.length > 1" [items]="filterClientNameArray"
-                            optionValueField="id" (remove)="clearFilter('clientName')" (select)="fillterElectionName()"
+                            optionValueField="id" (remove)="clearFilter('clientName')" (select)="clearFilter('electionId'); fillterElectionName()"
                             [disabled]="filterClientNameArray?.length  == 1" optionTextField="Fullname"
                             placeholder="Select Leader" formControlName="ClientId">
                         </ngx-select>
@@ -39,14 +39,14 @@
                             (remove)="clearFilter('AssemblyId');filterClientHaveSubEleOrNonSubEle()" formControlName="AssemblyId" optionValueField="Id"
                             optionTextField="ConstituencyName"
                             (select)="filterBoothsByAssembleId();filterClientHaveSubEleOrNonSubEle()"
-                            [disabled]="filterAssemblyArray?.length > 1" placeholder="Select Assembly">
+                            [disabled]="filterAssemblyArray?.length == 0 || !this.filterForm.value.ConstituencyId" placeholder="Select Assembly">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="filterAssembleListArray"
                             (remove)="clearFilter('BoothId');filterClientHaveSubEleOrNonSubEle()" formControlName="BoothId" optionValueField="BoothId"
                             optionTextField="BoothNickName" (select)="filterClientHaveSubEleOrNonSubEle()"
-                            [disabled]="filterAssembleListArray?.AssemblyId" placeholder="Select Booth">
+                            [disabled]="filterAssembleListArray?.AssemblyId == 0 || !this.filterForm.value.AssemblyId" placeholder="Select Booth">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
@@ -114,7 +114,7 @@
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="resetAssignAgentForm();assignAgentToBooth(clientABooths)" *ngIf="!clientABooths?.FullName"
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="agentwiseAssigBoothHide = false; resetAssignAgentForm();assignAgentToBooth(clientABooths)" *ngIf="!clientABooths?.FullName"
                                         
                                         href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
@@ -491,15 +491,15 @@
                       
                 <div class="row mb-3" *ngIf="agentwiseAssigBoothHide">
                     <div class="col-sm-12">
-                        <div class="card card-body shadow-none border py-2">
+                        <!-- <div class="card card-body shadow-none border py-2">
                             <p class="text-main fw-bold mb-1">
                                 {{agentwiseAssigBoothArray[0]?.ElectionName}}
+                                
                                 <small
                                     class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
-                                <span type="button" class="btn btn-light text-edit rounded mx-1"
-                                    (click)="showAssignBoots()" title="Edit Client">
-                                    <i class="fas fa-pen"></i></span>
-                            </p>
+                                <span type="button" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray[0]?.ElectionId == this.filterForm.value.ElectionId"
+                                    (click)="showAssignBoots()" title="Edit Client"> <i class="fas fa-pen"></i></span>
+                                </p>
 
 
                             <div class="form-container">
@@ -509,11 +509,30 @@
                                         {{agentwiseAssigBooth?.BoothName}}</li>
                                 </ul>
                             </div>
+                        </div> -->
+                        <div class="card card-body shadow-none border py-2 mb-2" *ngFor="let agentwiseAssigBoothArray of boothAssignAgentMergedArray">
+                            <p class="text-main fw-bold mb-1">
+                                {{agentwiseAssigBoothArray?.ElectionName}}
+                                
+                                <small
+                                    class="text-muted">[{{agentwiseAssigBoothArray?.ConstituencyName}}]</small>
+                                <span type="button" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
+                                    (click)="showAssignBoots(agentwiseAssigBoothArray?.HeaderId)" title="Edit Client"> <i class="fas fa-pen"></i></span>
+                                </p>
+
+
+                            <div class="form-container">
+                                <label class="form-label">Booths Assigned</label>
+                                <ul class="list-column">
+                                    <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray.BoothName">
+                                        {{agentwiseAssigBooth}}</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>   <!-- *ngIf="disabledNoOfCasesDiv" -->
                         <ng-container class="disabledNoOfCasesDiv">
-                            <div class="row mb-3">
+                            <div class="row mb-3 d-none">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
                                     <ngx-select [allowClear]="true" [items]="electionNameArray"
