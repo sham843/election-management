@@ -15,12 +15,14 @@
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <!-- [disabled]="filterElectionNameArray?.length  == 0" -->
+                        <!-- [disabled]="filterElectionNameArray?.length  == 0" 
+                        
+                        [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0 || this.checkLoginClientId != 0"-->
                         <ngx-select [allowClear]="filterElectionNameArray?.length > 1" [items]="filterElectionNameArray"
                             (remove)="clearFilter('electionId')" 
                             (select)="clearFilter('constituencyId');filterConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
-                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0 || this.checkLoginClientId != 0"
+                            
                             placeholder="Select Election">
                         </ngx-select>
                     </div>

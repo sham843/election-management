@@ -677,6 +677,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
 
   fillterElectionName() {
+    debugger;
     this.spinner.show();
     this.globalClientId = this.assAgentToBoothForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
