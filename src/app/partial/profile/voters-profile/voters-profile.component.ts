@@ -74,7 +74,6 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     // this.posNegativeInfData = [];
     this.GlobalAgentId = null;
     this.checkedActiveClass = data.AgentId;
-    console.log(this.checkedActiveClass)
     this.voterListData.AgentId = data.AgentId;
     this.MigInfoHide = false;
     this.getVoterProfileData();
@@ -137,10 +136,10 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.VPCommentData = res.data1;
-        this.posNegativeInfData = res.data2;
+         res.data2 == "" ?   this.posNegativeInfData = [] : this.posNegativeInfData = res.data2;
       } else {
         this.VPCommentData = [];
-        this.posNegativeInfData = [];
+      
         this.spinner.hide();
       }
     }, (error: any) => {
