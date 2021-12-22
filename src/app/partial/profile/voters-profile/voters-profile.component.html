@@ -124,6 +124,11 @@
                             <span class="voter-label">Area :</span>
                             <span class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Postal Voting  :</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
+                                VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
+                        </li>
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
                             <div class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}
@@ -214,9 +219,9 @@
                     <div class="card-header p-0">
                         Political Information
                     </div>
-                    <div class="card-body p-0 mb-2" *ngIf="voterProfileData?.partyname">
+                    <div class="card-body p-0 mb-2">
                         <div class="voter-data">
-                            {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
+                          <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span>  <span *ngIf="voterProfileData?.LeaderImportance">Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star text-warning"></i>)</span>
                         </div>
                     </div>
 
@@ -228,13 +233,13 @@
                             <div class="alert alert-success p-2 mb-2">
                                 <label class="form-label">Party/Person Favouring :</label>
                                 <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                    <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.Support}}</span>
+                                    <span *ngIf="posNegInf?.supportToid == 1">{{posNegInf?.Support}}</span>
                                 </div>
                             </div>
                             <div class="alert alert-danger p-2 mb-0">
                                 <label class="form-label">Party/Person Opposing :</label>
                                 <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                    <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.Support}}</span>
+                                    <span *ngIf="posNegInf?.supportToid == 4">{{posNegInf?.Support}}</span>
                                 </div>
                             </div>
                         </div>

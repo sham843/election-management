@@ -164,7 +164,7 @@ export class AssignBoothToVillageComponent implements OnInit {
 
   getBoothList(assembly:any) {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_GetBoothList?ConstituencyId=' + assembly + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Election_GetBoothListHavingNoVillage?ConstituencyId=' + assembly + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
 
       if (res.data == 0) {
@@ -257,6 +257,7 @@ export class AssignBoothToVillageComponent implements OnInit {
 
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
+    this.clearForm();
     this.getBoothListwithVillage();
   }
 
