@@ -72,7 +72,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   modalTextChange :any;
   agentBlogStatus :any
   agentwiseAssigBoothArray: any = [];
-  // agentwiseAssigBoothHide : boolean = false;
+  agentwiseAssigBoothHide : boolean = false;
   defaultAgentDataFlag : boolean = false;
   disabledNoOfCasesDiv : boolean = false;
 
@@ -89,6 +89,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   filterClientNameArray:any;
   agentModalFlag:boolean = false;
   // paginationNo :number = 1;
+  assemblyId:any;
   checkLoginClientId:any;
   @ViewChild('openAssignAgentToBooths') openAssignAgentToBooths: any;
   @ViewChild('closeAddAgentModal') closeAddAgentModal: any;
@@ -145,6 +146,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   assignAgentToBooth(data:any){
     this.btnText = 'Update agent'
+    this.assemblyId = data.Assembly;
     this.editAssignBoothsPatchValue(data, false);
   }
 
@@ -193,6 +195,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   getAgentwiseAssignedBooth() {//getAgentwiseAssigBooth
+
     this.spinner.show();
     this.agentwiseAssigBoothArray = [];
     this.nullishFilterForm();
@@ -202,7 +205,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         let agentwiseAssigBoothArray = res.data1;
-        // this.agentwiseAssigBoothHide = true;
+        this.agentwiseAssigBoothHide = true;
         this.disabledNoOfCasesDiv = false;
         this.globalHeaderId = agentwiseAssigBoothArray[0].HeaderId
         agentwiseAssigBoothArray.map((ele:any)=>{
@@ -834,6 +837,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
+        res.data1[0].BoothId = this.assemblyId.toString();
         this.editAssignBoothsPatchValue(res.data1[0], flag);
 
       } else {
@@ -987,7 +991,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   showAssignBoots(){
     this.disabledNoOfCasesDiv = true;
-    // this.btnText = 'Update agent';
+    this.btnText = 'Update agent';
     this.patchAssBoothElection(this.globalHeaderId, 'Add agent with Booths')
   }
 }
