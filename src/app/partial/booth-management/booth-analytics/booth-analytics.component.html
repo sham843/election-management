@@ -189,16 +189,22 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let row of migrationPatternList">
+                            <tr *ngFor="let row of migrationPatternList | paginate: migrationPatternConfig">
                               <td>{{row?.SrNo}}</td>
                               <td>{{row?.Migratedcity}}</td>
-                              <td>{{row?.TotalVoters}}</td>
+                              <td *ngIf="row.TotalVoters == 0">{{row?.TotalVoters}}</td>
+                              <td *ngIf="row.TotalVoters != 0" (click)="onClickMigratedCount(row)"> <a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothMigratedVotersList"> {{row?.TotalVoters}} </a> </td>
                             </tr>
                           </tbody>
-                        </table>
+                        </table>                      
                         <div class="mt-2 text-end" *ngIf="migrationPatternList?.length == 0">
                           <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
                         </div>
+                        <pagination-controls id="migrationPatternPagination"
+                                             *ngIf="migrationPatternList?.length != 0" previousLabel=""
+                                             nextLabel=""
+                                             (pageChange)="onClickPagintionMigrattionPattern(migrationPatrnPageSize = $event)">
+                        </pagination-controls>
                       </div>
                     </div>
                   </div>
@@ -220,7 +226,8 @@
                             <tr *ngFor="let row of professionFamiliesList">
                               <td>{{row?.SrNo}}</td>
                               <td>{{row?.Profession}}</td>
-                              <td>{{row?.TotalVoters}}</td>
+                              <td *ngIf="row.TotalVoters == 0">{{row?.TotalVoters}}</td>
+                              <td *ngIf="row.TotalVoters != 0" (click)="onClickFamilyCount(row,3)"> <a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList"> {{row?.TotalVoters}} </a> </td>
                             </tr>
                           </tbody>
                         </table>
@@ -446,7 +453,7 @@
                                   <td>{{supporter?.SrNo}}</td>
                                   <td>{{supporter?.SupporterName}}</td>
                                   <td *ngIf="supporter.TotalVoter == 0">{{supporter?.TotalVoter}}</td>
-                                  <td *ngIf="supporter.TotalVoter != 0" (click)="showVotersList(supporter.SupporterOfId);">
+                                  <td *ngIf="supporter.TotalVoter != 0" (click)="showVotersList(supporter);">
                                     <a class="text-main" data-bs-toggle="modal" data-bs-target="#ModalVotersList">{{supporter?.TotalVoter}}</a>
                                   </td>
                                   <td>{{supporter?.Support}}</td>
@@ -515,6 +522,73 @@
   </ng-container>
 </div>
 
+<!-- Modal to show list of Migrated  Voters -->
+<div class="modal fade" id="BoothMigratedVotersList" tabindex="-1" aria-labelledby="BoothMigratedVotersListLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="BoothMigratedVotersListLabel">Migrated To {{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="dataNotFound">
+        <div class="col-sm-6 mb-2">
+          <div class="form-container">
+            <div class="input-group">
+              <input class="form-control" type="text"
+                     placeholder="Search..." [formControl]="searchVoters"
+                     (keyup)="onKeyUpFilterMigrated()" />
+              <button type="button" *ngIf="searchVoters.value" class="btn btn-light border btn-sm" (click)="clearFiltersVoters('clearSearchMigrated')">
+                <i class="fas fa-times"></i>
+              </button>
+              <button type="button" *ngIf="!searchVoters.value" class="btn btn-sm border btn-light">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Sr. No.</th>
+              <th>Voters Name</th>
+              <th>Voter NO.</th>
+              <th>Gender</th>
+              <th>Contact No</th>
+              <th>Occupation</th>
+              <th>Qualification</th>
+              <th>Migrated Area</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let voter of boothMigratedList  | paginate: bootMigratedConfig">
+              <td>{{voter?.SrNo}}</td>
+              <td><a (click)="redirectToVoterPrfile(voter)" class="text-main">{{voter?.EnglishName}}</a></td>
+              <td>{{voter?.VoterNo}}</td>
+              <td>{{voter?.Gender}} </td>
+              <td>
+                <div *ngIf="voter?.MobileNo1">
+                  <a class="text-main" href="tel:{{voter?.MobileNo1}}">{{voter?.MobileNo1}}</a>
+                </div>
+                <div *ngIf="!voter?.MobileNo1">-</div>
+              </td>
+              <td> {{voter.Occupation ? (voter.Occupation | titlecase) : '-'}} </td>
+              <td> {{voter?.Qualification || '-'}} </td>
+              <td> {{voter?.MigratedArea || '-'}} </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-2 text-end" *ngIf="boothMigratedList?.length == 0">
+          <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
+        </div>
+        <pagination-controls id="boothMigratedPagination"
+                             *ngIf="boothMigratedList?.length != 0" previousLabel=""
+                             nextLabel=""
+                             (pageChange)="onClickPagintionBoothMigrated(boothMigratedPageSize = $event)">
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal to show list of Booth voters  -->
 <div class="modal fade" id="BoothModalVotersList" tabindex="-1" aria-labelledby="BoothModalVotersListLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
@@ -614,12 +688,12 @@
             </div>
           </div>
         </div>
-        <table class="table table-hover mb-0">
+        <!--<table class="table table-hover mb-0">
           <thead>
             <tr>
               <th>Sr. No.</th>
               <th>Voter Name</th>
-              <th>Mobile No.</th>
+              <th>Contact No</th>
               <th>Occupation</th>
               <th>Qualification</th>
               <th>Migration</th>
@@ -640,15 +714,116 @@
               <td> {{voter.Migrated ? (voter.Migrated | titlecase) : '-'}} </td>
             </tr>
           </tbody>
-        </table>
-        <div class="mt-2 text-end" *ngIf="boothwiseFamiliesList?.length == 0">
-          <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
-        </div>
-        <pagination-controls id="boothFamiliesListPagination"
-                             *ngIf="boothwiseFamiliesList?.length != 0" previousLabel=""
-                             nextLabel=""
-                             (pageChange)="onClickPagintionBoothFamilies(boothFamiliesPageSize = $event)">
-        </pagination-controls>
+        </table>-->
+          <div class="accordion accordion-flush" id="familytreeaccordion">
+                                                        <div class="row familytree-header">
+                                                            <div class="col-sm-1">Sr. No.</div>
+                                                            <div class="col-sm-3">Voter Name</div>
+                                                            <div class="col-sm-2">Contact No.</div>
+                                                            <div class="col-sm-2">Occupation</div>
+                                                            <div class="col-sm-2">Qualification</div>
+                                                            <div class="col-sm-auto">Migration</div>
+                                                            <div class="col-sm"></div>
+                                                        </div>
+                                                        <div class="accordion-item"
+                                                            *ngFor="let boothFamilyList of boothwiseFamiliesList  | paginate: bootwiseFamiliesConfig; let i = index">
+
+                                                            <div class="accordion-header familytree-row">
+                                                                <div class="row">
+                                                                    <div class="col-sm-1">{{boothFamilyList.SrNo}}
+                                                                    </div>
+                                                                    <div class="col-sm-3">
+                                                                        <a (click)="redirectToVoterPrfile(boothFamilyList)"
+                                                                            class="text-main">{{boothFamilyList?.Family}}</a>
+                                                                    </div>
+                                                                    <div class="col-sm-2">
+                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a
+                                                                                class="text-main"
+                                                                                href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a>
+                                                                        </div>
+                                                                        <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
+                                                                    </div>
+                                                                    <div class="col-sm-2">{{boothFamilyList.occupation ?
+                                                                        (boothFamilyList.occupation | titlecase) : '-'}}
+                                                                    </div>
+                                                                    <div class="col-sm-2">
+                                                                        {{boothFamilyList?.qualification ?
+                                                                        boothFamilyList.qualification : "-"}}</div>
+                                                                    <div class="col-sm-auto">
+                                                                        <div>{{boothFamilyList.migrated ?
+                                                                            (boothFamilyList.migrated | titlecase) :
+                                                                            '-'}} </div>
+                                                                    </div>
+                                                                    <div class="col-sm">
+                                                                        <a class="accordion-button collapsed"
+                                                                            data-bs-toggle="collapse"
+                                                                            [attr.data-bs-target]="'#flush-collapseOne'+i"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="flush-collapseOne"
+                                                                            (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="flush-collapseOne{{i}}"
+                                                                class="accordion-collapse collapse"
+                                                                aria-labelledby="family-1"
+                                                                data-bs-parent="#familytreeaccordion">
+                                                                <div class="accordion-body p-0">
+                                                                    <ng-container>
+                                                                        <div class="row familytree-details"
+                                                                            *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.SrNo}}</div>
+                                                                            <div class="col-sm-3">
+                                                                                {{boothFamilyDetails?.Family}}</div>
+                                                                            <div class="col-sm-2">
+                                                                                <span
+                                                                                    *ngIf="boothFamilyDetails?.MobileNo1"><a
+                                                                                        class="calltomember"
+                                                                                        href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a>
+                                                                                </span>
+                                                                                <span
+                                                                                    *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                {{boothFamilyDetails?.Occupation ?
+                                                                                (boothFamilyDetails?.Occupation |
+                                                                                titlecase) : '-'}}</div>
+                                                                            <div class="col-sm-2">
+                                                                                {{boothFamilyDetails?.Qualification ?
+                                                                                (boothFamilyDetails?.Qualification |
+                                                                                titlecase) : '-'}}
+                                                                            </div>
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.Migrated ?
+                                                                                (boothFamilyDetails?.Migrated |
+                                                                                titlecase) : '-'}}</div>
+                                                                            <div class="col-sm-1"></div>
+                                                                        </div>
+                                                                        <div class="mt-2 text-end"
+                                                                            *ngIf="boothFamilyDetailsArray?.length == 0">
+                                                                            <div
+                                                                                class="alert alert-danger text-center py-2">
+                                                                                No Data Found..!
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </ng-container>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                    <div class="mt-2 text-end" *ngIf="boothwiseFamiliesList?.length == 0">
+                      <div class="alert alert-danger text-center py-2"> No Data Found..!  </div>
+                    </div>
+                    <pagination-controls id="boothFamiliesListPagination"
+                                         *ngIf="boothwiseFamiliesList?.length != 0" previousLabel=""
+                                         nextLabel=""
+                                         (pageChange)="onClickPagintionBoothFamilies(boothFamiliesPageSize = $event)">
+                    </pagination-controls>
       </div>
     </div>
   </div>
@@ -660,7 +835,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalVotersListLabel">Voters List</h5>
+        <h5 class="modal-title" id="ModalVotersListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="dataNotFound">
