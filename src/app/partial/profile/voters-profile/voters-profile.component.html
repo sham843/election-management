@@ -216,12 +216,12 @@
                         </div>
                     </div>
 
-                    <div class="card-header p-0">
+                    <div class="card-header p-0" *ngIf="voterProfileData?.partyname || voterProfileData?.Leader == 'yes' ">
                         Political Information
                     </div>
                     <div class="card-body p-0 mb-2">
                         <div class="voter-data">
-                          <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span>  <span *ngIf="voterProfileData?.LeaderImportance">Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star text-warning"></i>)</span>
+                          <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span>  <span *ngIf="voterProfileData?.Leader == 'yes'">Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star text-warning"></i>)</span>
                         </div>
                     </div>
 
@@ -267,7 +267,7 @@
                                         <td>{{voterProfileFamily.VoterNo}}</td>
                                         <td>
                                             <p class="mb-0">{{voterProfileFamily.Family}}</p>
-                                           <span class="badge small bg-danger mb-2 fw-normal"><p class="mb-0" *ngIf="voterProfileFamily.IsExpired == 1">IsExpired</p></span> 
+                                           <span class="badge small bg-danger mb-2 fw-normal"><p class="mb-0" *ngIf="voterProfileFamily.IsExpired == 1">Expired</p></span> 
                                         </td>
                                         <td>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</td>
                                         <td>{{voterProfileFamily.Occupation ? voterProfileFamily.Occupation : '-'}}</td>
@@ -320,7 +320,7 @@
                 <div class="card-header d-flex justify-content-between">
                    <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.MarathiName}}</h6>
                     <span class="badge small bg-danger mb-2 fw-normal text-end"
-                       *ngIf="VPMemberDetailsData?.IsExpired == 1">IsExpired
+                       *ngIf="VPMemberDetailsData?.IsExpired == 1">Expired
                     </span>
                 </div>
                 <div class="voter-family-photo text-center mb-2">
@@ -384,7 +384,7 @@
                 </label>
                 <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'">
                     <div *ngFor="let votersonmap of VPVotersonmapData">
-                        <agm-marker [latitude]="votersonmap?.Latitude"  (markerClick)="markerClicked($event)" [longitude]="votersonmap?.Longitude"
+                        <agm-marker [latitude]="votersonmap?.Latitude" (markerClick)="markerClicked($event)" [longitude]="votersonmap?.Longitude"
                          >
                             <agm-info-window>
                                 <strong>{{votersonmap.EnglishName}}</strong>
