@@ -1122,11 +1122,14 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+        <form [formGroup]="votersFilterForm">
         <div class="form-container">
             <div class="mb-3">
-                <select class="form-select">
-                    <option value="">Select Area</option>
-                </select>
+                <!-- <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
+                            (remove)="clearTopFilter('clientId')"
+                            (select)="getElectionName()" optionValueField="id"
+                            optionTextField="Fullname" placeholder="Select Area">
+               </ngx-select> -->
             </div>
             <div class="row mb-3 g-2">
                 <div class="col-sm-6">
@@ -1205,5 +1208,6 @@
                 </div>
             </div>
         </div>
+        </form>
     </div>
 </div>
