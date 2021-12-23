@@ -7,6 +7,7 @@ import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
 import { Lightbox } from '@ngx-gallery/lightbox';
+import { AgmInfoWindow } from '@agm/core/directives/info-window';
 
 @Component({
   selector: 'app-voters-profile',
@@ -38,6 +39,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   profileImg: any;
   GlobalAgentId: any;
   selectedVoterIdObj: any;
+  previousInfoWindow!: AgmInfoWindow;
 
 
   constructor(
@@ -239,7 +241,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-  //........ Get Family Member Data ...........//    
+  //............................. Get Family Member Data ................................//    
 
   familyMemberData(FMobjData: any) {
     // FMobjData.VoterId != this.voterListData.VoterId
@@ -255,7 +257,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   }
 
 
-  //.............. Scroll Family member Details ......................//
+  //........................ Scroll Family member Details ................................//
   ScrollToFamilyMemberData() {
     window.scrollTo({
       top: 20,
@@ -265,7 +267,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   }
 
 
-  //........ get Voter Visit Details Data ...........//                    
+  //........................ get Voter Visit Details Data ................................//                    
 
   getVoterVisitDetailData(VisitTypeId: any) {
     this.spinner.show();
@@ -288,14 +290,14 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-  // ............ Gallary LightBox code .............  //
+  // ............................... Gallary LightBox code .............................  //
   showGallaryLightbox(data: any) {
     this.comUserdetImg = data.VisitPhoto.split(',');
     this.comUserdetImg = this.commonService.imgesDataTransform(this.comUserdetImg, 'array');
     this.gallery.ref('lightbox').load(this.comUserdetImg);
   }
 
-  //........... get Voter Profile Voters on map ................//
+  //........................... get Voter Profile Voters on map .............................//
 
   getVPVotersonmap() {
     this.spinner.show();
@@ -320,12 +322,22 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     localStorage.removeItem('voter-profile');
   }
 
-  // Show Profile Photo in FullSize in LightBox
+  //........................ Show Profile Photo in FullSize in LightBox..............................//
 
   showProfileLightbox(asd: any) {
     this.profileImg = [asd];
     this.profileImg = this.commonService.imgesDataTransform(this.profileImg, 'array');
     this.gallery.ref('lightbox').load(this.profileImg);
+  }
+
+  //.................... Agm Map infoWindow at a Time Only One Show .................................//
+
+  markerClicked(agmMarker: any): void {
+    this.previousInfoWindow?.close();
+    
+    if (agmMarker.infoWindow.length) {
+      this.previousInfoWindow = agmMarker.infoWindow.first as AgmInfoWindow;
+    }
   }
 
 }
