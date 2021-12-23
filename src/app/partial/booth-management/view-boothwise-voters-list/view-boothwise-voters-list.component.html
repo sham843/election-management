@@ -139,8 +139,99 @@
                             </div> -->
                             <div class="col-sm-12" id="boothdetails">
                                 <div class="card shadow-none border">
-                                    <div class="card-header border-bottom">
-                                        <h6 class="mb-0 fw-bold text-main">187 - काळचौंडी</h6>
+                                    <div class="card-header bg-light border-bottom border-dark">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h6 class="mb-0 fw-bold text-main">187 - काळचौंडी</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm pt-1">
+                                                        <span class="text-success">25 Results Found</span>
+                                                    </div>
+                                                    <div class="col-sm-auto">
+                                                        <button type="button" class="btn btn-main btn-sm me-2">Export to
+                                                            Excel</button>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                                            aria-controls="offcanvasRight"><i
+                                                                class="fas fa-filter"></i></button>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..." [formControl]="searchVoters"
+                                                                    (keyup)="onKeyUpFilterVoters()" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearSearchVoters')"
+                                                                    *ngIf="searchVoters.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchVoters.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="filter-alerts">
+                                            <div class="col-sm-12">
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    Male <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    Farmer <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    5 star <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    18 To 30 Years <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    Male <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    Farmer <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    5 star <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    18 To 30 Years <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    Farmer <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert">
+                                                    5 star <button type="button" class="btn-close"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-header p-0">
                                         <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
@@ -213,17 +304,6 @@
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
                                                 <div class="row justify-content-end mb-3 g-2">
-                                                    <div class="col-sm pt-1">
-                                                        <span class="text-success">25 Results Found</span>
-                                                    </div>
-                                                    <div class="col-sm-auto">
-                                                        <button type="button" class="btn btn-main btn-sm me-2">Export to
-                                                            Excel</button>
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm"
-                                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                                                            aria-controls="offcanvasRight"><i
-                                                                class="fas fa-filter"></i></button>
-                                                    </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-container">
                                                             <div class="input-group">
@@ -242,60 +322,6 @@
                                                         </div>
                                                     </div>
                                                     
-                                                </div>
-                                                <div class="row mb-3" id="filter-alerts">
-                                                    <div class="col-sm-12">
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            Male <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            Farmer <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            5 star <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            18 To 30 Years <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            Male <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            Farmer <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            5 star <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            18 To 30 Years <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            Farmer <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                        <span class="alert alert-secondary alert-dismissible fade show"
-                                                            role="alert">
-                                                            5 star <button type="button" class="btn-close"
-                                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </span>
-                                                    </div>
                                                 </div>
 
                                                 
