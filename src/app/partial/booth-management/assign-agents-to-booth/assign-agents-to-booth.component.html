@@ -117,9 +117,7 @@
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="agentwiseAssigBoothHide = false; resetAssignAgentForm();assignAgentToBooth(clientABooths)" *ngIf="!clientABooths?.FullName"
-                                        
-                                        href="#addOrEditAgentModal" role="button">
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="agentwiseAssigBoothHide = false; resetAssignAgentForm();assignAgentToBooth(clientABooths)" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
                                     </button>
 
@@ -460,7 +458,7 @@
                                 <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                     [allowClear]="clientNameArray?.length > 1" [items]="clientNameArray"
                                     formControlName="ClientId" [disabled]="clientNameArray?.length == 1"
-                                    (select)="globalEditObj = []; clearAggentToBooth('agentName'); getClientAgentList(); disabledNoOfCasesDiv = false;"
+                                    (select)="getClientAgentList();"
                                     optionValueField="id" optionTextField="Fullname" placeholder="Select Leader"
                                     (remove)="clearAggentToBooth('clientName')">
                                 </ngx-select>
@@ -476,7 +474,7 @@
                                     [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                     [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
                                     class="w-75"
-                                    (select)="clearAggentToBooth('electionName'); getElectionName();  disabledNoOfCasesDiv = false; getAgentwiseAssignedBooth();"
+                                    (select)="getElectionName();"
                                     placeholder="Select Agent" (remove)="clearAggentToBooth('agentName')">
                                 </ngx-select>
                                 <!-- getAgentwiseAssignedBooth(); -->
@@ -494,32 +492,14 @@
                       
                 <div class="row mb-3" *ngIf="agentwiseAssigBoothHide">
                     <div class="col-sm-12">
-                        <!-- <div class="card card-body shadow-none border py-2">
-                            <p class="text-main fw-bold mb-1">
-                                {{agentwiseAssigBoothArray[0]?.ElectionName}}
-                                
-                                <small
-                                    class="text-muted">[{{agentwiseAssigBoothArray[0]?.ConstituencyName}}]</small>
-                                <span type="button" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray[0]?.ElectionId == this.filterForm.value.ElectionId"
-                                    (click)="showAssignBoots()" title="Edit Client"> <i class="fas fa-pen"></i></span>
-                                </p>
 
-
-                            <div class="form-container">
-                                <label class="form-label">Booths Assigned</label>
-                                <ul class="list-column">
-                                    <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray">
-                                        {{agentwiseAssigBooth?.BoothName}}</li>
-                                </ul>
-                            </div>
-                        </div> -->
                         <div class="card card-body shadow-none border py-2 mb-2" *ngFor="let agentwiseAssigBoothArray of boothAssignAgentMergedArray">
                             <p class="text-main fw-bold mb-1">
                                 {{agentwiseAssigBoothArray?.ElectionName}}
                                 
                                 <small
                                     class="text-muted">[{{agentwiseAssigBoothArray?.ConstituencyName}}]</small>
-                                    <span type="button"   (click)="showAssignBoots(agentwiseAssigBoothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
+                                    <span type="button"   (click)="showAssignBoots()" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
                                    title="Edit Client"> <i class="fas fa-pen"></i></span>
                                 </p>
 
@@ -527,7 +507,7 @@
                             <div class="form-container">
                                 <label class="form-label">Booths Assigned</label>
                                 <ul class="list-column">
-                                    <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray.BoothName">
+                                    <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray.booths">
                                         {{agentwiseAssigBooth}} </li>
                                       
                                 </ul>
@@ -595,7 +575,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12">
+                                <div class="col-sm-12" *ngIf="disabledNoOfCasesDiv">
                                     <div>
                                         <label for="txtSearchBooth" class="form-label required-field">Booth</label>
                                         <div class="card border shadow-none">
