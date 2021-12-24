@@ -339,40 +339,39 @@ export class BoothAnalyticsComponent implements OnInit {
   casteWiseChart(obj: any) {
     // Create chart instance
     let chart = am4core.create("castewisediv", am4charts.PieChart);
-
     // Add data
     chart.data = obj;
-
     // Add and configure Series
     var pieSeries = chart.series.push(new am4charts.PieSeries());
     pieSeries.dataFields.value = "TotalVoters";
     pieSeries.dataFields.category = "castname";
-
     pieSeries.ticks.template.disabled = true;
     pieSeries.alignLabels = false;    
     pieSeries.labels.template.text = "{category}";
-    pieSeries.labels.template.fontSize = 10;
+    pieSeries.labels.template.fontSize = 13;
     //pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
     pieSeries.labels.template.radius = am4core.percent(-40);
     pieSeries.labels.template.fill = am4core.color("white");
-
+    pieSeries.labels.template.align = "right";
+    pieSeries.labels.template.textAlign = "end";
     pieSeries.labels.template.adapter.add("radius", function (radius, target) {
       if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
         return 0;
       }
       return radius;
     });
-
     pieSeries.labels.template.adapter.add("fill", function (color, target) {
       if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
         return am4core.color("#000");
       }
       return color;
     });
-
     chart.legend = new am4charts.Legend();
-    chart.legend.position = "bottom";
-    chart.legend.contentAlign = "left";  
+    // chart.legend.align = "right";
+    // chart.legend.position = "right";
+    chart.legend.contentAlign = "right";  
+    // chart.legend.width = 600;
+    // chart.legend.height = 250;
   }
 
   religionwiseChart(obj: any)  {
@@ -396,10 +395,13 @@ export class BoothAnalyticsComponent implements OnInit {
     pieSeries.ticks.template.disabled = true;
     pieSeries.alignLabels = false;
     pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
-    pieSeries.labels.template.fontSize = 10;
+    pieSeries.labels.template.fontSize = 13;
     pieSeries.labels.template.radius = am4core.percent(-30);
     pieSeries.labels.template.fill = am4core.color("white");
     pieSeries.slices.template.tooltipText = "{category}: {value.percent.formatNumber('#.0')}%";
+    pieSeries.labels.template.align = "right";
+    pieSeries.labels.template.textAlign = "end";
+
 
     pieSeries.labels.template.adapter.add("radius", function (radius, target) {
       if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
@@ -417,7 +419,8 @@ export class BoothAnalyticsComponent implements OnInit {
 
     chart.legend = new am4charts.Legend();
     let marker = chart.legend.markers.template.children.getIndex(0);  
-    chart.legend.position = "bottom";
+    // chart.legend.align = "right";
+    // chart.legend.position = "right";
     chart.legend.valueLabels.template.text = "{value.value}";
     chart.legend.valueLabels.template.align = "left";
     //chart.legend.valueLabels.template.textAlign = "end";
@@ -436,6 +439,7 @@ export class BoothAnalyticsComponent implements OnInit {
 
     var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
     xAxis.dataFields.category = 'Agegroup'
+    xAxis.fontSize = 13;
     xAxis.renderer.cellStartLocation = 0.1
     xAxis.renderer.cellEndLocation = 0.9
     xAxis.renderer.grid.template.location = 0;
@@ -503,24 +507,19 @@ export class BoothAnalyticsComponent implements OnInit {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end
-
     // Create chart instance
     let chart = am4core.create("partywiseVoterschartdiv", am4charts.XYChart);
-
     chart.colors.step = 2;
-    
-
     // Add data
     chart.data = obj;
-
     // Create axes
     let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "Partyshortcode";
     //categoryAxis.numberFormatter.numberFormat = "#";
     //categoryAxis.renderer.inversed = true;
     //categoryAxis.renderer.grid.template.location = 0;
-    //categoryAxis.renderer.cellStartLocation = 0.1;
-    //categoryAxis.renderer.cellEndLocation = 0.9;
+    categoryAxis.renderer.cellStartLocation = 0.1;
+    categoryAxis.renderer.cellEndLocation = 0.9;
     //categoryAxis.renderer.labels.template.location = 0.0001;
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
