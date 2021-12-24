@@ -203,16 +203,24 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.agentwiseAssBoothArray = res.data1;
+        let agentwiseAssigBoothArray  = res.data1;
         userId == 0 ? this.agentwiseAssigBoothHide = false : this.agentwiseAssigBoothHide = true;//all assign booths by agent are showing
         this.sortEleByBoothId(this.agentwiseAssBoothArray);
-        // let HeaderId = this.agentwiseAssBoothArray[0].HeaderId;
+        let HeaderId = this.agentwiseAssBoothArray[0].HeaderId;
         this.pushDataAgentwiseAssigBoothArray(this.agentwiseAssBoothArray);
         // this.AssemblyBoothArray = this.agentwiseAssBoothArray;
-        
+        // this.onCheckChangeBooths(true, BoothId: any, ConstituencyId: any, AssemblyId: any, ElectionId: any);
         //this.editAssignBoothsPatchValue(data, 'Add agent with Booths');
        // this.checkAllBooths(this.boothListMergeArray);
+       let obj:any [] = [];
+       agentwiseAssigBoothArray.map((ele:any)=>{
+        if(ele.BoothId || ele.ElectionId || ele.ConstituencyId || ele.ElectionId){
+          obj.push({'ElectionId':ele.ElectionId,'AssemblyId':ele.Assembly,'BoothId':ele.BoothId,'ConstituencyId':ele.ConstituencyId});
+        } 
+      })
+      this.AssemblyBoothArray = obj;
       } else {
-        // this.AssemblyBoothArray = [];
+        this.AssemblyBoothArray = [];
         //this.uncheckAllBooths(this.boothListMergeArray);
         //this.editAssignBoothsPatchValue(data, 'Add agent with Booths');
         this.agentwiseAssBoothArray =[];
@@ -411,7 +419,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
           return ele;
         }
       });
-      this.checkBoxCehckBoothArray(this.AssemblyBoothArray = uncheckAssemblyBoothArrayckAs);
+      this.AssemblyBoothArray = uncheckAssemblyBoothArrayckAs;
+      this.checkBoxCehckBoothArray(this.AssemblyBoothArray);
     }
   }
 
@@ -928,7 +937,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
   checkBoxCehckBoothArray(ConstituencyId: any) {
     debugger
-
     for (let i = 0; i < ConstituencyId.length; i++) {
       for (let j = 0; j < this.boothListArray.length; j++) {
         if (this.boothListArray[j].BoothId == ConstituencyId[i].BoothId) {
