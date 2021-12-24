@@ -466,6 +466,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
           if(item.BoothId == ele.BoothId){
             this.toastrService.error('This Booth name is already exists');
             return
+            
           }
         });
       });
