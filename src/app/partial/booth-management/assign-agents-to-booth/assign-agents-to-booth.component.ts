@@ -443,9 +443,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
     })
   }
 
-
-
   onSubmitAssAgentToBoothForm(){
+    this.spinner.show();
     this.aAsubmitted = true;
     let formData = this.assAgentToBoothForm.value;
 
@@ -458,37 +457,15 @@ export class AssignAgentsToBoothComponent implements OnInit {
       return;
     }
     else {
-      this.spinner.hide();
-      let boothsArray :any[]= [];
-
-      // this.agentwiseAssigBoothArray.filter((item:any) => { // check booth id is already exists or not  
-      //   this.AssemblyBoothArray.filter((ele:any) => {
-      //     if(item.BoothId != ele.BoothId){
-      //      boothsArray.push(ele);
-      //      boothsArray.push(item);
-      //       //this.toastrService.error('This Booth name is already exists');
-      //       //return
-      //     }
-      //   });
-      // });
-      // let demo:any[] = [];
-      // let s = [...this.agentwiseAssigBoothArray];
-      // for(let i=0;i<this.AssemblyBoothArray.length;i++){
-        
-      //   for(let j=0;j<s.length;j++){
-      //         if(this.AssemblyBoothArray[i].BoothId !== s[j].BoothId){
-      //           demo.push(this.AssemblyBoothArray[i]);              
-      //           s.splice(j,1);
-      //           console.log(s);
-      //         }
-      //   }
-      // }
-      // console.log(demo);
        this.agentwiseAssBoothArray.length == 0  ? this.agentwiseAssigBoothArray = [] :''; //check agent booths
       //  console.log(boothsArray);
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray.concat(this.agentwiseAssigBoothArray));
+
+      // console.log(this.agentwiseAssigBoothArray.splice(this.agentwiseAssigBoothArray.findIndex((a:any) => a.BoothId !== this.AssemblyBoothArray.BoothId) , 1))
+      
       // this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
       let id;
+
       formData.Id == "" || formData.Id == null  || formData.Id == undefined ? id = 0 : id = formData.Id;
      // this.agentwiseAssigBoothArray.lenght != 0 ? id = this.globalHeaderId : '';
     //  return
@@ -498,6 +475,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       // this.callAPIService.setHttp('post', 'Web_Insert_Election_AssignBoothToAgentHeader_Post', false, obj, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
+          this.spinner.hide();
           this.toastrService.success(res.data1[0].Msg);
 
           this.resetAssignAgentForm();

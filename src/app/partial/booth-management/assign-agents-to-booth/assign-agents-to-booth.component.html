@@ -9,7 +9,7 @@
                 <div class="row g-2">
                     <div class="col-sm">
                         <ngx-select [allowClear]="filterClientNameArray?.length > 1" [items]="filterClientNameArray"
-                            optionValueField="id" (remove)="clearFilter('clientName')" (select)="clearFilter('electionId'); fillterElectionName()"
+                            optionValueField="id" (remove)="clearFilter('clientName')" (select)="clientAgentWithBoothArray =[]; clearFilter('electionId'); fillterElectionName()"
                             [disabled]="filterClientNameArray?.length  == 1" optionTextField="Fullname"
                             placeholder="Select Leader" formControlName="ClientId">
                         </ngx-select>
@@ -20,7 +20,7 @@
                         <ngx-select [allowClear]="filterElectionNameArray?.length > 1" [items]="filterElectionNameArray"
                             (remove)="clearFilter('electionId')" 
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
-                            (select)="clearFilter('constituencyId');filterConstituencyName()"
+                            (select)="clientAgentWithBoothArray =[]; clearFilter('constituencyId');filterConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             
                             placeholder="Select Election">
@@ -458,7 +458,7 @@
                                 <ngx-select [ngClass]="{ 'is-invalid': aAsubmitted && a.ClientId.errors }"
                                     [allowClear]="clientNameArray?.length > 1" [items]="clientNameArray"
                                     formControlName="ClientId" [disabled]="clientNameArray?.length == 1"
-                                    (select)="getClientAgentList();"
+                                    (select)="globalEditObj = []; getClientAgentList();"
                                     optionValueField="id" optionTextField="Fullname" placeholder="Select Leader"
                                     (remove)="clearAggentToBooth('clientName')">
                                 </ngx-select>
@@ -474,7 +474,7 @@
                                     [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                     [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
                                     class="w-75"
-                                    (select)="getElectionName();getAgentwiseAssignedBooth()"
+                                    (select)="boothListMergeArray=[]; getElectionName();getAgentwiseAssignedBooth()"
                                     placeholder="Select Agent" (remove)="clearAggentToBooth('agentName')">
                                 </ngx-select>
                                 <!-- getAgentwiseAssignedBooth(); -->
