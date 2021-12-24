@@ -206,8 +206,14 @@ export class AssignAgentsToBoothComponent implements OnInit {
         userId == 0 ? this.agentwiseAssigBoothHide = false : this.agentwiseAssigBoothHide = true;//all assign booths by agent are showing
         this.sortEleByBoothId(this.agentwiseAssBoothArray);
         // let HeaderId = this.agentwiseAssBoothArray[0].HeaderId;
-        this.pushDataAgentwiseAssigBoothArray(this.agentwiseAssBoothArray)
+        this.pushDataAgentwiseAssigBoothArray(this.agentwiseAssBoothArray);
+        this.AssemblyBoothArray = this.agentwiseAssBoothArray;
+        //this.editAssignBoothsPatchValue(data, 'Add agent with Booths');
+       // this.checkAllBooths(this.boothListMergeArray);
       } else {
+        this.AssemblyBoothArray = [];
+        //this.uncheckAllBooths(this.boothListMergeArray);
+        //this.editAssignBoothsPatchValue(data, 'Add agent with Booths');
         this.agentwiseAssBoothArray =[];
         this.disabledNoOfCasesDiv = true;
         this.agentwiseAssigBoothHide = false;
@@ -220,6 +226,22 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+  uncheckAllBooths(data:any){
+    // this.boothListMergeArray =  data.filter((element:any) => {
+    //   element.checked = false;
+    //   return element
+    // });
+    // this.boothListMergeArray=[];
+  }
+
+  checkAllBooths(data:any){
+    // this.agentwiseAssigBoothArray=[];
+    // this.boothListMergeArray =  data.filter((element:any) => {
+    //   element.checked = true;
+    //   return element
+    // });
   }
 
   pushDataAgentwiseAssigBoothArray(data:any){
@@ -643,6 +665,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.filterClientNameArray = res.data1;
+        this.filterClientNameArray?.length == 1  ?  this.fillterElectionName() :  '';
 
       } else {
         this.spinner.hide();
@@ -664,6 +687,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.filterElectionNameArray = res.data1;
+        this.filterElectionNameArray?.length == 1 ? (this.filterForm.patchValue({ElectionId:this.filterElectionNameArray[0].ElectionId}), this.filterConstituencyName()) : '';
       } else {
         this.spinner.hide();
       }
@@ -682,6 +706,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.filterconstituencyNameArray = res.data1;
+        this.filterconstituencyNameArray?.length == 1 ? (this.filterForm.patchValue({ConstituencyId:this.filterconstituencyNameArray[0].ConstituencyId}), this.filterAssemblyName(), this.filterClientHaveSubEleOrNonSubEle())  : '';
        } else {
         this.spinner.hide();
       }
@@ -702,6 +727,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.filterAssemblyArray = res.data1;
+        this.filterAssemblyArray?.length == 1 ? (this.filterForm.patchValue({AssemblyId:this.filterAssemblyArray[0].Id}), this.filterBoothsByAssembleId(),this.filterClientHaveSubEleOrNonSubEle())  : '';
        } else {
         this.spinner.hide();
       }
@@ -724,6 +750,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.filterAssembleListArray = res.data1;
+        this.filterAssembleListArray.length == 1 ? this.filterClientHaveSubEleOrNonSubEle() : '';
         } else {
         this.filterAssembleListArray = [];
         this.spinner.hide();
@@ -898,6 +925,8 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   checkBoxCehckBoothArray(ConstituencyId: any) {
+    debugger
+
     for (let i = 0; i < ConstituencyId.length; i++) {
       for (let j = 0; j < this.boothListArray.length; j++) {
         if (this.boothListArray[j].BoothId == ConstituencyId[i].BoothId) {

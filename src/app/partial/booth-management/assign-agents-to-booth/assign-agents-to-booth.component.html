@@ -120,20 +120,20 @@
                                         </button>
                                         <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="assignAgentToBooth(clientABooths);" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
-                                    </button>
-
-                                        <button type="button"
-                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
-                                            [ngClass]="{'text-danger':clientABooths?.IsUserblock == 1 , 'text-main' :clientABooths?.IsUserblock == 0}"
-                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
-                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.IsUserblock; clientABooths?.IsUserblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
-                                            {{clientABooths?.IsUserblock == 1 ? 'Blocked' : 'Active'}}
-                                        </button>
+                                    </button>                                        
                                         <button type="button" title="Send Link"
                                         class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
                                         (click)="sendDownloadLink(clientABooths?.MobileNo)">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
+                                            [ngClass]="{'text-danger':clientABooths?.IsUserblock == 1 , 'text-main' :clientABooths?.IsUserblock == 0, 'disabled' : clientABooths.UserId == null}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                            (click)="ClientId = clientABooths.ClientId; userId = clientABooths.UserId; agentBlogStatus = clientABooths.IsUserblock; clientABooths?.IsUserblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
+                                            {{clientABooths?.IsUserblock == 1 ? 'Blocked' : 'Active'}}
+                                        </button>
+                                       
                                     </div>
                                 </td>
 
@@ -517,7 +517,8 @@
                     </div>
                 </div>   <!-- *ngIf="disabledNoOfCasesDiv" -->
                         <ng-container class="disabledNoOfCasesDiv">
-                            <div class="row mb-3 d-none">
+                            <!-- d-none -->
+                            <div class="row mb-3 ">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Select Election</label>
                                     <ngx-select [allowClear]="true" [items]="electionNameArray"
