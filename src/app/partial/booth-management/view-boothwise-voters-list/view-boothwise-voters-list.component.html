@@ -9,25 +9,28 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
-                        <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
+                        <!-- clientIdFlag -->
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
                             (remove)="clearTopFilter('clientId')"
-                            (select)="getElectionName()" optionValueField="id"
+                            (select)="clearTopFilter('electionId'); boothDataHide=false; getElectionName()" optionValueField="id"
                             optionTextField="Fullname" placeholder="Select Leader">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="electionFlag" [items]="electionNameArray"
+                        <!-- electionFlag -->
+                        <ngx-select [allowClear]="true" [items]="electionNameArray"
                             (remove)="clearTopFilter('electionId')"
-                            (select)="getConstituencyName()"
+                            (select)="boothDataHide=false;  getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                             placeholder="Select Election">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
-                        <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
+                        <!-- constituencyFlag -->
+                        <ngx-select [allowClear]="true" [items]="constituencyNameArray"
                             (remove)="clearTopFilter('constituencyId')"
-                            (select)="boothSummary()"
+                            (select)="boothDataHide=false;  boothSummary()"
                             formControlName="ConstituencyId" optionValueField="ConstituencyId"
                             optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"
                             placeholder="Select Constituency">
@@ -36,14 +39,14 @@
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="villageDropdown" [disabled]="!this.filterForm.value.ConstituencyId"
                         (remove)="clearTopFilter('village');boothDataHide =false;" formControlName="village"
-                        (select)="ClientWiseBoothList()"
+                        (select)="ClientWiseBoothList();boothDataHide=false;"
                         optionValueField="VillageId" optionTextField="VillageName"
                         placeholder="Select Village">
                     </ngx-select>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
-                            formControlName="getBoothId"  optionValueField="BoothId" (select)="selBoothList($event)" (remove)="clearTopFilter('BoothId')" 
+                            formControlName="getBoothId"  optionValueField="BoothId" (select)="boothDataHide=true;  selBoothList($event)" (remove)="clearTopFilter('BoothId')" 
                             optionTextField="BoothNickName"
                             placeholder="Select Booth">
                         </ngx-select>
@@ -137,101 +140,10 @@
                                     </a>
                                 </div>
                             </div> -->
-                            <div class="col-sm-12" id="boothdetails">
+                            <div class="col-sm-12" id="boothdetails" *ngIf="boothDataHide">
                                 <div class="card shadow-none border">
-                                    <div class="card-header bg-light border-bottom border-dark">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <h6 class="mb-0 fw-bold text-main">187 - काळचौंडी</h6>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <div class="row justify-content-end mb-3 g-2">
-                                                    <div class="col-sm pt-1">
-                                                        <span class="text-success">25 Results Found</span>
-                                                    </div>
-                                                    <div class="col-sm-auto">
-                                                        <button type="button" class="btn btn-main btn-sm me-2">Export to
-                                                            Excel</button>
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm"
-                                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                                                            aria-controls="offcanvasRight"><i
-                                                                class="fas fa-filter"></i></button>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-container">
-                                                            <div class="input-group">
-                                                                <input class="form-control" type="text"
-                                                                    placeholder="Search..." [formControl]="searchVoters"
-                                                                    (keyup)="onKeyUpFilterVoters()" />
-                                                                <button type="button"
-                                                                    class="btn btn-light border btn-sm"
-                                                                    (click)="clearFiltersBooth('clearSearchVoters')"
-                                                                    *ngIf="searchVoters.value"><i
-                                                                        class="fas fa-times"></i></button>
-                                                                <button type="button" *ngIf="!searchVoters.value"
-                                                                    class="btn btn-sm border btn-light"><i
-                                                                        class="fas fa-search"></i></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row" id="filter-alerts">
-                                            <div class="col-sm-12">
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    Male <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    Farmer <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    5 star <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    18 To 30 Years <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    Male <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    Farmer <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    5 star <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    18 To 30 Years <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    Farmer <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                                <span class="alert alert-secondary alert-dismissible fade show"
-                                                    role="alert">
-                                                    5 star <button type="button" class="btn-close"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <div class="card-header border-bottom">
+                                        <h6 class="mb-0 fw-bold text-main">{{showBoothName}}</h6>
                                     </div>
                                     <div class="card-header p-0">
                                         <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
@@ -283,7 +195,7 @@
                                                 <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-crm" type="button" role="tab"
                                                     aria-controls="pills-crm" aria-selected="false">
-                                                    <h5 class="mb-0">1245</h5>
+                                                    <h5 class="mb-0">{{clickBoothListArray?.CRM}}</h5>
                                                     CRM
                                                 </button>
                                             </li>
@@ -292,7 +204,7 @@
                                                     data-bs-toggle="pill" data-bs-target="#pills-crm-history"
                                                     type="button" role="tab" aria-controls="pills-crm-history"
                                                     aria-selected="false">
-                                                    <h5 class="mb-0">1245</h5>
+                                                    <h5 class="mb-0">{{clickBoothListArray?.CRMHistory}}</h5>
                                                     CRM History
                                                 </button>
                                             </li>
@@ -304,6 +216,17 @@
                                             <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
                                                 aria-labelledby="pills-voters-tab">
                                                 <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm pt-1 d-none">
+                                                        <span class="text-success">25 Results Found</span>
+                                                    </div>
+                                                    <div class="col-sm-auto d-none">
+                                                        <button type="button" class="btn btn-main btn-sm me-2">Export to
+                                                            Excel</button>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                                            aria-controls="offcanvasRight"><i
+                                                                class="fas fa-filter"></i></button>
+                                                    </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-container">
                                                             <div class="input-group">
@@ -322,6 +245,60 @@
                                                         </div>
                                                     </div>
                                                     
+                                                </div>
+                                                <div class="row mb-3 d-none" id="filter-alerts">
+                                                    <div class="col-sm-12">
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Male <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            18 To 30 Years <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Male <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            18 To 30 Years <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                    </div>
                                                 </div>
 
                                                 
@@ -1148,14 +1125,11 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <form [formGroup]="votersFilterForm">
         <div class="form-container">
             <div class="mb-3">
-                <!-- <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-                            (remove)="clearTopFilter('clientId')"
-                            (select)="getElectionName()" optionValueField="id"
-                            optionTextField="Fullname" placeholder="Select Area">
-               </ngx-select> -->
+                <select class="form-select">
+                    <option value="">Select Area</option>
+                </select>
             </div>
             <div class="row mb-3 g-2">
                 <div class="col-sm-6">
@@ -1234,6 +1208,5 @@
                 </div>
             </div>
         </div>
-        </form>
     </div>
 </div>
