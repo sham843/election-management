@@ -173,7 +173,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   Client_AgentList() {//Client_AgentList
-    debugger;
     this.spinner.show();
     let data = this.assAgentToBoothForm.value;
     this.callAPIService.setHttp('get', 'Web_Client_AgentList?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -459,7 +458,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
       return;
     }
     else {
-      debugger;
       this.spinner.hide();
       let boothsArray :any[]= [];
 
@@ -889,8 +887,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   editAssignBoothsPatchValue(objData: any, flag:any) {
-
-    debugger;
     this.agentwiseAssigBoothHide = true; // all assign booths by agent are showing
     this.globalEditObj = objData;
     this.assAgentToBoothForm.patchValue({
