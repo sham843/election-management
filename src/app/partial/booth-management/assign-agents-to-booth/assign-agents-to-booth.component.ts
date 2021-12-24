@@ -207,11 +207,12 @@ export class AssignAgentsToBoothComponent implements OnInit {
         this.sortEleByBoothId(this.agentwiseAssBoothArray);
         // let HeaderId = this.agentwiseAssBoothArray[0].HeaderId;
         this.pushDataAgentwiseAssigBoothArray(this.agentwiseAssBoothArray);
-        this.AssemblyBoothArray = this.agentwiseAssBoothArray;
+        // this.AssemblyBoothArray = this.agentwiseAssBoothArray;
+        
         //this.editAssignBoothsPatchValue(data, 'Add agent with Booths');
        // this.checkAllBooths(this.boothListMergeArray);
       } else {
-        this.AssemblyBoothArray = [];
+        // this.AssemblyBoothArray = [];
         //this.uncheckAllBooths(this.boothListMergeArray);
         //this.editAssignBoothsPatchValue(data, 'Add agent with Booths');
         this.agentwiseAssBoothArray =[];
@@ -486,6 +487,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
 
       // console.log(this.agentwiseAssigBoothArray.splice(this.agentwiseAssigBoothArray.findIndex((a:any) => a.BoothId !== this.AssemblyBoothArray.BoothId) , 1))
       let id;
+      debugger;
       formData.Id == "" || formData.Id == null  || formData.Id == undefined ? id = 0 : id = formData.Id;
      // this.agentwiseAssigBoothArray.lenght != 0 ? id = this.globalHeaderId : '';
     //  return
