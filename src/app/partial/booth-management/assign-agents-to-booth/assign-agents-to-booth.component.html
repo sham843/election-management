@@ -112,8 +112,9 @@
                                 </td> -->
                                 <td>
                                     <div class="btn-group">
+                                        <!-- (click)="assignAgentToBooth(clientABooths);"  -->
                                         <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName"
-                                        (click)="assignAgentToBooth(clientABooths);" 
+                                        (click)="patchAssBoothElection(clientABooths.HeaderId, false);" 
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -499,8 +500,8 @@
                                 
                                 <small
                                     class="text-muted">[{{boothArray?.ConstituencyName}}]</small>
-                                    <span type="button"   (click)="this.boothListMergeArray = []; agentwiseAssigBoothArray = []; showAssignBoots(boothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="boothArray?.ElectionId == this.filterForm.value.ElectionId"
-                                   title="Edit Client"> <i class="fas fa-pen"></i></span>
+                                    <!-- <span type="button"   (click)="this.boothListMergeArray = []; agentwiseAssigBoothArray = []; showAssignBoots(boothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="boothArray?.ElectionId == this.filterForm.value.ElectionId"
+                                   title="Edit Client"> <i class="fas fa-pen"></i></span> -->
                                 </p>
 
 

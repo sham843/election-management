@@ -454,18 +454,16 @@ export class AssignAgentsToBoothComponent implements OnInit {
     }
     else if (this.AssemblyBoothArray.length == 0){
       this.toastrService.error("Assembly Or Booth is required");
+      this.spinner.hide();
       return;
     }
     else {
        this.agentwiseAssBoothArray.length == 0  ? this.agentwiseAssigBoothArray = [] :''; //check agent booths
-      //  console.log(boothsArray);
-      this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray.concat(this.agentwiseAssigBoothArray));
+      this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
+      // this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray.concat(this.agentwiseAssigBoothArray));
 
       // console.log(this.agentwiseAssigBoothArray.splice(this.agentwiseAssigBoothArray.findIndex((a:any) => a.BoothId !== this.AssemblyBoothArray.BoothId) , 1))
-      
-      // this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
       let id;
-
       formData.Id == "" || formData.Id == null  || formData.Id == undefined ? id = 0 : id = formData.Id;
      // this.agentwiseAssigBoothArray.lenght != 0 ? id = this.globalHeaderId : '';
     //  return
