@@ -493,13 +493,13 @@
                 <div class="row mb-3" *ngIf="agentwiseAssigBoothHide">
                     <div class="col-sm-12">
 
-                        <div class="card card-body shadow-none border py-2 mb-2" *ngFor="let agentwiseAssigBoothArray of boothAssignAgentMergedArray">
+                        <div class="card card-body shadow-none border py-2 mb-2" *ngFor="let boothArray of boothAssignAgentMergedArray">
                             <p class="text-main fw-bold mb-1">
-                                {{agentwiseAssigBoothArray?.ElectionName}}
+                                {{boothArray?.ElectionName}}
                                 
                                 <small
-                                    class="text-muted">[{{agentwiseAssigBoothArray?.ConstituencyName}}]</small>
-                                    <span type="button"   (click)="this.boothListMergeArray = []; showAssignBoots(agentwiseAssigBoothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
+                                    class="text-muted">[{{boothArray?.ConstituencyName}}]</small>
+                                    <span type="button"   (click)="this.boothListMergeArray = []; agentwiseAssigBoothArray = []; showAssignBoots(boothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="boothArray?.ElectionId == this.filterForm.value.ElectionId"
                                    title="Edit Client"> <i class="fas fa-pen"></i></span>
                                 </p>
 
@@ -507,7 +507,7 @@
                             <div class="form-container">
                                 <label class="form-label">Booths Assigned</label>
                                 <ul class="list-column">
-                                    <li *ngFor="let agentwiseAssigBooth of agentwiseAssigBoothArray.booths">
+                                    <li *ngFor="let agentwiseAssigBooth of boothArray.booths">
                                         {{agentwiseAssigBooth}} </li>
                                       
                                 </ul>
