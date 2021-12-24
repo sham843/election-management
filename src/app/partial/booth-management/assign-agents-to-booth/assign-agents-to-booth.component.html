@@ -113,11 +113,11 @@
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName"
-                                            (click)="resetAssignAgentForm();patchAssBoothElection(clientABooths.HeaderId, false)"
+                                        (click)="assignAgentToBooth(clientABooths);" 
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="agentwiseAssigBoothHide = false; resetAssignAgentForm();assignAgentToBooth(clientABooths)" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="assignAgentToBooth(clientABooths);" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
                                     </button>
 
@@ -474,7 +474,7 @@
                                     [ngClass]="{ 'is-invalid': aAsubmitted && a.UserId.errors }"
                                     [disabled]="!this.assAgentToBoothForm.value.ClientId" optionTextField="FullName"
                                     class="w-75"
-                                    (select)="getElectionName();"
+                                    (select)="getElectionName();getAgentwiseAssignedBooth()"
                                     placeholder="Select Agent" (remove)="clearAggentToBooth('agentName')">
                                 </ngx-select>
                                 <!-- getAgentwiseAssignedBooth(); -->
@@ -499,7 +499,7 @@
                                 
                                 <small
                                     class="text-muted">[{{agentwiseAssigBoothArray?.ConstituencyName}}]</small>
-                                    <span type="button"   (click)="showAssignBoots()" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
+                                    <span type="button"   (click)="this.boothListMergeArray = []; showAssignBoots(agentwiseAssigBoothArray)" class="btn btn-light text-edit rounded mx-1" *ngIf="agentwiseAssigBoothArray?.ElectionId == this.filterForm.value.ElectionId"
                                    title="Edit Client"> <i class="fas fa-pen"></i></span>
                                 </p>
 
