@@ -121,7 +121,7 @@
                                         <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="assignAgentToBooth(clientABooths);" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
                                     </button>                                        
-                                        <button type="button" title="Send Link"
+                                        <button type="button" title="Send Link"  [ngClass]="{'disabled' : clientABooths.UserId == null}"
                                         class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
                                         (click)="sendDownloadLink(clientABooths?.MobileNo)">
                                         <i class="fas fa-paper-plane"></i>
@@ -608,7 +608,7 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <button type="button" class="btn btn-secondary btn-sm"
-                                        (click)="resetAssignAgentForm()">Clear</button>
+                                        (click)="resetAssignAgentForm()" data-bs-dismiss="modal" aria-label="Close" #closeAssignAgent>Close</button>
                                 </div>
                                 <div class="col-sm-9 text-end">
                                     <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
