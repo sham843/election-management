@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounce, debounceTime } from 'rxjs/operators';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import * as am4core from "@amcharts/amcharts4/core";
@@ -359,6 +359,7 @@ export class BoothAnalyticsComponent implements OnInit {
     var series = chart.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "TotalVoters";
     series.dataFields.categoryX = "castname";
+    series.columns.template.strokeWidth = 0;
 
     var bullet = series.bullets.push(new am4charts.LabelBullet());
     bullet.label.text = "{valueY}";
@@ -371,6 +372,10 @@ export class BoothAnalyticsComponent implements OnInit {
     //series.columns.template.height = am4core.percent(100);
     //series.sequencedInterpolation = true;
 
+    series.columns.template.adapter.add("fill", function (fill:any, target:any) { 
+      return chart.colors.getIndex(target.dataItem.index);
+    })
+   
   }
 
   casteWiseChart1(obj: any) {
@@ -849,7 +854,7 @@ export class BoothAnalyticsComponent implements OnInit {
     this.viewBoothwiseVotersList();
   }
 
-  onClickAreaVoter(obj: any, isFill: any, voterType:any) { debugger
+  onClickAreaVoter(obj: any, isFill: any, voterType:any) { 
     this.searchVoters.setValue('');
     this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
     this.PartyId = 0; this.AreaId = obj.Id;
