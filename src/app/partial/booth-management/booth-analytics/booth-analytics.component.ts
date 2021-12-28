@@ -338,6 +338,43 @@ export class BoothAnalyticsComponent implements OnInit {
 
   casteWiseChart(obj: any) {
     // Create chart instance
+    var chart = am4core.create("castewisediv", am4charts.XYChart);
+
+    // Add data
+    chart.data = obj;
+   
+    // Create axes
+    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "castname";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+
+    //categoryAxis.renderer.labels.template.horizontalCenter = "right";
+   // categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    //categoryAxis.renderer.labels.template.rotation = 270;
+
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+    // Create series
+    var series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "TotalVoters";
+    series.dataFields.categoryX = "castname";
+
+    var bullet = series.bullets.push(new am4charts.LabelBullet());
+    bullet.label.text = "{valueY}";
+    bullet.label.verticalCenter = "bottom";
+    bullet.label.dy = -5;
+    //bullet.label.fontSize = 20;
+
+    chart.maskBullets = false;
+    //series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+    //series.columns.template.height = am4core.percent(100);
+    //series.sequencedInterpolation = true;
+
+  }
+
+  casteWiseChart1(obj: any) {
+    // Create chart instance
     let chart = am4core.create("castewisediv", am4charts.PieChart);
     // Add data
     chart.data = obj;
@@ -346,7 +383,7 @@ export class BoothAnalyticsComponent implements OnInit {
     pieSeries.dataFields.value = "TotalVoters";
     pieSeries.dataFields.category = "castname";
     pieSeries.ticks.template.disabled = true;
-    pieSeries.alignLabels = false;    
+    pieSeries.alignLabels = false;
     pieSeries.labels.template.text = "{category}";
     pieSeries.labels.template.fontSize = 13;
     //pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
@@ -369,7 +406,7 @@ export class BoothAnalyticsComponent implements OnInit {
     chart.legend = new am4charts.Legend();
     // chart.legend.align = "right";
     // chart.legend.position = "right";
-    chart.legend.contentAlign = "right";  
+    chart.legend.contentAlign = "right";
     // chart.legend.width = 600;
     // chart.legend.height = 250;
   }
