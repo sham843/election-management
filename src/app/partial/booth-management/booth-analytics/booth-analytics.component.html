@@ -350,7 +350,7 @@
                               <td>{{areaWiseVoter?.SrNo}}</td>
                               <td>{{areaWiseVoter?.AreaName}}</td>
                               <td *ngIf="areaWiseVoter.TotalVoters == 0">{{areaWiseVoter?.TotalVoters}}</td>
-                              <td *ngIf="areaWiseVoter.TotalVoters != 0" (click)="onClickAreaVoter(areaWiseVoter.Id,2)">
+                              <td *ngIf="areaWiseVoter.TotalVoters != 0" (click)="onClickAreaVoter(areaWiseVoter,2,'t')">
                                 <a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
                                   {{areaWiseVoter?.TotalVoters}} </a> </td>
                               <td *ngIf="areaWiseVoter.TotalFamily == 0">{{areaWiseVoter?.TotalFamily}}</td>
@@ -359,7 +359,7 @@
                                   {{areaWiseVoter?.TotalFamily}} </a> </td>
                               <td *ngIf="areaWiseVoter.UpdatedVoters == 0">{{areaWiseVoter?.UpdatedVoters}}</td>
                               <td *ngIf="areaWiseVoter.UpdatedVoters != 0"
-                                (click)="onClickAreaVoter(areaWiseVoter.Id,1)"><a class="text-main"
+                                (click)="onClickAreaVoter(areaWiseVoter,1,'u')"><a class="text-main"
                                   data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
                                   {{areaWiseVoter?.UpdatedVoters}} </a> </td>
                               <td>{{areaWiseVoter?.Representative}}</td>
@@ -542,7 +542,7 @@
             <tr>
               <th>Sr. No.</th>
               <th>Voters Name</th>
-              <th>Voter NO.</th>
+              <th>Voter No.</th>
               <th>Gender</th>
               <th>Contact No</th>
               <th>Occupation</th>
@@ -584,7 +584,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="BoothModalVotersListLabel">Voters List</h5>
+        <h5 class="modal-title" id="BoothModalVotersListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="dataNotFound">
@@ -663,8 +663,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="BoothModalFamiliesListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})
-        </h5>
+        <h5 class="modal-title" id="BoothModalFamiliesListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="dataNotFound">
@@ -709,15 +708,15 @@
                   </div>
                   <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                 </div>
-                <div class="col-sm-2">{{boothFamilyList.occupation ?
-                  (boothFamilyList.occupation | titlecase) : '-'}}
+                <div class="col-sm-2">{{boothFamilyList.Occupation ?
+                  (boothFamilyList.Occupation | titlecase) : '-'}}
                 </div>
                 <div class="col-sm-2">
-                  {{boothFamilyList?.qualification ?
-                  boothFamilyList.qualification : "-"}}</div>
+                  {{boothFamilyList?.Qualification ?
+                  boothFamilyList.Qualification : "-"}}</div>
                 <div class="col-sm-auto">
-                  <div>{{boothFamilyList.migrated ?
-                    (boothFamilyList.migrated | titlecase) :
+                  <div>{{boothFamilyList.Migrated ?
+                    (boothFamilyList.Migrated | titlecase) :
                     '-'}} </div>
                 </div>
                 <div class="col-sm">
@@ -796,7 +795,7 @@
         <table class="table table-hover mb-0">
           <thead>
             <tr>
-              <th>Voter ID</th>
+              <th>Voter No.</th>
               <th>Voter Name</th>
               <th>Gender</th>
               <th>Contact No</th>
@@ -804,7 +803,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let voter of votersList | paginate: votersConfig">
-              <td>{{voter?.SrNo}}</td>
+              <td>{{voter?.VoterNo}}</td>
               <td>{{voter?.Englishname}}</td>
               <td>{{voter?.Gender}}</td>
               <td>{{voter?.MobileNo || '-'}}</td>

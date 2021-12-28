@@ -455,6 +455,10 @@ export class BoothAnalyticsComponent implements OnInit {
       series.dataFields.categoryX = 'Agegroup'
       series.name = name
 
+      series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+      series.columns.template.height = am4core.percent(100);
+      series.sequencedInterpolation = true;
+
      // series.events.on("hidden", arrangeColumns);
      // series.events.on("shown", arrangeColumns);
 
@@ -796,7 +800,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
   
   redirectToVoterPrfile(obj: any) {
-    window.open('../voters-profile/' + obj.UserId + '.' + this.filterForm.value.ClientId + '.' + obj.VoterId);
+    window.open('../voters-profile/' + (obj.UserId || obj.userid) + '.' + this.filterForm.value.ClientId + '.' + obj.VoterId);
   }
 
   onClickPartyVoter(id: any, isFill: any) {
@@ -808,13 +812,15 @@ export class BoothAnalyticsComponent implements OnInit {
     this.viewBoothwiseVotersList();
   }
 
-  onClickAreaVoter(id: any, isFill: any) {
+  onClickAreaVoter(obj: any, isFill: any, voterType:any) { debugger
     this.searchVoters.setValue('');
     this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
-    this.PartyId = 0; this.AreaId = id;
+    this.PartyId = 0; this.AreaId = obj.Id;
+    this.selectedTitle = obj.AreaName;
+    this.selectedVoterCount = (voterType == 't' ? obj.TotalVoters : obj.UpdatedVoters);
     this.IsFilled = isFill;
     this.boothwiseVotersList = [];
-    this.viewBoothwiseVotersList(); 
+    this.viewBoothwiseVotersList();
   }
 
   onClickPagintionBoothVoters(pageNo: any) {
