@@ -593,6 +593,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     valueAxis.renderer.inversed = false;
     valueAxis.title.text = "Agent Performance Count";
     valueAxis.renderer.minLabelPosition = 0.01;
+    chart.scrollbarX = new am4core.Scrollbar();
 
     // Create series
     let series1 = chart.series.push(new am4charts.LineSeries());
