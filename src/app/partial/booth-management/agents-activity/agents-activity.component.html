@@ -485,7 +485,7 @@
                                             <td>{{newVotersList?.SrNo}}</td>
                                             <td>{{newVotersList?.EnglishName | titlecase}}</td>
                                             <td>{{newVotersList?.SurveyDate}}</td>
-                                            <td>{{newVotersList?.VoterNo}}</td>
+                                            <td>{{newVotersList?.VoterNo ? newVotersList?.VoterNo : '-'}}</td>
                                             <td>{{newVotersList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
                                             <td>{{newVotersList?.MobileNo1}} {{newVotersList?.MobileNo2}}</td>
                                         </tr>

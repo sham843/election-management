@@ -110,6 +110,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.searchVoterFilter('false');
     this.searchNewVotersFilters('false');
     this.searchAgentCallLoggerFilters('false');
+    this.searchFamilyVotersFilters();
   }
 
 
@@ -563,8 +564,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   LineChartAgentPerformance(data: any) {
-    // Themes begin
-    debugger
+    // Themes begi
     am4core.useTheme(am4themes_animated);
     // Themes end
 
@@ -786,13 +786,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.subject.next();
   }
 
-  searchFamilyVotersFilters(flag: any) {
-    if (flag == 'true') {
-      if (this.searchFamilyVoters.value == "" || this.searchFamilyVoters.value == null) {
-        this.toastrService.error("Please search and try again");
-        return
-      }
-    }
+  searchFamilyVotersFilters() {
     this.subject.pipe(debounceTime(700)).subscribe(() => {
       this.searchFamilyVoters.value;
       this.clickOnFamiliyCard();
