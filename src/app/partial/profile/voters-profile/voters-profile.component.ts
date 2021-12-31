@@ -68,6 +68,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
     this.GlobalAgentId = this.voterListData.AgentId;
+    this.getVoterVisitDetailData(0)
   }
 
   agentFilledData(data: any) {
@@ -163,11 +164,11 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         this.voterHasVisitTypesData = res.data1;
         // ----------------- get voter Visit Details Bind  by  VoterId  start here -------------------------//
-        if (this.voterHasVisitTypesData.lenght != 0) {
-          this.voterHasVisitTypesData.forEach((element: any) => {
-            this.getVoterVisitDetailData(element.VistitTypeId);
-          });
-        }
+        //if (this.voterHasVisitTypesData.lenght != 0) {
+        //  this.voterHasVisitTypesData.forEach((element: any) => {
+        //    this.getVoterVisitDetailData(element.VistitTypeId);
+        //  });
+        //}
 
         // ----------------- get voter Visit Details Bind  by  VoterId  end here -------------------------//
       } else {
@@ -276,8 +277,9 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        let voterVisitDetailData = res.data1[0];
-        this.voterVisitDetailDataArray.push(voterVisitDetailData);
+        this.voterVisitDetailDataArray = res.data1;
+        //let voterVisitDetailData = res.data1[0];
+        //this.voterVisitDetailDataArray.push(voterVisitDetailData);
       } else {
         this.spinner.hide();
         this.voterVisitDetailDataArray = [];

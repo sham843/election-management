@@ -50,14 +50,15 @@ export class BoothAnalyticsComponent implements OnInit {
   impLeadersList: any;
   impLeadersTotal: any;
   impLeadersPaginationNo = 1;
-  impLeadersPageSize: number = 10;
-  areaWiseVotersPageSize: number = 10;
-  migrationPatrnPageSize: number = 10;
-  votersPageSize: number = 10;
-  boothvotersPageSize: number = 10;
-  boothFamiliesPageSize: number = 10;
-  boothMigratedPageSize: number = 10;
-  comnIssuePageSize: number = 10;
+  //socialSupporterPageSize: number = 10;
+  //impLeadersPageSize: number = 10;
+ // areaWiseVotersPageSize: number = 10;
+  //migrationPatrnPageSize: number = 10;
+ // votersPageSize: number = 10;
+  //boothvotersPageSize: number = 10;
+ // boothFamiliesPageSize: number = 10;
+ // boothMigratedPageSize: number = 10;
+  //comnIssuePageSize: number = 10;
   areaWiseVotersList: any;
   areaWiseVotersTotal: any;
   commonIssuesList: any;
@@ -68,6 +69,7 @@ export class BoothAnalyticsComponent implements OnInit {
   isocialMediaSuprtChart: boolean = false;
 
   areaWiseVoterConfig: any;
+  socialSupporterConfig: any;
   votersConfig: any;
   comnIssueConfig: any;
   migrationPatternConfig: any;
@@ -281,14 +283,7 @@ export class BoothAnalyticsComponent implements OnInit {
       })
       //this.clearForm();
     }
-      // this.filterForm.value.BoothId.forEach((value: any) => {
-      //   this.clientWiseBoothListArray.filter((ele: any) => {
-      //     if (value == ele.BoothId) {
-      //       this.selectedBoot.push(ele)
-      //     }
-      //   })
-      // });
-
+ 
       this.villageNameArray.filter((ele: any) => {
         if (this.filterForm.value.VillageId == ele.VillageId) {
           this.selectedVillage = ele;
@@ -297,6 +292,7 @@ export class BoothAnalyticsComponent implements OnInit {
 
       this.migrationPatternConfig = { id: 'migrationPatternPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.areaWiseVoterConfig = { id: 'areaWiseVoterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
+      this.socialSupporterConfig = { id: 'socialSupporterPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.votersConfig = { id: 'votersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.comnIssueConfig = { id: 'commonIssuePagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
       this.bootwiseVotersConfig = { id: 'boothVotersListPagination', itemsPerPage: 10, currentPage: 1, totalItems: 0 }
@@ -349,10 +345,6 @@ export class BoothAnalyticsComponent implements OnInit {
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
-    //categoryAxis.renderer.labels.template.horizontalCenter = "right";
-   // categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    //categoryAxis.renderer.labels.template.rotation = 270;
-
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
     // Create series
@@ -365,12 +357,8 @@ export class BoothAnalyticsComponent implements OnInit {
     bullet.label.text = "{valueY}";
     bullet.label.verticalCenter = "bottom";
     bullet.label.dy = -5;
-    //bullet.label.fontSize = 20;
 
     chart.maskBullets = false;
-    //series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-    //series.columns.template.height = am4core.percent(100);
-    //series.sequencedInterpolation = true;
 
     series.columns.template.adapter.add("fill", function (fill:any, target:any) { 
       return chart.colors.getIndex(target.dataItem.index);
@@ -496,19 +484,9 @@ export class BoothAnalyticsComponent implements OnInit {
       series.dataFields.valueY = value
       series.dataFields.categoryX = 'Agegroup'
       series.name = name
-
       series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
       series.columns.template.height = am4core.percent(100);
       series.sequencedInterpolation = true;
-
-     // series.events.on("hidden", arrangeColumns);
-     // series.events.on("shown", arrangeColumns);
-
-      var bullet = series.bullets.push(new am4charts.LabelBullet())
-      //bullet.interactionsEnabled = false
-      //bullet.dy = 30;
-     // bullet.label.text = '{valueY}'
-      //bullet.label.fill = am4core.color('#ffffff')  
       return series;
     }
     chart.data = obj;
@@ -549,64 +527,46 @@ export class BoothAnalyticsComponent implements OnInit {
     })
   }
 
-  partywiseVotersChart(obj:any) {
-    // Themes begin
+  partywiseVotersChart(obj: any) {
+
     am4core.useTheme(am4themes_animated);
-    // Themes end
-    // Create chart instance
-    let chart = am4core.create("partywiseVoterschartdiv", am4charts.XYChart);
+    var chart = am4core.create('partywiseVoterschartdiv', am4charts.XYChart)
     chart.colors.step = 2;
-    // Add data
-    chart.data = obj;
-    // Create axes
-    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "Partyshortcode";
-    //categoryAxis.numberFormatter.numberFormat = "#";
-    //categoryAxis.renderer.inversed = true;
-    //categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.cellStartLocation = 0.1;
-    categoryAxis.renderer.cellEndLocation = 0.9;
-    //categoryAxis.renderer.labels.template.location = 0.0001;
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 30;
-
-
-    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.renderer.opposite = true;
-
-    // Create series
-    function createSeries(field:any, name:any) {
-      let series = chart.series.push(new am4charts.ColumnSeries());
-      series.dataFields.valueX = field;
-      series.dataFields.categoryY = "Partyshortcode";
-      series.name = name;
-      series.columns.template.tooltipText = "{name}: [bold]{valueX}[/]";
-      series.columns.template.height = am4core.percent(100);
-      series.sequencedInterpolation = true;
-
-      let valueLabel = series.bullets.push(new am4charts.LabelBullet());
-     // valueLabel.label.text = "{valueX}";
-      valueLabel.label.horizontalCenter = "left";
-      valueLabel.label.dx = 10;
-      valueLabel.label.hideOversized = false;
-      valueLabel.label.truncate = false;
-
-      let categoryLabel = series.bullets.push(new am4charts.LabelBullet());
-      //categoryLabel.label.text = "{name}";
-      categoryLabel.label.horizontalCenter = "right";
-      categoryLabel.label.dx = -10;
-      categoryLabel.label.fill = am4core.color("#fff");
-      categoryLabel.label.hideOversized = false;
-      categoryLabel.label.truncate = false;
-    }
-
-    createSeries("TotalFamily", "Family");
-    createSeries("TotalVoter", "Voter");
 
     chart.legend = new am4charts.Legend()
     chart.legend.position = 'bottom'
-   // chart.legend.paddingBottom = 20
-    //chart.legend.labels.template.maxWidth = 95
+    chart.legend.paddingBottom = 20
+    chart.legend.labels.template.maxWidth = 95
+
+    var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
+    xAxis.dataFields.category = 'Partyshortcode'
+    xAxis.fontSize = 13;
+    xAxis.renderer.cellStartLocation = 0.1
+    xAxis.renderer.cellEndLocation = 0.9
+    xAxis.renderer.grid.template.location = 0;
+    xAxis.renderer.labels.template.fontSize = 10;
+    xAxis.renderer.minGridDistance = 30;
+
+    var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    yAxis.min = 0;
+    yAxis.renderer.labels.template.fontSize = 10;
+
+    function createSeries(value: any, name: any) {
+      var series = chart.series.push(new am4charts.ColumnSeries())
+      series.dataFields.valueY = value
+      series.dataFields.categoryX = 'Partyshortcode'
+      series.name = name
+
+      series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+      series.columns.template.height = am4core.percent(100);
+      series.sequencedInterpolation = true;
+      return series;
+    }
+    chart.data = obj;
+    createSeries("TotalFamily", "Family");
+    createSeries("TotalVoter", "Voter");
+
+    chart.scrollbarX = new am4core.Scrollbar();  
   }
 
   bindProfessionWiseFamilies() {
@@ -756,19 +716,25 @@ export class BoothAnalyticsComponent implements OnInit {
     });
 
     chart.legend = new am4charts.Legend();
-    chart.legend.position = "bottom";
+    chart.legend.position = "right";
     chart.legend.contentAlign = "left";
     chart.legend.valueLabels.template.text = "{category.category}";
+    chart.legend.scrollable = true;
   }
 
+  onClickPagintionsocialSupporter(pageNo: any) {
+    this.socialSupporterConfig.currentPage = pageNo;
+    this.bindSocialMediaSuprt();
+  }
   bindSocialMediaSuprt() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + "&nopage=" + this.socialSupporterConfig.currentPage
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Social_Media_Support?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.socialMediaSuprtList = res.data1;
+        this.socialSupporterConfig.totalItems = res.data2[0].TotalCount;
         setTimeout(() => { // bind charts
           this.socialMediaSuprtList.length > 0 ? (this.isocialMediaSuprtChart = true, this.socialMediaSuprtChart(this.socialMediaSuprtList)) : this.isocialMediaSuprtChart = false;
         }, 500)
@@ -842,13 +808,15 @@ export class BoothAnalyticsComponent implements OnInit {
   }
   
   redirectToVoterPrfile(obj: any) {
-    window.open('../voters-profile/' + (obj.UserId || obj.userid) + '.' + this.filterForm.value.ClientId + '.' + obj.VoterId);
+    window.open('../voters-profile/' + (obj.UserId || obj.userid || obj.AgentId || 0) + '.' + this.filterForm.value.ClientId + '.' + obj.VoterId);
   }
 
-  onClickPartyVoter(id: any, isFill: any) {
+  onClickPartyVoter(obj: any, isFill: any) {
     this.searchVoters.setValue('');
     this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
-    this.AreaId = 0; this.PartyId = id;
+    this.AreaId = 0; this.PartyId = obj.PartyId;
+    this.selectedTitle = obj.PartyName;
+    this.selectedVoterCount = obj.TotalVoter;
     this.IsFilled = isFill;
     this.boothwiseVotersList = [];
     this.viewBoothwiseVotersList();
@@ -944,7 +912,7 @@ export class BoothAnalyticsComponent implements OnInit {
     } else if (flag == 'clearSearchFamilies') {
       this.searchVoters.setValue('');
       this.viewBoothwiseFamiliesList();
-    } else if (flag == 'clearSearchMigrated') {
+    } else if (flag == 'clearSearchMigrated') {     
       this.searchVoters.setValue('');
       this.viewMigrationVotersList();
     }
@@ -1045,10 +1013,10 @@ export class BoothAnalyticsComponent implements OnInit {
     })
   }
   boothFamilyDetailsArray:any
-  familyDetails(ParentVoterId: any) {
-    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + this.filterForm.value.ClientId + '&Search=';
+  familyDetails(ParentVoterId: any, AgentId: any) {
+    let obj = 'ParentVoterId=' + ParentVoterId + '&AgentId=' + AgentId + '&ClientId=' + this.filterForm.value.ClientId + '&Search=';
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_FamilyMember_1_0?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -1089,6 +1057,7 @@ export class BoothAnalyticsComponent implements OnInit {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId })
     } else if (flag == 'VillageId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId })
+      this.selectedVillage = '';
     } else if (flag == 'BoothId') {
       this.filterForm.reset({ ClientId: this.filterForm.value.ClientId, ElectionId: this.filterForm.value.ElectionId, ConstituencyId: this.filterForm.value.ConstituencyId, VillageId: this.filterForm.value.VillageId })
       this.clientWiseBoothListArray = [];

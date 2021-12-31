@@ -138,7 +138,7 @@
                   <div class="col-sm-6">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
-                        Age wise Voters
+                        Age Wise Voters
                       </div>
                       <div class="card-body">
                         <div [hidden]="!isAgewiseChart" class="chart-container" id="chartdiv"></div>
@@ -152,7 +152,7 @@
                   <div class="col-sm-6">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
-                        Religion wise Voters Chart
+                        Religion Wise Voters Chart
                       </div>
                       <div class="card-body">
                         <div [hidden]="!isReligionwiseChart" class="chart-container" id="religionwisediv"></div>
@@ -194,9 +194,12 @@
                               <td>{{row?.SrNo}}</td>
                               <td>{{row?.Migratedcity}}</td>
                               <td *ngIf="row.TotalVoters == 0">{{row?.TotalVoters}}</td>
-                              <td *ngIf="row.TotalVoters != 0" (click)="onClickMigratedCount(row)"> <a class="text-main"
-                                  data-bs-toggle="modal" data-bs-target="#BoothMigratedVotersList"> {{row?.TotalVoters}}
-                                </a> </td>
+                              <td *ngIf="row.TotalVoters != 0">
+                                <a (click)="onClickMigratedCount(row)" class="text-main"
+                                   data-bs-toggle="modal" data-bs-target="#BoothMigratedVotersList">
+                                  {{row?.TotalVoters}}
+                                </a>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -204,8 +207,8 @@
                           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
                         </div>
                         <pagination-controls id="migrationPatternPagination" *ngIf="migrationPatternList?.length != 0"
-                          previousLabel="" nextLabel=""
-                          (pageChange)="onClickPagintionMigrattionPattern(migrationPatrnPageSize = $event)">
+                                             previousLabel="" nextLabel=""
+                                             (pageChange)="onClickPagintionMigrattionPattern($event)">
                         </pagination-controls>
                       </div>
                     </div>
@@ -229,9 +232,12 @@
                               <td>{{row?.SrNo}}</td>
                               <td>{{row?.Profession}}</td>
                               <td *ngIf="row.TotalVoters == 0">{{row?.TotalVoters}}</td>
-                              <td *ngIf="row.TotalVoters != 0" (click)="onClickFamilyCount(row,3)"> <a class="text-main"
-                                  data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList"> {{row?.TotalVoters}}
-                                </a> </td>
+                              <td *ngIf="row.TotalVoters != 0">
+                                <a (click)="onClickFamilyCount(row,3)" class="text-main"
+                                   data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList">
+                                  {{row?.TotalVoters}}
+                                </a>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -244,7 +250,7 @@
                   <div class="col-sm-6">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
-                        Party wise voters
+                        Party Wise voters
                       </div>
                       <div class="card-body">
                         <table class="table table-hover mb-0">
@@ -261,13 +267,19 @@
                               <td>{{row?.SrNo}}</td>
                               <td>{{row?.PartyName}}</td>
                               <td *ngIf="row.TotalFamily == 0">{{row?.TotalFamily}}</td>
-                              <td *ngIf="row.TotalFamily != 0" (click)="onClickFamilyCount(row,1)"> <a class="text-main"
-                                  data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList"> {{row?.TotalFamily}}
-                                </a> </td>
+                              <td *ngIf="row.TotalFamily != 0">
+                                <a (click)="onClickFamilyCount(row,1)" class="text-main"
+                                   data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList">
+                                  {{row?.TotalFamily}}
+                                </a>
+                              </td>
                               <td *ngIf="row.TotalVoter == 0">{{row?.TotalVoter}} </td>
-                              <td *ngIf="row.TotalVoter != 0" (click)="onClickPartyVoter(row.PartyId, 2)"><a
-                                  class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
-                                  {{row?.TotalVoter}} </a></td>
+                              <td *ngIf="row.TotalVoter != 0">
+                                <a (click)="onClickPartyVoter(row, 2)"
+                                   class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
+                                  {{row?.TotalVoter}}
+                                </a>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -280,7 +292,7 @@
                   <div class="col-sm-6">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
-                        Party wise voters Chart
+                        Party Wise voters Chart
                       </div>
                       <div class="card-body py-0">
                         <div [hidden]="!isPartyVotersChart" id="partywiseVoterschartdiv" class="chart-container"></div>
@@ -300,19 +312,22 @@
                           <thead>
                             <tr>
                               <th>Sr. No.</th>
+                              <th>Voter No.</th>
                               <th>Leader Name</th>
                               <th>Area</th>
+                              <th>Booth Name</th>
                               <th>Party</th>
                               <th>Importance</th>
                               <th>Contact No.</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr
-                              *ngFor="let leader of impLeadersList | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage: impLeadersPaginationNo, totalItems:impLeadersTotal}">
+                            <tr *ngFor="let leader of impLeadersList | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage: impLeadersPaginationNo, totalItems:impLeadersTotal}">
                               <td>{{leader?.SrNo}}</td>
+                              <td>{{leader?.VoterNo}}</td>
                               <td>{{leader?.LeaderName}}</td>
                               <td>{{leader?.AreaName}}</td>
+                              <td>{{leader?.BoothNickName}}</td>
                               <td>{{leader?.PartyName}}</td>
                               <td>{{leader?.LeaderImportance}}<i class="fas fa-star ms-1"></i></td>
                               <td>{{leader?.Contact}}</td>
@@ -323,12 +338,62 @@
                           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
                         </div>
                         <pagination-controls id="LeadersPagination" *ngIf="impLeadersList?.length != 0" previousLabel=""
-                          nextLabel="" (pageChange)="onClickPagintionImpLeaders(impLeadersPageSize = $event)">
+                                             nextLabel="" (pageChange)="onClickPagintionImpLeaders($event)">
                         </pagination-controls>
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-12">
+
+                  <div class="col-sm-6">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Social Media Supporter
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-hover mb-0">
+                          <thead>
+                            <tr>
+                              <th>Sr. No.</th>
+                              <th>Leader</th>
+                              <th>Voters</th>
+                              <th>Hits</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let supporter of socialMediaSuprtList | paginate: socialSupporterConfig">
+                              <td>{{supporter?.SrNo}}</td>
+                              <td>{{supporter?.SupporterName}}</td>
+                              <td *ngIf="supporter.TotalVoter == 0">{{supporter?.TotalVoter}}</td>
+                              <td *ngIf="supporter.TotalVoter != 0">
+                                <a (click)="showVotersList(supporter);" class="text-main" data-bs-toggle="modal"
+                                   data-bs-target="#ModalVotersList">{{supporter?.TotalVoter}}</a>
+                              </td>
+                              <td>{{supporter?.Support}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div class="mt-2 text-end" *ngIf="socialMediaSuprtList?.length == 0">
+                          <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
+                        </div>
+                        <pagination-controls id="socialSupporterPagination" *ngIf="socialMediaSuprtList?.length != 0"
+                                             previousLabel="" nextLabel=""
+                                             (pageChange)="onClickPagintionsocialSupporter($event)">
+                        </pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="card shadow-none border">
+                      <div class="card-header pb-0">
+                        Social Media Supporter Hits Chart
+                      </div>
+                      <div [hidden]="!isocialMediaSuprtChart" class="chart-container" id="socialMediaSuprtdiv"></div>
+                      <ng-container *ngIf="!isocialMediaSuprtChart">
+                        <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
                         Area Wise Voters
@@ -350,18 +415,24 @@
                               <td>{{areaWiseVoter?.SrNo}}</td>
                               <td>{{areaWiseVoter?.AreaName}}</td>
                               <td *ngIf="areaWiseVoter.TotalVoters == 0">{{areaWiseVoter?.TotalVoters}}</td>
-                              <td *ngIf="areaWiseVoter.TotalVoters != 0" (click)="onClickAreaVoter(areaWiseVoter,2,'t')">
-                                <a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
-                                  {{areaWiseVoter?.TotalVoters}} </a> </td>
+                              <td *ngIf="areaWiseVoter.TotalVoters != 0">
+                                <a (click)="onClickAreaVoter(areaWiseVoter,2,'t')" class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
+                                  {{areaWiseVoter?.TotalVoters}}
+                                </a>
+                              </td>
                               <td *ngIf="areaWiseVoter.TotalFamily == 0">{{areaWiseVoter?.TotalFamily}}</td>
-                              <td *ngIf="areaWiseVoter.TotalFamily != 0" (click)="onClickFamilyCount(areaWiseVoter,2)">
-                                <a class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList">
-                                  {{areaWiseVoter?.TotalFamily}} </a> </td>
+                              <td *ngIf="areaWiseVoter.TotalFamily != 0">
+                                <a (click)="onClickFamilyCount(areaWiseVoter,2)" class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList">
+                                  {{areaWiseVoter?.TotalFamily}}
+                                </a>
+                              </td>
                               <td *ngIf="areaWiseVoter.UpdatedVoters == 0">{{areaWiseVoter?.UpdatedVoters}}</td>
-                              <td *ngIf="areaWiseVoter.UpdatedVoters != 0"
-                                (click)="onClickAreaVoter(areaWiseVoter,1,'u')"><a class="text-main"
-                                  data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
-                                  {{areaWiseVoter?.UpdatedVoters}} </a> </td>
+                              <td *ngIf="areaWiseVoter.UpdatedVoters != 0">
+                                <a (click)="onClickAreaVoter(areaWiseVoter,1,'u')" class="text-main"
+                                   data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
+                                  {{areaWiseVoter?.UpdatedVoters}}
+                                </a>
+                              </td>
                               <td>{{areaWiseVoter?.Representative}}</td>
                             </tr>
                           </tbody>
@@ -370,137 +441,87 @@
                           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
                         </div>
                         <pagination-controls id="areaWiseVoterPagination" *ngIf="areaWiseVotersList?.length != 0"
-                          previousLabel="" nextLabel=""
-                          (pageChange)="onClickPagintionareaWiseVoters(areaWiseVotersPageSize = $event)">
+                                             previousLabel="" nextLabel=""
+                                             (pageChange)="onClickPagintionareaWiseVoters($event)">
                         </pagination-controls>
 
                         <!--<div class="col-md-12">
-                          <div class="card  o-hidden">
-                            <ngx-datatable style="height: calc(100vh - 270px); box-shadow: seashell" class="material fullscreen" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="100 " [scrollbarV]="true" [scrollbarH]="true" [rows]="rows">
-                              <ngx-datatable-column>
-                                <ng-template ngx-datatable-header-template>
-                                  Order No.
-                                </ng-template>
-                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                                  {{ row.SrNo }}
-                                </ng-template>
-                              </ngx-datatable-column>
-                              <ngx-datatable-column>
-                                <ng-template ngx-datatable-header-template>
-                                  Patient Name
-                                </ng-template>
-                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                                  {{  row.LeaderName }}
-                                </ng-template>
-                              </ngx-datatable-column>
-                              <ngx-datatable-column>
-                                <ng-template ngx-datatable-header-template>
-                                  Cancelled On
-                                </ng-template>
-                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                                  {{  row.AreaName }}
-                                </ng-template>
-                              </ngx-datatable-column>
-                            </ngx-datatable>
-                          </div>
-                        </div>-->
+          <div class="card  o-hidden">
+            <ngx-datatable style="height: calc(100vh - 270px); box-shadow: seashell" class="material fullscreen" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="100 " [scrollbarV]="true" [scrollbarH]="true" [rows]="rows">
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  Order No.
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                  {{ row.SrNo }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  Patient Name
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                  {{  row.LeaderName }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  Cancelled On
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                  {{  row.AreaName }}
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>-->
                         <!--<ngx-datatable [rows]="rows" [columns]="columns"> </ngx-datatable>-->
                         <!--<ngx-datatable class="material"
-                                       [rows]="rows"
-                                       [columns]="[{ prop: 'name' }, { name: 'Gender' }, { name: 'Company' }]"
-                                       [columnMode]="ColumnMode.force"
-                                       [headerHeight]="50"
-                                       [footerHeight]="50"
-                                       rowHeight="auto"
-                                       [externalPaging]="true"
-                                       [count]="page.totalElements"
-                                       [offset]="page.pageNumber"
-                                       [limit]="page.size"
-                                       (page)="setPage($event)">
-                        </ngx-datatable>-->
+                       [rows]="rows"
+                       [columns]="[{ prop: 'name' }, { name: 'Gender' }, { name: 'Company' }]"
+                       [columnMode]="ColumnMode.force"
+                       [headerHeight]="50"
+                       [footerHeight]="50"
+                       rowHeight="auto"
+                       [externalPaging]="true"
+                       [count]="page.totalElements"
+                       [offset]="page.pageNumber"
+                       [limit]="page.size"
+                       (page)="setPage($event)">
+        </ngx-datatable>-->
 
                       </div>
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="card shadow-none border">
-                      <div class="card-header pb-0">
-                        Social Media Supporter
-                      </div>
-                      <div class="card-body">
+                      <div class="card-header">Common Issues in this Area</div>
+                      <div class="card-body pt-0">
                         <table class="table table-hover mb-0">
-                          <thead>
-                            <tr>
-                              <th>Sr. No.</th>
-                              <th>Leader</th>
-                              <th>Voters</th>
-                              <th>Hits</th>
-                            </tr>
-                          </thead>
                           <tbody>
-                            <tr *ngFor="let supporter of socialMediaSuprtList">
-                              <td>{{supporter?.SrNo}}</td>
-                              <td>{{supporter?.SupporterName}}</td>
-                              <td *ngIf="supporter.TotalVoter == 0">{{supporter?.TotalVoter}}</td>
-                              <td *ngIf="supporter.TotalVoter != 0" (click)="showVotersList(supporter);">
-                                <a class="text-main" data-bs-toggle="modal"
-                                  data-bs-target="#ModalVotersList">{{supporter?.TotalVoter}}</a>
+                            <tr *ngFor="let commonIssue of commonIssuesList | paginate: comnIssueConfig">
+                              <td>
+                                <span class="fw-bold text-main">{{commonIssue?.EnglishName}}</span>
+                                <div>
+                                  {{commonIssue?.VisitDetails || '-'}}
+                                </div>
                               </td>
-                              <td>{{supporter?.Support}}</td>
                             </tr>
                           </tbody>
                         </table>
-                        <div class="mt-2 text-end" *ngIf="socialMediaSuprtList?.length == 0">
+                        <div class="mt-2 text-end" *ngIf="commonIssuesList?.length == 0">
                           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
                         </div>
+                        <pagination-controls id="commonIssuePagination" *ngIf="commonIssuesList?.length != 0"
+                                             previousLabel="" nextLabel=""
+                                             (pageChange)="onClickPagintionCommonIssues($event)">
+                        </pagination-controls>
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-6">
-                    <div class="card shadow-none border">
-                      <div class="card-header pb-0">
-                        Social Media Supporter Hits Chart
-                      </div>
-                      <div [hidden]="!isocialMediaSuprtChart" class="chart-container" id="socialMediaSuprtdiv"></div>
-                      <ng-container *ngIf="!isocialMediaSuprtChart">
-                        <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
-                      </ng-container>
-                    </div>
-                  </div>
-                </div>
-                <ng-container *ngIf="!dataNotFound">
-                  <div class="alert alert-danger text-center py-2 mb-0">Please Select booth..!</div>
-                </ng-container>
+                </div>               
               </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="card shadow-none border">
-                  <div class="card-header">Common Issues in this Area</div>
-                  <div class="card-body pt-0">
-                    <table class="table table-hover mb-0">
-                      <tbody>
-                        <tr *ngFor="let commonIssue of commonIssuesList | paginate: comnIssueConfig">
-                          <td>
-                            <span class="fw-bold text-main">{{commonIssue?.EnglishName}}</span>
-                            <div>
-                              {{commonIssue?.VisitDetails || '-'}}
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="mt-2 text-end" *ngIf="commonIssuesList?.length == 0">
-                      <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
-                    </div>
-                    <pagination-controls id="commonIssuePagination" *ngIf="commonIssuesList?.length != 0"
-                      previousLabel="" nextLabel=""
-                      (pageChange)="onClickPagintionCommonIssues(comnIssuePageSize = $event)">
-                    </pagination-controls>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </div>            
           </div>
         </div>
       </div>
@@ -541,21 +562,24 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Voters Name</th>
               <th>Voter No.</th>
+              <th>Voter Name</th>
               <th>Gender</th>
+              <th>Age</th>
               <th>Contact No</th>
               <th>Occupation</th>
               <th>Qualification</th>
               <th>Migrated Area</th>
+              <th>Booth Name</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let voter of boothMigratedList  | paginate: bootMigratedConfig">
               <td>{{voter?.SrNo}}</td>
-              <td><a (click)="redirectToVoterPrfile(voter)" class="text-main">{{voter?.EnglishName}}</a></td>
               <td>{{voter?.VoterNo}}</td>
+              <td><a (click)="redirectToVoterPrfile(voter)" class="text-main">{{voter?.EnglishName}}</a></td>
               <td>{{voter?.Gender}} </td>
+              <td>{{voter?.Age}} </td>
               <td>
                 <div *ngIf="voter?.MobileNo1">
                   <a class="text-main" href="tel:{{voter?.MobileNo1}}">{{voter?.MobileNo1}}</a>
@@ -565,6 +589,7 @@
               <td> {{voter.Occupation ? (voter.Occupation | titlecase) : '-'}} </td>
               <td> {{voter?.Qualification || '-'}} </td>
               <td> {{voter?.MigratedArea || '-'}} </td>
+              <td> {{voter?.BoothNickName || '-'}} </td>
             </tr>
           </tbody>
         </table>
@@ -572,7 +597,7 @@
           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
         </div>
         <pagination-controls id="boothMigratedPagination" *ngIf="boothMigratedList?.length != 0" previousLabel=""
-          nextLabel="" (pageChange)="onClickPagintionBoothMigrated(boothMigratedPageSize = $event)">
+          nextLabel="" (pageChange)="onClickPagintionBoothMigrated($event)">
         </pagination-controls>
       </div>
     </div>
@@ -584,7 +609,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="BoothModalVotersListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
+        <h5 class="modal-title" id="BoothModalVotersListLabel">{{selectedTitle}} - Voters List ({{selectedVoterCount}})</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="dataNotFound">
@@ -607,16 +632,19 @@
         <table class="table table-hover mb-0">
           <thead>
             <tr>
+              <th>Sr. No.</th>
               <th>Voter No.</th>
-              <th>Voters Name</th>
+              <th>Voter Name</th>
               <th>Gender</th>
+              <th>Age</th>
               <th>Contact No</th>
               <th>Occupation</th>
-              <th>Comments</th>
+             <th>Booth Name</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let voter of boothwiseVotersList  | paginate: bootwiseVotersConfig">
+              <td>{{voter?.SrNo}}</td>
               <td>{{voter?.VoterNo}}</td>
               <td>
                 <p class="mb-0">
@@ -630,19 +658,17 @@
               <td>
                 <div>{{voter?.Gender}}</div>
               </td>
-
+              <td>{{voter?.Age}}</td>
               <td>
-                <div *ngIf="voter?.MobileNo1">
-                  <a class="text-main" href="tel:{{voter?.MobileNo1}}">{{voter?.MobileNo1}}</a>
+                <div *ngIf="voter?.MobileNo">
+                  <a class="text-main" href="tel:{{voter?.MobileNo}}">{{voter?.MobileNo}}</a>
                 </div>
-                <div *ngIf="!voter?.MobileNo1">-</div>
+                <div *ngIf="!voter?.MobileNo">-</div>
               </td>
               <td>
                 <div>{{voter?.Occupation || '-'}}</div>
               </td>
-              <td>
-                <div>{{voter?.Comment || '-'}}</div>
-              </td>
+              <td> <div>{{voter?.BoothNickName || '-'}}</div></td>
             </tr>
           </tbody>
         </table>
@@ -650,7 +676,7 @@
           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
         </div>
         <pagination-controls id="boothVotersListPagination" *ngIf="boothwiseVotersList?.length != 0" previousLabel=""
-          nextLabel="" (pageChange)="onClickPagintionBoothVoters(boothvotersPageSize = $event)">
+          nextLabel="" (pageChange)="onClickPagintionBoothVoters($event)">
         </pagination-controls>
       </div>
     </div>
@@ -663,7 +689,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="BoothModalFamiliesListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
+        <h5 class="modal-title" id="BoothModalFamiliesListLabel">{{selectedTitle}} - Voters List ({{selectedVoterCount}})</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="dataNotFound">
@@ -685,45 +711,48 @@
         <div class="accordion accordion-flush" id="familytreeaccordion">
           <div class="row familytree-header">
             <div class="col-sm-1">Sr. No.</div>
+            <div class="col-sm-1">Voter No.</div>
             <div class="col-sm-3">Voter Name</div>
-            <div class="col-sm-2">Contact No.</div>
-            <div class="col-sm-2">Occupation</div>
-            <div class="col-sm-2">Qualification</div>
-            <div class="col-sm-auto">Migration</div>
-            <div class="col-sm"></div>
+            <div class="col-sm-1">Contact No.</div>
+            <div class="col-sm-1">Occupation</div>
+            <div class="col-sm-1">Qualification</div>
+            <div class="col-sm-1">Migration</div>
+            <div class="col-sm-2">Booth Name</div>
+            <div class="col-sm-1"></div>
           </div>
           <div class="accordion-item"
             *ngFor="let boothFamilyList of boothwiseFamiliesList  | paginate: bootwiseFamiliesConfig; let i = index">
 
             <div class="accordion-header familytree-row">
               <div class="row">
-                <div class="col-sm-1">{{boothFamilyList.SrNo}}
-                </div>
+                <div class="col-sm-1">{{boothFamilyList.SrNo}}</div>
+                <div class="col-sm-1">{{boothFamilyList.VoterNo}}</div>
                 <div class="col-sm-3">
                   <a (click)="redirectToVoterPrfile(boothFamilyList)" class="text-main">{{boothFamilyList?.Family}}</a>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                   <div *ngIf="boothFamilyList?.MobileNo1"><a class="text-main"
                       href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a>
                   </div>
                   <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
                 </div>
-                <div class="col-sm-2">{{boothFamilyList.Occupation ?
+                <div class="col-sm-1">{{boothFamilyList.Occupation ?
                   (boothFamilyList.Occupation | titlecase) : '-'}}
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                   {{boothFamilyList?.Qualification ?
                   boothFamilyList.Qualification : "-"}}</div>
-                <div class="col-sm-auto">
+                <div class="col-sm-1">
                   <div>{{boothFamilyList.Migrated ?
                     (boothFamilyList.Migrated | titlecase) :
                     '-'}} </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">{{boothFamilyList?.BoothNickName || '-'}} </div>
+                <div class="col-sm-1">
                   <a class="accordion-button collapsed" data-bs-toggle="collapse"
                     [attr.data-bs-target]="'#flush-collapseOne'+i" aria-expanded="false"
                     aria-controls="flush-collapseOne"
-                    (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                    (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId,boothFamilyList.AgentId)">
                   </a>
                 </div>
               </div>
@@ -734,21 +763,21 @@
               <div class="accordion-body p-0">
                 <ng-container>
                   <div class="row familytree-details" *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
-                    <div class="col-sm-1">
-                      {{boothFamilyDetails?.SrNo}}</div>
+                    <div class="col-sm-1">{{boothFamilyDetails?.SrNo}}</div>
+                    <div class="col-sm-1">{{boothFamilyDetails?.VoterNo}}</div>
                     <div class="col-sm-3">
                       {{boothFamilyDetails?.Family}}</div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                       <span *ngIf="boothFamilyDetails?.MobileNo1"><a class="calltomember"
                           href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a>
                       </span>
                       <span *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                       {{boothFamilyDetails?.Occupation ?
                       (boothFamilyDetails?.Occupation |
                       titlecase) : '-'}}</div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                       {{boothFamilyDetails?.Qualification ?
                       (boothFamilyDetails?.Qualification |
                       titlecase) : '-'}}
@@ -757,6 +786,7 @@
                       {{boothFamilyDetails?.Migrated ?
                       (boothFamilyDetails?.Migrated |
                       titlecase) : '-'}}</div>
+                    <div class="col-sm-2">{{boothFamilyDetails.BoothNickName || '-'}} </div>
                     <div class="col-sm-1"></div>
                   </div>
                   <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
@@ -775,7 +805,7 @@
           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
         </div>
         <pagination-controls id="boothFamiliesListPagination" *ngIf="boothwiseFamiliesList?.length != 0"
-          previousLabel="" nextLabel="" (pageChange)="onClickPagintionBoothFamilies(boothFamiliesPageSize = $event)">
+          previousLabel="" nextLabel="" (pageChange)="onClickPagintionBoothFamilies($event)">
         </pagination-controls>
       </div>
     </div>
@@ -788,25 +818,33 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalVotersListLabel">{{selectedTitle}} Voters List ({{selectedVoterCount}})</h5>
+        <h5 class="modal-title" id="ModalVotersListLabel">{{selectedTitle}} - Voters List ({{selectedVoterCount}})</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="dataNotFound">
         <table class="table table-hover mb-0">
           <thead>
             <tr>
+              <th>Sr. No.</th>
               <th>Voter No.</th>
               <th>Voter Name</th>
               <th>Gender</th>
+              <th>Age</th>
               <th>Contact No</th>
+              <th>Occupation</th>
+              <th>Booth Name</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let voter of votersList | paginate: votersConfig">
+              <td>{{voter?.SrNo}}</td>
               <td>{{voter?.VoterNo}}</td>
               <td>{{voter?.Englishname}}</td>
               <td>{{voter?.Gender}}</td>
+              <td>{{voter?.Age}}</td>
               <td>{{voter?.MobileNo || '-'}}</td>
+              <td>{{voter?.Occupation || '-'}}</td>
+              <td>{{voter?.BoothNickName || '-'}}</td>
             </tr>
           </tbody>
         </table>
@@ -814,7 +852,7 @@
           <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
         </div>
         <pagination-controls id="votersListPagination" *ngIf="votersList?.length != 0" previousLabel="" nextLabel=""
-          (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+          (pageChange)="onClickPagintionVoters($event)">
         </pagination-controls>
       </div>
     </div>
