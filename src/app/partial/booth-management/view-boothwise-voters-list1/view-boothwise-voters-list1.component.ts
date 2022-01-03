@@ -123,7 +123,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     checkedDataflag: boolean = true;
     indexNo: any;
   globalAssemblyId: any;
-   
+
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -719,7 +719,11 @@ clearBoothVotersFilterForm(){
 
       globalFilterShowData(){
         this.boothVoterList();
-
+        // this.boothFamilyList();
+        // this.boothMigratedList();
+        // this.boothPendingList();
+        // this.getCrmTableData();
+        // this.getCrmHistoryTableData();
       }
 
     // ------------------------------------------ Global Main filter End here  ------------------------------------------//
