@@ -113,15 +113,16 @@
                                 <td>
                                     <div class="btn-group">
                                         <!-- (click)="assignAgentToBooth(clientABooths);"  -->
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName"
-                                        (click)="patchAssBoothElection(clientABooths.HeaderId, false);" 
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName" title="Edit"
+                                        (click)="patchAssBoothElection(clientABooths.HeaderId, false);" [ngClass]="{'disabled' : clientABooths?.IsUserblock == 1}"
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" (click)="assignAgentToBooth(clientABooths);" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
+                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" title="Assign Agent"
+                                        (click)="assignAgentToBooth(clientABooths);" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
                                     </button>                                        
-                                        <button type="button" title="Send Link"  [ngClass]="{'disabled' : clientABooths.UserId == null}"
+                                        <button type="button" title="Send Link"  [ngClass]="{'disabled' : clientABooths.UserId == null || clientABooths?.IsUserblock == 1}"
                                         class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
                                         (click)="sendDownloadLink(clientABooths?.MobileNo)">
                                         <i class="fas fa-paper-plane"></i>
@@ -136,14 +137,11 @@
                                        
                                     </div>
                                 </td>
-
-
                             </tr>
-
                             <tr>
                                 <td colspan="6">
                                     <div *ngIf="clientAgentWithBoothArray?.length == 0">
-                                        <div class="alert alert-danger text-center py-2"> Select Constituency to show booth list.</div>
+                                        <div class="alert alert-danger text-center py-2"> No Data Found..!</div>
                                     </div>
                                 </td>
                             </tr>
@@ -662,6 +660,7 @@
                                                 placeholder="Middle Name"
                                                 [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
                                             <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.MName.errors.required">Middle Name is required</div>
                                                 <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space
                                                 </div>
                                                 <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
@@ -685,13 +684,12 @@
                                         <div class="col-sm-12">
                                             <label for="txtContactNo" class="form-label required-field">Contact
                                                 No.</label>
-                                            <input type="text" class="form-control" id="txtContactNo1" maxlength="10"
+                                            <input type="text" class="form-control" [readonly]="mobilefieldDisabled" id="txtContactNo1" maxlength="10" (keypress)=_keyPress($event)
                                                 formControlName="MobileNo" placeholder="Contact No."
                                                 [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
                                             <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
                                                 <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
-                                                <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Mobile
-                                                    Number.
+                                                <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Valid Number
                                                 </div>
                                             </div>
                                         </div>
@@ -704,8 +702,8 @@
 
                                     </div>
                                     <div class="mb-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox"
+                                        <div class="form-check"> 
+                                            <input class="form-check-input" type="checkbox" 
                                                 formControlName="IsMemberAddAllow" value="" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 Allow add area agent
@@ -734,7 +732,7 @@
                                                     <th>Sr. No.</th>
                                                     <th>Agent Name</th>
                                                     <th>Contact No</th>
-                                                    <th></th>
+                                                    <th>Manage Agents</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

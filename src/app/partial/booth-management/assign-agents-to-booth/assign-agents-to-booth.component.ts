@@ -95,6 +95,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   onClickBoothId:any;
   boothAssignAgentMergedArray:any;
   agentwiseAssBoothArray:any;
+  mobilefieldDisabled:boolean = false;
 
   @ViewChild('openAssignAgentToBooths') openAssignAgentToBooths: any;
   @ViewChild('closeAddAgentModal') closeAddAgentModal: any;
@@ -137,6 +138,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   get a() { return this.assAgentToBoothForm.controls };
 
   resetAssignAgentForm() {
+    this.assAgentToBoothForm.controls['boothId'].setValue(''); 
     this.btnText = 'Add Agent';
     this.aAsubmitted = false;
     this.agentToBoothForm();
@@ -849,11 +851,10 @@ export class AssignAgentsToBoothComponent implements OnInit {
       ClientId: [''],
       FullName: [''],
       FName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-      MName: ['',Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      MName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       Address: ['',],
-      // Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)
-      MobileNo: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
       IsMemberAddAllow: [''],
       CreatedBy: ['']
     })
@@ -862,6 +863,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   get f() { return this.assignAgentForm.controls };
 
   clearAggentForm() {
+    this.mobilefieldDisabled = false;
     this.submitted = false;
     this.btnText = 'Add agent';
     this.agentForm();
@@ -1000,6 +1002,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
     }
   }
   editAgent(data:any){
+    this.mobilefieldDisabled = true;
     this.btnText = 'Update Agent';
     this.assignAgentForm.patchValue({
       Id: data.UserId,
@@ -1064,6 +1067,15 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.assemblyId = data.Assembly;
     this.onClickBoothId = data.BoothId; 
     this.editAssignBoothsPatchValue(data, false);
+  }
+
+  _keyPress(event: any) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+        event.preventDefault();
+
+    }
   }
 }
 
