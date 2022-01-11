@@ -147,8 +147,9 @@
                                     </div>
                                     <div class="card-header p-0">
                                         <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
+                                            <!-- this.fillDataId = 0;   ==  remove this-->
                                             <li class="nav-item" role="presentation"
-                                                (click)="votersPaginationNo = 1; this.fillDataId = 0; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
+                                                (click)="votersPaginationNo = 1; this.fillDataId1 = 0; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
                                                 <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-voters" type="button" role="tab"
                                                     aria-controls="pills-voters" aria-selected="false">
@@ -156,6 +157,17 @@
                                                     Voters
                                                 </button>
                                             </li>
+
+                                            <li class="nav-item" role="presentation"
+                                            (click)="votersPaginationNo = 1; this.fillDataId1 = 1; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
+                                            <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-voters" type="button" role="tab"
+                                                aria-controls="pills-voters" aria-selected="false">
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalFilled}}</h5>
+                                                Filled
+                                            </button>
+                                        </li>
+
                                             <li class="nav-item" role="presentation"
                                                 (click)="familyPaginationNo = 1; this.searchFamily.setValue(''); boothFamilyList()">
                                                 <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
@@ -333,8 +345,8 @@
                                                             </td>
                                                             <!-- <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <td>
-                                                                <div *ngIf="boothVoterList?.Gender == 'F'">F</div>
-                                                                <div *ngIf="boothVoterList?.Gender == 'M'">M</div>
+                                                                <div *ngIf="boothVoterList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="boothVoterList?.Gender == 'M'">Male</div>
                                                             </td>
 
                                                             <td>

@@ -103,6 +103,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   showBoothName: any;
   // Main Global Filter Variable Declreation
 
+  fillDataId1 = 0;
+
   // mainGlobalFilterForm!: FormGroup;
 
   constructor(
@@ -392,8 +394,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
   boothVoterList() {
+    // this.fillDataId    === remove this
     let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
-      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo + '&IsFilled=' + this.fillDataId;
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&flag=' + this.voterListFlag + '&Search=' + this.searchVoters.value + '&nopage=' + this.votersPaginationNo + '&IsFilled=' + this.fillDataId1;
 
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Client_BoothVoterList?' + obj, false, false, false, 'electionServiceForWeb');

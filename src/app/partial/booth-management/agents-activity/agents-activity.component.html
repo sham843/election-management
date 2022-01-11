@@ -321,7 +321,13 @@
                                         <tr
                                             *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {id: 'votersPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
                                             <td>{{clientBooth?.SrNo}}</td>
-                                            <td>{{clientBooth?.EnglishName | titlecase}}</td>
+                                            <!-- {{clientBooth?.EnglishName | titlecase}} -->
+                                            <td>
+                                                <p class="mb-0">
+                                                    <a   (click)="redirectToVoterPrfile(clientBooth)"
+                                                    class="text-main">{{clientBooth?.EnglishName | titlecase}}</a>
+                                                </p>
+                                            </td>
                                             <td>{{clientBooth?.SurveyDate | dateTransform}}</td>
                                             <td>{{clientBooth?.VoterNo}}</td>
                                             <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>

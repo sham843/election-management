@@ -983,6 +983,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.deafultVoterProfilefilterForm();
   }
 
+  
+ redirectToVoterPrfile(obj: any) {
+  window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.VoterId);
+}
+
+
+
 
 }
 
