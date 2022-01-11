@@ -329,7 +329,7 @@
                                                         <tr
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <!-- <td>{{boothVoterList?.SrNo}}</td> -->
-                                                            <td>{{boothVoterList?.VoterId}}</td>
+                                                            <td>{{boothVoterList?.VoterNo}}</td>
                                                             <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
                                                             <!-- <td> <a (click)="redirectToVoterPrfile(boothVoterList)"  href="voters-profile/{{encryptData}}" target="_blank">{{boothVoterList?.EnglishName}}</a></td> -->
 
