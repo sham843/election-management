@@ -106,7 +106,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   fillDataId1 = 0;
 
   BoothAnalyticsObj = {ClientId: 0,ElectionId: 0,ConstituencyId: 0,
-     VillageId:0,BoothId:0,flag:'false'}
+     VillageId:0,BoothId:0,flag:0}
 
   // mainGlobalFilterForm!: FormGroup;
 
@@ -123,12 +123,20 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     public dateTimeAdapter: DateTimeAdapter<any>,
   ) {
     dateTimeAdapter.setLocale('en-IN');
-    let getlocalStorageData: any = localStorage.getItem('BoothAnalyticsData');
-    let ParcedLocalStorageData = JSON.parse(getlocalStorageData);
-    if(ParcedLocalStorageData?.flag == 'checkFlag'){
-      this.BoothAnalyticsObj = ParcedLocalStorageData;
+
+    // let getlocalStorageData: any = localStorage.getItem('BoothAnalyticsData');
+    // let ParcedLocalStorageData = JSON.parse(getlocalStorageData);
+    // if(ParcedLocalStorageData?.flag == 1){
+    //   this.BoothAnalyticsObj = ParcedLocalStorageData;
+    // }
+
+    let getUrlData: any = this.route.snapshot.params.id;
+    if (getUrlData) {
+      getUrlData = getUrlData.split('.');
+      this.BoothAnalyticsObj = { 'ClientId': +getUrlData[0], 'ElectionId': +getUrlData[1], 'ConstituencyId': +getUrlData[2] 
+                                 ,'VillageId': +getUrlData[3] , 'BoothId': +getUrlData[4], 'flag': +getUrlData[5]}
     }
-    
+
   }
 
   ngOnInit(): void {
@@ -187,7 +195,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.spinner.hide();
         this.electionNameArray = res.data1;
         this.electionNameArray.length == 1 ? (this.filterForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId }), this.IsSubElectionApplicable = this.electionNameArray[0].IsSubElectionApplicable, this.getConstituencyName(), this.electionFlag = false) : '';
-        if(this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 'checkFlag'){
+        if(this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 1){
           this.getConstituencyName();
         }
       } else {
@@ -262,7 +270,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        if(this.BoothAnalyticsObj.flag == 'checkFlag'){
+        if(this.BoothAnalyticsObj.flag == 1){
           this.selBoothList(this.BoothAnalyticsObj.BoothId);
         }
         this.dataNotFound = true;
@@ -981,13 +989,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   // ..................................   redirected Booth Analytics Code Start Here  ...........................//
 
   boothAnalyticsRedData(){
-    if(this.BoothAnalyticsObj.flag == 'checkFlag'){
+    if(this.BoothAnalyticsObj.flag == 1){
       this.getElectionName();
     }
-  }
-  
-  ngOnDestroy() {
-    localStorage.removeItem('BoothAnalyticsData');
   }
 
    // ..................................   redirected Booth Analytics Code End Here  ...........................//

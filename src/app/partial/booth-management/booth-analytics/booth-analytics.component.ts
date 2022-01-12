@@ -1092,9 +1092,11 @@ export class BoothAnalyticsComponent implements OnInit {
     if(formData.VillageId != 0 && formData.BoothId != 0){
 
       let obj = {ClientId:formData.ClientId,ElectionId:formData.ElectionId,ConstituencyId:formData.ConstituencyId,
-        VillageId:formData.VillageId,BoothId:formData.BoothId,IsSubEleAppli:this.IsSubElectionApplicable,flag:'checkFlag'}
-      localStorage.setItem('BoothAnalyticsData', JSON.stringify(obj));
-      this.router.navigate(['../view-boothwise-voters-list'], { relativeTo: this.route });
+        VillageId:formData.VillageId,BoothId:formData.BoothId,flag:1}
+      // localStorage.setItem('BoothAnalyticsData', JSON.stringify(obj));
+      // this.router.navigate(['../view-boothwise-voters-list'], { relativeTo: this.route });
+      window.open('../view-boothwise-voters-list/' + obj.ClientId  + '.' + obj.ElectionId + '.' + obj.ConstituencyId
+      + '.' + obj.VillageId + '.' + obj.BoothId + '.' + obj.flag);
     } else {
       if(formData.VillageId != 0){
         this.toastrService.error("Please Select Booth.....");
