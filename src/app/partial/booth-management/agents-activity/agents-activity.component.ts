@@ -763,12 +763,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   familyDetails(ParentVoterId: any) {
     let formData = this.filterForm.value;
     this.nullishTopFilterForm();
-    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
+    let search = '';
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + search + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        this.spinner.hide();;
+        this.spinner.hide();
         this.boothFamilyDetailsArray = res.data1;
       } else {
         this.boothFamilyDetailsArray = [];
