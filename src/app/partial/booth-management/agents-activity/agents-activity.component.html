@@ -384,7 +384,12 @@
                                         <div class="row g-1">
                                             <div class="col-sm-1">{{familiyList.SrNo}}
                                             </div>
-                                            <div class="col-sm-3">{{familiyList.Family | titlecase}}
+                                            <div class="col-sm-3">
+                                                <!-- {{familiyList.Family | titlecase}} -->
+                                                <p class="mb-0">
+                                                    <a   (click)="redirectToVoterPrfileFamilyData(familiyList)"
+                                                    class="text-main">{{familiyList?.Family | titlecase}}</a>
+                                                </p>
                                             </div>
                                             <div class="col-sm-2">
                                                 <div *ngIf="familiyList?.MobileNo1"><a class="calltomember"

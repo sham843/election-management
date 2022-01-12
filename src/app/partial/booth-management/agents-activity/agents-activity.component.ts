@@ -988,6 +988,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.VoterId);
 }
 
+redirectToVoterPrfileFamilyData(obj: any) {
+  window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.ParentVoterId);
+}
+
 
 
 
