@@ -1012,6 +1012,7 @@ export class BoothAnalyticsComponent implements OnInit {
       }
     })
   }
+
   boothFamilyDetailsArray:any
   familyDetails(ParentVoterId: any, AgentId: any) {
     let obj = 'ParentVoterId=' + ParentVoterId + '&AgentId=' + AgentId + '&ClientId=' + this.filterForm.value.ClientId + '&Search=';
@@ -1069,6 +1070,40 @@ export class BoothAnalyticsComponent implements OnInit {
   filterData() {
     this.paginationNo = 1;
     // this.getClientAgentWithBooths();
+  }
+
+      //................................... nullish FilterForm .....................................//
+
+  nullishFilterForm() {
+    let fromData = this.filterForm.value;
+    fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0);
+    fromData.ElectionId ?? this.filterForm.controls['ElectionId'].setValue(0);
+    fromData.ConstituencyId ?? this.filterForm.controls['ConstituencyId'].setValue(0);
+    fromData.VillageId ?? this.filterForm.controls['VillageId'].setValue(0);
+    fromData.BoothId ?? this.filterForm.controls['BoothId'].setValue(0);
+    fromData.Search ?? this.filterForm.controls['Search'].setValue('');
+  }
+
+  // ........................  Redirect To redToViewBoothWise Voter-List Page ...............................//
+
+  redToViewBoothWiseVoterListPage(){
+    this.nullishFilterForm();
+    let formData = this.filterForm.value;
+    if(formData.VillageId != 0 && formData.BoothId != 0){
+
+      let obj = {ClientId:formData.ClientId,ElectionId:formData.ElectionId,ConstituencyId:formData.ConstituencyId,
+        VillageId:formData.VillageId,BoothId:formData.BoothId,IsSubEleAppli:this.IsSubElectionApplicable,flag:'checkFlag'}
+      localStorage.setItem('BoothAnalyticsData', JSON.stringify(obj));
+      this.router.navigate(['../view-boothwise-voters-list'], { relativeTo: this.route });
+    } else {
+      if(formData.VillageId != 0){
+        this.toastrService.error("Please Select Booth.....");
+      }else if(formData.BoothId != 0){
+        this.toastrService.error("Please Select Village.....");
+      } else{
+        this.toastrService.error("Please Select Village & Booth.....");
+      }
+    }
   }
 
 }

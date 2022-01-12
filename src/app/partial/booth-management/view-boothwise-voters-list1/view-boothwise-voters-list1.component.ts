@@ -124,6 +124,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     indexNo: any;
   globalAssemblyId: any;
 
+  BoothAnalyticsObj = {ClientId: 0,ElectionId: 0,ConstituencyId: 0,
+    VillageId:0,BoothId:0,flag:'false'}
+
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -136,7 +139,12 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     public dialog: MatDialog,
     private datePipe: DatePipe,
     public dateTimeAdapter: DateTimeAdapter<any>,
-  ) { dateTimeAdapter.setLocale('en-IN'); }
+  ) { dateTimeAdapter.setLocale('en-IN');
+  let getlocalStorageData: any = localStorage.getItem('BoothAnalyticsData');
+  let ParcedLocalStorageData = JSON.parse(getlocalStorageData);
+  if(ParcedLocalStorageData?.flag == 'checkFlag'){
+    this.BoothAnalyticsObj = ParcedLocalStorageData;
+  } }
 
   ngOnInit(): void {
     this.defaultFilterForm();
@@ -154,16 +162,17 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
 
     this.globalFilterDataForm();
+    this.boothAnalyticsRedData();
 
   }
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      ClientId: [0],
-      ElectionId: [0],
-      ConstituencyId: [0],
-      village: [0],
-      getBoothId: [0],
+      ClientId: [this.BoothAnalyticsObj.ClientId || 0],
+      ElectionId: [this.BoothAnalyticsObj.ElectionId || 0],
+      ConstituencyId: [this.BoothAnalyticsObj.ConstituencyId || 0],
+      village: [this.BoothAnalyticsObj.VillageId || 0],
+      getBoothId: [this.BoothAnalyticsObj.BoothId || 0],
       Search: ['']
     })
   }
@@ -197,6 +206,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.electionNameArray = res.data1;
         this.electionNameArray.length == 1 ? (this.filterForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId }), this.IsSubElectionApplicable = this.electionNameArray[0].IsSubElectionApplicable, this.getConstituencyName(), this.electionFlag = false) : '';
+        if(this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 'checkFlag'){
+          this.getConstituencyName();
+        }
       } else {
         this.spinner.hide();
         this.electionNameArray = [];
@@ -269,6 +281,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
+        if(this.BoothAnalyticsObj.flag == 'checkFlag'){
+          this.selBoothList(this.BoothAnalyticsObj.BoothId);
+        }
         res.data1[0].AssemblyId ? this.globalAssemblyId = res.data1[0].AssemblyId : '';
         this.boothDataHide=true
         this.dataNotFound = true;
@@ -290,7 +305,14 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   clearTopFilter(flag: any) {
     if (flag == 'clientId') {
-      this.defaultFilterForm()
+      // this.defaultFilterForm();
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: 0,
+        ConstituencyId: 0,
+        village: 0,
+        getBoothId: 0
+      })
     } else if (flag == 'electionId') {
       this.filterForm.patchValue({ ClientId: this.filterForm.value.ClientId, 
         ElectionId: 0,
@@ -1379,5 +1401,19 @@ clearBoothVotersFilterForm(){
       // console.log(`Dialog result: ${result}`);
     });
   }
+
+    // ..................................   redirected Booth Analytics Code Start Here  ...........................//
+
+    boothAnalyticsRedData(){
+      if(this.BoothAnalyticsObj.flag == 'checkFlag'){
+        this.getElectionName();
+      }
+    }
+    
+    ngOnDestroy() {
+      localStorage.removeItem('BoothAnalyticsData');
+    }
+  
+     // ..................................   redirected Booth Analytics Code End Here  ...........................//
 
  }
