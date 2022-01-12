@@ -397,11 +397,11 @@
                                                 </div>
                                                 <div *ngIf="!familiyList?.MobileNo1">-</div>
                                             </div>
-                                            <div class="col-sm-2">{{familiyList.Occupation | titlecase}}
+                                            <div class="col-sm-2">{{familiyList.Occupation ? familiyList.Occupation : '-'}}
                                             </div>
-                                            <div class="col-sm-2">{{familiyList.Qualification | titlecase}}
+                                            <div class="col-sm-2">{{familiyList.Qualification ? familiyList.Qualification : '-'}}
                                             </div> 
-                                            <div class="col-sm-1">{{familiyList.Migrated | titlecase}}
+                                            <div class="col-sm-1">{{familiyList.Migrated ? familiyList.Migrated : '-'}}
                                             </div>
                                             <div class="col-sm-1">
                                                 <a class="accordion-button collapsed" data-bs-toggle="collapse"
@@ -430,12 +430,12 @@
                                                     <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
                                                 </div>
                                                 <div class="col-sm-2">
-                                                    {{boothFamilyDetails?.Occupation | titlecase}}</div>
+                                                    {{boothFamilyDetails?.Occupation ? boothFamilyDetails?.Occupation : '-'}}</div>
                                                 <div class="col-sm-2">
-                                                    {{boothFamilyDetails?.Qualification | titlecase}}
+                                                    {{boothFamilyDetails?.Qualification ? boothFamilyDetails?.Qualification : '-'}}
                                                 </div>
                                                 <div class="col-sm-1">
-                                                    {{boothFamilyDetails?.Migrated | titlecase}}</div>
+                                                    {{boothFamilyDetails?.Migrated ? boothFamilyDetails?.Migrated : '-'}}</div>
                                                 <div class="col-sm-1"></div>
                                             </div>
                                             <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
