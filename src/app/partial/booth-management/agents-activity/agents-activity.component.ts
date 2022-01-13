@@ -422,7 +422,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     pieSeries.dataFields.value = "categoryCount";
     pieSeries.dataFields.category = "Category";
 
-
     // Let's cut a hole in our Pie chart the size of 30% the radius
     // chart.innerRadius = am4core.percent(30);
 
@@ -471,9 +470,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   blockUser(userId: any, blogStatus: any) {
     let checkBlogStatus: any;
+    let boothClientId = this.filterForm.value.ClientId || this.agentInfo.ClientId ;
     blogStatus == 0 ? checkBlogStatus = 1 : checkBlogStatus = 0;
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId=' + userId + '&ClientId=' + this.agentInfo.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId() + '&IsBlock=' + checkBlogStatus, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId=' + userId + '&ClientId=' + boothClientId + '&CreatedBy=' + this.commonService.loggedInUserId() + '&IsBlock=' + checkBlogStatus, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
