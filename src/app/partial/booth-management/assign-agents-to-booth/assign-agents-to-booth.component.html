@@ -660,7 +660,7 @@
                                                 placeholder="Middle Name"
                                                 [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
                                             <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
-                                                <div *ngIf="f.MName.errors.required">Middle Name is required</div>
+                                                <!-- <div *ngIf="f.MName.errors.required">Middle Name is required</div> -->
                                                 <div *ngIf="f.MName.errors.pattern">Middle Name can not contain space
                                                 </div>
                                                 <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>

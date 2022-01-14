@@ -851,7 +851,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
       ClientId: [''],
       FullName: [''],
       FName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-      MName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      MName: ['',Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       Address: ['',],
       MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
