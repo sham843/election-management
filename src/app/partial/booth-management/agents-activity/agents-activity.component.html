@@ -273,8 +273,8 @@
                                     New Voters
                                 </button>
                             </li>
-                            <!-- *ngIf="agentCAllLogFlag" -->
-                            <li class="nav-item" role="presentation" >
+
+                            <li class="nav-item" role="presentation" *ngIf="agentCAllLogFlag">
                                 <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-calllog" type="button" role="tab"
                                     aria-controls="pills-calllog" aria-selected="false" (click)="callLoggerPaginationNo = 1; isAlertData = 0; isAlertChecked.setValue(false); this.searchAgentCallLogger.setValue(''); agentCallLogger()">
