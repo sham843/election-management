@@ -13,13 +13,14 @@
                 <div class="card-header">
                     <div class="row justify-content-end">
                         <div class="col-sm-3">
-                            <select class="form-select">
-                                <option value="">Select Client</option>
-                            </select>
-                        </div>   
+                           <ngx-select [items]="allAgentListArray" [allowClear]="true"
+                                    [formControl]="selectAgentData"  optionValueField="AgentId" optionTextField="FullName"
+                                    placeholder="Select Agent">
+                           </ngx-select>  
                     </div>
                 </div>
                 <div class="card-body">
+                    <!-- <form [formGroup]="agentSettingForm"> -->
                     <table class="table">
                         <thead>
                             <tr>
@@ -31,23 +32,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
+                            <tr *ngFor="let agentSetting of agentSettingArray">
+                                <td>{{agentSetting.SrNo}}</td>
                                 <td>
-                                    <a routerLink="">Vijay Kore</a>
+                                    <a routerLink="">{{agentSetting.FullName}}</a>
                                 </td>
                                 <td>
-                                    +91-9876543210
+                                    {{agentSetting.MobileNo}}
                                 </td>
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
-                                       
+                                        <input class="form-check-input" type="checkbox" (change)="onCheckisAlertData($event,agentSetting)" [checked]="agentSetting.IsCalllogTrack == 1" value="" id="flexCheckDefault1">
                                       </div>
                                 </td>
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                                        <input class="form-check-input" type="checkbox" (change)="onCheckisAlertData1($event,agentSetting)" [checked]="agentSetting.IsLacationTrack == 1" value="" id="flexCheckDefault2">
                                         
                                       </div>
                                 </td>
@@ -55,8 +55,10 @@
                         </tbody>
 
                     </table>
+                <!-- </form> -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+<button class="btn-primary" (click)="onSubmitData()">Save</button>
