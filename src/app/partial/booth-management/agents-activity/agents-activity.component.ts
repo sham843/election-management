@@ -92,6 +92,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   defaultAgentActivityDivHide: boolean = false;
   agentCAllLogFlag:boolean = true;
 
+  isAlertData = 0;
+  isAlertChecked = new FormControl(false);
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
     let ReceiveDataSnapshot: any = this.route.snapshot.params.id;
@@ -850,7 +853,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let formData = this.filterForm.value;
     this.nullishTopFilterForm();
-    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchAgentCallLogger.value + '&nopage=' + this.callLoggerPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchAgentCallLogger.value + '&nopage=' + this.callLoggerPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo 
+    + '&ToDate=' + this.voterProfilefilterForm.value.ToDate + '&IsAlert=' + this.isAlertData;   
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_CallLogger?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -993,7 +997,10 @@ redirectToVoterPrfileFamilyData(obj: any) {
   window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.ParentVoterId);
 }
 
-
+onCheckisAlertData(event: any){
+  event.target.checked == true ? this.isAlertData = 1 : this.isAlertData = 0 ; this.callLoggerPaginationNo = 1 ;
+  this.agentCallLogger();
+}
 
 
 }

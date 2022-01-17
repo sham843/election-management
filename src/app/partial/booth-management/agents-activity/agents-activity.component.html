@@ -273,10 +273,11 @@
                                     New Voters
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation" *ngIf="agentCAllLogFlag">
+                            <!-- *ngIf="agentCAllLogFlag" -->
+                            <li class="nav-item" role="presentation" >
                                 <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-calllog" type="button" role="tab"
-                                    aria-controls="pills-calllog" aria-selected="false"    (click)="callLoggerPaginationNo = 1; this.searchAgentCallLogger.setValue(''); agentCallLogger()">
+                                    aria-controls="pills-calllog" aria-selected="false" (click)="callLoggerPaginationNo = 1; isAlertData = 0; isAlertChecked.setValue(false); this.searchAgentCallLogger.setValue(''); agentCallLogger()">
                                     <h5 class="mb-0">{{this.votersCardData?.TotalCallLogs}}</h5>
                                     Agents Call Log
                                 </button>
@@ -517,7 +518,13 @@
                         <div class="tab-pane fade show" id="pills-calllog" role="tabpanel"
                             aria-labelledby="pills-calllog">
                             <!-- agent call log filter start here   -->
+                           
                             <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-3">
+                                    <input class="form-check-input me-1" [formControl]="isAlertChecked" (change)="onCheckisAlertData($event)" type="checkbox">
+                                    <label class="form-check-label" for="flexCheckDefault"><small>Restrict Mobile no
+                                    </small></label>
+                                </div>
                                 <div class="col-sm-4">
                                     <div class="form-container">
                                         <div class="input-group">
