@@ -20,7 +20,7 @@ export class AgentSettingComponent implements OnInit {
   agentSettingArray: any;
   allAgentList: any;
   allAgentListArray: any;
-  IsCalllogTrackData: any
+  IsCalllogTrackData: any;
   IsLacationTrackData: any;
   StrSettingArray: any[] = [];
   userId: any;
@@ -36,9 +36,7 @@ export class AgentSettingComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getAllAgentList();
