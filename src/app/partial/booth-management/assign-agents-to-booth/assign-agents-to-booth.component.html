@@ -50,7 +50,7 @@
                             (remove)="clearFilter('BoothId');filterClientHaveSubEleOrNonSubEle()"
                             formControlName="BoothId" optionValueField="BoothId" optionTextField="BoothNickName"
                             (select)="filterClientHaveSubEleOrNonSubEle()"
-                            [disabled]="filterAssembleListArray?.AssemblyId == 0 || !this.filterForm.value.AssemblyId || filterAssembleListArray.length == 0"
+                            [disabled]="filterAssembleListArray?.AssemblyId == 0 || !this.filterForm.value.AssemblyId || filterAssembleListArray?.length == 0"
                             placeholder="Select Booth">
                         </ngx-select>
                     </div>

@@ -498,7 +498,6 @@ export class AssignAgentsToBoothComponent implements OnInit, AfterViewInit {
 
       // console.log(this.agentwiseAssigBoothArray.splice(this.agentwiseAssigBoothArray.findIndex((a:any) => a.BoothId !== this.AssemblyBoothArray.BoothId) , 1))
       let id;
-      debugger;
       formData.Id == "" || formData.Id == null || formData.Id == undefined ? id = 0 : id = formData.Id;
       // this.agentwiseAssigBoothArray.lenght != 0 ? id = this.globalHeaderId : '';
       //  return
@@ -943,7 +942,6 @@ export class AssignAgentsToBoothComponent implements OnInit, AfterViewInit {
   }
 
   checkBoxCehckBoothArray(ConstituencyId: any) {
-    debugger
     for (let i = 0; i < ConstituencyId.length; i++) {
       for (let j = 0; j < this.boothListArray.length; j++) {
         if (this.boothListArray[j].BoothId == ConstituencyId[i].BoothId) {
