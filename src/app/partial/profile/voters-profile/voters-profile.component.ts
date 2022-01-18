@@ -62,6 +62,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
+    console.log(this.voterListData.VoterId)
   }
 
   agentFilledData(data:any){
@@ -198,6 +199,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   familyMemberData(FMobjData:any){
     if(FMobjData.VoterId != this.voterListData.VoterId){
       this.HighlightRow = FMobjData.SrNo;
+      
       this.MigInfoHide = true;
       this.getVPMemberDetailsData(FMobjData);
       this.ScrollToFamilyMemberData();
