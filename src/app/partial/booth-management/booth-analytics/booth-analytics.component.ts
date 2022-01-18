@@ -95,6 +95,8 @@ export class BoothAnalyticsComponent implements OnInit {
   ProfessionId: any = 0
   CityName: any
   boothMigratedList: any
+
+  HideVoterListLink : boolean = false;
   // reverseOrder: boolean = true;
   //sortField = 'LeaderImportance';
   //order: string = 'info.name';
@@ -1089,23 +1091,30 @@ export class BoothAnalyticsComponent implements OnInit {
   redToViewBoothWiseVoterListPage(){
     this.nullishFilterForm();
     let formData = this.filterForm.value;
-    if(formData.VillageId != 0 && formData.BoothId != 0){
+    // if(formData.VillageId != 0 && formData.BoothId != 0){
 
       let obj = {ClientId:formData.ClientId,ElectionId:formData.ElectionId,ConstituencyId:formData.ConstituencyId,
         VillageId:formData.VillageId,BoothId:formData.BoothId,flag:1}
-      // localStorage.setItem('BoothAnalyticsData', JSON.stringify(obj));
-      // this.router.navigate(['../view-boothwise-voters-list'], { relativeTo: this.route });
       window.open('../view-boothwise-voters-list/' + obj.ClientId  + '.' + obj.ElectionId + '.' + obj.ConstituencyId
       + '.' + obj.VillageId + '.' + obj.BoothId + '.' + obj.flag);
-    } else {
-      if(formData.VillageId != 0){
-        this.toastrService.error("Please Select Booth.....");
-      }else if(formData.BoothId != 0){
-        this.toastrService.error("Please Select Village.....");
-      } else{
-        this.toastrService.error("Please Select Village & Booth.....");
-      }
-    }
+    // } 
+    // else {
+    //   if(formData.VillageId != 0){
+    //     this.toastrService.error("Please Select Booth.....");
+    //   }else if(formData.BoothId != 0){
+    //     this.toastrService.error("Please Select Village.....");
+    //   } else{
+    //     this.toastrService.error("Please Select Village & Booth.....");
+    //   }
+    // }
   }
 
+  VoterListLinkShowHide(){
+  if( this.filterForm.value.VillageId !=0 && this.filterForm.value.BoothId !=0 && this.areaWiseVotersList?.length != 0){
+    this.HideVoterListLink = true;
+  }
+  else{
+    this.HideVoterListLink = false;
+  }
+}
 }

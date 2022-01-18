@@ -10,8 +10,8 @@
         <div class="row g-2 justify-content-end">
           <div class="col-sm-3">
             <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
-              (remove)="clearFilter('clientId')"
-              (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName()"
+              (remove)="clearFilter('clientId');HideVoterListLink = false;"
+              (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false;"
               [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
               placeholder="Select Client">
             </ngx-select>
@@ -33,15 +33,15 @@
           </div>
           <div class="col-sm-2">
             <ngx-select [allowClear]="villageFlag" [items]="villageNameArray"
-              (remove)="clearFilter('VillageId'); ClientWiseBoothList();" formControlName="VillageId"
-              (select)="clearFilter('BoothId'); ClientWiseBoothList(); boothDataHide=false" optionValueField="VillageId"
+              (remove)="clearFilter('VillageId'); ClientWiseBoothList(); HideVoterListLink = false;" formControlName="VillageId"
+              (select)="clearFilter('BoothId'); ClientWiseBoothList(); boothDataHide=false;VoterListLinkShowHide()" optionValueField="VillageId"
               optionTextField="VillageName" [disabled]="!this.filterForm.value.ConstituencyId"
               placeholder="Select Village">
             </ngx-select>
           </div>
           <div class="col-sm-2">
-            <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="bindData();"
-              formControlName="BoothId" (select)="bindData(); boothDataHide=false" optionValueField="BoothId"
+            <ngx-select [allowClear]="boothFlag" [items]="clientWiseBoothListArray" (remove)="bindData(); HideVoterListLink = false;"
+              formControlName="BoothId" (select)="bindData(); boothDataHide=false;VoterListLinkShowHide()" optionValueField="BoothId"
               optionTextField="BoothNickName" [disabled]="!this.filterForm.value.ConstituencyId"
               placeholder="Select Booth">
             </ngx-select>
@@ -397,7 +397,7 @@
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
                         Area Wise Voters
-                        <a class="btn btn-link float-end" (click)="redToViewBoothWiseVoterListPage()"><u>Voter List</u></a>
+                        <a class="btn btn-link float-end" *ngIf="HideVoterListLink" (click)="redToViewBoothWiseVoterListPage()"><u>Voter List</u></a>
                       </div>
                       <div class="card-body">
                         <table class="table table-hover mb-0">
