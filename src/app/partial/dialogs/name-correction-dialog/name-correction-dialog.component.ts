@@ -44,9 +44,9 @@ export class NameCorrectionDialogComponent implements OnInit {
       ModifiedBy: ['' || this.commonService.loggedInUserId()],
       IsNameChange: [1 || this.data.NameChanged],
       
-      NewFirstName: ['' || this.data.ChangeFirstName],
-      NewMiddleName: ['' || this.data.ChangeMiddleName],
-      NewLastName: ['' || this.data.ChangeLastName],
+      NewFirstName: ['' || this.data.ChangeFirstName,[Validators.required ,Validators.pattern(/^\S*$/)]],
+      NewMiddleName: ['' || this.data.ChangeMiddleName,[Validators.required ,Validators.pattern(/^\S*$/)]],
+      NewLastName: ['' || this.data.ChangeLastName,[Validators.required ,Validators.pattern(/^\S*$/)]],
       NewEnglishName: ['' || this.data.NewEnglishName],
 
       OldFirstName:['' || this.data.FirstName],
@@ -57,7 +57,7 @@ export class NameCorrectionDialogComponent implements OnInit {
       ConstituencyId: ['' || this.data.AssemblyId],
 
       NewEFirstName: ['' || this.data.EFirst,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
-      NewEMiddleName: ['' || this.data.EMiddle,Validators.compose([Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
+      NewEMiddleName: ['' || this.data.EMiddle,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       NewELastName: ['' || this.data.ELast,Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       NewMarathiName: ['' || this.data.NewMarathiName],
     })

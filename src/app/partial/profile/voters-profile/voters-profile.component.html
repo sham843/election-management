@@ -24,7 +24,7 @@
                     <div class="btn-group voter-repeat" role="group">
                         <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index" (click)="agentFilledData(VPBoothAgent)">
                             <input type="radio" class="btn-check" name="btnradio" autocomplete="off"
-                               [checked]="VPBoothAgent.AgentId == checkedActiveClass">
+                               [checked]="VPBoothAgent.AgentId ==  (GlobalAgentId ||  checkedActiveClass)">
                             <label class="btn btn-outline-secondary text-start" for="btnradio{{i}}">
                                 <small>{{VPBoothAgent.SurveyDate}}</small>
                                 <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="d-flex">
                             <div class="flex-shrink-0">
-                                <img *ngIf="voterProfileData?.VoterPhoto" src="{{voterProfileData?.VoterPhoto}}">
+                                <img *ngIf="voterProfileData?.VoterPhoto" (click)="showProfileLightbox(voterProfileData?.VoterPhoto) ; lightbox.open(0, 'lightbox')" src="{{voterProfileData?.VoterPhoto}}">
                                 <img *ngIf="!voterProfileData?.VoterPhoto" src="assets/images/Profile-Photo.jpg">
                             </div>
                             <div class="flex-grow-1 ms-2 pt-2">
@@ -82,13 +82,17 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 1 :</span>
-                            <span class="voter-data"><i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
+                            <span class="voter-data">
+                                <a *ngIf="voterProfileData?.WatsApp1" target="_blank" href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo1}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
+                                    <i class="fab fa-whatsapp me-1 text-primary"></i></a>
                                 {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Mobile 2 :</span>
-                            <span class="voter-data"><i *ngIf="voterProfileData?.WatsApp2" class="fab fa-whatsapp me-1 text-primary"></i>
+                            <span class="voter-data">
+                                <a *ngIf="voterProfileData?.WatsApp2" target="_blank" href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo2}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
+                                    <i class="fab fa-whatsapp me-1 text-primary"></i></a>
                                 {{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 :
                                 '-'}}</span>
                         </li>
@@ -102,13 +106,28 @@
                                 : '-'}}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Blood Group :</span>
+                            <span class="voter-data">{{voterProfileData?.Bloodgroup ? voterProfileData?.Bloodgroup :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Need Support :</span>
+                            <span class="voter-data">{{voterProfileData?.NeedSupportText ? voterProfileData?.NeedSupportText :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">House No. :</span>
                             <span class="voter-data">{{voterProfileData?.HouseNo ? voterProfileData?.HouseNo :
                                 '-'}}</span>
                         </li>
-                        <li class="list-group-item">
-                            <div class="voter-label">Area :</div>
-                            <div class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</div>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Area :</span>
+                            <span class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Postal Voting  :</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
+                                VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
                         </li>
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
@@ -119,11 +138,6 @@
                             <div class="voter-label">Migrated Address :</div>
                             <div class="voter-data"> {{voterProfileData?.MigratedArea ? voterProfileData?.MigratedArea : '-'}}
                             </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="voter-label">Blood Group :</span>
-                            <span class="voter-data">{{voterProfileData?.Bloodgroup ? voterProfileData?.Bloodgroup :
-                                '-'}}</span>
                         </li>
                     </ul>
                 </div>
@@ -166,7 +180,7 @@
                         <div class="col-sm-6" *ngIf="voterProfileData?.Head">
                             <span class="voter-data">
                                 <i class="fas fa-house-user fa-1x"></i>
-                                {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members)</span>
+                                Head : {{voterProfileData?.Head == 'no' ? 'No' : 'Yes'}}, Family ({{voterProfileData?.Familysize}} Members)</span>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -202,12 +216,12 @@
                         </div>
                     </div>
 
-                    <div class="card-header p-0">
+                    <div class="card-header p-0" *ngIf="voterProfileData?.partyname || voterProfileData?.Leader == 'yes' ">
                         Political Information
                     </div>
-                    <div class="card-body p-0 mb-2" *ngIf="voterProfileData?.partyname">
+                    <div class="card-body p-0 mb-2">
                         <div class="voter-data">
-                            {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
+                          <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span>  <span *ngIf="voterProfileData?.Leader == 'yes'">Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star text-warning"></i>)</span>
                         </div>
                     </div>
 
@@ -219,13 +233,13 @@
                             <div class="alert alert-success p-2 mb-2">
                                 <label class="form-label">Party/Person Favouring :</label>
                                 <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                    <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.Support}}</span>
+                                    <span *ngIf="posNegInf?.supportToid == 1">{{posNegInf?.Support}}</span>
                                 </div>
                             </div>
                             <div class="alert alert-danger p-2 mb-0">
                                 <label class="form-label">Party/Person Opposing :</label>
                                 <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                    <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.Support}}</span>
+                                    <span *ngIf="posNegInf?.supportToid == 4">{{posNegInf?.Support}}</span>
                                 </div>
                             </div>
                         </div>
@@ -246,11 +260,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- [class.active]="(voterProfileFamily.SrNo == HighlightRow) ?  (voterProfileFamily.SrNo == HighlightRow) : ((voterProfileFamily.VoterId == voterListData.VoterId) && (voterProfileFamily.FamilyHead == 0))" -->
                                     <tr *ngFor="let voterProfileFamily of voterProfileFamilyData"
                                         [class.active]="voterProfileFamily.SrNo == HighlightRow"
                                         (click)="familyMemberData(voterProfileFamily)">
                                         <td>{{voterProfileFamily.VoterNo}}</td>
-                                        <td>{{voterProfileFamily.Family}}</td>
+                                        <td>
+                                            <p class="mb-0">{{voterProfileFamily.Family}}</p>
+                                           <span class="badge small bg-danger mb-2 fw-normal"><p class="mb-0" *ngIf="voterProfileFamily.IsExpired == 1">Expired</p></span> 
+                                        </td>
                                         <td>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</td>
                                         <td>{{voterProfileFamily.Occupation ? voterProfileFamily.Occupation : '-'}}</td>
                                         <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification :
@@ -298,11 +316,12 @@
             </div>
         </div>
         <div class="col-sm-3">
-
-
             <div class="card mb-3" *ngIf="MigInfoHide">
-                <div class="card-header">
-                    <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.MarathiName}}</h6>
+                <div class="card-header d-flex justify-content-between">
+                   <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.MarathiName}}</h6>
+                    <span class="badge small bg-danger mb-2 fw-normal text-end"
+                       *ngIf="VPMemberDetailsData?.IsExpired == 1">Expired
+                    </span>
                 </div>
                 <div class="voter-family-photo text-center mb-2">
                     <img *ngIf="VPMemberDetailsData?.VoterPhoto" src="{{VPMemberDetailsData?.VoterPhoto}}">
@@ -349,9 +368,9 @@
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="voter-label">Need Support :</span>
-                                <span class="voter-data">{{VPMemberDetailsData?.NeedSupportFlag == 0 ? 'No' :
-                                    VPMemberDetailsData?.NeedSupportFlag == 1 ? 'Yes' : '-'}}</span>
+                                <span class="voter-label">Party Support :</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.partyname ?
+                                    VPMemberDetailsData?.partyname : '-'}}</span>
                             </div>
                         </li>
                     </ul>
@@ -365,10 +384,18 @@
                 </label>
                 <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'">
                     <div *ngFor="let votersonmap of VPVotersonmapData">
-                        <agm-marker [latitude]="votersonmap?.Latitude" [longitude]="votersonmap?.Longitude">
-                            <!-- <agm-info-window>
-                                <strong>{{votersonmap.VoterId}}</strong>
-                            </agm-info-window> -->
+                        <agm-marker [latitude]="votersonmap?.Latitude" (markerClick)="markerClicked($event)" [longitude]="votersonmap?.Longitude"
+                         >
+                            <agm-info-window>
+                                <strong>{{votersonmap.EnglishName}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+
+                        <agm-marker [latitude]="votersonmap?.MigratedLatitude" (markerClick)="markerClicked($event)" [longitude]="votersonmap?.MigratedLongitude"
+                         >
+                            <agm-info-window>
+                                <strong>{{votersonmap.EnglishName}}</strong>
+                            </agm-info-window>
                         </agm-marker>
                     </div>
                 </agm-map>

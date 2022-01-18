@@ -303,7 +303,7 @@ a.text-main:hover {
 }
 
 .chartbox .table td .form-check-input[type="checkbox"] {
-    width: 32px;
+    width: 18px;
     height: 18px;
 }
 
@@ -610,7 +610,7 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
   top: 0;
 }
 .chart-container{
-    height:350px;
+    height:275px;
     font-size: 0.85rem;
 }
 
@@ -658,4 +658,8 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 }
 .cdk-overlay-connected-position-bounding-box{
     z-index: 999999;
+}
+
+g[shape-rendering="auto"]{
+    display: none;
 }

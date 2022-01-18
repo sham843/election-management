@@ -129,8 +129,8 @@ export class NameCorrectionComponent implements OnInit {
         this.constituencyNameArray = res.data1;
         // this.IsSubElectionApplicable == undefined || this.IsSubElectionApplicable == null ? this.getIsSubEleAppId(this.filterForm.value.ElectionId) : '';
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
-        this.getClientHaveSubEleOrNonSubEle();
         this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.getVillageName()) : '';
+        this.getClientHaveSubEleOrNonSubEle();
       } else {
         this.constituencyNameArray = [];
         this.spinner.hide();

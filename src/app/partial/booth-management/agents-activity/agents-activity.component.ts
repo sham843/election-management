@@ -92,6 +92,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   defaultAgentActivityDivHide: boolean = false;
   agentCAllLogFlag:boolean = true;
 
+  isAlertData = 0;
+  isAlertChecked = new FormControl(false);
+
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
     let ReceiveDataSnapshot: any = this.route.snapshot.params.id;
@@ -110,6 +113,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.searchVoterFilter('false');
     this.searchNewVotersFilters('false');
     this.searchAgentCallLoggerFilters('false');
+    this.searchFamilyVotersFilters();
   }
 
 
@@ -306,6 +310,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     } else if (flag == 'subAgent') {
       this.filterForm.controls["subAreaAgentId"].setValue(0);
       this.filterForm.controls["BoothId"].setValue(0);
+    } else if (flag == 'Booth') {
+      this.filterForm.controls["BoothId"].setValue(0);
     }
     this.getAgentAssBoothActivityGraph();
   }
@@ -419,7 +425,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     pieSeries.dataFields.value = "categoryCount";
     pieSeries.dataFields.category = "Category";
 
-
     // Let's cut a hole in our Pie chart the size of 30% the radius
     // chart.innerRadius = am4core.percent(30);
 
@@ -468,9 +473,10 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   blockUser(userId: any, blogStatus: any) {
     let checkBlogStatus: any;
+    let boothClientId = this.filterForm.value.ClientId || this.agentInfo.ClientId ;
     blogStatus == 0 ? checkBlogStatus = 1 : checkBlogStatus = 0;
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId=' + userId + '&ClientId=' + this.agentInfo.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId() + '&IsBlock=' + checkBlogStatus, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Insert_Election_BlockBoothAgent?UserId=' + userId + '&ClientId=' + boothClientId + '&CreatedBy=' + this.commonService.loggedInUserId() + '&IsBlock=' + checkBlogStatus, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
@@ -561,15 +567,15 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   }
 
   LineChartAgentPerformance(data: any) {
-    // Themes begin
+    // Themes begi
     am4core.useTheme(am4themes_animated);
     // Themes end
 
     // Create chart instance
     let chart = am4core.create("agentPerformancediv", am4charts.XYChart);
-
+   
+    chart.data = data;
     // Add data
-
 
     data.map((ele: any) => {
       if (ele.Date) {
@@ -578,9 +584,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         ele.Date = transformDate;
       }
     })
-
-    chart.data = data;
-
 
     // Create category axis
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -593,12 +596,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     valueAxis.renderer.inversed = false;
     valueAxis.title.text = "Agent Performance Count";
     valueAxis.renderer.minLabelPosition = 0.01;
+    chart.scrollbarX = new am4core.Scrollbar();
 
     // Create series
     let series1 = chart.series.push(new am4charts.LineSeries());
     series1.dataFields.valueY = "VoterCount";
     series1.dataFields.categoryX = "Date";
-    series1.name = "VoterCount";
+    series1.name = "Voter Count";
     series1.bullets.push(new am4charts.CircleBullet());
     series1.tooltipText = "{valueY}";
     series1.legendSettings.valueText = "{valueY}";
@@ -612,7 +616,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let series2 = chart.series.push(new am4charts.LineSeries());
     series2.dataFields.valueY = "FamilyCount";
     series2.dataFields.categoryX = "Date";
-    series2.name = 'FamilyCount';
+    series2.name = 'Family Count';
     series2.bullets.push(new am4charts.CircleBullet());
     series2.tooltipText = "{valueY}";
     series2.legendSettings.valueText = "{valueY}";
@@ -625,7 +629,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     // Add chart cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.behavior = "zoomY";
-
 
     let hs1 = series1.segments.template.states.create("hover")
     hs1.properties.strokeWidth = 5;
@@ -652,7 +655,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     })
     this.getVotersCardData();
   }
-
 
   getVotersCardData() {
     this.spinner.show();
@@ -764,12 +766,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
   familyDetails(ParentVoterId: any) {
     let formData = this.filterForm.value;
     this.nullishTopFilterForm();
-    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + this.searchFamilyVoters.value + '&AgentId=' + formData.AgentId;
+    let search = '';
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + formData.ClientId + '&Search=' + search + '&AgentId=' + this.getReturnAgentIdOrAreaAgentId();
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_get_Agentwise_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        this.spinner.hide();;
+        this.spinner.hide();
         this.boothFamilyDetailsArray = res.data1;
       } else {
         this.boothFamilyDetailsArray = [];
@@ -787,13 +790,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.subject.next();
   }
 
-  searchFamilyVotersFilters(flag: any) {
-    if (flag == 'true') {
-      if (this.searchFamilyVoters.value == "" || this.searchFamilyVoters.value == null) {
-        this.toastrService.error("Please search and try again");
-        return
-      }
-    }
+  searchFamilyVotersFilters() {
     this.subject.pipe(debounceTime(700)).subscribe(() => {
       this.searchFamilyVoters.value;
       this.clickOnFamiliyCard();
@@ -856,7 +853,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let formData = this.filterForm.value;
     this.nullishTopFilterForm();
-    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchAgentCallLogger.value + '&nopage=' + this.callLoggerPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
+    let obj: any = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&Search=' + this.searchAgentCallLogger.value + '&nopage=' + this.callLoggerPaginationNo + '&FromDate=' + this.voterProfilefilterForm.value.FromTo 
+    + '&ToDate=' + this.voterProfilefilterForm.value.ToDate + '&IsAlert=' + this.isAlertData;   
     this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Agent_CallLogger?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -989,6 +987,20 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     }
     this.deafultVoterProfilefilterForm();
   }
+
+  
+ redirectToVoterPrfile(obj: any) {
+  window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.VoterId);
+}
+
+redirectToVoterPrfileFamilyData(obj: any) {
+  window.open('../voters-profile/' + obj.AgentId + '.' + obj.ClientID + '.' + obj.ParentVoterId);
+}
+
+onCheckisAlertData(event: any){
+  event.target.checked == true ? this.isAlertData = 1 : this.isAlertData = 0 ; this.callLoggerPaginationNo = 1 ;
+  this.agentCallLogger();
+}
 
 
 }

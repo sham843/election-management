@@ -48,8 +48,6 @@
                                 placeholder="Select Booth">
                     </ngx-select>
                   </div>
-
-
             </div>
         </div>
     </div>
@@ -64,7 +62,7 @@
                         </div>
                         <div class="col-sm-3">
                             <ngx-select [items]="NameChangeTypeArray" [allowClear]="nameChangeFlag"
-                            formControlName="NameChangeType"  optionValueField="id" (select)="getClientHaveSubEleOrNonSubEle()"
+                            formControlName="NameChangeType"  optionValueField="id" (select)="paginationNo = 1; getClientHaveSubEleOrNonSubEle()"
                              optionTextField="name"
                             placeholder="Select Correction Type" (remove)="clearFilter('NameChangeType')">
                         </ngx-select>
@@ -74,7 +72,7 @@
                             <ngx-select [items]="allAgentLists" [allowClear]="agentFlag"
                                 formControlName="AgentId"  optionValueField="AgentId"
                                 [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
-                                 optionTextField="FullName" (select)="getClientHaveSubEleOrNonSubEle()"
+                                 optionTextField="FullName" (select)="paginationNo = 1; getClientHaveSubEleOrNonSubEle()"
                                 placeholder="Select Agent" (remove)="clearFilter('AgentId')">
                             </ngx-select>
                         </div>
@@ -140,7 +138,7 @@
                                 <!-- [class.active]="constituency.Id == highlightedRow" -->
                                 <!-- <td>{{CHaveSubEOrNonSubE.SrNo}}</td> -->
                                 <td>{{CHaveSubEOrNonSubE.VoterNo}}</td>
-                                <td  >
+                                <td>
                                     <a>
                                         <p class="mb-0" >{{CHaveSubEOrNonSubE.OldEnglishName}}</p>
                                         <p class="mb-0">{{CHaveSubEOrNonSubE.OldMarathiName}}</p>
@@ -156,7 +154,7 @@
                                 <td>{{CHaveSubEOrNonSubE.boothnickname}}</td>
                                 <td>{{CHaveSubEOrNonSubE.AreaName}}</td>
                                 <td>
-                                    <a routerLink="#">{{CHaveSubEOrNonSubE.AgentName}}</a>
+                                {{CHaveSubEOrNonSubE.AgentName}}
                                 </td>
                                 <!-- <td>
                                     <h6 class="mb-0"><span class="badge rounded-pill bg-primary fw-normal">Requested</span></h6>

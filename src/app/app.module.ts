@@ -25,7 +25,6 @@ import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/
 import { NgxPaginationModule } from 'ngx-pagination';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,

@@ -172,6 +172,7 @@ export class AssignBoothToVillageComponent implements OnInit {
         this.boothListArray = res.data1;
         if (this.btnText == 'Update Village') {
           this.assignBoothsToVillageForm.controls['BoothId'].setValue(this.globalEditData.boothid);
+          console.log()
         }
       } else {
         this.spinner.hide();
@@ -257,6 +258,7 @@ export class AssignBoothToVillageComponent implements OnInit {
 
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
+    this.clearForm();
     this.getBoothListwithVillage();
   }
 
