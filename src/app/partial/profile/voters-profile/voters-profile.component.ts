@@ -68,7 +68,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
     this.GlobalAgentId = this.voterListData.AgentId;
-    this.getVoterVisitDetailData(0)
+    this.getVoterVisitDetailData(0);
   }
 
   agentFilledData(data: any) {
