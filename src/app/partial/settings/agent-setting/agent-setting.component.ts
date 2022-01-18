@@ -102,7 +102,6 @@ export class AgentSettingComponent implements OnInit {
   mergeCheckedData() {
     let obj = { SettingId: this.SettingId, Flag: this.Flag , UserId: this.userId }
     this.StrSettingArray.push(obj);
-    console.log(this.StrSettingArray);
   }
 
   onSubmitData() {
