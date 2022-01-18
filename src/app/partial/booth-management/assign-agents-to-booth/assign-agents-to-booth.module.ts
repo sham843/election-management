@@ -8,10 +8,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { DashPipe } from 'src/app/pipes/dash.pipe';
 
 @NgModule({
   declarations: [
-    AssignAgentsToBoothComponent
+    AssignAgentsToBoothComponent,
+    DashPipe
   ],
   imports: [
     CommonModule,
