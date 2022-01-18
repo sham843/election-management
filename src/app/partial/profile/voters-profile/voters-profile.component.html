@@ -390,6 +390,13 @@
                                 <strong>{{votersonmap.EnglishName}}</strong>
                             </agm-info-window>
                         </agm-marker>
+
+                        <agm-marker [latitude]="votersonmap?.MigratedLatitude" (markerClick)="markerClicked($event)" [longitude]="votersonmap?.MigratedLongitude"
+                         >
+                            <agm-info-window>
+                                <strong>{{votersonmap.EnglishName}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
                     </div>
                 </agm-map>
             </div>

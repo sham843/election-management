@@ -273,10 +273,11 @@
                                     New Voters
                                 </button>
                             </li>
+
                             <li class="nav-item" role="presentation" *ngIf="agentCAllLogFlag">
                                 <button class="nav-link" id="pills-calllog-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-calllog" type="button" role="tab"
-                                    aria-controls="pills-calllog" aria-selected="false"    (click)="callLoggerPaginationNo = 1; this.searchAgentCallLogger.setValue(''); agentCallLogger()">
+                                    aria-controls="pills-calllog" aria-selected="false" (click)="callLoggerPaginationNo = 1; isAlertData = 0; isAlertChecked.setValue(false); this.searchAgentCallLogger.setValue(''); agentCallLogger()">
                                     <h5 class="mb-0">{{this.votersCardData?.TotalCallLogs}}</h5>
                                     Agents Call Log
                                 </button>
@@ -310,9 +311,9 @@
                                     <thead>
                                         <tr>
                                             <th>Sr. No.</th>
+                                            <th>Voter No.</th>
                                             <th>Voters Full Name</th>
                                             <th>Visit Time</th>
-                                            <th>Voter No.</th>
                                             <th>Gender</th>
                                             <th>Contact No1/Contact No2</th>
                                         </tr>
@@ -321,9 +322,15 @@
                                         <tr
                                             *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {id: 'votersPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
                                             <td>{{clientBooth?.SrNo}}</td>
-                                            <td>{{clientBooth?.EnglishName | titlecase}}</td>
-                                            <td>{{clientBooth?.SurveyDate | dateTransform}}</td>
                                             <td>{{clientBooth?.VoterNo}}</td>
+                                            <!-- {{clientBooth?.EnglishName | titlecase}} -->
+                                            <td>
+                                                <p class="mb-0">
+                                                    <a   (click)="redirectToVoterPrfile(clientBooth)"
+                                                    class="text-main">{{clientBooth?.EnglishName | titlecase}}</a>
+                                                </p>
+                                            </td>
+                                            <td>{{clientBooth?.SurveyDate | dateTransform}}</td>
                                             <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
                                             <td>{{clientBooth?.MobileNo1 ? clientBooth?.MobileNo1 : '-'}}<span *ngIf="clientBooth?.MobileNo2"> /{{clientBooth?.MobileNo2}}</span></td>
                                         </tr>
@@ -378,7 +385,12 @@
                                         <div class="row g-1">
                                             <div class="col-sm-1">{{familiyList.SrNo}}
                                             </div>
-                                            <div class="col-sm-3">{{familiyList.Family | titlecase}}
+                                            <div class="col-sm-3">
+                                                <!-- {{familiyList.Family | titlecase}} -->
+                                                <p class="mb-0">
+                                                    <a   (click)="redirectToVoterPrfileFamilyData(familiyList)"
+                                                    class="text-main">{{familiyList?.Family | titlecase}}</a>
+                                                </p>
                                             </div>
                                             <div class="col-sm-2">
                                                 <div *ngIf="familiyList?.MobileNo1"><a class="calltomember"
@@ -386,11 +398,11 @@
                                                 </div>
                                                 <div *ngIf="!familiyList?.MobileNo1">-</div>
                                             </div>
-                                            <div class="col-sm-2">{{familiyList.Occupation | titlecase}}
+                                            <div class="col-sm-2">{{familiyList.Occupation ? familiyList.Occupation : '-'}}
                                             </div>
-                                            <div class="col-sm-2">{{familiyList.Qualification | titlecase}}
+                                            <div class="col-sm-2">{{familiyList.Qualification ? familiyList.Qualification : '-'}}
                                             </div> 
-                                            <div class="col-sm-1">{{familiyList.Migrated | titlecase}}
+                                            <div class="col-sm-1">{{familiyList.Migrated ? familiyList.Migrated : '-'}}
                                             </div>
                                             <div class="col-sm-1">
                                                 <a class="accordion-button collapsed" data-bs-toggle="collapse"
@@ -419,12 +431,12 @@
                                                     <div *ngIf="!boothFamilyDetails?.MobileNo1">-</div>
                                                 </div>
                                                 <div class="col-sm-2">
-                                                    {{boothFamilyDetails?.Occupation | titlecase}}</div>
+                                                    {{boothFamilyDetails?.Occupation ? boothFamilyDetails?.Occupation : '-'}}</div>
                                                 <div class="col-sm-2">
-                                                    {{boothFamilyDetails?.Qualification | titlecase}}
+                                                    {{boothFamilyDetails?.Qualification ? boothFamilyDetails?.Qualification : '-'}}
                                                 </div>
                                                 <div class="col-sm-1">
-                                                    {{boothFamilyDetails?.Migrated | titlecase}}</div>
+                                                    {{boothFamilyDetails?.Migrated ? boothFamilyDetails?.Migrated : '-'}}</div>
                                                 <div class="col-sm-1"></div>
                                             </div>
                                             <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">
@@ -472,9 +484,9 @@
                                     <thead>
                                         <tr>
                                             <th>Sr. No.</th>
+                                            <th>Voter NO.</th>
                                             <th>Voters Full Name</th>
                                             <th>Visit Time</th>
-                                            <th>Voter NO.</th>
                                             <th>Gender</th>
                                             <th>Contact No</th>
                                         </tr>
@@ -483,9 +495,9 @@
                                         <tr
                                             *ngFor="let newVotersList of getnewVotersList | paginate: {id: 'newVotersPagination', itemsPerPage: 10, currentPage: newVotersPaginationNo, totalItems:newVotersTotal}">
                                             <td>{{newVotersList?.SrNo}}</td>
+                                            <td>{{newVotersList?.VoterNo ? newVotersList?.VoterNo : '-'}}</td>
                                             <td>{{newVotersList?.EnglishName | titlecase}}</td>
                                             <td>{{newVotersList?.SurveyDate}}</td>
-                                            <td>{{newVotersList?.VoterNo}}</td>
                                             <td>{{newVotersList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
                                             <td>{{newVotersList?.MobileNo1}} {{newVotersList?.MobileNo2}}</td>
                                         </tr>
@@ -506,7 +518,13 @@
                         <div class="tab-pane fade show" id="pills-calllog" role="tabpanel"
                             aria-labelledby="pills-calllog">
                             <!-- agent call log filter start here   -->
+                           
                             <div class="row  justify-content-end mb-3">
+                                <div class="col-sm-3">
+                                    <input class="form-check-input me-1" [formControl]="isAlertChecked" (change)="onCheckisAlertData($event)" type="checkbox">
+                                    <label class="form-check-label" for="flexCheckDefault"><small>Restrict Mobile no
+                                    </small></label>
+                                </div>
                                 <div class="col-sm-4">
                                     <div class="form-container">
                                         <div class="input-group">
