@@ -43,7 +43,7 @@
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Election</label>
                             <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="Id" optionTextField="ElectionName"
-                             (select)="getConstituency()" placeholder="Select Election" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                             (select)="getConstituency()" (remove)="clearFilterData()" placeholder="Select Election" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
                             </ngx-select>
                             <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
                                 <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>

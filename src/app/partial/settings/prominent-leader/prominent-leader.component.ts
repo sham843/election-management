@@ -193,5 +193,8 @@ export class ProminentLeaderComponent implements OnInit {
     this.getProminentLeader();
   }
   
+  clearFilterData(){
+    this.prominentLeaderForm.controls['ConstituencyId'].setValue('');
+  }
 
 }
