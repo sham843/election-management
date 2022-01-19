@@ -107,37 +107,42 @@
                                 <td>
                                     <div class="btn-group">
                                         <!-- (click)="assignAgentToBooth(clientABooths);"  -->
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal"
+
+
+                                    <!-- <button class="btn btn-light text-dark rounded" data-bs-toggle="modal"
                                             *ngIf="clientABooths?.FullName"
                                             (click)="patchAssBoothElection(clientABooths.HeaderId, false);"
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal"
+                                    </button>
+                                    <button class="btn btn-light text-dark rounded" data-bs-toggle="modal"
                                             (click)="assignAgentToBooth(clientABooths);"
                                             *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-plus"></i>
-                                        </button>
-                                        <button type="button" title="Send Link"
+                                    </button>
+                                    <button type="button" title="Send Link"
                                             [ngClass]="{'disabled' : clientABooths.UserId == null}"
                                             class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
                                             (click)="sendDownloadLink(clientABooths?.MobileNo)">
                                             <i class="fas fa-paper-plane"></i>
-                                        </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName" title="Edit"
+                                    </button> -->
+
+
+                                    <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" *ngIf="clientABooths?.FullName" title="Edit"
                                         (click)="patchAssBoothElection(clientABooths.HeaderId, false);" [ngClass]="{'disabled' : clientABooths?.IsUserblock == 1}"
                                             href="#addOrEditAgentModal" role="button">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" title="Assign Agent"
+                                     </button>
+                                     <button class="btn btn-light text-dark rounded" data-bs-toggle="modal" title="Assign Agent"
                                         (click)="assignAgentToBooth(clientABooths);" *ngIf="!clientABooths?.FullName" href="#addOrEditAgentModal" role="button">
                                         <i class="fas fa-plus"></i>
                                     </button>                                        
-                                        <button type="button" title="Send Link"  [ngClass]="{'disabled' : clientABooths.UserId == null || clientABooths?.IsUserblock == 1}"
+                                     <button type="button" title="Send Link"  [ngClass]="{'disabled' : clientABooths.UserId == null || clientABooths?.IsUserblock == 1}"
                                         class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
                                         (click)="sendDownloadLink(clientABooths?.MobileNo)">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
+
                                     <button type="button" 
                                             class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
                                             [ngClass]="{'text-danger':clientABooths?.IsUserblock == 1 , 'text-main' :clientABooths?.IsUserblock == 0, 'disabled' : clientABooths.UserId == null}"
