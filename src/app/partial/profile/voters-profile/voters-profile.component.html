@@ -353,12 +353,24 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
                                 <span class="voter-label me-2">Migrated:</span>
-                                <span class="voter-data">{{VPMemberDetailsData?.Area ? VPMemberDetailsData?.MigratedArea
+                                <span class="voter-data">
+                                    {{VPMemberDetailsData?.Migrated == 'yes' ? 'Yes' :
+                                    VPMemberDetailsData?.Migrated == 'no' ? 'No' : '-'}}</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center1">
+                                <span class="voter-label me-2">Migrated City:</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.MigratedCity ? VPMemberDetailsData?.MigratedCity
                                     : '-'}}</span>
                             </div>
-                            <!-- <div class="voter-data mt-1">
-                                {{VPMemberDetailsData?.Address ? VPMemberDetailsData?.Address : '-'}}
-                            </div> -->
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center1">
+                                <span class="voter-label me-2">Migrated Area:</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.MigratedArea ? VPMemberDetailsData?.MigratedArea
+                                    : '-'}}</span>
+                            </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Postal Voting :</span>
