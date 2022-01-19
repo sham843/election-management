@@ -42,9 +42,11 @@ const routes: Routes = [
       { path: 'forward-activities', loadChildren: () => import('./partial/booth-management/forward-activities/forward-activities.module').then(m => m.ForwardActivitiesModule), data: { title: 'Forward Activities', allowedRoles: ['1','2'] } },
       { path: 'name-correction', loadChildren: () => import('./partial/booth-management/name-correction/name-correction.module').then(m => m.NameCorrectionModule), data: { title: 'Voter Name Correction', allowedRoles: ['1','2'] } },
       { path: 'agent-setting', loadChildren: () => import('./partial/settings/agent-setting/agent-setting.module').then(m => m.AgentSettingModule), data: { title: 'Agent Setting', allowedRoles: ['1','2'] }  },
+      { path: 'prominent-leader', loadChildren: () => import('./partial/settings/prominent-leader/prominent-leader.module').then(m => m.ProminentLeaderModule), data: { title: 'Prominent Leader', allowedRoles: ['1','2'] }   },
       ]
   },
   { path: '500', component: ServerErrorComponent },
+  
   
  
   { path: '**', component: PageNotFoundComponent },
