@@ -11,44 +11,66 @@
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
+                    <form [formGroup]="prominentLeaderForm" (ngSubmit)="onSubmit()">
                     <div class="form-container">
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Leader Name</label>
-                            <input type="text" class="form-control" placeholder="Leader Name">
+                            <input type="text" formControlName="LeaderName" class="form-control" placeholder="Leader Name"
+                            [ngClass]="{ 'is-invalid': submitted && f.LeaderName.errors }">
+                            <div *ngIf="submitted && f.LeaderName.errors" class="invalid-feedback">
+                                <div *ngIf="f.LeaderName.errors.required">Leader Name is required</div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Mobile No.</label>
-                            <input type="text" class="form-control" placeholder="Mobile No.">
+                            <input type="text" formControlName="MobileNo" (keypress)="acceptedOnlyNumbers($event)" class="form-control" placeholder="Mobile No."
+                            maxlength="10" [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                            <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                <div *ngIf="f.MobileNo.errors.required">Mobile No. is required</div>
+                                <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Valid Number
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Party</label>
-                            <select class="form-select">
-                                <option value="">Select Party</option>
-                            </select>
+                            <ngx-select [allowClear]="true" [items]="selectPartyArray" formControlName="PartyId" optionValueField="id" optionTextField="PartyName"
+                            placeholder="Select Party" [ngClass]="{ 'is-invalid': submitted && f.PartyId.errors }">
+                           </ngx-select>
+                           <div *ngIf="submitted && f.PartyId.errors" class="invalid-feedback">
+                               <div *ngIf="f.PartyId.errors.required">Party Name is required</div>
+                           </div>
                         </div>
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Election</label>
-                            <select class="form-select">
-                                <option value="">Select Election</option>
-                            </select>
+                            <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="Id" optionTextField="ElectionName"
+                             (select)="getConstituency()" placeholder="Select Election" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
+                                <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Constituency</label>
-                            <select class="form-select">
-                                <option value="">Select Constituency</option>
-                            </select>
+                            <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency"
+                           [disabled]="!prominentLeaderForm.value.ElectionId" [ngClass]="{ 'is-invalid': submitted && f.ConstituencyId.errors}">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.ConstituencyId.errors" class="invalid-feedback">
+                            <div *ngIf="f.ConstituencyId.errors.required">Constituency is required
+                            </div>
+                        </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-secondary">Clear</button>
+                                <button type="button" (click)="clearForm()" class="btn btn-secondary">Clear</button>
                             </div>
                             <div class="col-sm-6 text-end">
-                                <button type="submit" class="btn btn-main">Submit</button>
+                                <button type="submit" class="btn btn-main">{{btnText}}</button>
                             </div>
                             
                             
                         </div>
                     </div>
+                </form>
                 </div>
 
             </div>
@@ -69,17 +91,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Vijay Kore</td>
-                                <td>+91-9876543210</td>
-                                <td>NCP</td>
-                                <td>Satara ZP Election 2022</td>
-                                <td>Satara Vidhansabha</td>
+                            <tr *ngFor="let prominentLeader of prominentLeaderArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index" [class.active]="prominentLeader.SrNo == HighlightRow">
+                                <td>{{prominentLeader.SrNo}}</td>
+                                <td>{{prominentLeader.LeaderName}}</td>
+                                <td>{{prominentLeader.MobileNo}}</td>
+                                <td>{{prominentLeader.PartyName}}</td>
+                                <td>{{prominentLeader.ElectionName}}</td>
+                                <td>{{prominentLeader.ConstituencyName}}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" title="Edit Election"
-                                            class="btn btn-sm btn-light text-edit me-1 rounded"><i
+                                        <button type="button" title="Edit Election" (click)="patchProminentLeaderData(prominentLeader)"
+                                        class="btn btn-sm btn-light text-edit me-1 rounded"><i
                                                 class="far fa-edit"></i></button>
                                         <button type="button" title="Delete Election"
                                             class="btn btn-sm btn-light text-danger rounded"><i
@@ -89,6 +111,12 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="prominentLeaderArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="prominentLeaderArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel="" (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
                 </div>
             </div>
         </div>

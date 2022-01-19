@@ -6,6 +6,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { DeleteComponent } from '../../dialogs/delete/delete.component';
 
 @Component({
   selector: 'app-agent-setting',
@@ -16,10 +19,8 @@ export class AgentSettingComponent implements OnInit {
 
 
   agentSettingForm!: FormGroup;
-  selectAgentData = new FormControl('');
   agentSettingArray: any;
   allAgentList: any;
-  allAgentListArray: any;
   IsCalllogTrackData: any;
   IsLacationTrackData: any;
   StrSettingArray: any[] = [];
@@ -27,6 +28,11 @@ export class AgentSettingComponent implements OnInit {
   SettingId: any;
   StrSettingArrayJSON: any;
   Flag: any;
+  clientNameArray: any;
+  ClientId = new FormControl(0);
+  Search = new FormControl('');
+  subject: Subject<any> = new Subject();
+  searchFilter = "";
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -39,19 +45,24 @@ export class AgentSettingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAllAgentList();
+    this.getClientName();
     this.getAgentSetting();
+    this.searchFilters('false');
   }
 
-  getAllAgentList() {
+  getClientName() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + 22 + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.allAgentListArray = res.data1;
-      } else {
-        this.allAgentListArray = [];
+        this.clientNameArray = res.data1;
+
+        if (this.clientNameArray.length == 1) {
+          this.ClientId.setValue(this.clientNameArray[0].id); 
+          this.getAgentSetting();
+        }
+     } else {
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -65,12 +76,13 @@ export class AgentSettingComponent implements OnInit {
   getAgentSetting() {
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Client_AgentSetting?UserId=' + this.commonService.loggedInUserId()
-      + '&ClientId=' + 22, false, false, false, 'electionServiceForWeb');
+      + '&ClientId=' + this.ClientId.value + '&Search=' + this.Search.value, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.agentSettingArray = res.data1;
       } else {
+        this.agentSettingArray = [];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -81,7 +93,7 @@ export class AgentSettingComponent implements OnInit {
     })
   }
 
-  onCheckisAlertData(event: any, obj: any) {
+  onCheckisAlertIsCalllogTrackData(event: any, obj: any) {
     event.target.checked == true ? this.IsCalllogTrackData = 1 : this.IsCalllogTrackData = 0;
     this.userId = obj.AgentId;
     this.SettingId = 1;
@@ -89,7 +101,7 @@ export class AgentSettingComponent implements OnInit {
     this.mergeCheckedData();
   }
 
-  onCheckisAlertData1(event: any, obj: any) {
+  onCheckisAlertIsLacationTrackData(event: any, obj: any) {
     event.target.checked == true ? this.IsLacationTrackData = 1 : this.IsLacationTrackData = 0;
     this.userId = obj.AgentId;
     this.SettingId = 2;
@@ -106,7 +118,7 @@ export class AgentSettingComponent implements OnInit {
     this.spinner.show();
     this.StrSettingArrayJSON = JSON.stringify(this.StrSettingArray);
     let obj = '&CreatedBy=' + this.commonService.loggedInUserId() + '&StrSettingFlag=' + this.StrSettingArrayJSON
-    this.callAPIService.setHttp('get', 'Sp_Web_Insert_Agent_Setting?ClientId=' + 22 + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Sp_Web_Insert_Agent_Setting?ClientId=' + this.ClientId.value + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -122,6 +134,31 @@ export class AgentSettingComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+  onKeyUpFilter() {
+    this.subject.next();
+  }
+
+  searchFilters(flag: any) {
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchFilter = this.Search.value;
+        // this.paginationNo = 1;
+        this.getAgentSetting();
+      }
+      );
+  }
+
+  clearFilter(flag: any) {
+     if (flag == 'search') {
+      this.Search.setValue('');
+    } else  
+    if (flag == 'clientId') {
+      this.ClientId.setValue(0);
+    }
+    this.getAgentSetting(); 
   }
 
 }
