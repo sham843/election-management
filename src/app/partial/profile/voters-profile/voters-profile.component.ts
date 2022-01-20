@@ -231,7 +231,8 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.VPMemberDetailsData = res.data1[0];
-        this.VPMemberDetailsCommentsData = res?.data2;
+        this.VPMemberDetailsCommentsData = res.data2;
+        this.VPMemberDetailsCommentsData == "" ? this.VPMemberDetailsCommentsData =[] : this.VPMemberDetailsCommentsData ;
       } else {
         this.VPMemberDetailsData = [];
         this.VPMemberDetailsCommentsData =[];
