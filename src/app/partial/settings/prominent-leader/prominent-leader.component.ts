@@ -30,7 +30,7 @@ export class ProminentLeaderComponent implements OnInit {
   HighlightRow: any;
   // ProminentLeaderObj: any;
   clientNameArray: any;
-  HideClientFilter:boolean = true;
+  HideClientFilter: boolean = true;
   ClientIdTop = new FormControl(0);
   Search = new FormControl('');
   subject: Subject<any> = new Subject();
@@ -48,7 +48,7 @@ export class ProminentLeaderComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-  ) { 
+  ) {
   }
 
   ngOnInit(): void {
@@ -61,9 +61,9 @@ export class ProminentLeaderComponent implements OnInit {
   defaultProminentLeaderForm() {
     this.prominentLeaderForm = this.fb.group({
       Id: [0],
-      LeaderName: ['',Validators.required],
+      LeaderName: ['', Validators.required],
       MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
-      PartyId: ['',Validators.required],
+      PartyId: ['', Validators.required],
       ClientId: ['', Validators.required],
       ElectionId: ['', Validators.required],
       ConstituencyId: ['', [Validators.required]],
@@ -90,13 +90,13 @@ export class ProminentLeaderComponent implements OnInit {
           this.HideClientFilter = false;
           this.prominentLeaderForm.patchValue({ ClientId: this.clientNameArray[0].id });
           this.getElection();
-          this.ClientIdTop.setValue(this.clientNameArray[0].id); 
+          this.ClientIdTop.setValue(this.clientNameArray[0].id);
         }
-        if (this.btnText == 'Update' && this.clientNameArray.length != 1 ) {
+        if (this.btnText == 'Update' && this.clientNameArray.length != 1) {
           this.getElection();
         }
         this.getProminentLeader();
-     } else {
+      } else {
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -107,12 +107,12 @@ export class ProminentLeaderComponent implements OnInit {
     })
   }
 
-   //.......... get Political Party List ...............//
-   getPoliticalPartyList() {
+  //.......... get Political Party List ...............//
+  getPoliticalPartyList() {
     this.spinner.show();
     this.prominentLeaderForm.value.ClientId == '' ? this.prominentLeaderForm.value.ClientId = 0 : this.prominentLeaderForm.value.ClientId;
-    this.callAPIService.setHttp('get', 'Web_Get_VoterList_Filter_PoliticalParty_ddl?ClientId=' + this.prominentLeaderForm.value.ClientId + '&UserId=' 
-    + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Get_VoterList_Filter_PoliticalParty_ddl?ClientId=' + this.prominentLeaderForm.value.ClientId + '&UserId='
+      + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -129,7 +129,7 @@ export class ProminentLeaderComponent implements OnInit {
     })
   }
 
-  getElection() { 
+  getElection() {
     this.spinner.show();
     this.prominentLeaderForm.value.ClientId == '' ? this.prominentLeaderForm.value.ClientId = 0 : this.prominentLeaderForm.value.ClientId;
     this.callAPIService.setHttp('get', 'Web_Get_Election_byClientId_ddl?ClientId=' + this.prominentLeaderForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
@@ -137,15 +137,15 @@ export class ProminentLeaderComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.electionNameArray = res.data1;
-        if(this.electionNameArray.length == 1){
+        if (this.electionNameArray.length == 1) {
           this.prominentLeaderForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId })
           this.getConstituency();
         }
-        if (this.btnText == 'Update' && this.electionNameArray.length != 1 ) {
+        if (this.btnText == 'Update' && this.electionNameArray.length != 1) {
           this.prominentLeaderForm.controls['ElectionId'].setValue(this.ProminentLeaderObj.ElectionId);
-            this.getConstituency();
+          this.getConstituency();
         }
-        
+
       } else {
         this.spinner.hide();
         this.electionNameArray = [];
@@ -160,16 +160,16 @@ export class ProminentLeaderComponent implements OnInit {
 
   getConstituency() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId() 
-    + '&ElectionId=' + this.prominentLeaderForm.value.ElectionId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId()
+      + '&ElectionId=' + this.prominentLeaderForm.value.ElectionId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
-        if(this.constituencyNameArray.length == 1 ){
+        if (this.constituencyNameArray.length == 1) {
           this.prominentLeaderForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].id })
         }
-        if (this.btnText == 'Update' && this.constituencyNameArray.length != 1 ) {
+        if (this.btnText == 'Update' && this.constituencyNameArray.length != 1) {
           this.prominentLeaderForm.controls['ConstituencyId'].setValue(this.ProminentLeaderObj.ConstituencyId);
         }
       } else {
@@ -230,7 +230,7 @@ export class ProminentLeaderComponent implements OnInit {
       formData.Id == "" || formData.Id == null ? id = 0 : id = formData.Id;
       let obj = id + '&LeaderName=' + formData.LeaderName + '&MobileNo=' + formData.MobileNo + '&PartyId=' + formData.PartyId +
         '&ElectionId=' + formData.ElectionId + '&ConstituencyId=' + formData.ConstituencyId
-        + '&ClientId='+ formData.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId();
+        + '&ClientId=' + formData.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId();
       this.callAPIService.setHttp('get', 'Web_Insert_tblprominentleader?Id=' + obj, false, false, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
@@ -239,7 +239,7 @@ export class ProminentLeaderComponent implements OnInit {
           this.submitted = false;
           this.btnText = 'Submit';
           this.getProminentLeader();
-          this.clearForm(); 
+          this.clearForm();
         } else {
         }
       }, (error: any) => {
@@ -250,10 +250,10 @@ export class ProminentLeaderComponent implements OnInit {
     }
   }
 
-  patchProminentLeaderData(obj:any) {
+  patchProminentLeaderData(obj: any) {
     this.HighlightRow = obj.SrNo;
     this.btnText = 'Update';
-     this.ProminentLeaderObj = obj;
+    this.ProminentLeaderObj = obj;
     this.prominentLeaderForm.patchValue({
       Id: obj.ProminentleaderId,
       LeaderName: obj.LeaderName,
@@ -273,35 +273,35 @@ export class ProminentLeaderComponent implements OnInit {
     this.paginationNo = pageNo;
     this.getProminentLeader();
   }
-  
-  clearFormData(flag:any){
-    if(flag == 'client'){
+
+  clearFormData(flag: any) {
+    if (flag == 'client') {
       this.prominentLeaderForm.controls['ClientId'].setValue('');
       this.prominentLeaderForm.controls['ElectionId'].setValue('');
       this.prominentLeaderForm.controls['ConstituencyId'].setValue('');
-    } else if(flag == 'election'){
+    } else if (flag == 'election') {
       this.prominentLeaderForm.controls['ElectionId'].setValue('');
       this.prominentLeaderForm.controls['ConstituencyId'].setValue('');
-    } else if(flag == 'constituency'){
+    } else if (flag == 'constituency') {
       this.prominentLeaderForm.controls['ConstituencyId'].setValue('');
     }
   }
 
   clearTopFilter(flag: any) {
     if (flag == 'search') {
-     this.Search.setValue('');
-     this.clearForm(); 
-   } else  
-   if (flag == 'clientId') {
-     this.ClientIdTop.setValue(0);
-     this.clearForm(); 
-   }
-   this.getProminentLeader(); 
- }
+      this.Search.setValue('');
+      this.clearForm();
+    } else
+      if (flag == 'clientId') {
+        this.ClientIdTop.setValue(0);
+        this.clearForm();
+      }
+    this.getProminentLeader();
+  }
 
   onKeyUpFilter() {
     this.subject.next();
-    this.clearForm(); 
+    this.clearForm();
   }
 
   searchFilters(flag: any) {
@@ -324,19 +324,19 @@ export class ProminentLeaderComponent implements OnInit {
     const dialogRef = this.dialog.open(DeleteComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'Yes') {
-          this.deleteProminentLeader();
+        this.deleteProminentLeader();
       }
     });
   }
 
   deleteProminentLeader() {
-    this.callAPIService.setHttp('get', 'Web_Delete_ProminentLeader?ProminentLeaderId=' + this.deleteObj.ProminentleaderId 
-    + '&ClientId=' + this.deleteObj.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Delete_ProminentLeader?ProminentLeaderId=' + this.deleteObj.ProminentleaderId
+      + '&ClientId=' + this.deleteObj.ClientId + '&CreatedBy=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
         this.getProminentLeader();
-        this.clearForm(); 
+        this.clearForm();
       } else {
         this.spinner.hide();
       }
