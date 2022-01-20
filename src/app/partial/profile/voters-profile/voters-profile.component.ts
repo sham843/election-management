@@ -40,6 +40,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   GlobalAgentId: any;
   selectedVoterIdObj: any;
   previousInfoWindow!: AgmInfoWindow;
+  VPMemberDetailsCommentsData: any;
 
 
   constructor(
@@ -230,8 +231,10 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.VPMemberDetailsData = res.data1[0];
+        this.VPMemberDetailsCommentsData = res?.data2;
       } else {
         this.VPMemberDetailsData = [];
+        this.VPMemberDetailsCommentsData =[];
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -249,6 +252,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     if (FMobjData.FamilyHead != 1) {
       this.HighlightRow = FMobjData.SrNo;
       this.MigInfoHide = true;
+      this.VPMemberDetailsCommentsData =[];
       this.getVPMemberDetailsData(FMobjData);
       this.ScrollToFamilyMemberData();
     } else {
