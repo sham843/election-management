@@ -76,6 +76,9 @@ export class ProminentLeaderComponent implements OnInit {
     this.submitted = false;
     this.btnText = 'Submit'
     this.defaultProminentLeaderForm();
+    if (this.clientNameArray.length == 1) {
+    this.prominentLeaderForm.patchValue({ ClientId: this.clientNameArray[0].id });
+    }
   }
 
   getClientName() {

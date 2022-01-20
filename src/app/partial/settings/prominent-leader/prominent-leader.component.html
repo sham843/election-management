@@ -44,16 +44,13 @@
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Client</label>
                             <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId" optionValueField="id" optionTextField="Fullname"
-                             (select)="getElection()" (remove)="clearFormData('client')" placeholder="Select Client" 
+                             (select)="getElection()" [disabled]="clientNameArray.length == 1" (remove)="clearFormData('client')" placeholder="Select Client" 
                              [ngClass]="{ 'is-invalid': submitted && f.ClientId.errors }">
                             </ngx-select>
                             <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
                                 <div *ngIf="f.ClientId.errors.required">Election Name is required</div>
                             </div>
                         </div>
-
-
-
 
                         
                         <div class="mb-3">
