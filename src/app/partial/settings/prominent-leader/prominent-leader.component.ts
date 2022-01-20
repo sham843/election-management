@@ -290,15 +290,18 @@ export class ProminentLeaderComponent implements OnInit {
   clearTopFilter(flag: any) {
     if (flag == 'search') {
      this.Search.setValue('');
+     this.clearForm(); 
    } else  
    if (flag == 'clientId') {
      this.ClientIdTop.setValue(0);
+     this.clearForm(); 
    }
    this.getProminentLeader(); 
  }
 
   onKeyUpFilter() {
     this.subject.next();
+    this.clearForm(); 
   }
 
   searchFilters(flag: any) {
