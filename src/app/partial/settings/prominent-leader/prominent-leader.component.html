@@ -33,17 +33,45 @@
                         </div>
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Party</label>
-                            <ngx-select [allowClear]="true" [items]="selectPartyArray" formControlName="PartyId" optionValueField="id" optionTextField="PartyName"
+                            <ngx-select [allowClear]="true" [items]="politicalPartyArray" formControlName="PartyId" optionValueField="PartyId" optionTextField="PartyName"
                             placeholder="Select Party" [ngClass]="{ 'is-invalid': submitted && f.PartyId.errors }">
                            </ngx-select>
                            <div *ngIf="submitted && f.PartyId.errors" class="invalid-feedback">
                                <div *ngIf="f.PartyId.errors.required">Party Name is required</div>
                            </div>
                         </div>
+                        <!-- <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Select Client</label>
+                            <ngx-select [items]="clientNameArray" [allowClear]="true" formControlName="ClientId"
+                            (select)="getElection();" (remove)="clearFormData('client')"
+                            optionValueField="id" optionTextField="Fullname" placeholder="Select Client"
+                            [ngClass]="{ 'is-invalid': submitted && f.ClientId.errors }">
+                        </ngx-select>
+                           <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                               <div *ngIf="f.ClientId.errors.required">Client Name is required</div>
+                           </div>
+                        </div> -->
+
+                        <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Select Client</label>
+                            <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId" optionValueField="id" optionTextField="Fullname"
+                             (select)="getElection()" (remove)="clearFormData('client')" placeholder="Select Client" 
+                             [ngClass]="{ 'is-invalid': submitted && f.ClientId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                                <div *ngIf="f.ClientId.errors.required">Election Name is required</div>
+                            </div>
+                        </div>
+
+
+
+
+                        
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Election</label>
-                            <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="Id" optionTextField="ElectionName"
-                             (select)="getConstituency()" (remove)="clearFilterData()" placeholder="Select Election" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                            <ngx-select [allowClear]="false" [items]="electionNameArray" formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                             (select)="getConstituency()" (remove)="clearFormData('election')" placeholder="Select Election" 
+                             [disabled]="!prominentLeaderForm.value.ClientId" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
                             </ngx-select>
                             <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
                                 <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>
@@ -51,7 +79,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="txtElectionName" class="form-label required-field">Select Constituency</label>
-                            <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency"
+                            <ngx-select [allowClear]="false" [items]="constituencyNameArray" (remove)="clearFormData('constituency')" formControlName="ConstituencyId" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency"
                            [disabled]="!prominentLeaderForm.value.ElectionId" [ngClass]="{ 'is-invalid': submitted && f.ConstituencyId.errors}">
                         </ngx-select>
                         <div *ngIf="submitted && f.ConstituencyId.errors" class="invalid-feedback">
@@ -77,6 +105,27 @@
         </div>
         <div class="col-sm-8">
             <div class="card">
+                <div class="card-header">
+                    <div class="row justify-content-end">
+                        <div class="col-sm-4" *ngIf="HideClientFilter">
+                            <ngx-select [items]="clientNameArray" [allowClear]="true" [formControl]="ClientIdTop"
+                                (select)="getProminentLeader()" (remove)="clearTopFilter('clientId')"
+                                optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                            <input type="text" class="form-control" [formControl]="Search"
+                                placeholder="Search...." (keyup)="onKeyUpFilter()" />
+                            <button type="button" class="btn btn-light border btn-sm" (click)="clearTopFilter('search')"
+                                *ngIf="Search.value"><i _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                            <button type="button" *ngIf="!Search.value"
+                                class="btn btn-sm border btn-light"><i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <table class="table">
                         <thead>
@@ -103,7 +152,7 @@
                                         <button type="button" title="Edit Election" (click)="patchProminentLeaderData(prominentLeader)"
                                         class="btn btn-sm btn-light text-edit me-1 rounded"><i
                                                 class="far fa-edit"></i></button>
-                                        <button type="button" title="Delete Election"
+                                        <button type="button" title="Delete Election" (click)="delConfirmation(prominentLeader)"
                                             class="btn btn-sm btn-light text-danger rounded"><i
                                                 class="fas fa-trash-alt"></i></button>
                                     </div>

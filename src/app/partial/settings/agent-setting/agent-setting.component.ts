@@ -8,7 +8,6 @@ import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { DeleteComponent } from '../../dialogs/delete/delete.component';
 
 @Component({
   selector: 'app-agent-setting',
@@ -33,6 +32,8 @@ export class AgentSettingComponent implements OnInit {
   Search = new FormControl('');
   subject: Subject<any> = new Subject();
   searchFilter = "";
+  HideClientFilter:boolean = true;
+  
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -46,7 +47,7 @@ export class AgentSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.getClientName();
-    this.getAgentSetting();
+    //this.getAgentSetting();
     this.searchFilters('false');
   }
 
@@ -59,9 +60,10 @@ export class AgentSettingComponent implements OnInit {
         this.clientNameArray = res.data1;
 
         if (this.clientNameArray.length == 1) {
+          this.HideClientFilter = false;
           this.ClientId.setValue(this.clientNameArray[0].id); 
-          this.getAgentSetting();
         }
+        this.getAgentSetting();
      } else {
         this.spinner.hide();
       }
