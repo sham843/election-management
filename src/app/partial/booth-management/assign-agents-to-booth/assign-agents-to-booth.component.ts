@@ -936,7 +936,6 @@ export class AssignAgentsToBoothComponent implements OnInit {
   }
 
   checkBoxCehckBoothArray(ConstituencyId: any) {
-    debugger
     for (let i = 0; i < ConstituencyId.length; i++) {
       for (let j = 0; j < this.boothListArray.length; j++) {
         if (this.boothListArray[j].BoothId == ConstituencyId[i].BoothId) {
