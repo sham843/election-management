@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -312,7 +311,7 @@ export class ProminentLeaderComponent implements OnInit {
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchFilter = this.Search.value;
-        // this.paginationNo = 1;
+         this.paginationNo = 1;
         this.getProminentLeader();
       }
       );

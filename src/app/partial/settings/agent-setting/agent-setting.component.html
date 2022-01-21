@@ -38,6 +38,7 @@
                                 <th>Sr. No.</th>
                                 <th>Agent Name</th>
                                 <th>Mobile No.</th>
+                                <th>SubUser Type Name</th>
                                 <th>Track Call Log</th>
                                 <th>Track Location</th>
                             </tr>
@@ -48,9 +49,8 @@
                                 <td>
                                     <a routerLink="">{{agentSetting.FullName}}</a>
                                 </td>
-                                <td>
-                                    {{agentSetting.MobileNo}}
-                                </td>
+                                <td> {{agentSetting.MobileNo}}</td>
+                                <td> {{agentSetting.SubUserTypeName}}</td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox"
