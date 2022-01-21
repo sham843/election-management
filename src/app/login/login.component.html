@@ -20,20 +20,26 @@
                             <img src="assets/images/login-img.jpg" class="img-fluid">
                         </div>
                         <div class="col-sm-6 p-5">
-                            <form [formGroup]="loginForm" class="form" (ngSubmit)="onSubmit()">
+                            <form [formGroup]="loginForm">
                             <h3>Sign Up</h3>
                             <div class="form-container">
                                 <div class="mb-3">
                                     <label class="form-label">User Name <span class="text-danger">*</span></label>
-                                    <input type="text" placeholder="UserName" class="form-control" formControlName="UserName" [ngClass]="{ 'is-invalid': submitted && f.UserName.errors }">
+                                    <input type="text" placeholder="UserName" class="form-control" formControlName="UserName">
+                                    <div *ngIf="submitted && f.UserName.errors" class="invalid-feedback">
+                                        <div *ngIf="f.UserName.errors.required">UserName is required</div>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Password <span class="text-danger">*</span></label>
                                     <div class="input-group">
-                                        <input autocomplete="off" [type]="show_button ? 'text' : 'password'" class="form-control" placeholder="Password" formControlName="Password" [ngClass]="{ 'is-invalid': submitted && f.Password.errors }">
+                                        <input autocomplete="off" [type]="show_button ? 'text' : 'password'" class="form-control" placeholder="Password" formControlName="Password">
                                         <button type="button" class="btn btn-light bg-transparent" (click)="showPassword()">
                                             <i class="eye-icon-pos" [class]="show_eye ? 'fa fa-eye' : 'fa fa-eye-slash'"> </i>
                                         </button>
+                                    </div>
+                                    <div *ngIf="submitted && f.Password.errors" class="invalid-feedback">
+                                        <div *ngIf="f.Password.errors.passwordValid">Password is invalid format</div>
                                     </div>
                                 </div>
                                 <!-- <div class="mb-3">
@@ -45,7 +51,7 @@
                                     </div>
                                 </div> -->
                                 <div class="mb-3">
-                                    <button class="btn btn-main px-4 py-2" type="submit">
+                                    <button class="btn btn-main px-4 py-2" (click)="onSubmit()" type="submit">
                                         Log In
                                     </button>
                                 </div>

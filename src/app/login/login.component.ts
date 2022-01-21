@@ -47,12 +47,14 @@ export class LoginComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    //  else if(){
+    //   this.toastrService.error("Please Enter Valid credentials....!!!");
+    // }
     // else if (this.loginForm.value.recaptchaReactive != this.commonService.checkvalidateCaptcha()) {
     //   this.spinner.hide();
     //   this.toastrService.error("Invalid Captcha. Please try Again");
     // }
     else {
-      // this.callAPIService.setHttp('get', 'Web_GetLogin_2_0?UserName=' + this.loginForm.value.UserName + '&Password=' + this.loginForm.value.Password, false, false, false, 'ncpServiceForWeb');
       this.callAPIService.setHttp('get', 'Web_GetLogin_3_0?UserName=' + this.loginForm.value.UserName + '&Password=' + this.loginForm.value.Password+'&LoginType=1', false, false, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == '0') {
