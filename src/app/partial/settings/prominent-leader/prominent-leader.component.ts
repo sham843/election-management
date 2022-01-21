@@ -60,7 +60,7 @@ export class ProminentLeaderComponent implements OnInit {
   defaultProminentLeaderForm() {
     this.prominentLeaderForm = this.fb.group({
       Id: [0],
-      LeaderName: ['', Validators.required],
+      LeaderName: ['', [Validators.required,Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z\\s]+$')]],
       MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
       PartyId: ['', Validators.required],
       ClientId: ['', Validators.required],

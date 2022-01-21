@@ -51,7 +51,7 @@ export class RestrictedMobileComponent implements OnInit {
   defaultRestrictedMobileForm() {
     this.restrictedMobileForm = this.fb.group({
       Id: [0],
-      CallerName: ['', Validators.required],
+      CallerName: ['', [Validators.required,Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z\\s]+$')]],
       MobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
     })
   }

@@ -19,6 +19,7 @@
                             [ngClass]="{ 'is-invalid': submitted && f.LeaderName.errors }">
                             <div *ngIf="submitted && f.LeaderName.errors" class="invalid-feedback">
                                 <div *ngIf="f.LeaderName.errors.required">Leader Name is required</div>
+                                <div *ngIf="f.LeaderName.errors?.pattern">Please Enter Valid Leader Name</div>
                             </div>
                         </div>
                         <div class="mb-3">
