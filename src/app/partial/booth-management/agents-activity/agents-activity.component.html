@@ -483,7 +483,7 @@
                                     <thead>
                                         <tr>
                                             <th>Sr. No.</th>
-                                            <th>Voter NO.</th>
+                                            <!-- <th>Voter NO.</th> -->
                                             <th>Voters Full Name</th>
                                             <th>Visit Time</th>
                                             <th>Gender</th>
@@ -494,7 +494,7 @@
                                         <tr
                                             *ngFor="let newVotersList of getnewVotersList | paginate: {id: 'newVotersPagination', itemsPerPage: 10, currentPage: newVotersPaginationNo, totalItems:newVotersTotal}">
                                             <td>{{newVotersList?.SrNo}}</td>
-                                            <td>{{newVotersList?.VoterNo ? newVotersList?.VoterNo : '-'}}</td>
+                                            <!-- <td>{{newVotersList?.VoterNo ? newVotersList?.VoterNo : '-'}}</td> -->
                                             <td>{{newVotersList?.EnglishName | titlecase}}</td>
                                             <td>{{newVotersList?.SurveyDate}}</td>
                                             <td>{{newVotersList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
