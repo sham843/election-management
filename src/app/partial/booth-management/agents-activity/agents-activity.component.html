@@ -323,7 +323,6 @@
                                             *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {id: 'votersPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
                                             <td>{{clientBooth?.SrNo}}</td>
                                             <td>{{clientBooth?.VoterNo}}</td>
-                                            <!-- {{clientBooth?.EnglishName | titlecase}} -->
                                             <td>
                                                 <p class="mb-0">
                                                     <a   (click)="redirectToVoterPrfile(clientBooth)"
