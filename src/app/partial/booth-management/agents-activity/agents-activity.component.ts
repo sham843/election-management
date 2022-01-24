@@ -104,7 +104,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     }
   }
 
-
   ngOnInit(): void {
     this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
     this.deafultVoterProfilefilterForm();
