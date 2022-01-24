@@ -332,7 +332,7 @@
                                             </td>
                                             <td>{{clientBooth?.SurveyDate | dateTransform}}</td>
                                             <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
-                                            <td>{{clientBooth?.MobileNo1 ? clientBooth?.MobileNo1 : '-'}}<span *ngIf="clientBooth?.MobileNo2"> /{{clientBooth?.MobileNo2}}</span></td>
+                                            <td>{{clientBooth?.MobileNo1 ? clientBooth?.MobileNo1 : '-'}}<span *ngIf="clientBooth?.MobileNo2">  {{clientBooth?.MobileNo2}}</span></td>
                                         </tr>
 
                                     </tbody>
@@ -557,7 +557,7 @@
                                     <tbody>
                                         <tr *ngFor="let callList of getCallLoggerList | paginate: {id: 'agentCallLogsPagination', itemsPerPage: 10, currentPage: callLoggerPaginationNo, totalItems:getCallLoggerTotal}">                                           
                                             <td>{{callList?.SrNo}}</td>
-                                            <td>{{callList?.CallerName}}</td>
+                                            <td>{{callList?.CallerName? callList?.CallerName : '-'}}</td>
                                             <td>{{callList?.MobileNo}}</td>
                                             <td>{{callList?.CallDate}}</td>
                                             <td>{{callList?.CallDuration}} Sec</td>
