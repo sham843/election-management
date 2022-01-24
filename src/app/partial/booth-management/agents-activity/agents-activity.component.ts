@@ -114,9 +114,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.searchNewVotersFilters('false');
     this.searchAgentCallLoggerFilters('false');
     this.searchFamilyVotersFilters();
+    am4core.addLicense("ch-custom-attribution"); // Hide AmChart Logo Link
   }
-
-
 
   //--------------------------------------------------  top filter method's start  here -----------------------------------------------------------//
 
@@ -451,7 +450,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let hoverShadow = hoverState.filters.push(new am4core.DropShadowFilter);
     hoverShadow.opacity = 0.7;
     hoverShadow.blur = 5;
-    chart.radius = am4core.percent(100);
+    chart.radius = am4core.percent(90);
     // Add a legend
     chart.legend = new am4charts.Legend();
     chart.legend.maxWidth = 100;
@@ -464,8 +463,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     markerTemplate.width = 15;
     markerTemplate.height = 15;
     pieSeries.labels.template.disabled = true;
-
-
     chart.data = this.piChartArray;
   }
 

@@ -499,7 +499,7 @@
                                             <td>{{newVotersList?.EnglishName | titlecase}}</td>
                                             <td>{{newVotersList?.SurveyDate}}</td>
                                             <td>{{newVotersList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
-                                            <td>{{newVotersList?.MobileNo1}} {{newVotersList?.MobileNo2}}</td>
+                                            <td>{{newVotersList?.MobileNo1? newVotersList?.MobileNo1 : '-'}} <span *ngIf="newVotersList?.MobileNo2">/ {{newVotersList?.MobileNo2}}</span></td>
                                         </tr>
 
                                     </tbody>
@@ -604,6 +604,7 @@
                                 <td>Android</td>
                                 <td>{{appUseTrackRes?.StartDate | dateTransform}} -  {{appUseTrackRes?.EndDate | dateTransform}}</td>
                                 <td *ngIf="appUseTrackRes?.difference">{{appUseTrackRes?.difference}} (Min)</td>
+                                <td *ngIf="!appUseTrackRes?.difference">-</td>
                             </tr>
                         </tbody>
                     </table>
