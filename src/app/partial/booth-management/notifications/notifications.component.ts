@@ -392,6 +392,7 @@ export class NotificationsComponent implements OnInit {
         // }
         
       } else {
+        this.spinner.hide();
           //this.toastrService.error("Data is not available");
       }
     } ,(error:any) => {
@@ -410,7 +411,8 @@ export class NotificationsComponent implements OnInit {
         this.spinner.hide();
         this.getBodyOrgCellName = res.data1;
       } else {
-          //this.toastrService.error("Data is not available");
+        this.spinner.hide();
+        this.toastrService.error("Data is not available");
       }
     } ,(error:any) => {
       if (error.status == 500) {
@@ -427,7 +429,8 @@ export class NotificationsComponent implements OnInit {
         this.spinner.hide();
         this.allDistrict = res.data1;
       } else {
-          this.toastrService.error("Data is not available 2");
+        this.spinner.hide();
+        this.toastrService.error("Data is not available");
       }
     } ,(error:any) => {
       if (error.status == 500) {
@@ -435,7 +438,6 @@ export class NotificationsComponent implements OnInit {
       }
     })
   }
-
 
   gerNotificationscope() {
     this.spinner.show();
@@ -579,5 +581,4 @@ export class NotificationsComponent implements OnInit {
       this.notificationForm.controls["NotificationDate"].updateValueAndValidity();
     }
   }
-  
 }
