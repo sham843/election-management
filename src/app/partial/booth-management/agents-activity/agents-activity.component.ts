@@ -665,7 +665,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.votersCardData = res.data1[0];
-        let clickOnVoterTab: any = document.getElementById('pills-migrated-tab');clickOnVoterTab.click(); 
+        let clickOnVoterTab:any = document.getElementById('pills-migrated-tab');
+        clickOnVoterTab?.click(); 
         this.getClientBoothAgentVoterList();
       } else {
         this.votersCardData = [];

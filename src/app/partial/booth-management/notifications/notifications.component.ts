@@ -40,7 +40,7 @@ export class NotificationsComponent implements OnInit {
   ImgUrl: any;
   getImgExt: any;
   selectedFile: any;
-  NotificationText:string =  "Push";
+  NotificationText:string = "Push";
   getImgPath:any;
   NotificationId:any;
   ScopeId:any;
