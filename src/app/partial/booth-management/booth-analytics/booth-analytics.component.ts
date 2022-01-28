@@ -97,6 +97,8 @@ export class BoothAnalyticsComponent implements OnInit {
   boothMigratedList: any
 
   HideVoterListLink : boolean = false;
+  boothVoterListPromLeaderArray: any;
+  boothFamilyVLPromLeaderArray: any;
   // reverseOrder: boolean = true;
   //sortField = 'LeaderImportance';
   //order: string = 'info.name';
@@ -198,6 +200,7 @@ export class BoothAnalyticsComponent implements OnInit {
         this.IsSubElectionApplicable = item.IsSubElectionApplicable;
       }
     })
+    alert(this.IsSubElectionApplicable)
   }
 
   getConstituencyName() {
@@ -820,7 +823,11 @@ export class BoothAnalyticsComponent implements OnInit {
     this.selectedVoterCount = obj.TotalVoter;
     this.IsFilled = isFill;
     this.boothwiseVotersList = [];
-    this.viewBoothwiseVotersList();
+    if(obj.IsParty == 2){
+      this.boothVLNoSubPromLeader(obj.PartyId);
+    }else{
+      this.viewBoothwiseVotersList();
+    }
   }
 
   onClickAreaVoter(obj: any, isFill: any, voterType:any) { 
@@ -930,7 +937,11 @@ export class BoothAnalyticsComponent implements OnInit {
     this.searchVoters.setValue('');
     this.bootwiseFamiliesConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
     this.boothwiseFamiliesList = [];
-    this.viewBoothwiseFamiliesList();
+    if(obj.IsParty == 2){
+      this.boothFamillyVLNoSubPromLeader(obj.PartyId);
+    }else{
+      this.viewBoothwiseFamiliesList();
+    }
   }
 
   viewBoothwiseFamiliesList() {
@@ -1116,4 +1127,56 @@ export class BoothAnalyticsComponent implements OnInit {
     this.HideVoterListLink = false;
   }
 }
+
+//............................   Prominent Leader Regarding Code Start Here ...................................//
+
+
+boothVLNoSubPromLeader(PartyId:any) {
+  let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootMigratedConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
+  this.spinner.show();
+  let url = '';
+  this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_BoothVoterList_NoSub_PromLeader_1_0?' + obj : url = 'Web_Get_Client_BoothVoterList_PromLeader_1_0?' + obj
+  this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.data == 0) {
+      this.spinner.hide();
+      this.boothwiseVotersList = res.data1;  // Array Name is Same As viewBoothwiseVotersList();
+    } else {
+      this.boothwiseVotersList = [];
+      this.spinner.hide();
+    }
+  }, (error: any) => {
+    this.spinner.hide();
+    if (error.status == 500) {
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    }
+  })
+}
+
+boothFamillyVLNoSubPromLeader(PartyId:any) {
+  let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootMigratedConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
+  this.spinner.show();
+  let url = '';
+  this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_Booth_Familly_VoterList_PromLeader_No_SubEle?' + obj : url = 'Web_Get_Client_Booth_Familly_VoterList_1_0_PromLeader_1_0?' + obj
+  this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.data == 0) {
+      this.spinner.hide();
+      this.boothwiseFamiliesList = res.data1; //  Array Name is Same As viewBoothwiseFamiliesList();
+    } else {
+      this.boothwiseFamiliesList = [];
+      this.spinner.hide();
+    }
+  }, (error: any) => {
+    this.spinner.hide();
+    if (error.status == 500) {
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    }
+  })
+}
+
+
+
 }
