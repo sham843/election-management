@@ -200,7 +200,6 @@ export class BoothAnalyticsComponent implements OnInit {
         this.IsSubElectionApplicable = item.IsSubElectionApplicable;
       }
     })
-    alert(this.IsSubElectionApplicable)
   }
 
   getConstituencyName() {
