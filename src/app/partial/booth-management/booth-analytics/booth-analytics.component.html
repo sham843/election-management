@@ -11,7 +11,7 @@
           <div class="col-sm-3">
             <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
               (remove)="clearFilter('clientId');HideVoterListLink = false;"
-              (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false;"
+              (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false; this.IsPartyCheck = 0"
               [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
               placeholder="Select Client">
             </ngx-select>

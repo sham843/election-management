@@ -77,6 +77,7 @@ export class ForwardActivitiesComponent implements OnInit {
       hashtags_Activity: [''],
       IsChangeImage: [0],
       NewsType:[''],
+      ClientId :['']
     })
   }
 
@@ -131,9 +132,10 @@ export class ForwardActivitiesComponent implements OnInit {
       fromData.append('HashTags', getObj.hashtags_Activity);
       fromData.append('NewsType', NewsTypeFlag);  //img + text = 3, & only text = 1 
       fromData.append('IsChangeImage', imageChangeFlag);
-      fromData.append('NewsImages ', this.selectedFile);
-  
-      this.callAPIService.setHttp('post', 'Insert_News_Web_1_0', false, fromData, false, 'electionServiceForWeb');
+      fromData.append('NewsImages', this.selectedFile);
+      fromData.append('ClientId',this.commonService.getlocalStorageData().ClientId);
+
+      this.callAPIService.setHttp('post', 'Insert_News_Web_2_0', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.submitted = false;
@@ -249,8 +251,8 @@ export class ForwardActivitiesComponent implements OnInit {
     getObj.fromTo[1] != "" ? (toDate = this.datePipe.transform(getObj.fromTo[1], 'dd/MM/yyyy')) : toDate = '';
    
     let obj= this.commonService.loggedInUserId() + '&PageNo=' + this.paginationNo + '&FromDate=' + fromDate + '&ToDate=' + toDate + 
-    '&NewsType=' +getObj.newstypeId + '&SearchText=' + getObj.searchText
-    this.callAPIService.setHttp('get', 'GetNews_Web_1_0?UserId='+obj, false, false, false, 'electionServiceForWeb');
+    '&NewsType=' +getObj.newstypeId + '&SearchText=' + getObj.searchText + '&ClientId=' + this.commonService.getlocalStorageData().ClientId
+    this.callAPIService.setHttp('get', 'GetNews_Web_2_0?UserId='+obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();

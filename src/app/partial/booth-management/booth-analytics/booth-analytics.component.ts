@@ -99,6 +99,8 @@ export class BoothAnalyticsComponent implements OnInit {
   HideVoterListLink : boolean = false;
   boothVoterListPromLeaderArray: any;
   boothFamilyVLPromLeaderArray: any;
+  IsPartyCheck: any;
+  PartyIdper: any;
   // reverseOrder: boolean = true;
   //sortField = 'LeaderImportance';
   //order: string = 'info.name';
@@ -823,6 +825,8 @@ export class BoothAnalyticsComponent implements OnInit {
     this.IsFilled = isFill;
     this.boothwiseVotersList = [];
     if(obj.IsParty == 2){
+      this.IsPartyCheck = obj.IsParty;
+      this.PartyIdper = obj.PartyId;
       this.boothVLNoSubPromLeader(obj.PartyId);
     }else{
       this.viewBoothwiseVotersList();
@@ -842,7 +846,11 @@ export class BoothAnalyticsComponent implements OnInit {
 
   onClickPagintionBoothVoters(pageNo: any) {
     this.bootwiseVotersConfig.currentPage = pageNo;
-    this.viewBoothwiseVotersList();    
+    if(this.IsPartyCheck == 2){
+      this.boothVLNoSubPromLeader(this.PartyIdper);
+    }else{
+      this.viewBoothwiseVotersList(); 
+    } 
   }
 
   viewBoothwiseVotersList() {   
@@ -927,7 +935,12 @@ export class BoothAnalyticsComponent implements OnInit {
 
   onClickPagintionBoothFamilies(pageNo: any) {
     this.bootwiseFamiliesConfig.currentPage = pageNo;
-    this.viewBoothwiseFamiliesList();
+
+    if(this.IsPartyCheck == 2){
+      this.boothFamillyVLNoSubPromLeader(this.PartyIdper);
+    }else{
+      this.viewBoothwiseFamiliesList();
+    } 
   }
   onClickFamilyCount(obj: any, isFamily: any) {
     isFamily == 1 && (this.AreaId = 0, this.ProfessionId = 0, this.PartyId = obj.PartyId, this.selectedTitle = obj.PartyName, this.selectedVoterCount = obj.TotalFamily)
@@ -937,6 +950,8 @@ export class BoothAnalyticsComponent implements OnInit {
     this.bootwiseFamiliesConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
     this.boothwiseFamiliesList = [];
     if(obj.IsParty == 2){
+      this.IsPartyCheck = obj.IsParty;
+      this.PartyIdper = obj.PartyId;
       this.boothFamillyVLNoSubPromLeader(obj.PartyId);
     }else{
       this.viewBoothwiseFamiliesList();
@@ -1132,7 +1147,7 @@ export class BoothAnalyticsComponent implements OnInit {
 
 boothVLNoSubPromLeader(PartyId:any) {
   let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootMigratedConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
+    + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
   this.spinner.show();
   let url = '';
   this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_BoothVoterList_NoSub_PromLeader_1_0?' + obj : url = 'Web_Get_Client_BoothVoterList_PromLeader_1_0?' + obj
@@ -1141,6 +1156,7 @@ boothVLNoSubPromLeader(PartyId:any) {
     if (res.data == 0) {
       this.spinner.hide();
       this.boothwiseVotersList = res.data1;  // Array Name is Same As viewBoothwiseVotersList();
+      this.bootwiseVotersConfig.totalItems = res.data2[0].TotalCount;  
     } else {
       this.boothwiseVotersList = [];
       this.spinner.hide();
@@ -1155,7 +1171,7 @@ boothVLNoSubPromLeader(PartyId:any) {
 
 boothFamillyVLNoSubPromLeader(PartyId:any) {
   let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootMigratedConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
+    + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseFamiliesConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
   this.spinner.show();
   let url = '';
   this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_Booth_Familly_VoterList_PromLeader_No_SubEle?' + obj : url = 'Web_Get_Client_Booth_Familly_VoterList_1_0_PromLeader_1_0?' + obj
@@ -1164,6 +1180,7 @@ boothFamillyVLNoSubPromLeader(PartyId:any) {
     if (res.data == 0) {
       this.spinner.hide();
       this.boothwiseFamiliesList = res.data1; //  Array Name is Same As viewBoothwiseFamiliesList();
+      this.bootwiseFamiliesConfig.totalItems = res.data2[0].TotalCount;
     } else {
       this.boothwiseFamiliesList = [];
       this.spinner.hide();
@@ -1175,7 +1192,5 @@ boothFamillyVLNoSubPromLeader(PartyId:any) {
     }
   })
 }
-
-
 
 }
