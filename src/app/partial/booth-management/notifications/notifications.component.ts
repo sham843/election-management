@@ -25,7 +25,7 @@ export class NotificationsComponent implements OnInit {
   allLevels: any;
   memberNameArray: any;
   filterForm!: FormGroup;
-  viewMembersObj:any = { DistrictId: 0, Talukaid: 0, villageid: 0, SearchText:''}
+  viewMembersObj: any = { DistrictId: 0, Talukaid: 0, villageid: 0, SearchText: '' }
   getTalkaByDistrict: any;
   resultVillageOrCity: any;
   notificationscopeArray: any;
@@ -33,75 +33,82 @@ export class NotificationsComponent implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   searchFilter = "";
-  defaultCloseBtn:boolean = false;
-  total:any;
+  defaultCloseBtn: boolean = false;
+  total: any;
   imgName: any;
   ImgUrl: any;
   getImgExt: any;
   selectedFile: any;
-  NotificationText:string = "Push";
-  getImgPath:any;
-  NotificationId:any;
-  ScopeId:any;
-  MemberIdEdit:any;
-  globalMemberId:any[]= [];
-  NewsId:any;
-  @ViewChild('clickPushModal') clickPushModal:any;
-  IsChangeImage:boolean = false;
+  NotificationText: string = "Push";
+  getImgPath: any;
+  NotificationId: any;
+  ScopeId: any;
+  MemberIdEdit: any;
+  globalMemberId: any[] = [];
+  NewsId: any;
+  @ViewChild('clickPushModal') clickPushModal: any;
+  IsChangeImage: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef;
-  schedulerFlag:boolean = false;
+  schedulerFlag: boolean = false;
   minDate: any = new Date();
-  IspushedFlag:any = 0;
+  IspushedFlag: any = 0;
   reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
   allAgentLists: any;
+  clientNameArray: any;
+  globalClientId: any;
+  DecScopeId: any;
 
   constructor(
-    private callAPIService: CallAPIService, 
+    private callAPIService: CallAPIService,
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private commonService: CommonService,
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe:DatePipe,
+    private datePipe: DatePipe,
     public dialog: MatDialog,
     public dateTimeAdapter: DateTimeAdapter<any>) {
-      {dateTimeAdapter.setLocale('en-IN');} }
+    { dateTimeAdapter.setLocale('en-IN'); }
+  }
 
   ngOnInit(): void {
+    this.globalClientId = this.commonService.getlocalStorageData().ClientId;
     this.customForm();
     this.defaultFilterForm();
     this.gerNotificationscope();
     this.getNotificationData();
+    this.getClientName();
     this.searchFilters('false');
   }
 
   customForm() {
     this.notificationForm = this.fb.group({
-      Id:[0],
-      CreatedBy:[this.commonService.loggedInUserId()],
-      ScopeId: ['', Validators.required], 
+      Id: [0],
+      CreatedBy: [this.commonService.loggedInUserId()],
+      ScopeId: ['', Validators.required],
       Title: ['', Validators.required],
       Description: ['', Validators.required],
       ImageUrl: [''],
       Link: ['', [Validators.pattern(this.reg)]],
       MemberStr: [],
-      NotificationDate:[''],
-      ClientId:['']
+      NotificationDate: [''],
+      ClientId: ['']
     })
   }
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      fromTo: [['','']],
+      fromTo: [['', '']],
       ScopeId: [0],
-      searchText:[''],
+      searchText: [''],
+      ClientId : [0]
     })
   }
 
   get f() { return this.notificationForm.controls };
-  
-  onSubmit(){
+
+  onSubmit() {
     this.valiationForScheduler();
     this.spinner.show();
     this.submitted = true;
@@ -112,38 +119,38 @@ export class NotificationsComponent implements OnInit {
     else {
       this.globalMemberId = [];
       let fromData = new FormData();
-      let notificationFlag:any;
-      let ImageChangeFlag:any;
-      if(this.IsChangeImage || this.selectedFile){
+      let notificationFlag: any;
+      let ImageChangeFlag: any;
+      if (this.IsChangeImage || this.selectedFile) {
         notificationFlag = 2;
-        ImageChangeFlag = 1 
-      }else{
+        ImageChangeFlag = 1
+      } else {
         notificationFlag = 1;
         ImageChangeFlag = 0
       }
-      let getObj:any = this.notificationForm.value;
-      let fillSelection:any;
-      if(getObj.ScopeId == 2){
+      let getObj: any = this.notificationForm.value;
+      let fillSelection: any;
+      if (getObj.ScopeId == 2) {
         fillSelection = getObj.MemberStr
       }
-      
-      if(getObj.ScopeId == 2){
-        fillSelection.map((ele:any)=>{
-          this.globalMemberId.push({"MemberId":ele});
+
+      if (getObj.ScopeId == 2) {
+        fillSelection.map((ele: any) => {
+          this.globalMemberId.push({ "MemberId": ele });
         })
       }
-      let id:any;
+      let id: any;
       getObj.Id ? id = getObj.Id : id = 0;
-      let convertDate:any;
-      let NotificationDate:any;
-      if(getObj.NotificationDate){
+      let convertDate: any;
+      let NotificationDate: any;
+      if (getObj.NotificationDate) {
         NotificationDate = this.datePipe.transform(getObj.NotificationDate, 'dd/MM/YYYY HH:mm');
         // convertDate = NotificationDate.split(':');
         convertDate = NotificationDate;
-      }else{
+      } else {
         NotificationDate = this.datePipe.transform(new Date, 'dd/MM/YYYY HH:mm');
         // convertDate= NotificationDate.split(':');
-        convertDate= NotificationDate;
+        convertDate = NotificationDate;
       }
       fromData.append('Id', id);
       fromData.append('CreatedBy', this.commonService.loggedInUserId());
@@ -155,11 +162,11 @@ export class NotificationsComponent implements OnInit {
       fromData.append('MemberStr', JSON.stringify(this.globalMemberId));
       fromData.append('AttchmentStr', this.selectedFile ? this.selectedFile : '');
       fromData.append('NotificationType', notificationFlag);
-      fromData.append('IsChangeImage',  ImageChangeFlag );
+      fromData.append('IsChangeImage', ImageChangeFlag);
       // fromData.append('NotificationDate', convertDate[0]+":00");
       fromData.append('NotificationDate', convertDate);
-      fromData.append('IsPushed',  this.IspushedFlag);
-      fromData.append('ClientId',  this.commonService.getlocalStorageData().ClientId);
+      fromData.append('IsPushed', this.IspushedFlag);
+      fromData.append('ClientId', this.notificationForm.value.ClientId);
 
       this.callAPIService.setHttp('post', 'InsertNotification_Web_2_0', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
@@ -179,7 +186,7 @@ export class NotificationsComponent implements OnInit {
         } else {
           this.spinner.hide();
         }
-      } ,(error:any) => {
+      }, (error: any) => {
         this.spinner.hide();
         if (error.status == 500) {
           this.router.navigate(['../500'], { relativeTo: this.route });
@@ -191,35 +198,60 @@ export class NotificationsComponent implements OnInit {
   addValidationOn(scodeId: any) {
     if (scodeId == 2) {
       this.validationRemove();
-      this.getAllAgentList();
-      this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
-      this.notificationForm.controls["MemberStr"].updateValueAndValidity();
-      this.notificationForm.controls['MemberStr'].clearValidators();
-    } else{
+      this.getClientName();
+      this.notificationForm.controls["ClientId"].setValidators(Validators.required);
+      this.notificationForm.controls["ClientId"].updateValueAndValidity();
+      this.notificationForm.controls['ClientId'].clearValidators();
+      // this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
+      // this.notificationForm.controls["MemberStr"].updateValueAndValidity();
+      // this.notificationForm.controls['MemberStr'].clearValidators();
+    } else {
       this.validationRemove();
     }
   }
-  
+
   validationRemove() {
+    this.notificationForm.controls['ClientId'].setValue('');
+    this.notificationForm.controls['ClientId'].clearValidators();
+    this.notificationForm.controls['ClientId'].updateValueAndValidity();
     this.notificationForm.controls['MemberStr'].setValue('');
     this.notificationForm.controls['MemberStr'].clearValidators();
     this.notificationForm.controls['MemberStr'].updateValueAndValidity();
   }
 
-  editNotification(data:any){
+
+  addValidationOnClient() {
+    this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
+    this.notificationForm.controls["MemberStr"].updateValueAndValidity();
+    // this.notificationForm.controls['MemberStr'].clearValidators();
+  }
+
+  validationClientRemove() {
+    this.notificationForm.controls['MemberStr'].setValue('');
+    this.notificationForm.controls["ClientId"].setValidators(Validators.required);
+    this.notificationForm.controls["ClientId"].updateValueAndValidity();
+    this.notificationForm.controls['ClientId'].clearValidators();
+    this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
+    this.notificationForm.controls["MemberStr"].updateValueAndValidity();
+    this.notificationForm.controls['MemberStr'].clearValidators();
+  }
+
+
+  editNotification(data: any) {
+    this.DecScopeId = data.ScopeId;
     this.schedulerFlag = false;
     this.NotificationText = "Update";
     this.getImgPath = data.AttachmentPath;
-   
+
     this.addValidationOn(data.ScopeId);
 
-    if(data.ScopeId == 2){
-      data.MemberStr = data.MemberStr.split(",").map((item:any)=> {
-        return parseInt(item);
-    });
-    }
-    let dateTransForm:any = data.NotificationDate.split(" ");
-    let datefomratChange:any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
+    // if(data.ScopeId == 2){
+    //   data.MemberStr = data.MemberStr.split(",").map((item:any)=> {
+    //     return parseInt(item);
+    // });
+    // }
+    let dateTransForm: any = data.NotificationDate.split(" ");
+    let datefomratChange: any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
 
     this.notificationForm.patchValue({
       AttachmentPath: data.AttachmentPath,
@@ -232,17 +264,25 @@ export class NotificationsComponent implements OnInit {
       ScopeName: data.ScopeName,
       SrNo: data.SrNo,
       Title: data.Title,
-      MemberStr:data.MemberStr,
-      NotificationDate:new Date(Date.parse(datefomratChange+" "+dateTransForm[1])),
+      ClientId: data.ClientId,
+      NotificationDate: new Date(Date.parse(datefomratChange + " " + dateTransForm[1])),
     })
-    if (data.ScopeId == 2) {
+    if (this.DecScopeId != 1) {
+      this.getClientName();
+      this.notificationForm.controls["ClientId"].setValue(this.notificationForm.value.ClientId);
+      let asd = data.MemberStr.split(",").map((item: any) => {
+        return parseInt(item);
+      });
       this.getAllAgentList();
-      this.notificationForm.controls["MemberStr"].setValue(this.notificationForm.value.MemberStr);
-    }  
+      setTimeout(() => {
+        this.notificationForm.controls["MemberStr"].setValue(asd);
+      }, 500);
+      
+    }
   }
 
-  resetNotificationForm(){
-    this.NotificationText= "Push";
+  resetNotificationForm() {
+    this.NotificationText = "Push";
     this.submitted = false;
     this.paginationNo = 1;
     this.getImgPath = null;
@@ -250,14 +290,14 @@ export class NotificationsComponent implements OnInit {
   }
 
 
-  deleteImg(){
+  deleteImg() {
     this.selectedFile = "";
     this.getImgPath = "";
     this.fileInput.nativeElement.value = '';
     this.IsChangeImage = true;
   }
-  
-  delNotConfirmation(NewsId:any){
+
+  delNotConfirmation(NewsId: any) {
     this.NewsId = NewsId;
     this.deleteConfirmModel();
   }
@@ -265,14 +305,14 @@ export class NotificationsComponent implements OnInit {
   deleteConfirmModel() {
     const dialogRef = this.dialog.open(DeleteComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if(result == 'Yes'){
+      if (result == 'Yes') {
         this.deleteNotifications();
       }
     });
   }
 
-  deleteNotifications(){
-    this.callAPIService.setHttp('get', 'Delete_Notification_Web_1_0?NewsId='+this.NewsId+'&CreatedBy='+this.commonService.loggedInUserId(), false, false , false, 'electionServiceForWeb');
+  deleteNotifications() {
+    this.callAPIService.setHttp('get', 'Delete_Notification_Web_1_0?NewsId=' + this.NewsId + '&CreatedBy=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
@@ -282,7 +322,7 @@ export class NotificationsComponent implements OnInit {
         // this.toastrService.error(res.data1[0].Msg)
         this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
@@ -290,22 +330,22 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
-  pushMotificationStatus(id:any,scopeId:any){
+  pushMotificationStatus(id: any, scopeId: any) {
     this.NotificationId = id;
     this.ScopeId = scopeId;
   }
 
-  pushMotification(){
-    this.callAPIService.setHttp('get', 'Push_SendNotification_1_0?UserId='+this.commonService.loggedInUserId()+'&NotificationId='+this.NotificationId+'&ScopeId='+this.ScopeId, false, false , false, 'electionServiceForWeb');
+  pushMotification() {
+    this.callAPIService.setHttp('get', 'Push_SendNotification_1_0?UserId=' + this.commonService.loggedInUserId() + '&NotificationId=' + this.NotificationId + '&ScopeId=' + this.ScopeId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1);
         this.getNotificationData();
       } else {
-       // this.toastrService.error('Something went wrong please try again');
+        // this.toastrService.error('Something went wrong please try again');
         this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
@@ -313,27 +353,34 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
-  // getMemberName() {
-  //   this.spinner.show();    
-  //   this.callAPIService.setHttp('get', 'GetMemberddl_Web_1_0?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
-  //   this.callAPIService.getHttp().subscribe((res: any) => {
-  //     if (res.data == 0) {
-  //       this.spinner.hide();
-  //       this.memberNameArray = res.data1;
-
-  //     } else {
-  //       this.spinner.hide();
-  //     }
-  //   } ,(error:any) => {
-  //     if (error.status == 500) {
-  //       this.router.navigate(['../500'], { relativeTo: this.route });
-  //     }
-  //   })
-  // }
+  getClientName() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.clientNameArray = res.data1;
+        if (this.clientNameArray.length == 1) {
+          this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id); // Id men's agent Id
+          this.addValidationOnClient();
+          this.getAllAgentList();
+        }
+      }
+      else {
+        this.spinner.hide();
+        this.clientNameArray = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
 
   getAllAgentList() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + this.commonService.getlocalStorageData().ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + this.notificationForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -361,9 +408,9 @@ export class NotificationsComponent implements OnInit {
         this.notificationscopeArray = res.data1;
       } else {
         this.spinner.hide();
-          //this.toastrService.error("Data is not available");
+        //this.toastrService.error("Data is not available");
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
@@ -372,45 +419,47 @@ export class NotificationsComponent implements OnInit {
   }
 
 
-  clearFilter(flag:any){
-    if(flag ==  'notifications'){
+  clearFilter(flag: any) {
+    if (flag == 'client') {
+      this.filterForm.controls['ClientId'].setValue(0);
+    } else if (flag == 'notifications') {
       this.filterForm.controls['ScopeId'].setValue(0);
-    }else  if(flag ==  'search'){
+    } else if (flag == 'search') {
       this.filterForm.controls['searchText'].setValue('');
-    }else  if(flag ==  'dateRangePIcker'){
+    } else if (flag == 'dateRangePIcker') {
       this.defaultCloseBtn = false;
-      this.filterForm.controls['fromTo'].setValue(['','']);
+      this.filterForm.controls['fromTo'].setValue(['', '']);
     }
     this.paginationNo = 1;
     this.getNotificationData();
   }
 
-  filterData(flag:any){
-    flag == 'range' ?  this.defaultCloseBtn = true :  this.defaultCloseBtn = false; 
+  filterData(flag: any) {
+    flag == 'range' ? this.defaultCloseBtn = true : this.defaultCloseBtn = false;
     this.paginationNo = 1;
     this.getNotificationData();
   }
 
-  getNotificationData(){
-    let getObj:any = this.filterForm.value;
+  getNotificationData() {
+    let getObj: any = this.filterForm.value;
     this.spinner.show();
     let fromDate: any;
     let toDate: any;
+    let ClientId = this.commonService.getlocalStorageData().ClientId == 0 ? getObj.ClientId : this.commonService.getlocalStorageData().ClientId;
     getObj.fromTo[0] != "" ? (fromDate = this.datePipe.transform(getObj.fromTo[0], 'dd/MM/yyyy')) : fromDate = '';
     getObj.fromTo[1] != "" ? (toDate = this.datePipe.transform(getObj.fromTo[1], 'dd/MM/yyyy')) : toDate = '';
-    this.callAPIService.setHttp('get', 'GetNotification_Web_2_0?UserId='+this.commonService.loggedInUserId()+'&PageNo='+this.paginationNo+'&FromDate='+fromDate+'&ToDate='+toDate+'&ScopeId='+getObj.ScopeId+'&SearchText='+getObj.searchText
-    +'&ClientId='+ this.commonService.getlocalStorageData().ClientId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'GetNotification_Web_2_0?UserId=' + this.commonService.loggedInUserId() + '&PageNo=' + this.paginationNo + '&FromDate=' + fromDate + '&ToDate=' + toDate + '&ScopeId=' + getObj.ScopeId + '&SearchText=' + getObj.searchText
+      + '&ClientId=' + ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.notificationArray = res.data1;
-        console.log(this.notificationArray)
         this.total = res.data2[0].TotalCount;
       } else {
         this.notificationArray = [];
         this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.notificationArray = [];
       this.spinner.hide();
       if (error.status == 500) {
@@ -419,13 +468,13 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
- 
+
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
     this.getNotificationData();
   }
 
-  onKeyUpFilter(){
+  onKeyUpFilter() {
     this.subject.next();
   }
 
@@ -444,7 +493,7 @@ export class NotificationsComponent implements OnInit {
     );
   }
 
-  
+
   choosePhoto() {
     let clickPhoto: any = document.getElementById('my_file')
     clickPhoto.click();
@@ -486,12 +535,12 @@ export class NotificationsComponent implements OnInit {
     }
   }
 
-  valiationForScheduler(){
+  valiationForScheduler() {
     if (this.schedulerFlag) {
       this.notificationForm.controls["NotificationDate"].setValidators(Validators.required);
       this.notificationForm.controls["NotificationDate"].updateValueAndValidity();
       this.notificationForm.controls['NotificationDate'].clearValidators();
-    }else{
+    } else {
       this.notificationForm.controls['NotificationDate'].clearValidators();
       this.notificationForm.controls["NotificationDate"].updateValueAndValidity();
     }

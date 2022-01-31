@@ -44,7 +44,6 @@
                                     <div *ngIf="submitted && f.Link.errors" class="invalid-feedback">
                                         <div *ngIf="f.Link.errors.pattern">Please enter valid Link.</div>
                                     </div>
-
                                 </div>
 
                                 <div class="mb-3">
@@ -59,39 +58,31 @@
                                         <div *ngIf="f.ScopeId.errors.required">Scope of Notification is required</div>
                                     </div>
                                 </div>
-                                <!-- <div class="mb-3">
-                                    <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
-                                        District</label>
-                                    <ngx-select [allowClear]="true" [multiple]="true"
-                                        [disabled]="this.notificationForm.value.ScopeId != 2" [items]="allDistrict"
-                                        formControlName="DistrictId" optionValueField="DistrictId"
-                                        optionTextField="DistrictName" placeholder="Select District">
-                                    </ngx-select>
-                                    <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
-                                        <div *ngIf="f.DistrictId.errors.required">District is required</div>
-                                    </div>
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.BodyId.errors }">Select
-                                        Committee</label>
-                                    <ngx-select [allowClear]="true" [multiple]="true" [items]="getBodyOrgCellName"
-                                        [disabled]="this.notificationForm.value.ScopeId != 3" optionValueField="Id"
-                                        formControlName="BodyId" optionTextField="BodyOrgCellName"
-                                        placeholder="Select Committee Name">
+                                        [ngClass]="{ 'required-field': submitted && f.ClientId.errors }">Select
+                                        Client</label>
+                                    <ngx-select [items]="clientNameArray" [allowClear]="true"
+                                        (remove)="validationClientRemove()" formControlName="ClientId"
+                                        (select)="getAllAgentList();addValidationOnClient()"
+                                        [disabled]="this.notificationForm.value.ScopeId != 2 || globalClientId != 0"
+                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
                                     </ngx-select>
-                                    <div *ngIf="submitted && f.BodyId.errors" class="invalid-feedback">
-                                        <div *ngIf="f.BodyId.errors.required">Committee is required</div>
+                                    <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                                        <div *ngIf="f.ClientId.errors.required">Select Client is required</div>
                                     </div>
-                                </div> -->
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="ddlMembers" class="form-label"
                                         [ngClass]="{ 'required-field': submitted && f.MemberStr.errors }">Select
                                         Agent</label>
-                                    <ngx-select [items]="allAgentLists" [multiple]="true" [allowClear]="true" formControlName="MemberStr"
-                                        optionValueField="AgentId" [disabled]="this.notificationForm.value.ScopeId != 2"
-                                        optionTextField="FullName" placeholder="Select Agent">
+                                    <ngx-select [items]="allAgentLists" [multiple]="true" [allowClear]="true"
+                                        formControlName="MemberStr" optionValueField="AgentId"
+                                        [disabled]="!this.notificationForm.value.ClientId"
+                                        (remove)="addValidationOnClient()" optionTextField="FullName"
+                                        placeholder="Select Agent">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.MemberStr.errors" class="invalid-feedback">
                                         <div *ngIf="f.MemberStr.errors.required">Select Agent is required</div>
@@ -156,7 +147,15 @@
                         <div class="text-end">
                             <form [formGroup]="filterForm">
                                 <div class="row g-1 ">
-                                    <div class="offset-sm-3 col-sm-3">
+                                    <div class="col-sm-3">
+                                        <ngx-select [items]="clientNameArray" [allowClear]="true"
+                                            (remove)="clearFilter('client')" formControlName="ClientId"
+                                            (select)="filterData(false)" *ngIf="globalClientId == 0"
+                                            optionValueField="id" optionTextField="Fullname"
+                                            placeholder="Select Client">
+                                        </ngx-select>
+                                    </div>
+                                    <div class="col-sm-3">
                                         <ngx-select [allowClear]="true" (remove)="clearFilter('notifications')"
                                             [items]="notificationscopeArray" formControlName="ScopeId"
                                             placeholder="Scope of Notification" (select)="filterData(false)"
