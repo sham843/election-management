@@ -46,6 +46,8 @@ export class ForwardActivitiesComponent implements OnInit {
   NewsId: any;
   IsChangeImage:boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef;   
+  globalClientId: any;
+  clientNameArray: any;
 
   constructor(
     private callAPIService: CallAPIService, 
@@ -61,10 +63,12 @@ export class ForwardActivitiesComponent implements OnInit {
     ) { { dateTimeAdapter.setLocale('en-IN'); } }
 
   ngOnInit(): void {
+    this.globalClientId = this.commonService.getlocalStorageData().ClientId;
     this.customForm();
     this.defaultFilterForm();
     this.getnewstype();
     this.getNewsData();
+    this.getClientName();
     this.searchFilters('false');
   }
 
@@ -88,6 +92,7 @@ export class ForwardActivitiesComponent implements OnInit {
       newstypeId: [0],
       fromTo: [['','']],
       searchText:[''],
+      ClientId:[0]
     })
   }
   
@@ -222,6 +227,26 @@ export class ForwardActivitiesComponent implements OnInit {
     })
   }
 
+  getClientName() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.clientNameArray = res.data1;
+      }
+      else {
+        this.spinner.hide();
+        this.clientNameArray = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
 
   getnewstype(){
     this.spinner.show();
@@ -249,9 +274,10 @@ export class ForwardActivitiesComponent implements OnInit {
     let toDate: any;
     getObj.fromTo[0] != "" ? (fromDate = this.datePipe.transform(getObj.fromTo[0], 'dd/MM/yyyy')) : fromDate = '';
     getObj.fromTo[1] != "" ? (toDate = this.datePipe.transform(getObj.fromTo[1], 'dd/MM/yyyy')) : toDate = '';
-   
+    let ClientId = this.commonService.getlocalStorageData().ClientId == 0 ? getObj.ClientId : this.commonService.getlocalStorageData().ClientId;
+    
     let obj= this.commonService.loggedInUserId() + '&PageNo=' + this.paginationNo + '&FromDate=' + fromDate + '&ToDate=' + toDate + 
-    '&NewsType=' +getObj.newstypeId + '&SearchText=' + getObj.searchText + '&ClientId=' + this.commonService.getlocalStorageData().ClientId
+    '&NewsType=' +getObj.newstypeId + '&SearchText=' + getObj.searchText + '&ClientId=' + ClientId
     this.callAPIService.setHttp('get', 'GetNews_Web_2_0?UserId='+obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -278,7 +304,9 @@ export class ForwardActivitiesComponent implements OnInit {
   }
 
   clearFilter(flag:any){
-    if(flag ==  'newsType'){
+    if(flag == 'client'){
+      this.filterForm.controls['ClientId'].setValue(0);
+    }else if(flag ==  'newsType'){
       this.filterForm.controls['newstypeId'].setValue(0);
     }else  if(flag ==  'search'){
       this.filterForm.controls['searchText'].setValue('');

@@ -87,7 +87,13 @@
                     <div class="col-8 border-start" id="notifications">
                         <form [formGroup]="filterForm">
                             <div class="row g-1 mb-2 border-bottom pb-2">
-                                <div class="offset-sm-4 col-sm-4">
+                                <div class="col-sm-4">
+                                    <ngx-select [items]="clientNameArray" [allowClear]="true" (remove)="clearFilter('client')" formControlName="ClientId"
+                                        (select)="filterData(false)" *ngIf="globalClientId == 0" optionValueField="id" optionTextField="Fullname"
+                                        placeholder="Select Client">
+                                    </ngx-select>
+                                </div>
+                                <div class="col-sm-4">
                                     <div class="input-group">
                                         <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" formControlName="fromTo" [selectMode]="'range'" (dateTimeChange)="filterData('range')" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="From To Date">
                                         <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3" *ngIf="!defaultCloseBtn">
