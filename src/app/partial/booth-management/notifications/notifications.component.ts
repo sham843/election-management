@@ -270,13 +270,13 @@ export class NotificationsComponent implements OnInit {
     if (this.DecScopeId != 1) {
       this.getClientName();
       this.notificationForm.controls["ClientId"].setValue(this.notificationForm.value.ClientId);
-      let asd = data.MemberStr.split(",").map((item: any) => {
+      let MemberStr = data.MemberStr.split(",").map((item: any) => {
         return parseInt(item);
       });
       this.getAllAgentList();
       setTimeout(() => {
-        this.notificationForm.controls["MemberStr"].setValue(asd);
-      }, 500);
+        this.notificationForm.controls["MemberStr"].setValue(MemberStr);
+      }, 100);
       
     }
   }
