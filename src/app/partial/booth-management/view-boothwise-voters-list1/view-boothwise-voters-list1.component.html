@@ -46,7 +46,8 @@
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
-                            formControlName="getBoothId"  optionValueField="BoothId" (select)="boothDataHide=true;  selBoothList($event);boothVoterList()" (remove)="clearTopFilter('BoothId')" 
+                            formControlName="getBoothId"  optionValueField="BoothId" (selectionChanges)="globalAssemblyFilter($event)" 
+                            (select)="boothDataHide=true; selBoothList($event);boothVoterList()" (remove)="clearTopFilter('BoothId')" 
                             optionTextField="BoothNickName"
                             placeholder="Select Booth">
                         </ngx-select>
@@ -1198,7 +1199,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" (click)="clearBoothVotersFilterForm()">Clear All</button>
                 </div>
                 <div class="col-sm-6 text-end">
-                    <button type="button" class="btn btn-main btn-sm" (click)="globalFilterShowData()">Show Data</button>
+                    <button type="button" class="btn btn-main btn-sm" data-bs-dismiss="offcanvas" (click)="globalFilterShowData()">Show Data</button>
                 </div>
             </div>
         </div>

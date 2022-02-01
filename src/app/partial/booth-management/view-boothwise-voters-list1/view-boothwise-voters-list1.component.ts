@@ -286,7 +286,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         if(this.BoothAnalyticsObj.flag == 1){
           this.selBoothList(this.BoothAnalyticsObj.BoothId);
         }
-        res.data1[0].AssemblyId ? this.globalAssemblyId = res.data1[0].AssemblyId : '';
+        //res.data1[0].AssemblyId ? this.globalAssemblyId = res.data1[0].AssemblyId : '';
         this.boothDataHide=true
         this.dataNotFound = true;
       } else {
@@ -300,6 +300,11 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+  globalAssemblyFilter(event:any){
+    let AssemblyId = event[0]?.data.AssemblyId;
+    AssemblyId ? this.globalAssemblyId = AssemblyId : '';
   }
 
 
@@ -411,7 +416,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   
       this.globalboothVoterData = boothDetailsById[0];
       this.HighlightRow = boothDetailsById[0]?.BoothId;
-
     }
 
     // let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' +  this.filterForm.value?.getBoothId;
@@ -429,6 +433,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.boothDataHide = true;
         this.spinner.hide();
         this.clickBoothListArray = res.data1[0];
+        this.defaultShowVoterList();
       } else {
         this.boothDataHide = false;
         this.spinner.hide();
@@ -490,7 +495,9 @@ clearBoothVotersFilterForm(){
   getVoterAreaList() {
     this.spinner.show();
     let formData = this.globalFilterForm.value;
-    formData.AssemblyId = 0 || this.globalAssemblyId ;
+    let globalAssemblyId1 ; 
+    (this.globalAssemblyId == undefined || this.globalAssemblyId == '' || this.globalAssemblyId == null) ? globalAssemblyId1 = 0 : globalAssemblyId1 = this.globalAssemblyId;
+    formData.AssemblyId = 0 || globalAssemblyId1 ;
     this.callAPIService.setHttp('get', 'Web_Get_VoterList_Filter_Area_ddl?ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId()
       + '&AssemblyId=' + formData.AssemblyId + '&BoothId=' + this.filterForm.value.getBoothId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -792,6 +799,7 @@ clearBoothVotersFilterForm(){
             this.router.navigate(['../500'], { relativeTo: this.route });
           }
         })
+        
       }
 
       onCheckFillData(event: any) {
@@ -1299,10 +1307,10 @@ clearBoothVotersFilterForm(){
   }
 
   defaultShowVoterList() {
-    // let defualt click voters tab 
-    let clickOnVoterTab: any = document.getElementById('pills-voters-tab');
-    clickOnVoterTab.click();
+      let clickOnVoterTab: any = document.getElementById('pills-voters-tab');
+      clickOnVoterTab?.click();
   }
+
   // ------------------------------------------  global uses end here   ------------------------------------------//
 
   //  ------------------------------------------   Add Agent modal function's start here  ------------------------------------------ //
