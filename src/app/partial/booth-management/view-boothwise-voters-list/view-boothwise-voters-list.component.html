@@ -158,6 +158,15 @@
                                                 </button>
                                             </li>
 
+                                            <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
+                                            [disabled]="true" data-bs-target="#pills-voters" type="button" role="tab"
+                                                aria-controls="pills-voters" aria-selected="false">
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalExpired}}</h5>
+                                                Expired
+                                            </button>
+                                           </li>
+
                                             <li class="nav-item" role="presentation"
                                             (click)="votersPaginationNo = 1; this.fillDataId1 = 1; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
                                             <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
@@ -177,6 +186,16 @@
                                                     Families
                                                 </button>
                                             </li>
+
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
+                                                [disabled]="true" data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-voters" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalLeader}}</h5>
+                                                    Leader
+                                                </button>
+                                               </li>
+
                                             <li class="nav-item" role="presentation"
                                                 (click)="migratedPaginationNo = 1; this.searchMigrated.setValue(''); boothMigratedList()">
                                                 <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"

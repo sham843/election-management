@@ -224,7 +224,6 @@ export class AssignBoothToConstituencyComponent implements OnInit {
 
   onSubmitElection() {
     this.submitted = true;
-    debugger;
     let formData = this.assignBoothForm.value;
     if (this.assignBoothForm.invalid) {
       this.spinner.hide();
@@ -233,16 +232,23 @@ export class AssignBoothToConstituencyComponent implements OnInit {
       return;
     }
     else {
-    debugger;
       this.spinner.show();
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
-      let id;
-      formData.Id == "" || formData.Id == null ? id = 0 : id = formData.Id;
+      // let id;
+      // formData.Id == "" || formData.Id == null ? id = 0 : id = formData.Id;
 
-      let obj = id + '&ElectionId=' + formData.ElectionId + '&ConstituencyId=' + formData.ConstituencyId
-        + '&strAssmblyBoothId=' + this.assemblyBoothJSON + '&CreatedBy=' + this.commonService.loggedInUserId();
-        
-      this.callAPIService.setHttp('get', 'Web_Insert_Election_AssignBoothToElection?Id=' + obj, false, false, false, 'electionServiceForWeb');
+      // let obj = id + '&ElectionId=' + formData.ElectionId + '&ConstituencyId=' + formData.ConstituencyId
+      //   + '&strAssmblyBoothId=' + this.assemblyBoothJSON + '&CreatedBy=' + this.commonService.loggedInUserId();
+       // this.callAPIService.setHttp('get', 'Web_Insert_Election_AssignBoothToElection?Id=' + obj, false, false, false, 'electionServiceForWeb');
+
+      let fromData = new FormData();
+      fromData.append('Id',formData.Id);
+      fromData.append('ElectionId', formData.ElectionId);
+      fromData.append('ConstituencyId', formData.ConstituencyId);
+      fromData.append('strAssmblyBoothId', this.assemblyBoothJSON);
+      fromData.append('CreatedBy', this.commonService.loggedInUserId());
+ 
+      this.callAPIService.setHttp('post', 'Web_Insert_Election_AssignBoothToElection_Post', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.toastrService.success(res.data1[0].Msg);

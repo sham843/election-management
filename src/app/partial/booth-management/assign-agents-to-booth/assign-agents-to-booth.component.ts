@@ -492,18 +492,21 @@ export class AssignAgentsToBoothComponent implements OnInit {
     else {
        this.agentwiseAssBoothArray.length == 0  ? this.agentwiseAssigBoothArray = [] :''; //check agent booths
       this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray);
-      // this.assemblyBoothJSON = JSON.stringify(this.AssemblyBoothArray.concat(this.agentwiseAssigBoothArray));
-
-      // console.log(this.agentwiseAssigBoothArray.splice(this.agentwiseAssigBoothArray.findIndex((a:any) => a.BoothId !== this.AssemblyBoothArray.BoothId) , 1))
-      let id;
-      debugger;
-      formData.Id == "" || formData.Id == null  || formData.Id == undefined ? id = 0 : id = formData.Id;
-     // this.agentwiseAssigBoothArray.lenght != 0 ? id = this.globalHeaderId : '';
-    //  return
-      let obj =  id + '&UserId=' + formData.UserId + '&ClientId=' + formData.ClientId
-        + '&strAssmblyBoothId=' + this.assemblyBoothJSON + '&CreatedBy=' + this.commonService.loggedInUserId();
-      this.callAPIService.setHttp('get', 'Web_Insert_Election_AssignBoothToAgentHeader?Id=' + obj, false, false, false, 'electionServiceForWeb');
-      // this.callAPIService.setHttp('post', 'Web_Insert_Election_AssignBoothToAgentHeader_Post', false, obj, false, 'electionServiceForWeb');
+    
+      // let id;
+      // formData.Id == "" || formData.Id == null  || formData.Id == undefined ? id = 0 : id = formData.Id;
+      // let obj =  id + '&UserId=' + formData.UserId + '&ClientId=' + formData.ClientId
+      //   + '&strAssmblyBoothId=' + this.assemblyBoothJSON + '&CreatedBy=' + this.commonService.loggedInUserId();
+      // this.callAPIService.setHttp('get', 'Web_Insert_Election_AssignBoothToAgentHeader?Id=' + obj, false, false, false, 'electionServiceForWeb');
+    
+      let fromData = new FormData();
+      fromData.append('Id',formData.Id);
+      fromData.append('UserId', formData.UserId);
+      fromData.append('ClientId', formData.ClientId);
+      fromData.append('strAssmblyBoothId', this.assemblyBoothJSON);
+      fromData.append('CreatedBy', this.commonService.loggedInUserId());
+ 
+      this.callAPIService.setHttp('post', 'Web_Insert_Election_AssignBoothToAgentHeader_Post', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.spinner.hide();
