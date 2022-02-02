@@ -152,6 +152,9 @@ export class NotificationsComponent implements OnInit {
         // convertDate= NotificationDate.split(':');
         convertDate = NotificationDate;
       }
+      let ClientIdCheck = (this.notificationForm.value.ClientId == null || this.notificationForm.value.ClientId == undefined ||
+      this.notificationForm.value.ClientId == '') ? 0 : this.notificationForm.value.ClientId;
+
       fromData.append('Id', id);
       fromData.append('CreatedBy', this.commonService.loggedInUserId());
       fromData.append('ScopeId', getObj.ScopeId);
@@ -166,7 +169,7 @@ export class NotificationsComponent implements OnInit {
       // fromData.append('NotificationDate', convertDate[0]+":00");
       fromData.append('NotificationDate', convertDate);
       fromData.append('IsPushed', this.IspushedFlag);
-      fromData.append('ClientId', this.notificationForm.value.ClientId);
+      fromData.append('ClientId', ClientIdCheck);
 
       this.callAPIService.setHttp('post', 'InsertNotification_Web_2_0', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
@@ -239,7 +242,11 @@ export class NotificationsComponent implements OnInit {
 
   editNotification(data: any) {
     this.DecScopeId = data.ScopeId;
-    this.schedulerFlag = false;
+    if(data.IsPushed == 2){
+      this.schedulerFlag = true;
+    }else{
+      this.schedulerFlag = false;
+    }
     this.NotificationText = "Update";
     this.getImgPath = data.AttachmentPath;
 
