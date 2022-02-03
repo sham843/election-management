@@ -51,63 +51,66 @@
                             placeholder="Select Booth">
                         </ngx-select>
                     </div>
-                    <!-- <div class="col-sm-3">
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Search..."
-                            formControlName="Search" (keyup)="onKeyUpFilter()" />
-                        <button type="button" class="btn btn-light border btn-sm"
-                            *ngIf="filterForm.value.Search" (click)="clearFilter('search')"><i
-                                _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
-                        <button type="button" (click)="searchFilter('true')" *ngIf="!filterForm.value.Search"
-                            class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
-                    </div>
-                </div> -->
                 </div>
             </form>
         </div>
     </div>
     <ng-container *ngIf="dataNotFound">
         <div class="row g-2" id="dash-stats">
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <div class="card card-body bg-cyan">
                     <i class="fas fa-person-booth"></i>
                     <p>Booths</p>
                     <h3>{{cardData?.TotalBooths}}</h3>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <div class="card card-body bg-green">
                     <i class="fas fa-users"></i>
                     <p>Voters</p>
                     <h3>{{cardData?.TotalVoters}}</h3>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <div class="card card-body bg-blue">
                     <i class="fas fa-house-user"></i>
                     <p>Families</p>
                     <h3>{{cardData?.TotalFamilies}}</h3>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <div class="card card-body bg-gold">
                     <i class="fas fa-plane-departure"></i>
                     <p>Migrated</p>
                     <h3>{{cardData?.TotalMigrated}}</h3>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
+                <div class="card card-body bg-gold">
+                    <i class="fas fa-plane-departure"></i>
+                    <p>Leaders</p>
+                    <h3>{{cardData?.TotalLeader}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
                 <div class="card card-body bg-red">
                     <i class="fas fa-star-half-alt"></i>
                     <p>Fill / Pending</p>
                     <h3>{{cardData?.TotalFilled}}/{{cardData?.TotalPending}}</h3>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <div class="card card-body bg-voilet">
                     <i class="fas fa-user-cog"></i>
                     <p>Agents</p>
                     <h3>{{cardData?.TotalAgents}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-voilet">
+                    <i class="fas fa-user-cog"></i>
+                    <p>Expired</p>
+                    <h3>{{cardData?.TotalExpired}}</h3>
                 </div>
             </div>
         </div>
@@ -158,15 +161,6 @@
                                                 </button>
                                             </li>
 
-                                            <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
-                                            [disabled]="true" data-bs-target="#pills-voters" type="button" role="tab"
-                                                aria-controls="pills-voters" aria-selected="false">
-                                                <h5 class="mb-0">{{clickBoothListArray?.TotalExpired}}</h5>
-                                                Expired
-                                            </button>
-                                           </li>
-
                                             <li class="nav-item" role="presentation"
                                             (click)="votersPaginationNo = 1; this.fillDataId1 = 1; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
                                             <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
@@ -187,15 +181,6 @@
                                                 </button>
                                             </li>
 
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
-                                                [disabled]="true" data-bs-target="#pills-voters" type="button" role="tab"
-                                                    aria-controls="pills-voters" aria-selected="false">
-                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalLeader}}</h5>
-                                                    Leader
-                                                </button>
-                                               </li>
-
                                             <li class="nav-item" role="presentation"
                                                 (click)="migratedPaginationNo = 1; this.searchMigrated.setValue(''); boothMigratedList()">
                                                 <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
@@ -205,6 +190,17 @@
                                                     Migrated
                                                 </button>
                                             </li>
+
+                                            <li class="nav-item" role="presentation"
+                                            (click)="LeadersPaginationNo = 1; this.searchLeaders.setValue(''); getLeadersList()">
+                                                <button class="nav-link" id="pills-Leaders-tab" data-bs-toggle="pill"
+                                                 data-bs-target="#pills-Leaders" type="button" role="tab"
+                                                    aria-controls="pills-Leaders" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalLeader}}</h5>
+                                                    Leaders
+                                                </button>
+                                               </li>
+
                                             <li class="nav-item" role="presentation"
                                                 (click)="pendingPaginationNo = 1; this.searchPending.setValue(''); boothPendingList()">
                                                 <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
@@ -214,6 +210,17 @@
                                                     Pending
                                                 </button>
                                             </li>
+
+                                            <li class="nav-item" role="presentation"
+                                            (click)="ExpiredPaginationNo = 1; this.searchExpired.setValue(''); getExpiredList()">
+                                                <button class="nav-link" id="pills-Expired-tab" data-bs-toggle="pill"
+                                                 data-bs-target="#pills-Expired" type="button" role="tab"
+                                                    aria-controls="pills-Expired" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalExpired}}</h5>
+                                                    Expired
+                                                </button>
+                                               </li>
+
                                             <li class="nav-item" role="presentation" (click)="boothAgentList()">
                                                 <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-agents" type="button" role="tab"
@@ -239,6 +246,7 @@
                                                     CRM History
                                                 </button>
                                             </li>
+                                            
                                         </ul>
                                     </div>
                                     <div class="card-body">
@@ -568,9 +576,9 @@
                                                 <table class="table table-hover mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Sr. No.</th>
-                                                            <th>Voters Name</th>
+                                                            <!-- <th>Sr. No.</th> -->
                                                             <th>Voter NO.</th>
+                                                            <th>Voters Name</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                             <th>Migrated To</th>
@@ -579,13 +587,12 @@
                                                     <tbody>
                                                         <tr
                                                             *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
-                                                            <td>{{MigratedList?.SrNo}}</td>
-                                                            <!-- <td>{{MigratedList?.EnglishName}}</td> -->
+                                                            <!-- <td>{{MigratedList?.SrNo}}</td> -->
+                                                            <td>{{MigratedList?.VoterNo}}</td>
                                                             <td><a (click)="redirectToVoterPrfile(MigratedList)"
                                                                     class="text-main"
                                                                     style="cursor: pointer;">{{MigratedList?.EnglishName}}</a>
                                                             </td>
-                                                            <td>{{MigratedList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="MigratedList?.Gender == 'M'">Male</div>
@@ -640,9 +647,8 @@
                                                 <table class="table table-hover mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Sr. No.</th>
-                                                            <th>Voters Name</th>
                                                             <th>Voter NO.</th>
+                                                            <th>Voters Name</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                         </tr>
@@ -650,13 +656,12 @@
                                                     <tbody>
                                                         <tr
                                                             *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
-                                                            <td>{{PendingList?.SrNo}}</td>
-                                                            <!-- <td>{{PendingList?.EnglishName}}</td> -->
+                                                            <!-- <td>{{PendingList?.SrNo}}</td> -->
+                                                            <td>{{PendingList?.VoterNo}}</td>
                                                             <td><a (click)="redirectToVoterPrfile(PendingList)"
                                                                     class="text-main"
                                                                     style="cursor: pointer;">{{PendingList?.EnglishName}}</a>
                                                             </td>
-                                                            <td>{{PendingList?.VoterNo}}</td>
                                                             <td>
                                                                 <div *ngIf="PendingList?.Gender == 'F'">Female</div>
                                                                 <div *ngIf="PendingList?.Gender == 'M'">Male</div>
@@ -1031,13 +1036,14 @@
               </div>
           </div>
       </div>
+
       <!-- Expired table start here  -->
       <table class="table table-hover mb-0">
           <thead>
               <tr>
-                  <th>Sr. No.</th>
-                  <th>Voters Name</th>
+                  <!-- <th>Sr. No.</th> -->
                   <th>Voter NO.</th>
+                  <th>Voters Name</th>
                   <th>Gender</th>
                   <th>Contact No</th>
               </tr>
@@ -1045,21 +1051,17 @@
           <tbody>
               <tr
                   *ngFor="let expiredList of ExpiredListArray  | paginate: {id: 'ExpiredPagination', itemsPerPage: 10, currentPage:  ExpiredPaginationNo, totalItems:ExpiredTotal};">
-                  <td>{{expiredList?.SrNo}}</td>
-                  <td><a (click)="redirectToVoterPrfile(expiredList)"
-                          class="text-main"
-                          style="cursor: pointer;">{{expiredList?.EnglishName}}</a>
-                  </td>
+                  <!-- <td>{{expiredList?.SrNo}}</td> -->
                   <td>{{expiredList?.VoterNo}}</td>
+                  <td>{{expiredList?.EnglishName}}</td>
                   <td>
                       <div *ngIf="expiredList?.Gender == 'F'">Female</div>
                       <div *ngIf="expiredList?.Gender == 'M'">Male</div>
                   </td>
                   <td>
-                      <div *ngIf="expiredList?.MobileNo1"><a class="text-main"
-                              href="tel:{{expiredList?.MobileNo1}}">{{expiredList?.MobileNo1}}</a>
+                      <div><a class="text-main"
+                              href="tel:{{expiredList?.MobileNo1}}">{{expiredList?.MobileNo1 ? expiredList?.MobileNo1 : '-'}}</a>
                       </div>
-                      <div *ngIf="!expiredList?.MobileNo1">-</div>
                   </td>
               </tr>
           </tbody>
@@ -1072,9 +1074,79 @@
       <pagination-controls id="ExpiredPagination"
           *ngIf="ExpiredListArray?.length != 0" previousLabel=""
           nextLabel=""
-          (pageChange)="onClickPagintionPending(ExpiredPageSize  = $event)">
+          (pageChange)="onClickPagintionExpired(ExpiredPageSize  = $event)">
       </pagination-controls>
   </div>
+
+  <!-- Expired Code end here  -->
+
+       <!-- Leaders tab start here   -->
+       <div class="tab-pane fade" id="pills-Leaders" role="tabpanel"
+       aria-labelledby="pills-Leaders-tab">
+       <div class="row justify-content-end mb-3">
+           <div class="col-sm-3">
+               <div class="form-container">
+                   <div class="input-group">
+                       <input class="form-control" type="text"
+                           placeholder="Search..."
+                           [formControl]="searchLeaders"
+                           (keyup)="onKeyUpFilterLeaders()" />
+                       <button type="button"
+                           class="btn btn-light border btn-sm"
+                           (click)="clearFiltersBooth('clearFiltersLeaders')"
+                           *ngIf="searchLeaders.value"><i
+                               class="fas fa-times"></i></button>
+                       <button type="button" *ngIf="!searchLeaders.value"
+                           class="btn btn-sm border btn-light"><i
+                               class="fas fa-search"></i></button>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+      <!-- Leaders table start here  -->
+      <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <!-- <th>Sr. No.</th> -->
+                <th>Voter NO.</th>
+                <th>Leader Name</th>
+                <th>Contact No</th>
+                <th>Party Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let leadesList of LeadersListArray  | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage:  LeadersPaginationNo, totalItems:LeadersTotal};">
+                <!-- <td>{{leadesList?.SrNo}}</td> -->
+                <td>{{leadesList?.VoterNo}}</td>
+                <td>{{leadesList?.LeaderName}}</td>
+                <!-- <td>
+                    <div *ngIf="leadesList?.Gender == 'F'">Female</div>
+                    <div *ngIf="leadesList?.Gender == 'M'">Male</div>
+                </td> -->
+                <td>
+                    <div><a class="text-main"
+                            href="tel:{{leadesList?.Contact}}">{{leadesList?.Contact ? leadesList?.Contact : '-'}}</a>
+                    </div>
+                </td>
+                <td>{{leadesList?.PartyName ? leadesList?.PartyName : '-'}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Leaders table end here  -->
+    <div class="mt-2 text-end" *ngIf="LeadersListArray?.length == 0">
+        <div class="alert alert-danger text-center py-2">No Data Found..!
+        </div>
+    </div>
+    <pagination-controls id="LeadersPagination"
+        *ngIf="LeadersListArray?.length != 0" previousLabel=""
+        nextLabel=""
+        (pageChange)="onClickPagintionLeaders(LeadersPageSize  = $event)">
+    </pagination-controls>
+</div>
+
+<!-- Leaders Code end here  -->
 
 
 

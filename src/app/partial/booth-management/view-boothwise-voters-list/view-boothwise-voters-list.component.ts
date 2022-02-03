@@ -161,6 +161,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.searchFamilyFilters('false');
     this.searchCrmFilter('false');
     this.searchCrmHistoryFilter('false');
+    this.searchExpiredFilters('false');
+    this.searchLeadersFilters('false');
     this.agentForm();
     this.boothAnalyticsRedData();
   }
@@ -365,25 +367,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     // this.getClientAgentWithBooths();
   }
 
-  onKeyUpFilter() {
-    this.subject.next();
-  }
-
-  searchFilter(flag: any) {
-    if (flag == 'true') {
-      if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
-        this.toastrService.error("Please search and try again");
-        return
-      }
-    }
-    this.subject
-      .pipe(debounceTime(700))
-      .subscribe(() => {
-        this.filterForm.value.Search = this.filterForm.value.Search;
-        //this.getClientAgentWithBooths();
-      }
-      );
-  }
 
   // ------------------------------------------filter data all methodes start here ------------------------------ //
 
