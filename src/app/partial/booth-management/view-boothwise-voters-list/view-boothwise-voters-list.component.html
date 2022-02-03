@@ -1120,11 +1120,10 @@
                 *ngFor="let leadesList of LeadersListArray  | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage:  LeadersPaginationNo, totalItems:LeadersTotal};">
                 <!-- <td>{{leadesList?.SrNo}}</td> -->
                 <td>{{leadesList?.VoterNo}}</td>
-                <td>{{leadesList?.LeaderName}}</td>
-                <!-- <td>
-                    <div *ngIf="leadesList?.Gender == 'F'">Female</div>
-                    <div *ngIf="leadesList?.Gender == 'M'">Male</div>
-                </td> -->
+                <!-- <td>{{leadesList?.LeaderName}}</td> -->
+                <td>{{leadesList?.LeaderName}}
+                    <small class="text-muted" *ngIf="leadesList?.LeaderImportance"> ({{leadesList?.LeaderImportance}} )<i class="fas fa-star"></i></small>
+                </td>
                 <td>
                     <div><a class="text-main"
                             href="tel:{{leadesList?.Contact}}">{{leadesList?.Contact ? leadesList?.Contact : '-'}}</a>

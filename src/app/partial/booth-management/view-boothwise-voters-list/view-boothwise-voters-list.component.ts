@@ -739,7 +739,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
       this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&Followupstatusid=' + formDataCrmFilter.Followupstatusid +
       '&SearchText=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
-    this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+
+     let url = '';
+     this.IsSubElectionApplicable == 0 ? url = 'Web_get_crm_1_0_No_SubElection?' + obj : url = 'Get_CRM_1_0?' + obj
+     
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -819,7 +823,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
       this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&Followupstatusid=' + formDataCrmHistoryFilter.Followupstatusid +
       '&SearchText=' + formDataCrmHistoryFilter.SearchText + '&nopage=' + this.crmHistoryPaginationNo + '&feedbackstatus=' + formDataCrmHistoryFilter.feedbackstatus + '&date=' + formDataCrmHistoryFilter.date;
-    this.callAPIService.setHttp('get', 'Get_crmhistory_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+   
+      let url = '';
+      this.IsSubElectionApplicable == 0 ? url = 'Web_get_crmhistory_1_0_No_SubEle?' + obj : url = 'Get_crmhistory_1_0?' + obj
+
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
