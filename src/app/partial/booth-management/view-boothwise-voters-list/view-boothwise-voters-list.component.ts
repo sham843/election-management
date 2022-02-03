@@ -108,7 +108,17 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   BoothAnalyticsObj = {ClientId: 0,ElectionId: 0,ConstituencyId: 0,
      VillageId:0,BoothId:0,flag:0}
 
-  // mainGlobalFilterForm!: FormGroup;
+  searchExpired = new FormControl('');
+  ExpiredListArray: any;
+  ExpiredPaginationNo = 1;
+  ExpiredPageSize: number = 10;
+  ExpiredTotal: any;
+
+  searchLeaders = new FormControl('');
+  LeadersListArray: any;
+  LeadersPaginationNo = 1;
+  LeadersPageSize: number = 10;
+  LeadersTotal: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -847,6 +857,115 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------  CRM History with filter End here  ------------------------------------------//
 
+
+ // ------------------------------------------  Expired filter start here  ------------------------------------------//
+
+ getExpiredList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchExpired.value + '&nopage=' + this.ExpiredPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Expired_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.ExpiredListArray = res.data1;
+        this.ExpiredTotal = res.data2[0].TotalCount;
+      } else {
+        this.ExpiredListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionExpired(pageNo: any) {
+    this.ExpiredPaginationNo = pageNo;
+    this.getExpiredList();
+  }
+
+  onKeyUpFilterExpired() {
+    this.subject.next();
+  }
+
+  searchExpiredFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchExpired.value == "" || this.searchExpired == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchExpired.value;
+        this.ExpiredPaginationNo = 1;
+        this.getExpiredList();
+      }
+      );
+  }
+
+// ------------------------------------------  Expired filter End here  ------------------------------------------//
+
+
+// ------------------------------------------  Leaders filter start here  ------------------------------------------//
+
+getLeadersList() {
+  let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+    '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchLeaders.value + '&nopage=' + this.LeadersPaginationNo;
+
+  this.spinner.show();
+  this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_ImpLeaders_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.data == 0) {
+      this.spinner.hide();
+      this.LeadersListArray = res.data1;
+      this.LeadersTotal = res.data2[0].TotalCount;
+    } else {
+      this.LeadersListArray = [];
+      this.spinner.hide();
+    }
+  }, (error: any) => {
+    this.spinner.hide();
+    if (error.status == 500) {
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    }
+  })
+}
+
+onClickPagintionLeaders(pageNo: any) {
+  this.LeadersPaginationNo = pageNo;
+  this.getLeadersList();
+}
+
+onKeyUpFilterLeaders() {
+  this.subject.next();
+}
+
+searchLeadersFilters(flag: any) {
+  if (flag == 'true') {
+    if (this.searchLeaders.value == "" || this.searchLeaders == null) {
+      this.toastrService.error("Please search and try again");
+      return
+    }
+  }
+  this.subject
+    .pipe(debounceTime(700))
+    .subscribe(() => {
+      this.searchLeaders.value;
+      this.LeadersPaginationNo = 1;
+      this.getLeadersList();
+    }
+    );
+}
+
+// ------------------------------------------  Leaders filter End here  ------------------------------------------//
+
+
   // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag: any) {
     if (flag == 'clearSearchVoters') {
@@ -864,12 +983,13 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'clearFiltersAgent') {
       this.searchAgent.setValue('');
       this.boothAgentList();
+    } else if (flag == 'clearFiltersExpired') {
+      this.searchExpired.setValue('');
+      this.getExpiredList();
+    } else if (flag == 'clearFiltersLeaders') {
+      this.searchLeaders.setValue('');
+      this.getLeadersList();
     }
-    //  else if (flag == 'village') {
-    //   this.selVillage.setValue(0);
-    //   this.ClientWiseBoothList();
-    //   this.boothDataHide =false;
-    // }
 
   }
 

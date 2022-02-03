@@ -1006,6 +1006,81 @@
                                                     (pageChange)="onClickPagintionCrmHistory(crmHistoryPageSize  = $event)">
                                                 </pagination-controls>
                                             </div>
+
+
+      <!-- Expired tab start here   -->
+      <div class="tab-pane fade" id="pills-Expired" role="tabpanel"
+      aria-labelledby="pills-Expired-tab">
+      <div class="row justify-content-end mb-3">
+          <div class="col-sm-3">
+              <div class="form-container">
+                  <div class="input-group">
+                      <input class="form-control" type="text"
+                          placeholder="Search..."
+                          [formControl]="searchExpired"
+                          (keyup)="onKeyUpFilterExpired()" />
+                      <button type="button"
+                          class="btn btn-light border btn-sm"
+                          (click)="clearFiltersBooth('clearFiltersExpired')"
+                          *ngIf="searchExpired.value"><i
+                              class="fas fa-times"></i></button>
+                      <button type="button" *ngIf="!searchExpired.value"
+                          class="btn btn-sm border btn-light"><i
+                              class="fas fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Expired table start here  -->
+      <table class="table table-hover mb-0">
+          <thead>
+              <tr>
+                  <th>Sr. No.</th>
+                  <th>Voters Name</th>
+                  <th>Voter NO.</th>
+                  <th>Gender</th>
+                  <th>Contact No</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr
+                  *ngFor="let expiredList of ExpiredListArray  | paginate: {id: 'ExpiredPagination', itemsPerPage: 10, currentPage:  ExpiredPaginationNo, totalItems:ExpiredTotal};">
+                  <td>{{expiredList?.SrNo}}</td>
+                  <td><a (click)="redirectToVoterPrfile(expiredList)"
+                          class="text-main"
+                          style="cursor: pointer;">{{expiredList?.EnglishName}}</a>
+                  </td>
+                  <td>{{expiredList?.VoterNo}}</td>
+                  <td>
+                      <div *ngIf="expiredList?.Gender == 'F'">Female</div>
+                      <div *ngIf="expiredList?.Gender == 'M'">Male</div>
+                  </td>
+                  <td>
+                      <div *ngIf="expiredList?.MobileNo1"><a class="text-main"
+                              href="tel:{{expiredList?.MobileNo1}}">{{expiredList?.MobileNo1}}</a>
+                      </div>
+                      <div *ngIf="!expiredList?.MobileNo1">-</div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <!-- Expired table end here  -->
+      <div class="mt-2 text-end" *ngIf="ExpiredListArray?.length == 0">
+          <div class="alert alert-danger text-center py-2">No Data Found..!
+          </div>
+      </div>
+      <pagination-controls id="ExpiredPagination"
+          *ngIf="ExpiredListArray?.length != 0" previousLabel=""
+          nextLabel=""
+          (pageChange)="onClickPagintionPending(ExpiredPageSize  = $event)">
+      </pagination-controls>
+  </div>
+
+
+
+
+
+
                                         </div>
                                     </div>
                                 </div>

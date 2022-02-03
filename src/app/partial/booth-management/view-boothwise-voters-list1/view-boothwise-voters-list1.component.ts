@@ -28,7 +28,13 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   total: any;
-  subject: Subject<any> = new Subject();
+  votersSubject: Subject<any> = new Subject();
+  familySubject: Subject<any> = new Subject();
+  pendingSubject: Subject<any> = new Subject();
+  migratedSubject: Subject<any> = new Subject();
+  agentSubject: Subject<any> = new Subject();
+  crmSubject: Subject<any> = new Subject();
+  crmHistorySubject: Subject<any> = new Subject();
   clientWiseBoothListArray: any;
   IsSubElectionApplicable: any;
   villageDropdown: any;
@@ -127,6 +133,8 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   BoothAnalyticsObj = {ClientId: 0,ElectionId: 0,ConstituencyId: 0,
     VillageId:0,BoothId:0,flag:0}
 
+    filterSidebarFlag = 'VotersFlag';
+
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -177,6 +185,11 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       getBoothId: [this.BoothAnalyticsObj.BoothId || 0],
       Search: ['']
     })
+  }
+
+  nullishDefaultFilterForm() {
+    let fromData = this.filterForm.value;
+    fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0);
   }
 
   getClientName() {
@@ -350,6 +363,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         ElectionId: this.filterForm.value.ElectionId,
         ConstituencyId: this.filterForm.value.ConstituencyId,
         village:0,
+        getBoothId: 0
       })
     }
     this.dataNotFound = false;
@@ -374,25 +388,24 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     // this.getClientAgentWithBooths();
   }
 
-  onKeyUpFilter() {
-    this.subject.next();
-  }
+  // onKeyUpFilter() {
+  //   this.subject.next();
+  // }
 
-  searchFilter(flag: any) {
-    if (flag == 'true') {
-      if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
-        this.toastrService.error("Please search and try again");
-        return
-      }
-    }
-    this.subject
-      .pipe(debounceTime(700))
-      .subscribe(() => {
-        this.filterForm.value.Search = this.filterForm.value.Search;
-        //this.getClientAgentWithBooths();
-      }
-      );
-  }
+  // searchFilter(flag: any) {
+  //   if (flag == 'true') {
+  //     if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
+  //       this.toastrService.error("Please search and try again");
+  //       return
+  //     }
+  //   }
+  //   this.subject
+  //     .pipe(debounceTime(700))
+  //     .subscribe(() => {
+  //       this.filterForm.value.Search = this.filterForm.value.Search;
+  //     }
+  //     );
+  // }
 
   // ------------------------------------------filter data all methodes start here ------------------------------ //
 
@@ -494,6 +507,7 @@ clearBoothVotersFilterForm(){
   //.......... get Voter Area List ...............//
   getVoterAreaList() {
     this.spinner.show();
+     this.nullishDefaultFilterForm();
     let formData = this.globalFilterForm.value;
     let globalAssemblyId1 ; 
     (this.globalAssemblyId == undefined || this.globalAssemblyId == '' || this.globalAssemblyId == null) ? globalAssemblyId1 = 0 : globalAssemblyId1 = this.globalAssemblyId;
@@ -671,6 +685,7 @@ clearBoothVotersFilterForm(){
           else{
             let obj1 = {id:obj.id,name:obj.name,flag:flagName}
             this.insertUpdateFilterData(obj1,flagName);
+            // this.votersPaginationNo = 1
           }
         }
       }
@@ -706,10 +721,31 @@ clearBoothVotersFilterForm(){
           this.globalFilterForm.controls['InOpposeOfId'].setValue(0);
         }
         this.filteredValueNameArray.splice(index,1);
-        checkFlag == 'chipFlag' ? this.boothVoterList() : '';
+        
+        if(checkFlag == 'chipFlag'){ // when Chip is Remove then Call 
+          if(this.filterSidebarFlag =='VotersFlag'){
+            this.votersPaginationNo = 1
+            this.boothVoterList();
+          } else if(this.filterSidebarFlag =='FamiliesFlag'){
+            this.familyPaginationNo = 1;
+            this.boothFamilyList();
+          } else if(this.filterSidebarFlag =='MigratedFlag'){
+            this.migratedPaginationNo = 1;
+            this.boothMigratedList();
+          } else if(this.filterSidebarFlag =='PendingFlag'){
+            this.pendingPaginationNo = 1;
+            this.boothPendingList();
+          } else if(this.filterSidebarFlag =='CRMFlag'){
+            this.crmPaginationNo = 1;
+            this.getCrmTableData();
+          } else if(this.filterSidebarFlag =='CRMHistoryFlag'){
+            this.crmHistoryPaginationNo = 1;
+            this.getCrmHistoryTableData();
+          }
+        }
       }
 
-      FiltereDataRemove(flagName:any){
+      FiltereDataRemove(flagName:any){ //Form Remove  formFlag Using
          this.filteredValueNameArray.map((ele:any,index:any)=>{
           if(ele.flag == flagName){
             this.indexNo = index;
@@ -717,6 +753,22 @@ clearBoothVotersFilterForm(){
         })
         let obj = {flag:flagName}
         this.clearGlobalFilterForm(this.indexNo,obj,'formFlag');
+      }
+
+      globalFilterShowData(){
+        if(this.filterSidebarFlag =='VotersFlag'){
+          this.boothVoterList();
+        } else if(this.filterSidebarFlag =='FamiliesFlag'){
+          this.boothFamilyList();
+        } else if(this.filterSidebarFlag =='MigratedFlag'){
+          this.boothMigratedList();
+        } else if(this.filterSidebarFlag =='PendingFlag'){
+          this.boothPendingList();
+        } else if(this.filterSidebarFlag =='CRMFlag'){
+          this.getCrmTableData();
+        } else if(this.filterSidebarFlag =='CRMHistoryFlag'){
+          this.getCrmHistoryTableData();
+        }
       }
 
       nullishGlobalFilterForm() {
@@ -748,14 +800,6 @@ clearBoothVotersFilterForm(){
         fromData.ProfessionId ?? this.globalFilterForm.controls['ProfessionId'].setValue(0);
       }
 
-      globalFilterShowData(){
-        this.boothVoterList();
-        // this.boothFamilyList();
-        // this.boothMigratedList();
-        // this.boothPendingList();
-        // this.getCrmTableData();
-        // this.getCrmHistoryTableData();
-      }
 
     // ------------------------------------------ Global Main filter End here  ------------------------------------------//
 
@@ -768,13 +812,13 @@ clearBoothVotersFilterForm(){
         let votersData = this.globalFilterForm.value;
         let topFilterFormData = this.filterForm.value;
         let AssemblyId = this.globalAssemblyId || 0;
-        votersData.Gender = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
-        
+        let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+       
          let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
           '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
           AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
           topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-          '&Gender=' + votersData.Gender + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+          '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
           votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
           votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
           '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
@@ -813,7 +857,7 @@ clearBoothVotersFilterForm(){
       }
     
       onKeyUpFilterVoters() {
-        this.subject.next();
+        this.votersSubject.next();
       }
     
       searchVotersFilters(flag: any) {
@@ -823,7 +867,7 @@ clearBoothVotersFilterForm(){
             return
           }
         }
-        this.subject
+        this.votersSubject
           .pipe(debounceTime(700))
           .subscribe(() => {
             this.searchVoters.value;
@@ -840,13 +884,13 @@ clearBoothVotersFilterForm(){
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
-    votersData.Gender = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
     
      let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
       AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
-      topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-      '&Gender=' + votersData.Gender + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+      topFilterFormData.village + '&Search=' + this.searchFamily.value + '&AreaId=' + votersData.AreaId +
+      '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
       votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&InFavourofId='
        + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
        '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
@@ -880,7 +924,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterFamily() {
-    this.subject.next();
+    this.familySubject.next();
   }
 
   searchFamilyFilters(flag: any) {
@@ -890,7 +934,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.subject
+    this.familySubject
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchFamily.value;
@@ -929,13 +973,13 @@ clearBoothVotersFilterForm(){
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
-    votersData.Gender = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
     
      let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
       AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
-      topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-      '&Gender=' + votersData.Gender + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+      topFilterFormData.village + '&Search=' + this.searchMigrated.value + '&AreaId=' + votersData.AreaId +
+      '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
       votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
       votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
       '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
@@ -967,7 +1011,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterMigrated() {
-    this.subject.next();
+    this.migratedSubject.next();
   }
 
   searchMigratedFilters(flag: any) {
@@ -977,7 +1021,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.subject
+    this.migratedSubject
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchMigrated.value;
@@ -995,13 +1039,13 @@ clearBoothVotersFilterForm(){
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
-    votersData.Gender = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
     
      let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
       AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
-      topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-      '&Gender=' + votersData.Gender + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+      topFilterFormData.village + '&Search=' + this.searchPending.value + '&AreaId=' + votersData.AreaId +
+      '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
       votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
       votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
       '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
@@ -1033,7 +1077,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterPending() {
-    this.subject.next();
+    this.pendingSubject.next();
   }
 
   searchPendingFilters(flag: any) {
@@ -1043,7 +1087,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.subject
+    this.pendingSubject
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchPending.value;
@@ -1084,7 +1128,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterAgent() {
-    this.subject.next();
+    this.agentSubject.next();
   }
 
   searchAgentFilters(flag: any) {
@@ -1094,7 +1138,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.subject.pipe(debounceTime(700)).subscribe(() => {
+    this.agentSubject.pipe(debounceTime(700)).subscribe(() => {
       this.searchAgent.value;
       this.boothAgentList();
     });
@@ -1111,11 +1155,11 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterCrmSearch() {
-    this.subject.next();
+    this.crmSubject.next();
   }
 
   searchCrmFilter(flag: any) {
-    this.subject
+    this.crmSubject
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmFilterForm.value.SearchText
@@ -1145,13 +1189,13 @@ clearBoothVotersFilterForm(){
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
-    votersData.Gender = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
     
      let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
       AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
-      topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-      '&Gender=' + votersData.Gender + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+      topFilterFormData.village + '&Search=' + crmFilterData.SearchText + '&AreaId=' + votersData.AreaId +
+      '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
       votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
       votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
       '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
@@ -1192,11 +1236,11 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterCrmHistorySearch() {
-    this.subject.next();
+    this.crmHistorySubject.next();
   }
 
   searchCrmHistoryFilter(flag: any) {
-    this.subject
+    this.crmHistorySubject
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmHistoryFilterForm.value.SearchText
@@ -1237,13 +1281,13 @@ clearBoothVotersFilterForm(){
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
-    votersData.Gender = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
     
      let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
       AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
-      topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-      '&Gender=' + votersData.Gender + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+      topFilterFormData.village + '&Search=' + crmHistoryFilterData.SearchText + '&AreaId=' + votersData.AreaId +
+      '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
       votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
       votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
       '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
