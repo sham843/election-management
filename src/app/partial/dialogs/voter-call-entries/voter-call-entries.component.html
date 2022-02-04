@@ -28,9 +28,10 @@
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label">Booth Name</label>
-                                <div class="form-data">{{voterProfileData?.BoothName ? voterProfileData?.BoothName : '-'}}</div>
+                                <div class="form-data">{{voterProfileData?.BoothName ? voterProfileData?.BoothName :
+                                    '-'}}</div>
                             </div>
-                           
+
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-4">
@@ -50,30 +51,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="mb-2">
+                        <div class="mb-2">
                             <label class="form-label">Contact No.</label>
                             <div class="form-data">
                                 <i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
-                                    {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
-                            </div>
-                        </div> -->
-
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <label class="form-label">Contact No.</label>
-                                <div class="form-data">
-                                    <i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
-                                        {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
-                                </div>
-                             </div>
-                            <div class="col-sm-6">
-                                <label class="form-label">LocalLeader</label>
-                                <div class="form-data">{{voterProfileData?.LocalLeader ? voterProfileData?.LocalLeader
-                                    : '-'}}</div>
+                                {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </div>
                         </div>
-
-
 
                         <div class="mb-2">
                             <label class="form-label">Area</label>
@@ -82,11 +66,13 @@
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <label class="form-label">Religion (Caste)</label>
-                                <div class="form-data" *ngIg="voterProfileData?.ReligionName"> {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})</div>
+                                <div class="form-data" *ngIg="voterProfileData?.ReligionName">
+                                    {{voterProfileData?.ReligionName}} ({{voterProfileData?.Castname}})</div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label">Qualification</label>
-                                <div class="form-data">{{voterProfileData?.Qualification ? voterProfileData?.Qualification
+                                <div class="form-data">{{voterProfileData?.Qualification ?
+                                    voterProfileData?.Qualification
                                     : '-'}}</div>
                             </div>
                         </div>
@@ -102,10 +88,19 @@
                                 <span class="text-danger" *ngIf="VPCommentData?.length == 0">No Comments</span>
                             </div>
                         </div>
+
+                        <div><label class="form-label"
+                                *ngIf="voterProfileData?.LocalLeader || voterProfileData?.partyname">Political
+                                Information:</label></div>
                         <div class="mb-2">
-                            <label class="form-label">Political Information</label>
-                            <div class="form-data" *ngIf="voterProfileData?.partyname">
-                                {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star"></i>)
+                            <div class="form-data mb-2" *ngIf="voterProfileData?.LocalLeader">
+                                <label class="form-label">Local Leader Name: </label>
+                                {{voterProfileData?.LocalLeader ? voterProfileData?.LocalLeader
+                                : '-'}}
+                            </div>
+                            <div class=" form-data" *ngIf="voterProfileData?.partyname">
+                                {{voterProfileData?.partyname}}, Leader ({{voterProfileData?.LeaderImportance}}<i
+                                    class="fas fa-star"></i>)
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -122,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-2">
                             <span class="form-label">Family Information</span>
                             <span class="form-data">
@@ -143,7 +138,8 @@
                                         <td>{{voterProfileFamily.VoterNo}}</td>
                                         <td>
                                             <p class="mb-0">{{voterProfileFamily.Family}}</p>
-                                            <small>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</small>
+                                            <small>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 :
+                                                '-'}}</small>
                                         </td>
                                         <td>{{voterProfileFamily.Address ? voterProfileFamily.Address : '-'}}</td>
                                         <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification :
@@ -172,7 +168,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
+                        <tr
+                            *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
                             <td>{{feedbacksList?.SrNo}}</td>
                             <td>
                                 <div class="row">
@@ -180,9 +177,15 @@
                                         <small class="text-muted">{{feedbacksList?.FeedBackDate}}</small>
                                     </div>
                                     <div class="col-sm-6 text-end">
-                                            <span class="badge rounded-pill bg-success fw-normal" *ngIf="feedbacksList?.FeedBackTypeId == 1"> {{feedbacksList?.FeedBackType | titlecase}}</span>
-                                            <span class="badge rounded-pill bg-danger fw-normal" *ngIf="feedbacksList?.FeedBackTypeId == 2"> {{feedbacksList?.FeedBackType | titlecase}}</span>
-                                            <span class="badge rounded-pill bg-warning fw-normal text-dark" *ngIf="feedbacksList?.FeedBackTypeId == 3"> {{feedbacksList?.FeedBackType | titlecase}}</span>
+                                        <span class="badge rounded-pill bg-success fw-normal"
+                                            *ngIf="feedbacksList?.FeedBackTypeId == 1"> {{feedbacksList?.FeedBackType |
+                                            titlecase}}</span>
+                                        <span class="badge rounded-pill bg-danger fw-normal"
+                                            *ngIf="feedbacksList?.FeedBackTypeId == 2"> {{feedbacksList?.FeedBackType |
+                                            titlecase}}</span>
+                                        <span class="badge rounded-pill bg-warning fw-normal text-dark"
+                                            *ngIf="feedbacksList?.FeedBackTypeId == 3"> {{feedbacksList?.FeedBackType |
+                                            titlecase}}</span>
                                     </div>
                                     <div class="col-sm-12">
                                         {{feedbacksList?.Description ? (feedbacksList?.Description | titlecase) : '-'}}
@@ -200,7 +203,7 @@
                 </div>
                 <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length != 0">
                     <pagination-controls previousLabel="" nextLabel=""
-                        (pageChange)="onClickPagintion(feedbacksPageSize = $event)"> 
+                        (pageChange)="onClickPagintion(feedbacksPageSize = $event)">
                     </pagination-controls>
                 </div>
             </div>
@@ -214,7 +217,7 @@
                                     <label class="form-label">Do Not Call</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="chkDoNotCall"
-                                        formControlName="NotToCall">
+                                            formControlName="NotToCall">
                                         <label class="form-check-label" for="chkDoNotCall">
                                             Do Not Call
                                         </label>
@@ -224,10 +227,11 @@
                                 <div class="col-sm-4">
                                     <label class="form-label">Followup Date-Time</label>
                                     <div class="input-group">
-                                       
+
                                         <input [owlDateTime]="dt3" formControlName="FollowupDate"
                                             (dateTimeChange)="voterDateRangeSelect(this.enterNewFeedbackForm.value.FollowupDate)"
-                                            class="form-control" [owlDateTimeTrigger]="dt3" placeholder="dd/mM/yyyy hh:mm:ss">
+                                            class="form-control" [owlDateTimeTrigger]="dt3"
+                                            placeholder="dd/mM/yyyy hh:mm:ss">
                                     </div>
                                     <owl-date-time #dt3></owl-date-time>
                                 </div>
@@ -249,7 +253,8 @@
                             </div>
                             <div class="mb-0 row">
                                 <div class="col-sm-6">
-                                    <button type="button" class="btn btn-secondary btn-sm me-2" (click)="clearForm()">Cancel</button>
+                                    <button type="button" class="btn btn-secondary btn-sm me-2"
+                                        (click)="clearForm()">Cancel</button>
                                 </div>
                                 <div class="col-sm-6 text-end">
                                     <!-- [mat-dialog-close]="true" -->
