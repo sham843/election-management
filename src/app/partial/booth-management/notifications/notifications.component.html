@@ -21,7 +21,7 @@
                         <form [formGroup]="notificationForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
                             <div class="form-container">
                                 <div class="mb-3">
-                                    <label for="txtTitleName" class="form-label  required-field">Title Name</label>
+                                    <label for="txtTitleName" class="form-label  required-field">Notification Title</label>
                                     <input type="text" class="form-control" id="txtTitleName" formControlName="Title"
                                         placeholder="Title Name">
                                     <div *ngIf="submitted && f.Title .errors" class="invalid-feedback">

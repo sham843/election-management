@@ -201,6 +201,16 @@
                                                 </button>
                                                </li>
 
+                                               <li class="nav-item" role="presentation"
+                                               (click)="ExpiredPaginationNo = 1; this.searchExpired.setValue(''); getExpiredList()">
+                                                   <button class="nav-link" id="pills-Expired-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-Expired" type="button" role="tab"
+                                                       aria-controls="pills-Expired" aria-selected="false">
+                                                       <h5 class="mb-0">{{clickBoothListArray?.TotalExpired}}</h5>
+                                                       Expired
+                                                   </button>
+                                                  </li>
+
                                             <li class="nav-item" role="presentation"
                                                 (click)="pendingPaginationNo = 1; this.searchPending.setValue(''); boothPendingList()">
                                                 <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
@@ -210,16 +220,6 @@
                                                     Pending
                                                 </button>
                                             </li>
-
-                                            <li class="nav-item" role="presentation"
-                                            (click)="ExpiredPaginationNo = 1; this.searchExpired.setValue(''); getExpiredList()">
-                                                <button class="nav-link" id="pills-Expired-tab" data-bs-toggle="pill"
-                                                 data-bs-target="#pills-Expired" type="button" role="tab"
-                                                    aria-controls="pills-Expired" aria-selected="false">
-                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalExpired}}</h5>
-                                                    Expired
-                                                </button>
-                                               </li>
 
                                             <li class="nav-item" role="presentation" (click)="boothAgentList(); this.searchAgent.setValue('');">
                                                 <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
@@ -258,10 +258,10 @@
                                                     <div class="col-sm pt-1 d-none">
                                                         <span class="text-success">25 Results Found</span>
                                                     </div>
-                                                    <div class="col-sm-auto d-none">
-                                                        <button type="button" class="btn btn-main btn-sm me-2">Export to
+                                                    <div class="col-sm-auto">
+                                                        <button type="button" (click)="getVoterListDownloadExcel()" class="btn btn-main btn-sm me-2">Export to
                                                             Excel</button>
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm d-none"
                                                             data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                                                             aria-controls="offcanvasRight"><i
                                                                 class="fas fa-filter"></i></button>

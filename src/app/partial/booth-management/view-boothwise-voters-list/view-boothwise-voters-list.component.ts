@@ -13,6 +13,7 @@ import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dia
 import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
 import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
+import { ExcelService } from '../../../services/excel.service'
 
 @Component({
   selector: 'app-view-boothwise-voters-list',
@@ -129,6 +130,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   LeadersPaginationNo = 1;
   LeadersPageSize: number = 10;
   LeadersTotal: any;
+  VoterListDownloadExcel: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -141,6 +143,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     public dialog: MatDialog,
     private datePipe: DatePipe,
     public dateTimeAdapter: DateTimeAdapter<any>,
+    public excelService: ExcelService,
   ) {
     dateTimeAdapter.setLocale('en-IN');
 
@@ -1131,5 +1134,43 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   // ..................................   redirected Booth Analytics Code End Here  ...........................//
+
+ // ..................................   Download Excel VoterList Code Start Here  ...........................//
+
+ getVoterListDownloadExcel() {
+
+    let formDataTopFilter = this.filterForm.value;
+    let villageId: any;
+    formDataTopFilter.village == null || formDataTopFilter.village == undefined || formDataTopFilter.village == '' ? villageId = 0 : villageId = formDataTopFilter.village;
+    let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
+      '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
+      this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&VillageId=' + villageId;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Client_VoterDetails_Download_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.VoterListDownloadExcel = res.data1;
+        this.excelService.exportAsExcelFile(this.VoterListDownloadExcel, 'VoterList');
+      } else {
+        this.toastrService.error("No Data Found");
+        this.VoterListDownloadExcel = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+//   let key = ['SrNo','VoterNo','AgentName','EnglishName','MarathiName', 'BoothNickName', 'Age', 'AgentMobileNo', 'Gender',
+//   'MobileNo','SubUserTypeName', 'VillageName', 'AreaName','FamilySize','FamilyHead','Migrated','MigratedCity','CastName',
+//  'ReligionName','Leader','LeaderImportance','LocalLeader','PartyShortCode','Occupation','Qualification','BusinnessDetails',
+// 'SurveyDate','Comment','Expired'];
+
+   // ..................................  Download Excel VoterList Code End Here  ...........................//
 
 }
