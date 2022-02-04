@@ -221,7 +221,7 @@
                                                 </button>
                                                </li>
 
-                                            <li class="nav-item" role="presentation" (click)="boothAgentList()">
+                                            <li class="nav-item" role="presentation" (click)="boothAgentList(); this.searchAgent.setValue('');">
                                                 <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-agents" type="button" role="tab"
                                                     aria-controls="pills-agents" aria-selected="false">
@@ -229,7 +229,7 @@
                                                     Agents
                                                 </button>
                                             </li>
-                                            <li class="nav-item" role="presentation" (click)="getCrmTableData()">
+                                            <li class="nav-item" role="presentation" (click)="getCrmTableData();crmAndCrmHistorySearchClear('crm')">
                                                 <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-crm" type="button" role="tab"
                                                     aria-controls="pills-crm" aria-selected="false">
@@ -237,7 +237,7 @@
                                                     CRM
                                                 </button>
                                             </li>
-                                            <li class="nav-item" role="presentation" (click)="getCrmHistoryTableData()">
+                                            <li class="nav-item" role="presentation" (click)="getCrmHistoryTableData();crmAndCrmHistorySearchClear('crmHistory')">
                                                 <button class="nav-link" id="pills-crm-history-tab"
                                                     data-bs-toggle="pill" data-bs-target="#pills-crm-history"
                                                     type="button" role="tab" aria-controls="pills-crm-history"
@@ -411,7 +411,8 @@
                                             <!-- family table start here   -->
                                             <div class="tab-pane fade" id="pills-family" role="tabpanel"
                                                 aria-labelledby="pills-family-tab">
-                                                <ng-container *ngIf="boothFamilyListArray?.length != 0">
+                                                <!--  Remove Ng-Container ==> *ngIf="boothFamilyListArray?.length != 0" -->
+                                                <ng-container>
                                                     <div class="row justify-content-end mb-3">
                                                         <div class="col-sm-3">
                                                             <div class="form-container">
@@ -804,10 +805,9 @@
                                                                         formControlName="SearchText"
                                                                         (keyup)="onKeyUpFilterCrmSearch()" />
                                                                     <button type="button"
-                                                                        class="btn btn-light border btn-sm"
-                                                                        *ngIf="searchAgent.value"><i
-                                                                            class="fas fa-times"></i></button>
-                                                                    <button type="button" *ngIf="!searchAgent.value"
+                                                                        class="btn btn-light border btn-sm" (click)="crmAndCrmHistorySearchClear('crm1')"
+                                                                        *ngIf="crmFilterForm.value.SearchText"><i class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!crmFilterForm.value.SearchText"
                                                                         class="btn btn-sm border btn-light"><i
                                                                             class="fas fa-search"></i></button>
                                                                 </div>
@@ -928,11 +928,11 @@
                                                                         placeholder="Search..."
                                                                         formControlName="SearchText"
                                                                         (keyup)="onKeyUpFilterCrmHistorySearch()" />
-                                                                    <button type="button"
+                                                                    <button type="button" (click)="crmAndCrmHistorySearchClear('crmHistory1')"
                                                                         class="btn btn-light border btn-sm"
-                                                                        *ngIf="searchAgent.value"><i
+                                                                        *ngIf="crmHistoryFilterForm.value.SearchText"><i
                                                                             class="fas fa-times"></i></button>
-                                                                    <button type="button" *ngIf="!searchAgent.value"
+                                                                    <button type="button" *ngIf="!crmHistoryFilterForm.value.SearchText"
                                                                         class="btn btn-sm border btn-light"><i
                                                                             class="fas fa-search"></i></button>
                                                                 </div>
