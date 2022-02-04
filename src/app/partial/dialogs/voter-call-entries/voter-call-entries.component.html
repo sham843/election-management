@@ -50,13 +50,31 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-2">
+                        <!-- <div class="mb-2">
                             <label class="form-label">Contact No.</label>
                             <div class="form-data">
                                 <i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
                                     {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </div>
+                        </div> -->
+
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <label class="form-label">Contact No.</label>
+                                <div class="form-data">
+                                    <i *ngIf="voterProfileData?.WatsApp1" class="fab fa-whatsapp me-1 text-primary"></i>
+                                        {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
+                                </div>
+                             </div>
+                            <div class="col-sm-6">
+                                <label class="form-label">LocalLeader</label>
+                                <div class="form-data">{{voterProfileData?.LocalLeader ? voterProfileData?.LocalLeader
+                                    : '-'}}</div>
+                            </div>
                         </div>
+
+
+
                         <div class="mb-2">
                             <label class="form-label">Area</label>
                             <div class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</div>
