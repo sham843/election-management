@@ -56,7 +56,7 @@ export class NotificationsComponent implements OnInit {
   allAgentLists: any;
   clientNameArray: any;
   globalClientId: any;
-  DecScopeId: any;
+  editDataObject: any;
 
   constructor(
     private callAPIService: CallAPIService,
@@ -76,9 +76,9 @@ export class NotificationsComponent implements OnInit {
     this.globalClientId = this.commonService.getlocalStorageData().ClientId;
     this.customForm();
     this.defaultFilterForm();
-    this.gerNotificationscope();
     this.getNotificationData();
     this.getClientName();
+    this.gerNotificationscope();
     this.searchFilters('false');
   }
 
@@ -86,14 +86,14 @@ export class NotificationsComponent implements OnInit {
     this.notificationForm = this.fb.group({
       Id: [0],
       CreatedBy: [this.commonService.loggedInUserId()],
-      ScopeId: ['', Validators.required],
-      Title: ['', Validators.required],
-      Description: ['', Validators.required],
+      ScopeId: [''],
+      Title: ['', [Validators.required, Validators.maxLength(100), Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
+      Description: ['', [Validators.required, Validators.maxLength(100), Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
       ImageUrl: [''],
       Link: ['', [Validators.pattern(this.reg)]],
       MemberStr: [],
       NotificationDate: [''],
-      ClientId: ['']
+      ClientId: ['', Validators.required]
     })
   }
 
@@ -102,7 +102,7 @@ export class NotificationsComponent implements OnInit {
       fromTo: [['', '']],
       ScopeId: [0],
       searchText: [''],
-      ClientId : [0]
+      ClientId: [0]
     })
   }
 
@@ -153,7 +153,7 @@ export class NotificationsComponent implements OnInit {
         convertDate = NotificationDate;
       }
       let ClientIdCheck = (this.notificationForm.value.ClientId == null || this.notificationForm.value.ClientId == undefined ||
-      this.notificationForm.value.ClientId == '') ? 0 : this.notificationForm.value.ClientId;
+        this.notificationForm.value.ClientId == '') ? 0 : this.notificationForm.value.ClientId;
 
       fromData.append('Id', id);
       fromData.append('CreatedBy', this.commonService.loggedInUserId());
@@ -198,65 +198,56 @@ export class NotificationsComponent implements OnInit {
     }
   }
 
-  addValidationOn(scodeId: any) {
-    if (scodeId == 2) {
-      this.validationRemove();
-      this.getClientName();
-      this.notificationForm.controls["ClientId"].setValidators(Validators.required);
-      this.notificationForm.controls["ClientId"].updateValueAndValidity();
-      this.notificationForm.controls['ClientId'].clearValidators();
-      // this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
-      // this.notificationForm.controls["MemberStr"].updateValueAndValidity();
-      // this.notificationForm.controls['MemberStr'].clearValidators();
-    } else {
-      this.validationRemove();
+  clearValidationAndData(flag: any) {
+    if (flag == 'client') {
+      this.notificationForm.controls['ScopeId'].setValue('');
+      this.notificationForm.controls['MemberStr'].setValue('');
+    } else if (flag == 'scopClear') {
+      this.notificationForm.controls['MemberStr'].setValue('');
+      this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
+      this.notificationForm.controls["ScopeId"].updateValueAndValidity();
+      this.notificationForm.controls['ScopeId'].clearValidators();
+    } else if (flag == 'agent') {
+      this.validationAddAgent();
     }
+
   }
 
-  validationRemove() {
-    this.notificationForm.controls['ClientId'].setValue('');
-    this.notificationForm.controls['ClientId'].clearValidators();
-    this.notificationForm.controls['ClientId'].updateValueAndValidity();
+  addValidationOn(FlagWithScopId: any) {
+    if (FlagWithScopId == 2) {
+      this.getAllAgentList();
+      this.validationAddAgent();
+    } else if (FlagWithScopId == 1) {
+      this.validationRemoveAgent();
+    } else if (FlagWithScopId == 'client') {
+      this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
+      this.notificationForm.controls["ScopeId"].updateValueAndValidity();
+      this.notificationForm.controls['ScopeId'].clearValidators();
+    } 
+  }
+  
+  validationRemoveAgent() {
     this.notificationForm.controls['MemberStr'].setValue('');
     this.notificationForm.controls['MemberStr'].clearValidators();
     this.notificationForm.controls['MemberStr'].updateValueAndValidity();
   }
 
-
-  addValidationOnClient() {
-    this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
-    this.notificationForm.controls["MemberStr"].updateValueAndValidity();
-    // this.notificationForm.controls['MemberStr'].clearValidators();
-  }
-
-  validationClientRemove() {
-    this.notificationForm.controls['MemberStr'].setValue('');
-    this.notificationForm.controls["ClientId"].setValidators(Validators.required);
-    this.notificationForm.controls["ClientId"].updateValueAndValidity();
-    this.notificationForm.controls['ClientId'].clearValidators();
+  validationAddAgent() {
     this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
     this.notificationForm.controls["MemberStr"].updateValueAndValidity();
     this.notificationForm.controls['MemberStr'].clearValidators();
   }
 
-
   editNotification(data: any) {
-    this.DecScopeId = data.ScopeId;
-    if(data.IsPushed == 2){
+    this.editDataObject = data;
+    if (data.IsPushed == 2) {
       this.schedulerFlag = true;
-    }else{
+    } else {
       this.schedulerFlag = false;
     }
     this.NotificationText = "Update";
     this.getImgPath = data.AttachmentPath;
-
-    this.addValidationOn(data.ScopeId);
-
-    // if(data.ScopeId == 2){
-    //   data.MemberStr = data.MemberStr.split(",").map((item:any)=> {
-    //     return parseInt(item);
-    // });
-    // }
+    
     let dateTransForm: any = data.NotificationDate.split(" ");
     let datefomratChange: any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
 
@@ -274,18 +265,9 @@ export class NotificationsComponent implements OnInit {
       ClientId: data.ClientId,
       NotificationDate: new Date(Date.parse(datefomratChange + " " + dateTransForm[1])),
     })
-    if (this.DecScopeId != 1) {
-      this.getClientName();
-      this.notificationForm.controls["ClientId"].setValue(this.notificationForm.value.ClientId);
-      let MemberStr = data.MemberStr.split(",").map((item: any) => {
-        return parseInt(item);
-      });
-      this.getAllAgentList();
-      setTimeout(() => {
-        this.notificationForm.controls["MemberStr"].setValue(MemberStr);
-      }, 100);
-      
-    }
+
+    this.addValidationOn(data.ScopeId);
+    
   }
 
   resetNotificationForm() {
@@ -294,6 +276,9 @@ export class NotificationsComponent implements OnInit {
     this.paginationNo = 1;
     this.getImgPath = null;
     this.notificationForm.reset();
+    if (this.clientNameArray.length == 1) {
+      this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id);
+    }
   }
 
 
@@ -368,9 +353,7 @@ export class NotificationsComponent implements OnInit {
         this.spinner.hide();
         this.clientNameArray = res.data1;
         if (this.clientNameArray.length == 1) {
-          this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id); // Id men's agent Id
-          this.addValidationOnClient();
-          this.getAllAgentList();
+          this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id);
         }
       }
       else {
@@ -392,6 +375,14 @@ export class NotificationsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
+        if (this.NotificationText == "Update") {
+          let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
+            return parseInt(item);
+          });
+          this.notificationForm.controls["MemberStr"].setValue(MemberStr);
+          
+        }
+
       } else {
         this.allAgentLists = [];
         this.spinner.hide();

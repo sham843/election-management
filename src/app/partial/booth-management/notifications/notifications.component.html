@@ -26,6 +26,7 @@
                                         placeholder="Title Name">
                                     <div *ngIf="submitted && f.Title .errors" class="invalid-feedback">
                                         <div *ngIf="f.Title.errors.required">Title name is required</div>
+                                        <div *ngIf="f.Title.errors.pattern">Enter Valid Title</div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -34,6 +35,7 @@
                                         id="txtBody" placeholder="Notification Body"></textarea>
                                     <div *ngIf="submitted && f.Description.errors" class="invalid-feedback">
                                         <div *ngIf="f.Description.errors.required">Notification Body is required</div>
+                                        <div *ngIf="f.Description.errors.pattern">Enter Valid Notification Body</div>
                                     </div>
                                 </div>
 
@@ -47,9 +49,24 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="ddlScope" class="form-label  required-field">Scope of
+                                    <label for="ddlMembers" class="form-label required-field">Select
+                                        Client</label>
+                                    <ngx-select [items]="clientNameArray" [allowClear]="true" 
+                                        (remove)="clearValidationAndData('client')" formControlName="ClientId"
+                                        (select)="addValidationOn('client')"
+                                        [disabled]="globalClientId != 0"
+                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                                    </ngx-select>
+                                    <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                                        <div *ngIf="f.ClientId.errors.required">Select Client is required</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ddlScope" class="form-label required-field">Scope of
                                         Notification</label>
-                                    <ngx-select [allowClear]="true" (remove)="validationRemove()"
+                                    <ngx-select [allowClear]="true" (remove)="clearValidationAndData('scopClear')"
+                                    [disabled]="!this.notificationForm.value.ClientId"
                                         (select)="addValidationOn($event)" [items]="notificationscopeArray"
                                         formControlName="ScopeId" placeholder="Scope of Notification"
                                         optionValueField="id" optionTextField="ScopeName">
@@ -60,28 +77,12 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.ClientId.errors }">Select
-                                        Client</label>
-                                    <ngx-select [items]="clientNameArray" [allowClear]="true"
-                                        (remove)="validationClientRemove()" formControlName="ClientId"
-                                        (select)="getAllAgentList();addValidationOnClient()"
-                                        [disabled]="this.notificationForm.value.ScopeId != 2 || globalClientId != 0"
-                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
-                                    </ngx-select>
-                                    <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
-                                        <div *ngIf="f.ClientId.errors.required">Select Client is required</div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.MemberStr.errors }">Select
+                                    <label for="ddlMembers" class="form-label required-field">Select
                                         Agent</label>
                                     <ngx-select [items]="allAgentLists" [multiple]="true" [allowClear]="true"
                                         formControlName="MemberStr" optionValueField="AgentId"
-                                        [disabled]="!this.notificationForm.value.ClientId"
-                                        (remove)="addValidationOnClient()" optionTextField="FullName"
+                                        [disabled]="this.notificationForm.value.ScopeId != 2"
+                                        optionTextField="FullName" (remove)="clearValidationAndData('client')"
                                         placeholder="Select Agent">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.MemberStr.errors" class="invalid-feedback">
