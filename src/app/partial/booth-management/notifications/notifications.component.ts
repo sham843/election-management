@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../../dialogs/delete/delete.component';
 import { DateTimeAdapter } from 'ng-pick-datetime';
@@ -145,11 +144,9 @@ export class NotificationsComponent implements OnInit {
       let NotificationDate: any;
       if (getObj.NotificationDate) {
         NotificationDate = this.datePipe.transform(getObj.NotificationDate, 'dd/MM/YYYY HH:mm');
-        // convertDate = NotificationDate.split(':');
         convertDate = NotificationDate;
       } else {
         NotificationDate = this.datePipe.transform(new Date, 'dd/MM/YYYY HH:mm');
-        // convertDate= NotificationDate.split(':');
         convertDate = NotificationDate;
       }
       let ClientIdCheck = (this.notificationForm.value.ClientId == null || this.notificationForm.value.ClientId == undefined ||
@@ -166,7 +163,6 @@ export class NotificationsComponent implements OnInit {
       fromData.append('AttchmentStr', this.selectedFile ? this.selectedFile : '');
       fromData.append('NotificationType', notificationFlag);
       fromData.append('IsChangeImage', ImageChangeFlag);
-      // fromData.append('NotificationDate', convertDate[0]+":00");
       fromData.append('NotificationDate', convertDate);
       fromData.append('IsPushed', this.IspushedFlag);
       fromData.append('ClientId', ClientIdCheck);
@@ -178,11 +174,8 @@ export class NotificationsComponent implements OnInit {
           this.IsChangeImage = false;
           this.submitted = false;
           this.notificationForm.reset();
-          // let modalClick = this.clickPushModal.nativeElement;
-          // modalClick.click();
           this.toastrService.success(res.data1[0].Msg);
           this.pushMotificationStatus(res.data1[0].ID, res.data1[0].ScopeId);
-          // this.pushMotificationStatus(getObj?.Id, getObj?.ScopeId)
           this.schedulerFlag = false;
           this.getNotificationData();
           this.resetNotificationForm();
@@ -246,7 +239,6 @@ export class NotificationsComponent implements OnInit {
     }
     this.NotificationText = "Update";
     this.getImgPath = data.AttachmentPath;
-
     let dateTransForm: any = data.NotificationDate.split(" ");
     let datefomratChange: any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
 
@@ -264,9 +256,7 @@ export class NotificationsComponent implements OnInit {
       ClientId: data.ClientId,
       NotificationDate: new Date(Date.parse(datefomratChange + " " + dateTransForm[1])),
     })
-
     this.addValidationOn(data.ScopeId);
-
   }
 
   resetNotificationForm() {
@@ -310,7 +300,6 @@ export class NotificationsComponent implements OnInit {
         this.getNotificationData();
         this.resetNotificationForm();
       } else {
-        // this.toastrService.error(res.data1[0].Msg)
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -333,7 +322,6 @@ export class NotificationsComponent implements OnInit {
         this.toastrService.success(res.data1);
         this.getNotificationData();
       } else {
-        // this.toastrService.error('Something went wrong please try again');
         this.spinner.hide();
       }
     }, (error: any) => {
@@ -381,10 +369,9 @@ export class NotificationsComponent implements OnInit {
               return parseInt(item);
             });
             this.notificationForm.controls["MemberStr"].setValue(MemberStr);
-          } else{
+          } else {
             this.validationAddAgent();
           }
-
         }
       } else {
         this.allAgentLists = [];
@@ -407,7 +394,6 @@ export class NotificationsComponent implements OnInit {
         this.notificationscopeArray = res.data1;
       } else {
         this.spinner.hide();
-        //this.toastrService.error("Data is not available");
       }
     }, (error: any) => {
       this.spinner.hide();
@@ -467,7 +453,6 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
-
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
     this.getNotificationData();
@@ -491,7 +476,6 @@ export class NotificationsComponent implements OnInit {
     }
     );
   }
-
 
   choosePhoto() {
     let clickPhoto: any = document.getElementById('my_file')
