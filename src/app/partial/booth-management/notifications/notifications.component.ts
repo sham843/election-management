@@ -380,7 +380,7 @@ export class NotificationsComponent implements OnInit {
             return parseInt(item);
           });
           this.notificationForm.controls["MemberStr"].setValue(MemberStr);
-          
+
         }
 
       } else {
@@ -394,8 +394,6 @@ export class NotificationsComponent implements OnInit {
       }
     })
   }
-
-
 
   gerNotificationscope() {
     this.spinner.show();
