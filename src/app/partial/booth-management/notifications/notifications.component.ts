@@ -210,7 +210,6 @@ export class NotificationsComponent implements OnInit {
     } else if (flag == 'agent') {
       this.validationAddAgent();
     }
-
   }
 
   addValidationOn(FlagWithScopId: any) {
@@ -223,9 +222,9 @@ export class NotificationsComponent implements OnInit {
       this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
       this.notificationForm.controls["ScopeId"].updateValueAndValidity();
       this.notificationForm.controls['ScopeId'].clearValidators();
-    } 
+    }
   }
-  
+
   validationRemoveAgent() {
     this.notificationForm.controls['MemberStr'].setValue('');
     this.notificationForm.controls['MemberStr'].clearValidators();
@@ -247,7 +246,7 @@ export class NotificationsComponent implements OnInit {
     }
     this.NotificationText = "Update";
     this.getImgPath = data.AttachmentPath;
-    
+
     let dateTransForm: any = data.NotificationDate.split(" ");
     let datefomratChange: any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
 
@@ -267,7 +266,7 @@ export class NotificationsComponent implements OnInit {
     })
 
     this.addValidationOn(data.ScopeId);
-    
+
   }
 
   resetNotificationForm() {
@@ -375,14 +374,18 @@ export class NotificationsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        if (this.NotificationText == "Update") {
-          let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
-            return parseInt(item);
-          });
-          this.notificationForm.controls["MemberStr"].setValue(MemberStr);
+        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2) {
+
+          if (this.notificationForm.value.MemberStr != '') {
+            let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
+              return parseInt(item);
+            });
+            this.notificationForm.controls["MemberStr"].setValue(MemberStr);
+          } else{
+            this.validationAddAgent();
+          }
 
         }
-
       } else {
         this.allAgentLists = [];
         this.spinner.hide();
