@@ -45,7 +45,6 @@
                         </ngx-select>
                         <!-- [disabled]="subAreaAgentIdDisabledFlag" -->
                     </div>
-
                 </div>
             </form>
         </div>
@@ -74,7 +73,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <small class="text-muted">Booths(s) Assigned :</small>
+                            <small class="text-muted">Booth(s) Assigned :</small>
                             <p class="area">{{agentProfileData?.Booths}}</p>
                             <ng-container *ngIf="agentProfileData?._Area">
                                 <small class="text-muted">Area :</small>
@@ -323,7 +322,6 @@
                                             *ngFor="let clientBooth of clientBoothAgentVoterList | paginate: {id: 'votersPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}">
                                             <td>{{clientBooth?.SrNo}}</td>
                                             <td>{{clientBooth?.VoterNo}}</td>
-                                            <!-- {{clientBooth?.EnglishName | titlecase}} -->
                                             <td>
                                                 <p class="mb-0">
                                                     <a   (click)="redirectToVoterPrfile(clientBooth)"
@@ -332,7 +330,7 @@
                                             </td>
                                             <td>{{clientBooth?.SurveyDate | dateTransform}}</td>
                                             <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
-                                            <td>{{clientBooth?.MobileNo1 ? clientBooth?.MobileNo1 : '-'}}<span *ngIf="clientBooth?.MobileNo2"> /{{clientBooth?.MobileNo2}}</span></td>
+                                            <td>{{clientBooth?.MobileNo1 ? clientBooth?.MobileNo1 : '-'}}<span *ngIf="clientBooth?.MobileNo2">  {{clientBooth?.MobileNo2}}</span></td>
                                         </tr>
 
                                     </tbody>
@@ -484,7 +482,7 @@
                                     <thead>
                                         <tr>
                                             <th>Sr. No.</th>
-                                            <th>Voter NO.</th>
+                                            <!-- <th>Voter NO.</th> -->
                                             <th>Voters Full Name</th>
                                             <th>Visit Time</th>
                                             <th>Gender</th>
@@ -495,11 +493,11 @@
                                         <tr
                                             *ngFor="let newVotersList of getnewVotersList | paginate: {id: 'newVotersPagination', itemsPerPage: 10, currentPage: newVotersPaginationNo, totalItems:newVotersTotal}">
                                             <td>{{newVotersList?.SrNo}}</td>
-                                            <td>{{newVotersList?.VoterNo ? newVotersList?.VoterNo : '-'}}</td>
+                                            <!-- <td>{{newVotersList?.VoterNo ? newVotersList?.VoterNo : '-'}}</td> -->
                                             <td>{{newVotersList?.EnglishName | titlecase}}</td>
                                             <td>{{newVotersList?.SurveyDate}}</td>
                                             <td>{{newVotersList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
-                                            <td>{{newVotersList?.MobileNo1}} {{newVotersList?.MobileNo2}}</td>
+                                            <td>{{newVotersList?.MobileNo1? newVotersList?.MobileNo1 : '-'}} <span *ngIf="newVotersList?.MobileNo2">/ {{newVotersList?.MobileNo2}}</span></td>
                                         </tr>
 
                                     </tbody>
@@ -557,7 +555,7 @@
                                     <tbody>
                                         <tr *ngFor="let callList of getCallLoggerList | paginate: {id: 'agentCallLogsPagination', itemsPerPage: 10, currentPage: callLoggerPaginationNo, totalItems:getCallLoggerTotal}">                                           
                                             <td>{{callList?.SrNo}}</td>
-                                            <td>{{callList?.CallerName}}</td>
+                                            <td>{{callList?.CallerName? callList?.CallerName : '-'}}</td>
                                             <td>{{callList?.MobileNo}}</td>
                                             <td>{{callList?.CallDate}}</td>
                                             <td>{{callList?.CallDuration}} Sec</td>
@@ -604,6 +602,7 @@
                                 <td>Android</td>
                                 <td>{{appUseTrackRes?.StartDate | dateTransform}} -  {{appUseTrackRes?.EndDate | dateTransform}}</td>
                                 <td *ngIf="appUseTrackRes?.difference">{{appUseTrackRes?.difference}} (Min)</td>
+                                <td *ngIf="!appUseTrackRes?.difference">-</td>
                             </tr>
                         </tbody>
                     </table>

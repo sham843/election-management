@@ -104,7 +104,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     }
   }
 
-
   ngOnInit(): void {
     this.commonService.getlocalStorageData().IsTrackAgetCallLogger == 1 ?  this.agentCAllLogFlag = true :  this.agentCAllLogFlag = false
     this.deafultVoterProfilefilterForm();
@@ -114,9 +113,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.searchNewVotersFilters('false');
     this.searchAgentCallLoggerFilters('false');
     this.searchFamilyVotersFilters();
+    am4core.addLicense("ch-custom-attribution"); // Hide AmChart Logo Link
   }
-
-
 
   //--------------------------------------------------  top filter method's start  here -----------------------------------------------------------//
 
@@ -451,7 +449,7 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     let hoverShadow = hoverState.filters.push(new am4core.DropShadowFilter);
     hoverShadow.opacity = 0.7;
     hoverShadow.blur = 5;
-    chart.radius = am4core.percent(100);
+    chart.radius = am4core.percent(90);
     // Add a legend
     chart.legend = new am4charts.Legend();
     chart.legend.maxWidth = 100;
@@ -464,8 +462,6 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     markerTemplate.width = 15;
     markerTemplate.height = 15;
     pieSeries.labels.template.disabled = true;
-
-
     chart.data = this.piChartArray;
   }
 
@@ -669,6 +665,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.votersCardData = res.data1[0];
+        let clickOnVoterTab:any = document.getElementById('pills-migrated-tab');
+        clickOnVoterTab?.click(); 
         this.getClientBoothAgentVoterList();
       } else {
         this.votersCardData = [];

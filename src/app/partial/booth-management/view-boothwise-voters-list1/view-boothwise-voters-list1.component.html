@@ -46,7 +46,8 @@
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
-                            formControlName="getBoothId"  optionValueField="BoothId" (select)="boothDataHide=true;  selBoothList($event);boothVoterList()" (remove)="clearTopFilter('BoothId')" 
+                            formControlName="getBoothId"  optionValueField="BoothId" (selectionChanges)="globalAssemblyFilter($event)" 
+                            (select)="boothDataHide=true; selBoothList($event);boothVoterList()" (remove)="clearTopFilter('BoothId')" 
                             optionTextField="BoothNickName"
                             placeholder="Select Booth">
                         </ngx-select>
@@ -178,7 +179,8 @@
                                     <div class="card-header p-0">
                                         <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
                                             <li class="nav-item" role="presentation"
-                                                (click)="votersPaginationNo = 1; this.fillDataId = 0; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
+                                                (click)="filterSidebarFlag = 'VotersFlag'; clearBoothVotersFilterForm(); votersPaginationNo = 1; this.fillDataId = 0; 
+                                                this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
                                                 <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-voters" type="button" role="tab"
                                                     aria-controls="pills-voters" aria-selected="false">
@@ -187,7 +189,7 @@
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation"
-                                                (click)="familyPaginationNo = 1; this.searchFamily.setValue(''); boothFamilyList()">
+                                                (click)="filterSidebarFlag = 'FamiliesFlag'; clearBoothVotersFilterForm(); familyPaginationNo = 1; this.searchFamily.setValue(''); boothFamilyList()">
                                                 <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-family" type="button" role="tab"
                                                     aria-controls="pills-family" aria-selected="false">
@@ -196,7 +198,7 @@
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation"
-                                                (click)="migratedPaginationNo = 1; this.searchMigrated.setValue(''); boothMigratedList()">
+                                                (click)="filterSidebarFlag = 'MigratedFlag'; clearBoothVotersFilterForm(); migratedPaginationNo = 1; this.searchMigrated.setValue(''); boothMigratedList()">
                                                 <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-migrated" type="button" role="tab"
                                                     aria-controls="pills-migrated" aria-selected="true">
@@ -205,7 +207,7 @@
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation"
-                                                (click)="pendingPaginationNo = 1; this.searchPending.setValue(''); boothPendingList()">
+                                                (click)="filterSidebarFlag = 'PendingFlag'; clearBoothVotersFilterForm(); pendingPaginationNo = 1; this.searchPending.setValue(''); boothPendingList()">
                                                 <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-pending" type="button" role="tab"
                                                     aria-controls="pills-pending" aria-selected="false">
@@ -213,7 +215,7 @@
                                                     Pending
                                                 </button>
                                             </li>
-                                            <li class="nav-item" role="presentation" (click)="crmPaginationNo = 1; boothAgentList()">
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = ''; this.searchAgent.setValue(''); crmPaginationNo = 1; boothAgentList()">
                                                 <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-agents" type="button" role="tab"
                                                     aria-controls="pills-agents" aria-selected="false">
@@ -221,7 +223,8 @@
                                                     Agents
                                                 </button>
                                             </li>
-                                            <li class="nav-item" role="presentation" (click)="crmHistoryPaginationNo = 1; getCrmTableData()">
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'CRMFlag'; clearBoothVotersFilterForm();
+                                            crmHistoryPaginationNo = 1; getCrmTableData()">
                                                 <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
                                                     data-bs-target="#pills-crm" type="button" role="tab"
                                                     aria-controls="pills-crm" aria-selected="false">
@@ -229,7 +232,7 @@
                                                     CRM
                                                 </button>
                                             </li>
-                                            <li class="nav-item" role="presentation" (click)="getCrmHistoryTableData()">
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'CRMHistoryFlag'; clearBoothVotersFilterForm(); getCrmHistoryTableData()">
                                                 <button class="nav-link" id="pills-crm-history-tab"
                                                     data-bs-toggle="pill" data-bs-target="#pills-crm-history"
                                                     type="button" role="tab" aria-controls="pills-crm-history"
@@ -1198,7 +1201,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" (click)="clearBoothVotersFilterForm()">Clear All</button>
                 </div>
                 <div class="col-sm-6 text-end">
-                    <button type="button" class="btn btn-main btn-sm" (click)="globalFilterShowData()">Show Data</button>
+                    <button type="button" class="btn btn-main btn-sm" data-bs-dismiss="offcanvas" (click)="globalFilterShowData()">Show Data</button>
                 </div>
             </div>
         </div>

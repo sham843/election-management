@@ -9,7 +9,7 @@
                     <button (click)="ngOnInit()" class="btn btn-sm btn-main"><i class="fas fa-sync-alt"></i></button>
                 </div>
             </div>
-            
+
         </div>
     </div>
 
@@ -21,11 +21,12 @@
                         <form [formGroup]="notificationForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
                             <div class="form-container">
                                 <div class="mb-3">
-                                    <label for="txtTitleName" class="form-label  required-field">Title Name</label>
+                                    <label for="txtTitleName" class="form-label  required-field">Notification Title</label>
                                     <input type="text" class="form-control" id="txtTitleName" formControlName="Title"
                                         placeholder="Title Name">
                                     <div *ngIf="submitted && f.Title .errors" class="invalid-feedback">
                                         <div *ngIf="f.Title.errors.required">Title name is required</div>
+                                        <div *ngIf="f.Title.errors.pattern">Enter Valid Title</div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -34,34 +35,38 @@
                                         id="txtBody" placeholder="Notification Body"></textarea>
                                     <div *ngIf="submitted && f.Description.errors" class="invalid-feedback">
                                         <div *ngIf="f.Description.errors.required">Notification Body is required</div>
+                                        <div *ngIf="f.Description.errors.pattern">Enter Valid Notification Body</div>
                                     </div>
                                 </div>
-                                <!-- <div class="mb-2">
-                                <label for="fuPhoto" class="form-label">Photo</label>
-                                <input class="form-control form-control-sm" formControlName="Photo" id="fuPhoto" type="file">
-                                <div *ngIf="submitted && f.Photo.errors" class="invalid-feedback">
-                                    <div *ngIf="f.Photo.errors.required">Photo is required</div>
-                                </div>
-                            </div> -->
+
                                 <div class="mb-3">
                                     <label for="txtLinkURL" class="form-label">Link</label>
                                     <input type="url" class="form-control" formControlName="Link" id="txtLinkURL"
                                         placeholder="http://www.example.com">
                                     <div *ngIf="submitted && f.Link.errors" class="invalid-feedback">
                                         <div *ngIf="f.Link.errors.pattern">Please enter valid Link.</div>
-                                     </div>
-                  
+                                    </div>
                                 </div>
-                                <!-- <div class="mb-2">
-                                    <label for="fuAttachments" class="form-label">Attachment(s)</label>
-                                    <input class="form-control form-control-sm" id="fuAttachments" type="file" (change)="readUrl($event)">
-                                    <a *ngIf="getImgPath"><small>{{getImgPath}}</small> &nbsp; <i
-                                            class="fas fa-trash-alt text-danger" (click)="deleteImg()"></i></a>
-                                </div> -->
+
                                 <div class="mb-3">
-                                    <label for="ddlScope" class="form-label  required-field">Scope of
+                                    <label for="ddlMembers" class="form-label required-field">Select
+                                        Client</label>
+                                    <ngx-select [items]="clientNameArray" [allowClear]="true" 
+                                        (remove)="clearValidationAndData('client')" formControlName="ClientId"
+                                        (select)="addValidationOn('client')"
+                                        [disabled]="globalClientId != 0"
+                                        optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                                    </ngx-select>
+                                    <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                                        <div *ngIf="f.ClientId.errors.required">Select Client is required</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ddlScope" class="form-label required-field">Scope of
                                         Notification</label>
-                                    <ngx-select [allowClear]="true" (remove)="validationRemove()"
+                                    <ngx-select [allowClear]="true" (remove)="clearValidationAndData('scopClear')"
+                                    [disabled]="!this.notificationForm.value.ClientId"
                                         (select)="addValidationOn($event)" [items]="notificationscopeArray"
                                         formControlName="ScopeId" placeholder="Scope of Notification"
                                         optionValueField="id" optionTextField="ScopeName">
@@ -70,68 +75,46 @@
                                         <div *ngIf="f.ScopeId.errors.required">Scope of Notification is required</div>
                                     </div>
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
-                                        District</label>
-                                    <ngx-select [allowClear]="true" [multiple]="true"
-                                        [disabled]="this.notificationForm.value.ScopeId != 2" [items]="allDistrict"
-                                        formControlName="DistrictId" optionValueField="DistrictId"
-                                        optionTextField="DistrictName" placeholder="Select District">
-                                    </ngx-select>
-                                    <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
-                                        <div *ngIf="f.DistrictId.errors.required">District is required</div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.BodyId.errors }">Select
-                                        Committee</label>
-                                    <!-- <ngx-select [allowClear]="true" [multiple]="true"  [disabled]="this.notificationForm.value.ScopeId != 3"  [items]="memberNameArray"  optionValueField="Id" formControlName="BodyId" optionTextField="FullName"  placeholder="Select Committee Name">
-                                </ngx-select> -->
-                                    <ngx-select [allowClear]="true" [multiple]="true" [items]="getBodyOrgCellName"
-                                        [disabled]="this.notificationForm.value.ScopeId != 3" optionValueField="Id"
-                                        formControlName="BodyId" optionTextField="BodyOrgCellName"
-                                        placeholder="Select Committee Name">
-                                    </ngx-select>
-                                    <div *ngIf="submitted && f.BodyId.errors" class="invalid-feedback">
-                                        <div *ngIf="f.BodyId.errors.required">Committee is required</div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ddlMembers" class="form-label"
-                                        [ngClass]="{ 'required-field': submitted && f.MemberStr.errors }">Select
-                                        Members</label>
-                                    <!-- (select)="addValidationOn($event)" -->
-                                    <ngx-select [allowClear]="true" [multiple]="true" 
-                                        [disabled]="this.notificationForm.value.ScopeId != 4" [items]="memberNameArray"
-                                        optionValueField="Id" formControlName="MemberStr" optionTextField="FullName"
-                                        placeholder="Select Member Name">
+                                    <label for="ddlMembers" class="form-label required-field">Select
+                                        Agent</label>
+                                    <ngx-select [items]="allAgentLists" [multiple]="true" [allowClear]="true"
+                                        formControlName="MemberStr" optionValueField="AgentId"
+                                        [disabled]="this.notificationForm.value.ScopeId != 2"
+                                        optionTextField="FullName" (remove)="clearValidationAndData('client')"
+                                        placeholder="Select Agent">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.MemberStr.errors" class="invalid-feedback">
-                                        <div *ngIf="f.MemberStr.errors.required">Select Members is required</div>
+                                        <div *ngIf="f.MemberStr.errors.required">Select Agent is required</div>
                                     </div>
                                 </div>
-                                <div class="mb-3" >
+                                <div class="mb-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="txtScheduleDateTime" [checked]="schedulerFlag == true" (change)="checkBoxScheduler($event)" >
+                                        <input class="form-check-input" type="checkbox" name="txtScheduleDateTime"
+                                            [checked]="schedulerFlag == true" (change)="checkBoxScheduler($event)">
                                         <label class="form-check-label" for="txtScheduleDateTime">
                                             Schedule Notification
                                         </label>
-                                      </div>
+                                    </div>
 
-                                      <div class="input-group" *ngIf="schedulerFlag">
-                                        <input   class="form-control form-control-sm" [min]="minDate" [owlDateTimeTrigger]="dt1" placeholder="Date Time" [owlDateTime]="dt1" formControlName="NotificationDate" [ngClass]="{ 'required-field': submitted && f.NotificationDate.errors }">
-                                        <owl-date-time #dt1 ></owl-date-time>
-                                        <button class="btn btn-light btn-sm" type="button" [owlDateTimeTrigger]="dt1" >
+                                    <div class="input-group" *ngIf="schedulerFlag">
+                                        <input class="form-control form-control-sm" [min]="minDate"
+                                            [owlDateTimeTrigger]="dt1" placeholder="Date Time" [owlDateTime]="dt1"
+                                            formControlName="NotificationDate"
+                                            [ngClass]="{ 'required-field': submitted && f.NotificationDate.errors }">
+                                        <owl-date-time #dt1></owl-date-time>
+                                        <button class="btn btn-light btn-sm" type="button" [owlDateTimeTrigger]="dt1">
                                             <i class="fas fa-calendar-alt"></i>
                                         </button>
-                                        <div *ngIf="submitted && f.NotificationDate.errors" class="invalid-feedback mt-4">
-                                            <div *ngIf="f.NotificationDate.errors.required">Notification Date is required</div>
+                                        <div *ngIf="submitted && f.NotificationDate.errors"
+                                            class="invalid-feedback mt-4">
+                                            <div *ngIf="f.NotificationDate.errors.required">Notification Date is
+                                                required</div>
                                         </div>
                                     </div>
-                                    </div>
-                                    
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="fuPhoto" class="form-label">Attachment(s)</label>
                                     <div class="uploadimg">
@@ -165,7 +148,15 @@
                         <div class="text-end">
                             <form [formGroup]="filterForm">
                                 <div class="row g-1 ">
-                                    <div class="offset-sm-3 col-sm-3">
+                                    <div class="col-sm-3">
+                                        <ngx-select [items]="clientNameArray" [allowClear]="true"
+                                            (remove)="clearFilter('client')" formControlName="ClientId"
+                                            (select)="filterData(false)" *ngIf="globalClientId == 0"
+                                            optionValueField="id" optionTextField="Fullname"
+                                            placeholder="Select Client">
+                                        </ngx-select>
+                                    </div>
+                                    <div class="col-sm-3">
                                         <ngx-select [allowClear]="true" (remove)="clearFilter('notifications')"
                                             [items]="notificationscopeArray" formControlName="ScopeId"
                                             placeholder="Scope of Notification" (select)="filterData(false)"
@@ -215,7 +206,7 @@
                                 <img *ngIf="notificationScope?.AttachmentPath else noImg"
                                     src="{{notificationScope?.AttachmentPath}}" alt="..." class="media-img">
                                 <ng-template #noImg>
-                                    <img src="assets/images/ncp-default.png" alt="..." class="media-img">
+                                    <img src="assets/images/ele.png" alt="..." class="media-img">
 
                                 </ng-template>
                             </div>
@@ -223,17 +214,22 @@
                                 <!-- <span class="media-date" *ngIf="{{'notificationScope?.NotificationDate' == 1}}"></span> -->
                                 <span class="media-date"
                                     [ngClass]="{'badge text-white bg-success fw-bolder':notificationScope?.IsPushed == 1}">{{notificationScope?.IsPushed
-                                    == 1 ? 'Published' : notificationScope?.IsPushed == 2 ? 'Schedule Notification' :  'Not-published'}}</span>
+                                    == 1 ? 'Published' : notificationScope?.IsPushed == 2 ? 'Schedule Notification' :
+                                    'Not-published'}}</span>
                                 <div class="media-title">{{notificationScope?.Title}}</div>
                                 <div class="media-scope">
-                                    {{notificationScope?.ScopeName}} <span *ngIf="notificationScope?.MemberDetails">-  {{notificationScope?.MemberDetails}}</span>
+                                    {{notificationScope?.ScopeName}} <span *ngIf="notificationScope?.MemberDetails">-
+                                        {{notificationScope?.MemberDetails}}</span>
                                 </div>
                                 <div class="media-body">
                                     {{notificationScope?.Description}}
                                 </div>
                                 <div class="media-links">
-                                    <ng-container *ngIf="notificationScope?.Link =='' || notificationScope?.Link == 'null' || notificationScope?.Link ==  'undefined' else Link"> -  </ng-container>
-                                    <ng-template #Link> <a href="{{notificationScope?.Link}}" target="_blank" class="me-5">{{notificationScope?.Link}}</a></ng-template>
+                                    <ng-container
+                                        *ngIf="notificationScope?.Link =='' || notificationScope?.Link == 'null' || notificationScope?.Link ==  'undefined' else Link">
+                                        - </ng-container>
+                                    <ng-template #Link> <a href="{{notificationScope?.Link}}" target="_blank"
+                                            class="me-5">{{notificationScope?.Link}}</a></ng-template>
                                     <!-- <button type="button" class="btn btn-light btn-sm me-1"><i class="fas fa-download"></i></button>
                                     <button type="button" class="btn btn-light btn-sm me-1"><i class="fas fa-download"></i></button>
                                     <button type="button" class="btn btn-light btn-sm me-1"><i class="fas fa-download"></i></button>

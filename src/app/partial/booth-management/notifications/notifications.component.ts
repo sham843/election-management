@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../../dialogs/delete/delete.component';
 import { DateTimeAdapter } from 'ng-pick-datetime';
@@ -25,8 +24,7 @@ export class NotificationsComponent implements OnInit {
   allLevels: any;
   memberNameArray: any;
   filterForm!: FormGroup;
-  allDistrict: any;
-  viewMembersObj:any = { DistrictId: 0, Talukaid: 0, villageid: 0, SearchText:''}
+  viewMembersObj: any = { DistrictId: 0, Talukaid: 0, villageid: 0, SearchText: '' }
   getTalkaByDistrict: any;
   resultVillageOrCity: any;
   notificationscopeArray: any;
@@ -34,77 +32,82 @@ export class NotificationsComponent implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   searchFilter = "";
-  defaultCloseBtn:boolean = false;
-  total:any;
+  defaultCloseBtn: boolean = false;
+  total: any;
   imgName: any;
   ImgUrl: any;
   getImgExt: any;
   selectedFile: any;
-  NotificationText:string =  "Push";
-  getImgPath:any;
-  NotificationId:any;
-  ScopeId:any;
-  MemberIdEdit:any;
-  getBodyOrgCellName:any;
-  globalMemberId:any[]= [];
-  NewsId:any;
-  @ViewChild('clickPushModal') clickPushModal:any;
-  IsChangeImage:boolean = false;
+  NotificationText: string = "Push";
+  getImgPath: any;
+  NotificationId: any;
+  ScopeId: any;
+  MemberIdEdit: any;
+  globalMemberId: any[] = [];
+  NewsId: any;
+  @ViewChild('clickPushModal') clickPushModal: any;
+  IsChangeImage: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef;
-  schedulerFlag:boolean = false;
+  schedulerFlag: boolean = false;
   minDate: any = new Date();
-  IspushedFlag:any = 0;
+  IspushedFlag: any = 0;
   reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
+  allAgentLists: any;
+  clientNameArray: any;
+  globalClientId: any;
+  editDataObject: any;
 
   constructor(
-    private callAPIService: CallAPIService, 
+    private callAPIService: CallAPIService,
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private commonService: CommonService,
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe:DatePipe,
+    private datePipe: DatePipe,
     public dialog: MatDialog,
     public dateTimeAdapter: DateTimeAdapter<any>) {
-      {dateTimeAdapter.setLocale('en-IN');} }
+    { dateTimeAdapter.setLocale('en-IN'); }
+  }
 
   ngOnInit(): void {
+    this.globalClientId = this.commonService.getlocalStorageData().ClientId;
     this.customForm();
-    this.getLevel();
     this.defaultFilterForm();
-    this.gerNotificationscope();
     this.getNotificationData();
+    this.getClientName();
+    this.gerNotificationscope();
     this.searchFilters('false');
   }
 
   customForm() {
     this.notificationForm = this.fb.group({
-      Id:[0],
-      CreatedBy:[this.commonService.loggedInUserId()],
-      ScopeId: ['', Validators.required], 
-      Title: ['', Validators.required],
-      Description: ['', Validators.required],
+      Id: [0],
+      CreatedBy: [this.commonService.loggedInUserId()],
+      ScopeId: [''],
+      Title: ['', [Validators.required, Validators.maxLength(100), Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
+      Description: ['', [Validators.required, Validators.maxLength(100), Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
       ImageUrl: [''],
       Link: ['', [Validators.pattern(this.reg)]],
-      DistrictId: [''],
-      BodyId:[''],
       MemberStr: [],
-      NotificationDate:['']
+      NotificationDate: [''],
+      ClientId: ['', Validators.required]
     })
   }
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      fromTo: [['','']],
+      fromTo: [['', '']],
       ScopeId: [0],
-      searchText:[''],
+      searchText: [''],
+      ClientId: [0]
     })
   }
 
   get f() { return this.notificationForm.controls };
-  
-  onSubmit(){
+
+  onSubmit() {
     this.valiationForScheduler();
     this.spinner.show();
     this.submitted = true;
@@ -115,44 +118,40 @@ export class NotificationsComponent implements OnInit {
     else {
       this.globalMemberId = [];
       let fromData = new FormData();
-      let notificationFlag:any;
-      let ImageChangeFlag:any;
-      if(this.IsChangeImage || this.selectedFile){
+      let notificationFlag: any;
+      let ImageChangeFlag: any;
+      if (this.IsChangeImage || this.selectedFile) {
         notificationFlag = 2;
-        ImageChangeFlag = 1 
-      }else{
+        ImageChangeFlag = 1
+      } else {
         notificationFlag = 1;
         ImageChangeFlag = 0
       }
-      let getObj:any = this.notificationForm.value;
-
-      let fillSelection:any;
-      if(getObj.ScopeId == 4){
+      let getObj: any = this.notificationForm.value;
+      let fillSelection: any;
+      if (getObj.ScopeId == 2) {
         fillSelection = getObj.MemberStr
-      }else if (getObj.ScopeId == 3){
-        fillSelection = getObj.BodyId
-      }else if (getObj.ScopeId == 2){
-        fillSelection = getObj.DistrictId
       }
-      
-      if(getObj.ScopeId == 4 || getObj.ScopeId == 3 || getObj.ScopeId == 2){
-        fillSelection.map((ele:any)=>{
-          this.globalMemberId.push({"MemberId":ele});
+
+      if (getObj.ScopeId == 2) {
+        fillSelection.map((ele: any) => {
+          this.globalMemberId.push({ "MemberId": ele });
         })
       }
-      let id:any;
+      let id: any;
       getObj.Id ? id = getObj.Id : id = 0;
-      let convertDate:any;
-      let NotificationDate:any;
-      if(getObj.NotificationDate){
+      let convertDate: any;
+      let NotificationDate: any;
+      if (getObj.NotificationDate) {
         NotificationDate = this.datePipe.transform(getObj.NotificationDate, 'dd/MM/YYYY HH:mm');
-        // convertDate = NotificationDate.split(':');
         convertDate = NotificationDate;
-      }else{
+      } else {
         NotificationDate = this.datePipe.transform(new Date, 'dd/MM/YYYY HH:mm');
-        // convertDate= NotificationDate.split(':');
-        convertDate= NotificationDate;
+        convertDate = NotificationDate;
       }
+      let ClientIdCheck = (this.notificationForm.value.ClientId == null || this.notificationForm.value.ClientId == undefined ||
+        this.notificationForm.value.ClientId == '') ? 0 : this.notificationForm.value.ClientId;
+
       fromData.append('Id', id);
       fromData.append('CreatedBy', this.commonService.loggedInUserId());
       fromData.append('ScopeId', getObj.ScopeId);
@@ -163,31 +162,27 @@ export class NotificationsComponent implements OnInit {
       fromData.append('MemberStr', JSON.stringify(this.globalMemberId));
       fromData.append('AttchmentStr', this.selectedFile ? this.selectedFile : '');
       fromData.append('NotificationType', notificationFlag);
-      fromData.append('IsChangeImage',  ImageChangeFlag );
-      // fromData.append('NotificationDate', convertDate[0]+":00");
+      fromData.append('IsChangeImage', ImageChangeFlag);
       fromData.append('NotificationDate', convertDate);
-      fromData.append('IsPushed',  this.IspushedFlag);
+      fromData.append('IsPushed', this.IspushedFlag);
+      fromData.append('ClientId', ClientIdCheck);
 
-
-      this.callAPIService.setHttp('post', 'InsertNotification_Web_1_0', false, fromData, false, 'electionServiceForWeb');
+      this.callAPIService.setHttp('post', 'InsertNotification_Web_2_0', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.deleteImg();
           this.IsChangeImage = false;
           this.submitted = false;
           this.notificationForm.reset();
-          // let modalClick = this.clickPushModal.nativeElement;
-          // modalClick.click();
           this.toastrService.success(res.data1[0].Msg);
           this.pushMotificationStatus(res.data1[0].ID, res.data1[0].ScopeId);
-          // this.pushMotificationStatus(getObj?.Id, getObj?.ScopeId)
           this.schedulerFlag = false;
           this.getNotificationData();
           this.resetNotificationForm();
         } else {
           this.spinner.hide();
         }
-      } ,(error:any) => {
+      }, (error: any) => {
         this.spinner.hide();
         if (error.status == 500) {
           this.router.navigate(['../500'], { relativeTo: this.route });
@@ -196,69 +191,56 @@ export class NotificationsComponent implements OnInit {
     }
   }
 
-  addValidationOn(scodeId: any) {
-    if (scodeId == 2) {
-      this.validationRemove();
-      this.getDistrict();
-      this.notificationForm.controls["DistrictId"].setValidators(Validators.required);
-      this.notificationForm.controls["DistrictId"].updateValueAndValidity();
-      this.notificationForm.controls['DistrictId'].clearValidators();
-    } else if (scodeId == 3) {
-      this.validationRemove();
-      this.getOrgName()
-      this.notificationForm.controls["BodyId"].setValidators(Validators.required);
-      this.notificationForm.controls["BodyId"].updateValueAndValidity();
-      this.notificationForm.controls['BodyId'].clearValidators();
-    } else if (scodeId == 4) {
-      this.validationRemove();
-      this.getMemberName();
-      this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
-      this.notificationForm.controls["MemberStr"].updateValueAndValidity();
-      this.notificationForm.controls['MemberStr'].clearValidators();
-    } else{
-      this.validationRemove();
+  clearValidationAndData(flag: any) {
+    if (flag == 'client') {
+      this.notificationForm.controls['ScopeId'].setValue('');
+      this.notificationForm.controls['MemberStr'].setValue('');
+    } else if (flag == 'scopClear') {
+      this.notificationForm.controls['MemberStr'].setValue('');
+      this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
+      this.notificationForm.controls["ScopeId"].updateValueAndValidity();
+      this.notificationForm.controls['ScopeId'].clearValidators();
+    } else if (flag == 'agent') {
+      this.validationAddAgent();
     }
   }
-  
-  validationRemove() {
-    this.notificationForm.controls['DistrictId'].clearValidators();
-    this.notificationForm.controls["DistrictId"].updateValueAndValidity();
-    this.notificationForm.controls['DistrictId'].setValue('');
-    this.notificationForm.controls['BodyId'].clearValidators();
-    this.notificationForm.controls["BodyId"].updateValueAndValidity();
+
+  addValidationOn(FlagWithScopId: any) {
+    if (FlagWithScopId == 2) {
+      this.getAllAgentList();
+      this.validationAddAgent();
+    } else if (FlagWithScopId == 1) {
+      this.validationRemoveAgent();
+    } else if (FlagWithScopId == 'client') {
+      this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
+      this.notificationForm.controls["ScopeId"].updateValueAndValidity();
+      this.notificationForm.controls['ScopeId'].clearValidators();
+    }
+  }
+
+  validationRemoveAgent() {
     this.notificationForm.controls['MemberStr'].setValue('');
     this.notificationForm.controls['MemberStr'].clearValidators();
     this.notificationForm.controls['MemberStr'].updateValueAndValidity();
-    this.notificationForm.controls['BodyId'].setValue('');
   }
 
-  editNotification(data:any){
-    if(data.IsPushed == 2){
+  validationAddAgent() {
+    this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
+    this.notificationForm.controls["MemberStr"].updateValueAndValidity();
+    this.notificationForm.controls['MemberStr'].clearValidators();
+  }
+
+  editNotification(data: any) {
+    this.editDataObject = data;
+    if (data.IsPushed == 2) {
       this.schedulerFlag = true;
-    }else{
+    } else {
       this.schedulerFlag = false;
     }
-    
     this.NotificationText = "Update";
     this.getImgPath = data.AttachmentPath;
-   
-    this.addValidationOn(data.ScopeId);
-
-    if(data.ScopeId == 4){
-      data.MemberStr = data.MemberStr.split(",").map((item:any)=> {
-        return parseInt(item);
-    });
-    }else if (data.ScopeId == 3){
-      data.BodyId =   data.MemberStr.split(",").map((item:any)=> {
-        return parseInt(item);
-    });
-    }else if (data.ScopeId == 2){
-      data.DistrictId =   data.MemberStr.split(",").map((item:any)=> {
-        return parseInt(item);
-    });
-    }
-    let dateTransForm:any = data.NotificationDate.split(" ");
-    let datefomratChange:any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
+    let dateTransForm: any = data.NotificationDate.split(" ");
+    let datefomratChange: any = this.datePipe.transform(this.commonService.dateFormatChange(dateTransForm[0]), 'yyyy/MM/dd');
 
     this.notificationForm.patchValue({
       AttachmentPath: data.AttachmentPath,
@@ -271,43 +253,32 @@ export class NotificationsComponent implements OnInit {
       ScopeName: data.ScopeName,
       SrNo: data.SrNo,
       Title: data.Title,
-      MemberStr:data.MemberStr,
-      NotificationDate:new Date(Date.parse(datefomratChange+" "+dateTransForm[1])),
-      BodyId:data.BodyId,
-      DistrictId:data.DistrictId,
+      ClientId: data.ClientId,
+      NotificationDate: new Date(Date.parse(datefomratChange + " " + dateTransForm[1])),
     })
- 
-    if (data.ScopeId == 2) {
-     this.getDistrict();
-     this.notificationForm.controls["DistrictId"].setValue(this.notificationForm.value.DistrictId);
-    } else if (data.ScopeId == 3) {
-      this.notificationForm.controls["BodyId"].setValidators(Validators.required);
-      this.notificationForm.controls["BodyId"].updateValueAndValidity();
-      this.notificationForm.controls['BodyId'].clearValidators();
-      this.notificationForm.controls["BodyId"].setValue(this.notificationForm.value.BodyId);
-    } else if (data.ScopeId == 4) {
-      this.getMemberName();
-      this.notificationForm.controls["MemberStr"].setValue(this.notificationForm.value.MemberStr);
-    }  
+    this.addValidationOn(data.ScopeId);
   }
 
-  resetNotificationForm(){
-    this.NotificationText= "Push";
+  resetNotificationForm() {
+    this.NotificationText = "Push";
     this.submitted = false;
     this.paginationNo = 1;
     this.getImgPath = null;
     this.notificationForm.reset();
+    if (this.clientNameArray.length == 1) {
+      this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id);
+    }
   }
 
 
-  deleteImg(){
+  deleteImg() {
     this.selectedFile = "";
     this.getImgPath = "";
     this.fileInput.nativeElement.value = '';
     this.IsChangeImage = true;
   }
-  
-  delNotConfirmation(NewsId:any){
+
+  delNotConfirmation(NewsId: any) {
     this.NewsId = NewsId;
     this.deleteConfirmModel();
   }
@@ -315,24 +286,23 @@ export class NotificationsComponent implements OnInit {
   deleteConfirmModel() {
     const dialogRef = this.dialog.open(DeleteComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if(result == 'Yes'){
+      if (result == 'Yes') {
         this.deleteNotifications();
       }
     });
   }
 
-  deleteNotifications(){
-    this.callAPIService.setHttp('get', 'Delete_Notification_Web_1_0?NewsId='+this.NewsId+'&CreatedBy='+this.commonService.loggedInUserId(), false, false , false, 'electionServiceForWeb');
+  deleteNotifications() {
+    this.callAPIService.setHttp('get', 'Delete_Notification_Web_1_0?NewsId=' + this.NewsId + '&CreatedBy=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1[0].Msg);
         this.getNotificationData();
         this.resetNotificationForm();
       } else {
-        // this.toastrService.error(res.data1[0].Msg)
         this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
@@ -340,22 +310,21 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
-  pushMotificationStatus(id:any,scopeId:any){
+  pushMotificationStatus(id: any, scopeId: any) {
     this.NotificationId = id;
     this.ScopeId = scopeId;
   }
 
-  pushMotification(){
-    this.callAPIService.setHttp('get', 'Push_SendNotification_1_0?UserId='+this.commonService.loggedInUserId()+'&NotificationId='+this.NotificationId+'&ScopeId='+this.ScopeId, false, false , false, 'electionServiceForWeb');
+  pushMotification() {
+    this.callAPIService.setHttp('get', 'Push_SendNotification_1_0?UserId=' + this.commonService.loggedInUserId() + '&NotificationId=' + this.NotificationId + '&ScopeId=' + this.ScopeId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.toastrService.success(res.data1);
         this.getNotificationData();
       } else {
-       // this.toastrService.error('Something went wrong please try again');
         this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
@@ -363,79 +332,58 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
-  getLevel() {
-    // this.spinner.show();
-    // this.callAPIService.setHttp('get', 'Web_GetLevel_1_0', false, false, false, 'electionServiceForWeb');
-    // this.callAPIService.getHttp().subscribe((res: any) => {
-    //   if (res.data == 0) {
-    //     this.spinner.hide();
-    //     this.allLevels = res.data1;
-    //   } else {
-    //       //this.toastrService.error("Data is not available");
-    //   }
-    // } ,(error:any) => {
-    //   if (error.status == 500) {
-    //     this.router.navigate(['../500'], { relativeTo: this.route });
-    //   }
-    // })
-  }
-
-  getMemberName() {
-    this.spinner.show();    
-    this.callAPIService.setHttp('get', 'GetMemberddl_Web_1_0?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+  getClientName() {
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_ddl?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.memberNameArray = res.data1;
-        // if(this.NotificationText == 'update'){
-        //   this.notificationForm.controls['MemberStr'].setValue('');
-        // }
-        
-      } else {
-          //this.toastrService.error("Data is not available");
+        this.clientNameArray = res.data1;
+        if (this.clientNameArray.length == 1) {
+          this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id);
+        }
       }
-    } ,(error:any) => {
+      else {
+        this.spinner.hide();
+        this.clientNameArray = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
   }
 
-  
-  getOrgName() {
+  getAllAgentList() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_GetBodyOrgCellName_1_0_Committee?UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetBodyOrgCellName_1_0
+    this.callAPIService.setHttp('get', 'Web_Client_AgentList_ddl?ClientId=' + this.notificationForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
-        this.getBodyOrgCellName = res.data1;
-      } else {
-          //this.toastrService.error("Data is not available");
-      }
-    } ,(error:any) => {
-      if (error.status == 500) {
-        this.router.navigate(['../../500'], { relativeTo: this.route });
-      }
-    })
-  }
+        this.allAgentLists = res.data1;
+        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2) {
 
-  getDistrict() {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_GetDistrict_1_0_Committee?StateId=' + 1 +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.allDistrict = res.data1;
+          if (this.notificationForm.value.MemberStr != '') {
+            let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
+              return parseInt(item);
+            });
+            this.notificationForm.controls["MemberStr"].setValue(MemberStr);
+          } else {
+            this.validationAddAgent();
+          }
+        }
       } else {
-          this.toastrService.error("Data is not available 2");
+        this.allAgentLists = [];
+        this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
+      this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
   }
-
 
   gerNotificationscope() {
     this.spinner.show();
@@ -446,9 +394,8 @@ export class NotificationsComponent implements OnInit {
         this.notificationscopeArray = res.data1;
       } else {
         this.spinner.hide();
-          //this.toastrService.error("Data is not available");
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
@@ -457,33 +404,37 @@ export class NotificationsComponent implements OnInit {
   }
 
 
-  clearFilter(flag:any){
-    if(flag ==  'notifications'){
+  clearFilter(flag: any) {
+    if (flag == 'client') {
+      this.filterForm.controls['ClientId'].setValue(0);
+    } else if (flag == 'notifications') {
       this.filterForm.controls['ScopeId'].setValue(0);
-    }else  if(flag ==  'search'){
+    } else if (flag == 'search') {
       this.filterForm.controls['searchText'].setValue('');
-    }else  if(flag ==  'dateRangePIcker'){
+    } else if (flag == 'dateRangePIcker') {
       this.defaultCloseBtn = false;
-      this.filterForm.controls['fromTo'].setValue(['','']);
+      this.filterForm.controls['fromTo'].setValue(['', '']);
     }
     this.paginationNo = 1;
     this.getNotificationData();
   }
 
-  filterData(flag:any){
-    flag == 'range' ?  this.defaultCloseBtn = true :  this.defaultCloseBtn = false; 
+  filterData(flag: any) {
+    flag == 'range' ? this.defaultCloseBtn = true : this.defaultCloseBtn = false;
     this.paginationNo = 1;
     this.getNotificationData();
   }
 
-  getNotificationData(){
-    let getObj:any = this.filterForm.value;
+  getNotificationData() {
+    let getObj: any = this.filterForm.value;
     this.spinner.show();
     let fromDate: any;
     let toDate: any;
+    let ClientId = this.commonService.getlocalStorageData().ClientId == 0 ? getObj.ClientId : this.commonService.getlocalStorageData().ClientId;
     getObj.fromTo[0] != "" ? (fromDate = this.datePipe.transform(getObj.fromTo[0], 'dd/MM/yyyy')) : fromDate = '';
     getObj.fromTo[1] != "" ? (toDate = this.datePipe.transform(getObj.fromTo[1], 'dd/MM/yyyy')) : toDate = '';
-    this.callAPIService.setHttp('get', 'GetNotification_Web_1_0?UserId='+this.commonService.loggedInUserId()+'&PageNo='+this.paginationNo+'&FromDate='+fromDate+'&ToDate='+toDate+'&ScopeId='+getObj.ScopeId+'&SearchText='+getObj.searchText, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'GetNotification_Web_2_0?UserId=' + this.commonService.loggedInUserId() + '&PageNo=' + this.paginationNo + '&FromDate=' + fromDate + '&ToDate=' + toDate + '&ScopeId=' + getObj.ScopeId + '&SearchText=' + getObj.searchText
+      + '&ClientId=' + ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -493,7 +444,7 @@ export class NotificationsComponent implements OnInit {
         this.notificationArray = [];
         this.spinner.hide();
       }
-    } ,(error:any) => {
+    }, (error: any) => {
       this.notificationArray = [];
       this.spinner.hide();
       if (error.status == 500) {
@@ -502,13 +453,12 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
- 
   onClickPagintion(pageNo: number) {
     this.paginationNo = pageNo;
     this.getNotificationData();
   }
 
-  onKeyUpFilter(){
+  onKeyUpFilter() {
     this.subject.next();
   }
 
@@ -527,7 +477,6 @@ export class NotificationsComponent implements OnInit {
     );
   }
 
-  
   choosePhoto() {
     let clickPhoto: any = document.getElementById('my_file')
     clickPhoto.click();
@@ -569,15 +518,14 @@ export class NotificationsComponent implements OnInit {
     }
   }
 
-  valiationForScheduler(){
+  valiationForScheduler() {
     if (this.schedulerFlag) {
       this.notificationForm.controls["NotificationDate"].setValidators(Validators.required);
       this.notificationForm.controls["NotificationDate"].updateValueAndValidity();
       this.notificationForm.controls['NotificationDate'].clearValidators();
-    }else{
+    } else {
       this.notificationForm.controls['NotificationDate'].clearValidators();
       this.notificationForm.controls["NotificationDate"].updateValueAndValidity();
     }
   }
-  
 }

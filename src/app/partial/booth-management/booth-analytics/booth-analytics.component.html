@@ -11,7 +11,7 @@
           <div class="col-sm-3">
             <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
               (remove)="clearFilter('clientId');HideVoterListLink = false;"
-              (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false;"
+              (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false; this.IsPartyCheck = 0"
               [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
               placeholder="Select Client">
             </ngx-select>
@@ -52,72 +52,94 @@
   </div>
   <ng-container *ngIf="dataNotFound">
     <div id="dash-stats" class="row g-2">
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Total Voters</p>
-          <h3>{{cardData?.TotalVoters}}</h3>
-        </div>
-      </div>
-      <div class="col-sm">
+
+      <div class="col-sm-2">
         <div class="card card-body">
           <p>Total Booths</p>
           <h3>{{cardData?.TotalBooths}}</h3>
         </div>
       </div>
-      <div class="col-sm">
+
+      <div class="col-sm-2">
         <div class="card card-body">
-          <p>Data Filled</p>
-          <h3>{{cardData?.TotalFilled}}</h3>
+          <p>Total Voters</p>
+          <h3>{{cardData?.TotalVoters}}</h3>
         </div>
       </div>
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Pending</p>
-          <h3>{{cardData?.TotalPending}}</h3>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Families</p>
-          <h3>{{cardData?.TotalFamilies}}</h3>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Migrated</p>
-          <h3>{{cardData?.TotalMigrated}}</h3>
-        </div>
-      </div>
-      <!--<div class="col-sm">
-        <div class="card card-body">
-          <p>New Voters</p>
-          <h3>{{cardData?.NewVoters}}</h3>
-        </div>
-      </div>-->
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Male</p>
-          <h3>{{cardData?.Male}}</h3>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Female</p>
-          <h3>{{cardData?.Female}}</h3>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="card card-body">
-          <p>Other Gender</p>
-          <h3>{{cardData?.OtheGender}}</h3>
-        </div>
-      </div>
-      <div class="col-sm">
+
+      <div class="col-sm-2">
         <div class="card card-body">
           <p>Expired</p>
           <h3>{{cardData?.Expired}}</h3>
         </div>
       </div>
+
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Valid Votes</p>
+          <h3>{{cardData?.ValidVotes}}</h3>
+        </div>
+      </div>
+     
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Data Filled</p>
+          <h3>{{cardData?.TotalFilled}}</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Pending</p>
+          <h3>{{cardData?.TotalPending}}</h3>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Families</p>
+          <h3>{{cardData?.TotalFamilies}}</h3>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Migrated</p>
+          <h3>{{cardData?.TotalMigrated}}</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Leaders</p>
+          <h3>{{cardData?.Leaders}}</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Male</p>
+          <h3>{{cardData?.Male}}</h3>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Female</p>
+          <h3>{{cardData?.Female}}</h3>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="card card-body">
+          <p>Other Gender</p>
+          <h3>{{cardData?.OtheGender}}</h3>
+        </div>
+      </div>
+
+      <!-- <div class="col-sm-2">
+        <div class="card card-body">
+          <p>New Voters</p>
+          <h3>{{cardData?.NewVoters}}</h3>
+        </div>
+      </div> -->
+      
     </div>
 
     <div class="row chartbox g-2 mb-3">
@@ -434,7 +456,7 @@
                                   {{areaWiseVoter?.UpdatedVoters}}
                                 </a>
                               </td>
-                              <td>{{areaWiseVoter?.Representative}}</td>
+                              <td>{{areaWiseVoter?.Representative ? areaWiseVoter?.Representative : '-'}}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -503,7 +525,7 @@
                             <tr *ngFor="let commonIssue of commonIssuesList | paginate: comnIssueConfig">
                               <td>
                                 <span class="fw-bold text-main">{{commonIssue?.EnglishName}}</span>
-                                <div>
+                                <div class="text-break">
                                   {{commonIssue?.VisitDetails || '-'}}
                                 </div>
                               </td>

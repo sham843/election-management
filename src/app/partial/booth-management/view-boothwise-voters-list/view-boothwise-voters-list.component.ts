@@ -13,6 +13,7 @@ import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dia
 import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
 import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
+import { ExcelService } from '../../../services/excel.service'
 
 @Component({
   selector: 'app-view-boothwise-voters-list',
@@ -28,7 +29,15 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   total: any;
-  subject: Subject<any> = new Subject();
+  subjectVoters: Subject<any> = new Subject();
+  subjectFamily: Subject<any> = new Subject();
+  subjectMigrated: Subject<any> = new Subject();
+  subjectPending: Subject<any> = new Subject();
+  subjectAgent: Subject<any> = new Subject();
+  subjectCrm: Subject<any> = new Subject();
+  subjectCrmHistory: Subject<any> = new Subject();
+  subjectExpired: Subject<any> = new Subject();
+  subjectLeaders: Subject<any> = new Subject();
   clientWiseBoothListArray: any;
   IsSubElectionApplicable: any;
   villageDropdown: any;
@@ -105,10 +114,23 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   fillDataId1 = 0;
 
-  BoothAnalyticsObj = {ClientId: 0,ElectionId: 0,ConstituencyId: 0,
-     VillageId:0,BoothId:0,flag:0}
+  BoothAnalyticsObj = {
+    ClientId: 0, ElectionId: 0, ConstituencyId: 0,
+    VillageId: 0, BoothId: 0, flag: 0
+  }
 
-  // mainGlobalFilterForm!: FormGroup;
+  searchExpired = new FormControl('');
+  ExpiredListArray: any;
+  ExpiredPaginationNo = 1;
+  ExpiredPageSize: number = 10;
+  ExpiredTotal: any;
+
+  searchLeaders = new FormControl('');
+  LeadersListArray: any;
+  LeadersPaginationNo = 1;
+  LeadersPageSize: number = 10;
+  LeadersTotal: any;
+  VoterListDownloadExcel: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -121,6 +143,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     public dialog: MatDialog,
     private datePipe: DatePipe,
     public dateTimeAdapter: DateTimeAdapter<any>,
+    public excelService: ExcelService,
   ) {
     dateTimeAdapter.setLocale('en-IN');
 
@@ -133,8 +156,10 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     let getUrlData: any = this.route.snapshot.params.id;
     if (getUrlData) {
       getUrlData = getUrlData.split('.');
-      this.BoothAnalyticsObj = { 'ClientId': +getUrlData[0], 'ElectionId': +getUrlData[1], 'ConstituencyId': +getUrlData[2] 
-                                 ,'VillageId': +getUrlData[3] , 'BoothId': +getUrlData[4], 'flag': +getUrlData[5]}
+      this.BoothAnalyticsObj = {
+        'ClientId': +getUrlData[0], 'ElectionId': +getUrlData[1], 'ConstituencyId': +getUrlData[2]
+        , 'VillageId': +getUrlData[3], 'BoothId': +getUrlData[4], 'flag': +getUrlData[5]
+      }
     }
 
   }
@@ -151,6 +176,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.searchFamilyFilters('false');
     this.searchCrmFilter('false');
     this.searchCrmHistoryFilter('false');
+    this.searchExpiredFilters('false');
+    this.searchLeadersFilters('false');
     this.agentForm();
     this.boothAnalyticsRedData();
   }
@@ -195,7 +222,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         this.spinner.hide();
         this.electionNameArray = res.data1;
         this.electionNameArray.length == 1 ? (this.filterForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId }), this.IsSubElectionApplicable = this.electionNameArray[0].IsSubElectionApplicable, this.getConstituencyName(), this.electionFlag = false) : '';
-        if(this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 1){
+        if (this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 1) {
           this.getConstituencyName();
         }
       } else {
@@ -236,7 +263,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   boothSummary() {
     this.nullishFilterForm(); //Check all value null || undefind || empty
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable  ;
+      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothSummary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -263,14 +290,14 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     this.HighlightRow = 0;
     this.nullishFilterForm(); //Check all value null || undefind || empty
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable   + '&VillageId=' + this.filterForm.value.village
+      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable + '&VillageId=' + this.filterForm.value.village
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothList?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        if(this.BoothAnalyticsObj.flag == 1){
+        if (this.BoothAnalyticsObj.flag == 1) {
           this.selBoothList(this.BoothAnalyticsObj.BoothId);
         }
         this.dataNotFound = true;
@@ -355,25 +382,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     // this.getClientAgentWithBooths();
   }
 
-  onKeyUpFilter() {
-    this.subject.next();
-  }
-
-  searchFilter(flag: any) {
-    if (flag == 'true') {
-      if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
-        this.toastrService.error("Please search and try again");
-        return
-      }
-    }
-    this.subject
-      .pipe(debounceTime(700))
-      .subscribe(() => {
-        this.filterForm.value.Search = this.filterForm.value.Search;
-        //this.getClientAgentWithBooths();
-      }
-      );
-  }
 
   // ------------------------------------------filter data all methodes start here ------------------------------ //
 
@@ -462,7 +470,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterVoters() {
-    this.subject.next();
+    this.subjectVoters.next();
   }
 
   searchVotersFilters(flag: any) {
@@ -472,7 +480,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         return
       }
     }
-    this.subject
+    this.subjectVoters
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchVoters.value;
@@ -514,7 +522,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterFamily() {
-    this.subject.next();
+    this.subjectFamily.next();
   }
 
   searchFamilyFilters(flag: any) {
@@ -524,7 +532,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         return
       }
     }
-    this.subject
+    this.subjectFamily
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchFamily.value;
@@ -586,7 +594,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterMigrated() {
-    this.subject.next();
+    this.subjectMigrated.next();
   }
 
   searchMigratedFilters(flag: any) {
@@ -596,7 +604,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         return
       }
     }
-    this.subject
+    this.subjectMigrated
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchMigrated.value;
@@ -637,7 +645,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterPending() {
-    this.subject.next();
+    this.subjectPending.next();
   }
 
   searchPendingFilters(flag: any) {
@@ -647,7 +655,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         return
       }
     }
-    this.subject
+    this.subjectPending
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchPending.value;
@@ -684,7 +692,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterAgent() {
-    this.subject.next();
+    this.subjectAgent.next();
   }
 
   searchAgentFilters(flag: any) {
@@ -694,7 +702,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         return
       }
     }
-    this.subject.pipe(debounceTime(700)).subscribe(() => {
+    this.subjectAgent.pipe(debounceTime(700)).subscribe(() => {
       this.searchAgent.value;
       this.boothAgentList();
     });
@@ -711,11 +719,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterCrmSearch() {
-    this.subject.next();
+    this.subjectCrm.next();
   }
 
   searchCrmFilter(flag: any) {
-    this.subject
+    this.subjectCrm
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmFilterForm.value.SearchText
@@ -746,7 +754,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
       this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&Followupstatusid=' + formDataCrmFilter.Followupstatusid +
       '&SearchText=' + formDataCrmFilter.SearchText + '&nopage=' + this.crmPaginationNo;
-    this.callAPIService.setHttp('get', 'Get_CRM_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+
+    let url = '';
+    this.IsSubElectionApplicable == 0 ? url = 'Web_get_crm_1_0_No_SubElection?' + obj : url = 'Get_CRM_1_0?' + obj
+
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -764,6 +776,19 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     })
   }
 
+  crmAndCrmHistorySearchClear(flag: any) {
+    if (flag == 'crm') {
+      this.crmFilterForm.controls["SearchText"].setValue('');
+    } else if (flag == 'crmHistory') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+    } else if (flag == 'crm1') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.getCrmTableData();
+    } else if (flag == 'crmHistory1') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.getCrmHistoryTableData();
+    }
+  }
 
   // ------------------------------------------  CRM with filter End here  ------------------------------------------//
 
@@ -779,11 +804,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   }
 
   onKeyUpFilterCrmHistorySearch() {
-    this.subject.next();
+    this.subjectCrmHistory.next();
   }
 
   searchCrmHistoryFilter(flag: any) {
-    this.subject
+    this.subjectCrmHistory
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmHistoryFilterForm.value.SearchText
@@ -826,7 +851,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
       this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&Followupstatusid=' + formDataCrmHistoryFilter.Followupstatusid +
       '&SearchText=' + formDataCrmHistoryFilter.SearchText + '&nopage=' + this.crmHistoryPaginationNo + '&feedbackstatus=' + formDataCrmHistoryFilter.feedbackstatus + '&date=' + formDataCrmHistoryFilter.date;
-    this.callAPIService.setHttp('get', 'Get_crmhistory_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+
+    let url = '';
+    this.IsSubElectionApplicable == 0 ? url = 'Web_get_crmhistory_1_0_No_SubEle?' + obj : url = 'Get_crmhistory_1_0?' + obj
+
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
@@ -847,6 +876,115 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ------------------------------------------  CRM History with filter End here  ------------------------------------------//
 
+
+  // ------------------------------------------  Expired filter start here  ------------------------------------------//
+
+  getExpiredList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchExpired.value + '&nopage=' + this.ExpiredPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Expired_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.ExpiredListArray = res.data1;
+        this.ExpiredTotal = res.data2[0].TotalCount;
+      } else {
+        this.ExpiredListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionExpired(pageNo: any) {
+    this.ExpiredPaginationNo = pageNo;
+    this.getExpiredList();
+  }
+
+  onKeyUpFilterExpired() {
+    this.subjectExpired.next();
+  }
+
+  searchExpiredFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchExpired.value == "" || this.searchExpired == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subjectExpired
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchExpired.value;
+        this.ExpiredPaginationNo = 1;
+        this.getExpiredList();
+      }
+      );
+  }
+
+  // ------------------------------------------  Expired filter End here  ------------------------------------------//
+
+
+  // ------------------------------------------  Leaders filter start here  ------------------------------------------//
+
+  getLeadersList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchLeaders.value + '&nopage=' + this.LeadersPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_ImpLeaders_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.LeadersListArray = res.data1;
+        this.LeadersTotal = res.data2[0].TotalCount;
+      } else {
+        this.LeadersListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionLeaders(pageNo: any) {
+    this.LeadersPaginationNo = pageNo;
+    this.getLeadersList();
+  }
+
+  onKeyUpFilterLeaders() {
+    this.subjectLeaders.next();
+  }
+
+  searchLeadersFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchLeaders.value == "" || this.searchLeaders == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subjectLeaders
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchLeaders.value;
+        this.LeadersPaginationNo = 1;
+        this.getLeadersList();
+      }
+      );
+  }
+
+  // ------------------------------------------  Leaders filter End here  ------------------------------------------//
+
+
   // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag: any) {
     if (flag == 'clearSearchVoters') {
@@ -864,12 +1002,13 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'clearFiltersAgent') {
       this.searchAgent.setValue('');
       this.boothAgentList();
+    } else if (flag == 'clearFiltersExpired') {
+      this.searchExpired.setValue('');
+      this.getExpiredList();
+    } else if (flag == 'clearFiltersLeaders') {
+      this.searchLeaders.setValue('');
+      this.getLeadersList();
     }
-    //  else if (flag == 'village') {
-    //   this.selVillage.setValue(0);
-    //   this.ClientWiseBoothList();
-    //   this.boothDataHide =false;
-    // }
 
   }
 
@@ -988,12 +1127,50 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ..................................   redirected Booth Analytics Code Start Here  ...........................//
 
-  boothAnalyticsRedData(){
-    if(this.BoothAnalyticsObj.flag == 1){
+  boothAnalyticsRedData() {
+    if (this.BoothAnalyticsObj.flag == 1) {
       this.getElectionName();
     }
   }
 
-   // ..................................   redirected Booth Analytics Code End Here  ...........................//
+  // ..................................   redirected Booth Analytics Code End Here  ...........................//
+
+ // ..................................   Download Excel VoterList Code Start Here  ...........................//
+
+ getVoterListDownloadExcel() {
+
+    let formDataTopFilter = this.filterForm.value;
+    let villageId: any;
+    formDataTopFilter.village == null || formDataTopFilter.village == undefined || formDataTopFilter.village == '' ? villageId = 0 : villageId = formDataTopFilter.village;
+    let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
+      '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
+      this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&VillageId=' + villageId;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Client_VoterDetails_Download_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.VoterListDownloadExcel = res.data1;
+        this.excelService.exportAsExcelFile(this.VoterListDownloadExcel, 'VoterList');
+      } else {
+        this.toastrService.error("No Data Found");
+        this.VoterListDownloadExcel = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+//   let key = ['SrNo','VoterNo','AgentName','EnglishName','MarathiName', 'BoothNickName', 'Age', 'AgentMobileNo', 'Gender',
+//   'MobileNo','SubUserTypeName', 'VillageName', 'AreaName','FamilySize','FamilyHead','Migrated','MigratedCity','CastName',
+//  'ReligionName','Leader','LeaderImportance','LocalLeader','PartyShortCode','Occupation','Qualification','BusinnessDetails',
+// 'SurveyDate','Comment','Expired'];
+
+   // ..................................  Download Excel VoterList Code End Here  ...........................//
 
 }

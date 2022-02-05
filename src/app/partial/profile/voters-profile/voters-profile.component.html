@@ -216,11 +216,13 @@
                         </div>
                     </div>
 
-                    <div class="card-header p-0" *ngIf="voterProfileData?.partyname || voterProfileData?.Leader == 'yes' ">
+                    <div class="card-header p-0" *ngIf="voterProfileData?.partyname || voterProfileData?.Leader == 'yes' || voterProfileData?.LocalLeader ">
                         Political Information
                     </div>
                     <div class="card-body p-0 mb-2">
                         <div class="voter-data">
+                                <div class="voter-data mb-2" *ngIf="voterProfileData?.LocalLeader">
+                                    Local Leader Name : {{voterProfileData?.LocalLeader}}</div>
                           <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span>  <span *ngIf="voterProfileData?.Leader == 'yes'">Leader ({{voterProfileData?.LeaderImportance}} <i class="fas fa-star text-warning"></i>)</span>
                         </div>
                     </div>
