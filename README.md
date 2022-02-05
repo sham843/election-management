@@ -41,4 +41,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
  <!-- Added By Avinash
     npm install file-saver --save
-    npm install @types/file-saver --save-dev -->
+    npm install @types/file-saver --save-dev
+    npm i exceljs
+ -->

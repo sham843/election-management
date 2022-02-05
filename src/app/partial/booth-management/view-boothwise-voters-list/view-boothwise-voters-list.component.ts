@@ -1135,9 +1135,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
   // ..................................   redirected Booth Analytics Code End Here  ...........................//
 
- // ..................................   Download Excel VoterList Code Start Here  ...........................//
+  // ..................................   Download Excel VoterList Code Start Here  ...........................//
 
- getVoterListDownloadExcel() {
+  getVoterListDownloadExcel() {
 
     let formDataTopFilter = this.filterForm.value;
     let villageId: any;
@@ -1152,7 +1152,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.VoterListDownloadExcel = res.data1;
-        this.excelService.exportAsExcelFile(this.VoterListDownloadExcel, 'VoterList');
+        this.downloadExcel();
       } else {
         this.toastrService.error("No Data Found");
         this.VoterListDownloadExcel = [];
@@ -1166,11 +1166,24 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     })
   }
 
-//   let key = ['SrNo','VoterNo','AgentName','EnglishName','MarathiName', 'BoothNickName', 'Age', 'AgentMobileNo', 'Gender',
-//   'MobileNo','SubUserTypeName', 'VillageName', 'AreaName','FamilySize','FamilyHead','Migrated','MigratedCity','CastName',
-//  'ReligionName','Leader','LeaderImportance','LocalLeader','PartyShortCode','Occupation','Qualification','BusinnessDetails',
-// 'SurveyDate','Comment','Expired'];
+  downloadExcel() {
+    let keyValue = this.VoterListDownloadExcel.map((value: any) => Object.keys(value));
+    let keyData = keyValue[0]; // key Name
 
-   // ..................................  Download Excel VoterList Code End Here  ...........................//
+    let ValueData = this.VoterListDownloadExcel.reduce(
+      (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)],
+      []
+    );// Value Name
+
+    let TopHeadingData = { ClientId:this.filterForm.value.ClientId, ElectionId:this.filterForm.value.ElectionId,
+      ConstituencyId:this.filterForm.value.ConstituencyId, BoothName:this.showBoothName,
+      PageName:'VoterList',headingName:'VoterList Data'}
+
+    this.excelService.generateExcel(keyData, ValueData, TopHeadingData);
+  }
+
+
+
+  // ..................................  Download Excel VoterList Code End Here  ...........................//
 
 }
