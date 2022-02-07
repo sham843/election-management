@@ -405,7 +405,6 @@ export class NotificationsComponent implements OnInit {
     })
   }
 
-
   clearFilter(flag: any) {
     if (flag == 'client') {
       this.filterForm.controls['ClientId'].setValue(0);

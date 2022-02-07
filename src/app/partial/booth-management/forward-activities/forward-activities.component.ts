@@ -129,12 +129,13 @@ export class ForwardActivitiesComponent implements OnInit {
         }
       }
       this.forwardActivitiForm.value.Id == null ? this.forwardActivitiForm.value.Id = 0 : this.forwardActivitiForm.value.Id;
-      
+      let HashTag = getObj.hashtags_Activity == null ? '' : getObj.hashtags_Activity;
+
       fromData.append('Id', this.forwardActivitiForm.value.Id);
       fromData.append('CreatedBy', this.commonService.loggedInUserId());
       fromData.append('Title', getObj.activityTitle);
       fromData.append('Description', getObj.activityBody);
-      fromData.append('HashTags', getObj.hashtags_Activity);
+      fromData.append('HashTags', HashTag);
       fromData.append('NewsType', NewsTypeFlag);  //img + text = 3, & only text = 1 
       fromData.append('IsChangeImage', imageChangeFlag);
       fromData.append('NewsImages', this.selectedFile);
