@@ -1171,11 +1171,11 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   
   onSelectionObj(event:any,flag:any){ // Top Filter selection Value Name Get
     if(flag == 'client'){
-      this.topClientName = event[0].data.Fullname;
+      this.topClientName = event[0]?.data.Fullname;
     } else if(flag == 'election'){
-      this.topElectionName = event[0].data.ElectionName;
+      this.topElectionName = event[0]?.data.ElectionName;
     } else if(flag == 'constituency'){
-      this.topConstituencyName = event[0].data.ConstituencyName;
+      this.topConstituencyName = event[0]?.data.ConstituencyName;
     }
   }
 

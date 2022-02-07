@@ -51,7 +51,8 @@ export class NotificationsComponent implements OnInit {
   schedulerFlag: boolean = false;
   minDate: any = new Date();
   IspushedFlag: any = 0;
-  reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
+  // reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
+  reg = '^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$'
   allAgentLists: any;
   clientNameArray: any;
   globalClientId: any;
