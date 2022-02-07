@@ -114,6 +114,7 @@ export class NotificationsComponent implements OnInit {
     this.submitted = true;
     if (this.notificationForm.invalid) {
       this.spinner.hide();
+      window.scroll(0,0);
       return;
     }
     else {
