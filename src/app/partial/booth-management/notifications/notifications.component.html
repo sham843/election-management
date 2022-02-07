@@ -80,7 +80,7 @@
                                     <label for="ddlMembers" class="form-label required-field">Select
                                         Agent</label>
                                     <ngx-select [items]="allAgentLists" [multiple]="true" (remove)="clearValidationAndData('agent')"
-                                        formControlName="MemberStr" optionValueField="AgentId"
+                                        formControlName="MemberStr" optionValueField="AgentId" 
                                         [disabled]="this.notificationForm.value.ScopeId != 2"
                                         optionTextField="FullName"
                                         placeholder="Select Agent">
