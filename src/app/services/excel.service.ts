@@ -29,11 +29,11 @@ export class ExcelService {
     };
 
     worksheet.addRow([]);
-    worksheet.getCell('B4').value = 'Client Name:' + TopHeadingData.ClientId + ' ,'
-      + 'Election Name:' + TopHeadingData.ClientId + ' ,' + 'Constituency Name:' + TopHeadingData.ClientId
+    worksheet.getCell('C4').value = 'Client Name:' + TopHeadingData.ClientName + ' ,'
+      + 'Election Name:' + TopHeadingData.ElectionName + ' ,' + 'Constituency Name:' + TopHeadingData.ConstituencyName
       + ' ,' + 'Booth Name:' + TopHeadingData.BoothName;
 
-    worksheet.getCell('B4').font = { name: 'Corbel', family: 4, size: 15, bold: true, };
+    worksheet.getCell('C4').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
 
     // worksheet.mergeCells('A1:D2');
 

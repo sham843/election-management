@@ -11,7 +11,7 @@
                     <div class="col-sm">
                         <!-- clientIdFlag -->
                         <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
-                            (remove)="clearTopFilter('clientId')"
+                            (remove)="clearTopFilter('clientId')" (selectionChanges)="onSelectionObj($event,'client')"
                             (select)="clearTopFilter('electionId'); boothDataHide=false; getElectionName()" optionValueField="id"
                             optionTextField="Fullname" placeholder="Select Leader">
                         </ngx-select>
@@ -19,7 +19,7 @@
                     <div class="col-sm">
                         <!-- electionFlag -->
                         <ngx-select [allowClear]="true" [items]="electionNameArray"
-                            (remove)="clearTopFilter('electionId')"
+                            (remove)="clearTopFilter('electionId')" (selectionChanges)="onSelectionObj($event,'election')"
                             (select)="boothDataHide=false;  getConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
@@ -29,7 +29,7 @@
                     <div class="col-sm">
                         <!-- constituencyFlag -->
                         <ngx-select [allowClear]="true" [items]="constituencyNameArray"
-                            (remove)="clearTopFilter('constituencyId')"
+                            (remove)="clearTopFilter('constituencyId')" (selectionChanges)="onSelectionObj($event,'constituency')"
                             (select)="boothDataHide=false;  boothSummary()"
                             formControlName="ConstituencyId" optionValueField="ConstituencyId"
                             optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"

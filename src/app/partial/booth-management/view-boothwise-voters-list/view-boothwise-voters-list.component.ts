@@ -131,6 +131,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
   LeadersPageSize: number = 10;
   LeadersTotal: any;
   VoterListDownloadExcel: any;
+  topClientName: any;
+  topElectionName: any;
+  topConstituencyName: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -1165,6 +1168,17 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     })
   }
 
+  
+  onSelectionObj(event:any,flag:any){ // Top Filter selection Value Name Get
+    if(flag == 'client'){
+      this.topClientName = event[0].data.Fullname;
+    } else if(flag == 'election'){
+      this.topElectionName = event[0].data.ElectionName;
+    } else if(flag == 'constituency'){
+      this.topConstituencyName = event[0].data.ConstituencyName;
+    }
+  }
+
   downloadExcel() {
     let keyValue = this.VoterListDownloadExcel.map((value: any) => Object.keys(value));
     let keyData = keyValue[0]; // key Name
@@ -1174,8 +1188,8 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       []
     );// Value Name
 
-    let TopHeadingData = { ClientId:this.filterForm.value.ClientId, ElectionId:this.filterForm.value.ElectionId,
-      ConstituencyId:this.filterForm.value.ConstituencyId, BoothName:this.showBoothName,
+    let TopHeadingData = { ClientName:this.topClientName, ElectionName:this.topElectionName,
+      ConstituencyName:this.topConstituencyName, BoothName:this.showBoothName,
       PageName:'VoterList',headingName:'VoterList Data'}
 
     this.excelService.generateExcel(keyData, ValueData, TopHeadingData);
