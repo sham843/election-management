@@ -79,10 +79,10 @@
                                 <div class="mb-3">
                                     <label for="ddlMembers" class="form-label required-field">Select
                                         Agent</label>
-                                    <ngx-select [items]="allAgentLists" [multiple]="true" [allowClear]="true"
+                                    <ngx-select [items]="allAgentLists" [multiple]="true" (remove)="clearValidationAndData('agent')"
                                         formControlName="MemberStr" optionValueField="AgentId"
                                         [disabled]="this.notificationForm.value.ScopeId != 2"
-                                        optionTextField="FullName" (remove)="clearValidationAndData('client')"
+                                        optionTextField="FullName"
                                         placeholder="Select Agent">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.MemberStr.errors" class="invalid-feedback">

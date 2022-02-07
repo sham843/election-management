@@ -161,7 +161,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
         , 'VillageId': +getUrlData[3], 'BoothId': +getUrlData[4], 'flag': +getUrlData[5]
       }
     }
-
   }
 
   ngOnInit(): void {

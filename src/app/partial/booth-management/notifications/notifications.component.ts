@@ -164,7 +164,7 @@ export class NotificationsComponent implements OnInit {
       fromData.append('AttchmentStr', this.selectedFile ? this.selectedFile : '');
       fromData.append('NotificationType', notificationFlag);
       fromData.append('IsChangeImage', ImageChangeFlag);
-      fromData.append('NotificationDate', convertDate);
+      fromData.append('NotificationDate', convertDate); 
       fromData.append('IsPushed', this.IspushedFlag);
       fromData.append('ClientId', ClientIdCheck);
 
@@ -198,9 +198,7 @@ export class NotificationsComponent implements OnInit {
       this.notificationForm.controls['MemberStr'].setValue('');
     } else if (flag == 'scopClear') {
       this.notificationForm.controls['MemberStr'].setValue('');
-      this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
-      this.notificationForm.controls["ScopeId"].updateValueAndValidity();
-      this.notificationForm.controls['ScopeId'].clearValidators();
+      this.validationAddScope();
     } else if (flag == 'agent') {
       this.validationAddAgent();
     }
@@ -213,9 +211,7 @@ export class NotificationsComponent implements OnInit {
     } else if (FlagWithScopId == 1) {
       this.validationRemoveAgent();
     } else if (FlagWithScopId == 'client') {
-      this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
-      this.notificationForm.controls["ScopeId"].updateValueAndValidity();
-      this.notificationForm.controls['ScopeId'].clearValidators();
+      this.validationAddScope();
     }
   }
 
@@ -229,6 +225,12 @@ export class NotificationsComponent implements OnInit {
     this.notificationForm.controls["MemberStr"].setValidators(Validators.required);
     this.notificationForm.controls["MemberStr"].updateValueAndValidity();
     this.notificationForm.controls['MemberStr'].clearValidators();
+  }
+
+  validationAddScope(){
+    this.notificationForm.controls["ScopeId"].setValidators(Validators.required);
+    this.notificationForm.controls["ScopeId"].updateValueAndValidity();
+    this.notificationForm.controls['ScopeId'].clearValidators();
   }
 
   editNotification(data: any) {
@@ -342,6 +344,7 @@ export class NotificationsComponent implements OnInit {
         this.clientNameArray = res.data1;
         if (this.clientNameArray.length == 1) {
           this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id);
+           this.validationAddScope();
         }
       }
       else {
@@ -364,13 +367,11 @@ export class NotificationsComponent implements OnInit {
         this.spinner.hide();
         this.allAgentLists = res.data1;
         if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2) {
-
-          if (this.notificationForm.value.MemberStr != '') {
-            let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
-              return parseInt(item);
-            });
-            this.notificationForm.controls["MemberStr"].setValue(MemberStr);
-          } else {
+          let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
+            return parseInt(item);
+          });
+          this.notificationForm.controls["MemberStr"].setValue(MemberStr);
+          if (this.notificationForm.value.MemberStr == '') {
             this.validationAddAgent();
           }
         }
