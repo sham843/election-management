@@ -48,10 +48,10 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
+                                <div class="mb-3" *ngIf="globalClientId == 0">
                                     <label for="ddlMembers" class="form-label required-field">Select
                                         Client</label>
-                                    <ngx-select [items]="clientNameArray" [allowClear]="true" 
+                                    <ngx-select [items]="clientNameArray" [allowClear]="true"
                                         (remove)="clearValidationAndData('client')" formControlName="ClientId"
                                         (select)="addValidationOn('client')"
                                         [disabled]="globalClientId != 0"
@@ -165,9 +165,9 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="input-group">
-                                            <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')"
+                                            <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" 
                                                 formControlName="fromTo" [selectMode]="'range'"
-                                                (dateTimeChange)="filterData('range')"
+                                                (dateTimeChange)="filterData('range')" [max]="date"
                                                 class="form-control border border-end-0" [owlDateTimeTrigger]="dt3"
                                                 placeholder="From To Date">
 
@@ -212,10 +212,12 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <!-- <span class="media-date" *ngIf="{{'notificationScope?.NotificationDate' == 1}}"></span> -->
-                                <span class="media-date"
-                                    [ngClass]="{'badge text-white bg-success fw-bolder':notificationScope?.IsPushed == 1}">{{notificationScope?.IsPushed
-                                    == 1 ? 'Published' : notificationScope?.IsPushed == 2 ? 'Schedule Notification' :
-                                    'Not-published'}}</span>
+                                    <span class="media-date"
+                                    [ngClass]="{'badge text-white bg-success fw-bolder':notificationScope?.IsPushed == 1}">{{notificationScope?.IsPushed == 1 ? 'Published' : ''}}</span>
+                                    <span class="media-date"
+                                    [ngClass]="{'badge text-white bg-primary fw-bolder':notificationScope?.IsPushed == 0}">{{notificationScope?.IsPushed == 0 ? 'Not-published' : ''}}</span>
+                                    <span class="media-date"
+                                    [ngClass]="{'badge text-white bg-info fw-bolder':notificationScope?.IsPushed == 2}">{{notificationScope?.IsPushed == 2 ? 'Schedule Notification' : ''}}</span>
                                 <div class="media-title">{{notificationScope?.Title}}</div>
                                 <div class="media-scope">
                                     {{notificationScope?.ScopeName}} <span *ngIf="notificationScope?.MemberDetails">-

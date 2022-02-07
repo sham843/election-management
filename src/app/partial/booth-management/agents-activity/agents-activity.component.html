@@ -400,8 +400,8 @@
                                             </div>
                                             <div class="col-sm-2">{{familiyList.Qualification ? familiyList.Qualification : '-'}}
                                             </div> 
-                                            <div class="col-sm-1">{{familiyList.Migrated ? familiyList.Migrated : '-'}}
-                                            </div>
+                                            <div class="col-sm-1">{{familiyList?.Migrated == 'yes' ? 'Yes' :
+                                                familiyList?.Migrated == 'no' ? 'No' : '-' }}</div>
                                             <div class="col-sm-1">
                                                 <a class="accordion-button collapsed" data-bs-toggle="collapse"
                                                     [attr.data-bs-target]="'#flush-collapseOne'+i" aria-expanded="false"
@@ -433,8 +433,8 @@
                                                 <div class="col-sm-2">
                                                     {{boothFamilyDetails?.Qualification ? boothFamilyDetails?.Qualification : '-'}}
                                                 </div>
-                                                <div class="col-sm-1">
-                                                    {{boothFamilyDetails?.Migrated ? boothFamilyDetails?.Migrated : '-'}}</div>
+                                                <div class="col-sm-1">{{boothFamilyDetails?.Migrated == 'yes' ? 'Yes' :
+                                                    boothFamilyDetails?.Migrated == 'no' ? 'No' : '-' }}</div>
                                                 <div class="col-sm-1"></div>
                                             </div>
                                             <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">

@@ -56,6 +56,7 @@ export class NotificationsComponent implements OnInit {
   clientNameArray: any;
   globalClientId: any;
   editDataObject: any;
+  date = new Date();
 
   constructor(
     private callAPIService: CallAPIService,

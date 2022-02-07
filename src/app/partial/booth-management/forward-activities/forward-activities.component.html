@@ -20,6 +20,8 @@
                                     <input type="text" class="form-control" formControlName="activityTitle" id="txtActivityTitle" placeholder="Activity Title">
                                     <div *ngIf="submitted && f.activityTitle.errors" class="invalid-feedback">
                                         <div *ngIf="f.activityTitle.errors.required">Activity Title is required</div>
+                                        <!-- <div *ngIf="f.activityTitle.errors.maxLength">Activity maxLength</div> -->
+                                        <div *ngIf="f.activityTitle.errors.pattern">Enter Valid Activity Title</div>
                                     </div>
                                 </div>
                                 <div class="mb-2">
@@ -27,6 +29,7 @@
                                     <textarea type="text" rows="6" formControlName="activityBody" class="form-control" id="txtBody" placeholder="Activity Body"></textarea>
                                     <div *ngIf="submitted && f.activityBody.errors" class="invalid-feedback">
                                         <div *ngIf="f.activityBody.errors.required">Activity Body is required</div>
+                                        <div *ngIf="f.activityBody.errors.pattern">Enter Valid Activity Body</div>
                                     </div>
                                 </div>
                                 <div class="mb-2">
@@ -124,10 +127,11 @@
                             <div class="flex-grow-1 ms-3">
                                 <span class="media-date">{{getnews.NewsDate1}}</span>
                                 <div class="media-title">{{getnews.Title | titlecase}}</div>
-                                <div class="media-body">
+                                <div class="media-body" title="{{getnews.Description}}">
                                     {{getnews.Description}}
                                 </div>
                                 <div class="media-links">
+                                    <span>{{getnews.HashTags}}</span>
                                     <span class="float-end">
                                         <button type="button" title="Edit Notification"
                                             (click)="editNotification(getnews)"
