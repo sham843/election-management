@@ -150,7 +150,7 @@
                                         <ngx-select [items]="clientNameArray" [allowClear]="true"
                                             (remove)="clearFilter('client')" formControlName="ClientId"
                                             (select)="filterData(false)" *ngIf="globalClientId == 0"
-                                            optionValueField="id" optionTextField="Fullname"
+                                            optionValueField="id" optionTextField="Fullname" 
                                             placeholder="Select Client">
                                         </ngx-select>
                                     </div>
