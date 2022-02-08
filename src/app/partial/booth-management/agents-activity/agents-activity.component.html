@@ -12,7 +12,7 @@
                         <ngx-select [items]="clientNameArray" [allowClear]="true"
                             formControlName="ClientId" 
                             (remove)="clearTopFilter('clientId');defaultAgentActivityDivHide = false" (select)="clearTopFilter('Agent');getAllAgentList()"
-                            optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                            optionValueField="id" optionTextField="Fullname" placeholder="Select Leader">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
@@ -20,7 +20,7 @@
                             formControlName="AgentId"  optionValueField="AgentId"
                             [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
                             (select)="clearTopFilter('subAgent'); areaSubAgentByAgentId();defaultAgentActivityDivHide = true; getAgentProfileData()" optionTextField="FullName"
-                            placeholder="Select Agent" (remove)="clearTopFilter('Agent');getAgentProfileData()">
+                            placeholder="Select Booth Agent" (remove)="clearTopFilter('Agent');getAgentProfileData()">
                         </ngx-select>
                         <!-- getAgentProfileData(); -->
                     </div>
@@ -31,7 +31,7 @@
                                 formControlName="subAreaAgentId" optionValueField="Id" optionTextField="FullName"
                                 (remove)="clearTopFilter('subAgent'); getAgentByBooths();getAgentProfileData()"
                                 (select)="clearTopFilter('Booth'); getAgentByBooths(); getAgentProfileData()"
-                                placeholder="Select Area  Agent">
+                                placeholder="Select Area Agent">
                             </ngx-select>
                             <!--   getAgentProfileData() -->
                         </div>
@@ -337,7 +337,7 @@
                                 </table>
                             </ng-container>
                             <div class="mt-2 text-end" *ngIf="clientBoothAgentVoterList?.length == 0">
-                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                <div class="alert alert-danger text-center py-2">No Agents Activity Found...!</div>
                             </div>
                             <pagination-controls id="votersPagination" *ngIf="clientBoothAgentVoterList?.length != 0"
                                 previousLabel="" nextLabel=""
@@ -592,7 +592,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>App Device</th>
-                                <th>App Open Date & Time</th>
+                                <th>App Open - Close Date & Time</th>
                                 <th>App Use Duration (Min)</th>
                             </tr>
                         </thead>
@@ -655,6 +655,6 @@
         </div>
     </div>
     <ng-template #noDataFound>
-        <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+        <div class="alert alert-danger text-center py-2 mb-0">Select above filters to show data...!</div>
     </ng-template>
 </div>
