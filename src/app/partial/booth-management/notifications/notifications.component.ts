@@ -154,6 +154,7 @@ export class NotificationsComponent implements OnInit {
       }
       let ClientIdCheck = (this.notificationForm.value.ClientId == null || this.notificationForm.value.ClientId == undefined ||
         this.notificationForm.value.ClientId == '') ? 0 : this.notificationForm.value.ClientId;
+        let LinkCheck = getObj.Link == null ? '' : getObj.Link;
 
       fromData.append('Id', id);
       fromData.append('CreatedBy', this.commonService.loggedInUserId());
@@ -161,7 +162,7 @@ export class NotificationsComponent implements OnInit {
       fromData.append('Title', getObj.Title);
       fromData.append('Description', getObj.Description);
       fromData.append('ImageUrl', getObj.ImageUrl ? this.selectedFile : '');
-      fromData.append('Link', getObj.Link);
+      fromData.append('Link', LinkCheck);
       fromData.append('MemberStr', JSON.stringify(this.globalMemberId));
       fromData.append('AttchmentStr', this.selectedFile ? this.selectedFile : '');
       fromData.append('NotificationType', notificationFlag);
@@ -368,14 +369,12 @@ export class NotificationsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2) {
+        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2 && this.notificationForm.value.ScopeId !=2) {
           let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
             return parseInt(item);
           });
           this.notificationForm.controls["MemberStr"].setValue(MemberStr);
-          if (this.notificationForm.value.MemberStr == '') {
-            this.validationAddAgent();
-          }
+          this.validationAddAgent();
         }
       } else {
         this.allAgentLists = [];
