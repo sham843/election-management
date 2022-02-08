@@ -9,7 +9,6 @@
                     <button (click)="ngOnInit()" class="btn btn-sm btn-main"><i class="fas fa-sync-alt"></i></button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -53,7 +52,7 @@
                                         Client</label>
                                     <ngx-select [items]="clientNameArray" [allowClear]="true"
                                         (remove)="clearValidationAndData('client')" formControlName="ClientId"
-                                        (select)="addValidationOn('client')"
+                                        (select)="addValidationOn('client')" 
                                         [disabled]="globalClientId != 0"
                                         optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
                                     </ngx-select>
@@ -66,7 +65,7 @@
                                     <label for="ddlScope" class="form-label required-field">Scope of
                                         Notification</label>
                                     <ngx-select [allowClear]="true" (remove)="clearValidationAndData('scopClear')"
-                                    [disabled]="!this.notificationForm.value.ClientId"
+                                    [disabled]="!this.notificationForm.value.ClientId" 
                                         (select)="addValidationOn($event);clearAgentValue = true" [items]="notificationscopeArray"
                                         formControlName="ScopeId" placeholder="Scope of Notification"
                                         optionValueField="id" optionTextField="ScopeName">
