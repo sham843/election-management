@@ -58,6 +58,7 @@ export class NotificationsComponent implements OnInit {
   globalClientId: any;
   editDataObject: any;
   date = new Date();
+  clearAgentValue : boolean = false;
 
   constructor(
     private callAPIService: CallAPIService,
@@ -237,6 +238,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   editNotification(data: any) {
+    this.clearAgentValue = false;
     this.editDataObject = data;
     if (data.IsPushed == 2) {
       this.schedulerFlag = true;
@@ -369,10 +371,13 @@ export class NotificationsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2 && this.notificationForm.value.ScopeId !=2) {
+        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2) {
           let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
             return parseInt(item);
           });
+          if(this.clearAgentValue == true){
+            MemberStr = '';
+          }
           this.notificationForm.controls["MemberStr"].setValue(MemberStr);
           this.validationAddAgent();
         }
