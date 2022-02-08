@@ -13,7 +13,7 @@
               (remove)="clearFilter('clientId');HideVoterListLink = false;"
               (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false; this.IsPartyCheck = 0"
               [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
-              placeholder="Select Client">
+              placeholder="Select Leader">
             </ngx-select>
           </div>
           <div class="col-sm-3">
@@ -327,7 +327,7 @@
                   <div class="col-sm-12">
                     <div class="card shadow-none border">
                       <div class="card-header pb-0">
-                        Important Leaders in This Village/Booth
+                        Important Leaders In This Village/Booth
                       </div>
                       <div class="card-body">
                         <table class="table table-hover mb-0">
@@ -351,13 +351,13 @@
                               <td>{{leader?.AreaName}}</td>
                               <td>{{leader?.BoothNickName}}</td>
                               <td>{{leader?.PartyName}}</td>
-                              <td>{{leader?.LeaderImportance}}<i class="fas fa-star ms-1"></i></td>
+                              <td>{{leader?.LeaderImportance}}<i class="fas fa-star ms-1 text-warning"></i></td>
                               <td>{{leader?.Contact}}</td>
                             </tr>
                           </tbody>
                         </table>
                         <div class="mt-2 text-end" *ngIf="impLeadersList?.length == 0">
-                          <div class="alert alert-danger text-center py-2"> No Data Found..! </div>
+                          <div class="alert alert-danger text-center py-2 mb-0"> No Data Found..! </div>
                         </div>
                         <pagination-controls id="LeadersPagination" *ngIf="impLeadersList?.length != 0" previousLabel=""
                                              nextLabel="" (pageChange)="onClickPagintionImpLeaders($event)">
@@ -518,7 +518,7 @@
                   </div>
                   <div class="col-sm-6">
                     <div class="card shadow-none border">
-                      <div class="card-header">Common Issues in this Area</div>
+                      <div class="card-header">Common Issues In This Area</div>
                       <div class="card-body pt-0">
                         <table class="table table-hover mb-0">
                           <tbody>
@@ -551,7 +551,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!dataNotFound">
-    <div class="alert alert-danger text-center py-2 mb-0">Please select the data..!</div>
+    <div class="alert alert-danger text-center py-2 mb-0">Please select the above filters to show data..!</div>
   </ng-container>
 </div>
 
@@ -675,7 +675,7 @@
                 </p>
                 <small class="text-muted" *ngIf="voter?.Leader == 'yes'">
                   {{voter?.PartyShortCode}}
-                  {{voter?.LeaderImportance}} <i class="fas fa-star"></i>
+                  {{voter?.LeaderImportance}} <i class="fas fa-star text-warning"></i>
                 </small>
               </td>
               <td>

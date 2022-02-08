@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-body p-2">
                     <div class="btn-group voter-repeat" role="group">
-                        <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index" (click)="agentFilledData(VPBoothAgent)">
+                        <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index" (click)="agentFilledData(VPBoothAgent)" class="me-2">
                             <input type="radio" class="btn-check" name="btnradio" autocomplete="off"
                                [checked]="VPBoothAgent.AgentId ==  (GlobalAgentId ||  checkedActiveClass)">
                             <label class="btn btn-outline-secondary text-start" for="btnradio{{i}}">
@@ -192,7 +192,7 @@
                                 <span>{{voterProfileData?.IsGoatSheepFarmer == 0 ? '' : voterProfileData?.IsGoatSheepFarmer == 1 ? 'Goat / Sheep Farmer, ' : ''}}</span>
                                <span>{{voterProfileData?.IsSugarCaneCutter == 0 ? '' : voterProfileData?.IsSugarCaneCutter == 1 ? 'SugarCane Cutter / Worker, ' : ''}}</span> 
                                <span>{{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ? 'Farmer, ' : ''}} </span> 
-                               <span>{{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ? 'Business ' : ''}}</span> 
+                               <span>{{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ? 'Business, ' : ''}}</span> 
                                <span *ngIf="voterProfileData?.BusinnessDetails">({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }})</span> 
                                <span *ngIf="voterProfileData?.HaveVehicle"> {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
                                 'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},</span>
@@ -257,7 +257,7 @@
                                         <th>Member Name</th>
                                         <th>Mobile No.</th>
                                         <th>Occupation</th>
-                                        <th>Qualifiction</th>
+                                        <th>Qualification</th>
                                         <th>Migration</th>
                                     </tr>
                                 </thead>
@@ -354,7 +354,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
-                                <span class="voter-label me-2">Migrated:</span>
+                                <span class="voter-label me-2">Migrated :</span>
                                 <span class="voter-data">
                                     {{VPMemberDetailsData?.Migrated == 'yes' ? 'Yes' :
                                     VPMemberDetailsData?.Migrated == 'no' ? 'No' : '-'}}</span>
@@ -362,14 +362,14 @@
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
-                                <span class="voter-label me-2">Migrated City:</span>
+                                <span class="voter-label me-2">Migrated City :</span>
                                 <span class="voter-data">{{VPMemberDetailsData?.MigratedCity ? VPMemberDetailsData?.MigratedCity
                                     : '-'}}</span>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
-                                <span class="voter-label me-2">Migrated Area:</span>
+                                <span class="voter-label me-2">Migrated Area :</span>
                                 <span class="voter-data">{{VPMemberDetailsData?.MigratedArea ? VPMemberDetailsData?.MigratedArea
                                     : '-'}}</span>
                             </div>
@@ -391,7 +391,7 @@
                     <div class="card-header">
                         Comments :
                     </div>
-                    <div class="card-body mb-2">
+                    <div class="card-body mb-2 py-0">
                     <div class="voter-data">
                         <ul *ngFor="let VPMemberDetailComment of VPMemberDetailsCommentsData" class="list-group list-group-flush mb-0">
                             <li class="list-group-item ps-0" *ngIf="VPMemberDetailComment?.CommentDetails">
