@@ -99,6 +99,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
   @ViewChild('openAssignAgentToBooths') openAssignAgentToBooths: any;
   @ViewChild('closeAddAgentModal') closeAddAgentModal: any;
   @ViewChild('closeAssignAgent') closeAssignAgent: any;
+  deleteObj: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -1067,5 +1068,41 @@ export class AssignAgentsToBoothComponent implements OnInit {
     this.onClickBoothId = data.BoothId; 
     this.editAssignBoothsPatchValue(data, false);
   }
+
+//................................................... Call Delete Booth Agent Api...........................//
+
+delConfirmation(obj: any) { 
+  this.deleteObj = obj;
+  this.deleteConfirmModel();
+}
+
+deleteConfirmModel() {
+  const dialogRef = this.dialog.open(DeleteComponent);
+  dialogRef.afterClosed().subscribe(result => {
+    if (result == 'Yes') {
+      this.deleteBoothAgent();
+    }
+  });
+}
+
+deleteBoothAgent() {
+  this.callAPIService.setHttp('get', 'Web_Delete_Booth_Agent?ClientId=' + this.deleteObj.ClientId
+    + '&AgentId=' + this.deleteObj.AgentId + '&CreatedBy=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.data == 0) {
+      this.toastrService.success(res.data1[0].Msg);
+      this.Client_AgentList();
+      this.clearAggentForm();
+    } else {
+      this.spinner.hide();
+    }
+  }, (error: any) => {
+    this.spinner.hide();
+    if (error.status == 500) {
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    }
+  })
+}
+
 }
 

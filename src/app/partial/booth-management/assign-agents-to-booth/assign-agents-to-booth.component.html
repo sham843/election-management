@@ -753,6 +753,9 @@
                                                             (click)="blockUser(agentList.UserId, agentList.ClientId, agentList.IsUserBlock)">
                                                             {{agentList?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
                                                         </button>
+                                                        <button type="button" title="Delete Election" (click)="delConfirmation(agentList)"
+                                                        class="btn btn-sm btn-light text-danger rounded"><i
+                                                            class="fas fa-trash-alt"></i></button>
                                                     </td>
                                                 </tr>
                                                 <tr>
