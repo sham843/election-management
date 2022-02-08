@@ -369,7 +369,7 @@ export class NotificationsComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.allAgentLists = res.data1;
-        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2 && this.notificationForm.value.ScopeId !=2) {
+        if (this.NotificationText == "Update" && this.editDataObject.ScopeId == 2) {
           let MemberStr = this.editDataObject.MemberStr.split(",").map((item: any) => {
             return parseInt(item);
           });
