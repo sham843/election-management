@@ -13,7 +13,7 @@
               (remove)="clearFilter('clientId');HideVoterListLink = false;"
               (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false; this.IsPartyCheck = 0"
               [disabled]="clientIdDisabled" optionValueField="id" optionTextField="Fullname"
-              placeholder="Select Client">
+              placeholder="Select Leader">
             </ngx-select>
           </div>
           <div class="col-sm-3">
@@ -551,7 +551,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!dataNotFound">
-    <div class="alert alert-danger text-center py-2 mb-0">Please select the data..!</div>
+    <div class="alert alert-danger text-center py-2 mb-0">Please select the above filters to show data..!</div>
   </ng-container>
 </div>
 
