@@ -8,6 +8,7 @@ body{
     /* --main-color:#005b96; */
     /* --main-color:#2114E2; */
     --main-color:#463AFD;
+    --main-dark-color:#2b1fe0;
 }
 .main-content {
     margin: 4rem 0 0;
@@ -49,7 +50,7 @@ a.text-main:hover {
 }
 
 .btn-main:hover {
-    background-color: var(--main-color);
+    background-color: var(--main-dark-color);
     color: #fff;
 }
 .form-container .form-label {
