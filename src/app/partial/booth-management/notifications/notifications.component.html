@@ -67,7 +67,7 @@
                                         Notification</label>
                                     <ngx-select [allowClear]="true" (remove)="clearValidationAndData('scopClear')"
                                     [disabled]="!this.notificationForm.value.ClientId"
-                                        (select)="addValidationOn($event)" [items]="notificationscopeArray"
+                                        (select)="addValidationOn($event);clearAgentValue = true" [items]="notificationscopeArray"
                                         formControlName="ScopeId" placeholder="Scope of Notification"
                                         optionValueField="id" optionTextField="ScopeName">
                                     </ngx-select>
