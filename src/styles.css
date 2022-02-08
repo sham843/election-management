@@ -663,3 +663,6 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 g[shape-rendering="auto"]{
     display: none;
 }
+.ngx-select__choices{
+    z-index: 1;
+}
