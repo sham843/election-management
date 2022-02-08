@@ -354,7 +354,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
-                                <span class="voter-label me-2">Migrated:</span>
+                                <span class="voter-label me-2">Migrated :</span>
                                 <span class="voter-data">
                                     {{VPMemberDetailsData?.Migrated == 'yes' ? 'Yes' :
                                     VPMemberDetailsData?.Migrated == 'no' ? 'No' : '-'}}</span>
@@ -362,14 +362,14 @@
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
-                                <span class="voter-label me-2">Migrated City:</span>
+                                <span class="voter-label me-2">Migrated City :</span>
                                 <span class="voter-data">{{VPMemberDetailsData?.MigratedCity ? VPMemberDetailsData?.MigratedCity
                                     : '-'}}</span>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center1">
-                                <span class="voter-label me-2">Migrated Area:</span>
+                                <span class="voter-label me-2">Migrated Area :</span>
                                 <span class="voter-data">{{VPMemberDetailsData?.MigratedArea ? VPMemberDetailsData?.MigratedArea
                                     : '-'}}</span>
                             </div>
@@ -391,7 +391,7 @@
                     <div class="card-header">
                         Comments :
                     </div>
-                    <div class="card-body mb-2">
+                    <div class="card-body mb-2 py-0">
                     <div class="voter-data">
                         <ul *ngFor="let VPMemberDetailComment of VPMemberDetailsCommentsData" class="list-group list-group-flush mb-0">
                             <li class="list-group-item ps-0" *ngIf="VPMemberDetailComment?.CommentDetails">
