@@ -94,6 +94,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   isAlertData = 0;
   isAlertChecked = new FormControl(false);
+  fromDate: any;
+  toDate: any;
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService, private fb: FormBuilder, public dateTimeAdapter: DateTimeAdapter<any>, private datePipe: DatePipe, private commonService: CommonService, private router: Router, private route: ActivatedRoute, private toastrService: ToastrService) {
     { dateTimeAdapter.setLocale('en-IN') }
@@ -540,6 +542,9 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let formData = this.filterForm.value;
     this.nullishTopFilterForm();
+    (this.voterProfilefilterForm.value.FromTo == null || this.voterProfilefilterForm.value.ToDate == null) ? (this.voterProfilefilterForm.value.FromTo = this.fromDate , this.voterProfilefilterForm.value.ToDate = this.toDate) : (this.voterProfilefilterForm.value.FromTo , this.voterProfilefilterForm.value.ToDate)
+    this.fromDate = this.voterProfilefilterForm.value.FromTo;
+    this.toDate = this.voterProfilefilterForm.value.ToDate;
     let checkBoothId: any
     formData.BoothId == null ? checkBoothId = 0 : checkBoothId = formData.BoothId;
     let obj = 'AgentId=' + this.getReturnAgentIdOrAreaAgentId() + '&ClientId=' + formData.ClientId + '&BoothId=' + checkBoothId + '&AssemblyId=' + formData.AssemblyId + '&FromDate=' + this.voterProfilefilterForm.value.FromTo + '&ToDate=' + this.voterProfilefilterForm.value.ToDate;
