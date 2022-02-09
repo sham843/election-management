@@ -54,7 +54,7 @@
 
                     </div>
                     <div class="col-sm-4">
-                        <label class="form-label">Middle Name</label>
+                        <label class="form-label required-field">Middle Name</label>
                         <input type="text" formControlName="NewEMiddleName"  class="form-control" placeholder="Middle Name"
                         [ngClass]="{ 'is-invalid': submitted && f.NewEMiddleName.errors }">
                                 <div *ngIf="submitted && f.NewEMiddleName.errors" class="invalid-feedback">
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <label class="form-label">मधले नाव</label>
+                        <label class="form-label required-field">मधले नाव</label>
                         <input type="text" formControlName="NewMiddleName" class="form-control" placeholder="मधले नाव" [ngClass]="{ 'is-invalid': submitted && f.NewMiddleName.errors }">
                         <div *ngIf="submitted && f.NewMiddleName.errors" class="invalid-feedback">
                             <div *ngIf="f.NewMiddleName.errors.required">Middle Name is required </div>
