@@ -20,7 +20,8 @@
                         <form [formGroup]="notificationForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
                             <div class="form-container">
                                 <div class="mb-3">
-                                    <label for="txtTitleName" class="form-label  required-field">Notification Title</label>
+                                    <label for="txtTitleName" class="form-label  required-field">Notification
+                                        Title</label>
                                     <input type="text" class="form-control" id="txtTitleName" formControlName="Title"
                                         placeholder="Title Name">
                                     <div *ngIf="submitted && f.Title .errors" class="invalid-feedback">
@@ -52,8 +53,7 @@
                                         Client</label>
                                     <ngx-select [items]="clientNameArray" [allowClear]="true"
                                         (remove)="clearValidationAndData('client')" formControlName="ClientId"
-                                        (select)="addValidationOn('client')" 
-                                        [disabled]="globalClientId != 0"
+                                        (select)="addValidationOn('client')" [disabled]="globalClientId != 0"
                                         optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
@@ -65,10 +65,11 @@
                                     <label for="ddlScope" class="form-label required-field">Scope of
                                         Notification</label>
                                     <ngx-select [allowClear]="true" (remove)="clearValidationAndData('scopClear')"
-                                    [disabled]="!this.notificationForm.value.ClientId" 
-                                        (select)="addValidationOn($event);clearAgentValue = true" [items]="notificationscopeArray"
-                                        formControlName="ScopeId" placeholder="Scope of Notification"
-                                        optionValueField="id" optionTextField="ScopeName">
+                                        [disabled]="!this.notificationForm.value.ClientId"
+                                        (select)="addValidationOn($event);clearAgentValue = true"
+                                        [items]="notificationscopeArray" formControlName="ScopeId"
+                                        placeholder="Scope of Notification" optionValueField="id"
+                                        optionTextField="ScopeName">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.ScopeId.errors" class="invalid-feedback">
                                         <div *ngIf="f.ScopeId.errors.required">Scope of Notification is required</div>
@@ -78,10 +79,10 @@
                                 <div class="mb-3">
                                     <label for="ddlMembers" class="form-label required-field">Select
                                         Agent</label>
-                                    <ngx-select [items]="allAgentLists" [multiple]="true" (remove)="clearValidationAndData('agent')"
-                                        formControlName="MemberStr" optionValueField="AgentId" [autoClearSearch]="true"
-                                        [disabled]="this.notificationForm.value.ScopeId != 2"
-                                        optionTextField="FullName"
+                                    <ngx-select [items]="allAgentLists" [multiple]="true"
+                                        (remove)="clearValidationAndData('agent')" formControlName="MemberStr"
+                                        optionValueField="AgentId" [autoClearSearch]="true"
+                                        [disabled]="this.notificationForm.value.ScopeId != 2" optionTextField="FullName"
                                         placeholder="Select Agent">
                                     </ngx-select>
                                     <div *ngIf="submitted && f.MemberStr.errors" class="invalid-feedback">
@@ -96,7 +97,6 @@
                                             Schedule Notification
                                         </label>
                                     </div>
-
                                     <div class="input-group" *ngIf="schedulerFlag">
                                         <input class="form-control form-control-sm" [min]="minDate"
                                             [owlDateTimeTrigger]="dt1" placeholder="Date Time" [owlDateTime]="dt1"
@@ -106,11 +106,10 @@
                                         <button class="btn btn-light btn-sm" type="button" [owlDateTimeTrigger]="dt1">
                                             <i class="fas fa-calendar-alt"></i>
                                         </button>
-                                        <div *ngIf="submitted && f.NotificationDate.errors"
-                                            class="invalid-feedback mt-4">
-                                            <div *ngIf="f.NotificationDate.errors.required">Notification Date is
-                                                required</div>
-                                        </div>
+                                    </div>
+                                    <div *ngIf="submitted && f.NotificationDate.errors" class="invalid-feedback">
+                                        <div *ngIf="f.NotificationDate.errors.required">Notification Date is
+                                            required</div>
                                     </div>
                                 </div>
 
@@ -164,7 +163,7 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="input-group">
-                                            <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" 
+                                            <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')"
                                                 formControlName="fromTo" [selectMode]="'range'"
                                                 (dateTimeChange)="filterData('range')" [max]="date"
                                                 class="form-control border border-end-0" [owlDateTimeTrigger]="dt3"
@@ -211,12 +210,15 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <!-- <span class="media-date" *ngIf="{{'notificationScope?.NotificationDate' == 1}}"></span> -->
-                                    <span class="media-date"
-                                    [ngClass]="{'badge text-white bg-success fw-bolder':notificationScope?.IsPushed == 1}">{{notificationScope?.IsPushed == 1 ? 'Published' : ''}}</span>
-                                    <span class="media-date"
-                                    [ngClass]="{'badge text-white bg-primary fw-bolder':notificationScope?.IsPushed == 0}">{{notificationScope?.IsPushed == 0 ? 'Not-published' : ''}}</span>
-                                    <span class="media-date"
-                                    [ngClass]="{'badge text-white bg-info fw-bolder':notificationScope?.IsPushed == 2}">{{notificationScope?.IsPushed == 2 ? 'Schedule Notification' : ''}}</span>
+                                <span class="media-date"
+                                    [ngClass]="{'badge text-white bg-success fw-bolder':notificationScope?.IsPushed == 1}">{{notificationScope?.IsPushed
+                                    == 1 ? 'Published' : ''}}</span>
+                                <span class="media-date"
+                                    [ngClass]="{'badge text-white bg-primary fw-bolder':notificationScope?.IsPushed == 0}">{{notificationScope?.IsPushed
+                                    == 0 ? 'Not-published' : ''}}</span>
+                                <span class="media-date"
+                                    [ngClass]="{'badge text-white bg-info fw-bolder':notificationScope?.IsPushed == 2}">{{notificationScope?.IsPushed
+                                    == 2 ? 'Schedule Notification' : ''}}</span>
                                 <div class="media-title">{{notificationScope?.Title}}</div>
                                 <div class="media-scope">
                                     {{notificationScope?.ScopeName}} <span *ngIf="notificationScope?.MemberDetails">-
