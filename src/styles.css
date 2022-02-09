@@ -665,5 +665,5 @@ g[shape-rendering="auto"]{
     display: none;
 }
 .ngx-select__choices{
-    z-index: 1;
+    z-index: 6;
 }
