@@ -65,11 +65,11 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getVoterProfileData();
     this.getVPPoliticalInfluenceData();
-    this.getVoterHasVisitTypeData();
+    //this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
     this.GlobalAgentId = this.voterListData.AgentId;
-    this.getVoterVisitDetailData(0);
+    this.getVoterVisitDetailData();
   }
 
   agentFilledData(data: any) {
@@ -82,9 +82,10 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     this.MigInfoHide = false;
     this.getVoterProfileData();
     this.getVPPoliticalInfluenceData();
-    this.getVoterHasVisitTypeData();
+    //this.getVoterHasVisitTypeData();
     this.getVPVotersonmap();
     this.getVoterprofileFamilyData();
+    this.getVoterVisitDetailData();
   }
 
   // Get Voter Profile Data.....................
@@ -156,34 +157,33 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
 
   //........ get Voter Has Visit Type Id...........// 
 
-  getVoterHasVisitTypeData() {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_VoterHas_VisitTypes?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
-    //this.callAPIService.setHttp('get', 'Web_VoterHas_VisitTypes?ClientId=' + 2 + '&AgentId='+ 5 + '&VoterId='+ 342671 , false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.voterHasVisitTypesData = res.data1;
+  // getVoterHasVisitTypeData() {
+  //   this.spinner.show();
+  //   this.callAPIService.setHttp('get', 'Web_VoterHas_VisitTypes?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
+  //  this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.data == 0) {
+  //       this.spinner.hide();
+  //       this.voterHasVisitTypesData = res.data1;
      
-        // ----------------- get voter Visit Details Bind  by  VoterId  start here -------------------------//
-        //if (this.voterHasVisitTypesData.lenght != 0) {
-        //  this.voterHasVisitTypesData.forEach((element: any) => {
-        //    this.getVoterVisitDetailData(element.VistitTypeId);
-        //  });
-        //}
+  //       // ----------------- get voter Visit Details Bind  by  VoterId  start here -------------------------//
+  //       //if (this.voterHasVisitTypesData.lenght != 0) {
+  //       //  this.voterHasVisitTypesData.forEach((element: any) => {
+  //       //    this.getVoterVisitDetailData(element.VistitTypeId);
+  //       //  });
+  //       //}
 
-        // ----------------- get voter Visit Details Bind  by  VoterId  end here -------------------------//
-      } else {
-        this.spinner.hide();
-        this.voterHasVisitTypesData = [];
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
+  //       // ----------------- get voter Visit Details Bind  by  VoterId  end here -------------------------//
+  //     } else {
+  //       this.spinner.hide();
+  //       this.voterHasVisitTypesData = [];
+  //     }
+  //   }, (error: any) => {
+  //     this.spinner.hide();
+  //     if (error.status == 500) {
+  //       this.router.navigate(['../500'], { relativeTo: this.route });
+  //     }
+  //   })
+  // }
 
   //........ get get Voterprofile Family Data ...........//    
 
@@ -276,10 +276,10 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
 
   //........................ get Voter Visit Details Data ................................//                    
 
-  getVoterVisitDetailData(VisitTypeId: any) {
+  getVoterVisitDetailData() {
     this.spinner.show();
     //this.callAPIService.setHttp('get', 'Web_Voter_Visit_Details?ClientId=' + 2 + '&AgentId='+ 5 + '&VoterId='+ 342671 + '&VisitTypeId='+ VisitTypeId , false, false, false, 'electionServiceForWeb');
-    this.callAPIService.setHttp('get', 'Web_Voter_Visit_Details?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId + '&VisitTypeId=' + VisitTypeId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'Web_Voter_Visit_Details?ClientId=' + this.voterListData.ClientID + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId + '&VisitTypeId=' + 0, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.spinner.hide();
