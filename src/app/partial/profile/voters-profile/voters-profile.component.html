@@ -299,9 +299,9 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0">
                                 <!-- (click)="imgData(voterVisitDetail)" -->
-                                <span><img class="extrainfo-img"
+                                <span *ngIf="voterVisitDetail?.VisitPhoto"><img class="extrainfo-img"
                                         (click)="showGallaryLightbox(voterVisitDetail) ; lightbox.open(0, 'lightbox')"
-                                        src="{{voterVisitDetail.VisitPhoto.split(',')[0]}}"></span>
+                                        src="{{voterVisitDetail?.VisitPhoto.split(',')[0]}}"></span>
                                 <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img"
                                         src="assets/images/ele.png"></span>
                             </div>
