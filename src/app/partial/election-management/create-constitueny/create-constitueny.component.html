@@ -31,6 +31,7 @@
                                     [ngClass]="{ 'is-invalid': submitted && f.ConstituencyName.errors }">
                                 <div *ngIf="submitted && f.ConstituencyName.errors" class="invalid-feedback">
                                     <div *ngIf="f.ConstituencyName.errors.required">Constituency Name is required</div>
+                                    <div *ngIf="f.ConstituencyName.errors.pattern">Valid Constituency Name is required</div>
                                 </div>
                             </div>
                             <div class="mb-2">

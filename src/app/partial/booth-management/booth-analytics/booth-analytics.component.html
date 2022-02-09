@@ -352,7 +352,7 @@
                               <td>{{leader?.BoothNickName}}</td>
                               <td>{{leader?.PartyName}}</td>
                               <td>{{leader?.LeaderImportance}}<i class="fas fa-star ms-1 text-warning"></i></td>
-                              <td>{{leader?.Contact}}</td>
+                              <td>{{leader?.Contact.split(',')[0]}} <span *ngIf="leader?.Contact.split(',')[1]">, {{leader?.Contact.split(',')[1]}}</span></td>
                             </tr>
                           </tbody>
                         </table>
@@ -766,8 +766,8 @@
                   {{boothFamilyList?.Qualification ?
                   boothFamilyList.Qualification : "-"}}</div>
                 <div class="col-sm-1">
-                  <div>{{boothFamilyList.Migrated ?
-                    (boothFamilyList.Migrated | titlecase) :
+                  <div>{{boothFamilyList.Address ?
+                    (boothFamilyList.Address) :
                     '-'}} </div>
                 </div>
                 <div class="col-sm-2">{{boothFamilyList?.BoothNickName || '-'}} </div>
@@ -806,9 +806,7 @@
                       titlecase) : '-'}}
                     </div>
                     <div class="col-sm-1">
-                      {{boothFamilyDetails?.Migrated ?
-                      (boothFamilyDetails?.Migrated |
-                      titlecase) : '-'}}</div>
+                      {{boothFamilyDetails?.Address ? boothFamilyDetails?.Address : '-'}}</div>
                     <div class="col-sm-2">{{boothFamilyDetails.BoothNickName || '-'}} </div>
                     <div class="col-sm-1"></div>
                   </div>

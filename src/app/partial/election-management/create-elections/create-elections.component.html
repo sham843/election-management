@@ -21,6 +21,7 @@
                                     [ngClass]="{ 'is-invalid': submitted && f.ElectionName.errors }">
                                 <div *ngIf="submitted && f.ElectionName.errors" class="invalid-feedback">
                                     <div *ngIf="f.ElectionName.errors.required">Election Name is required</div>
+                                    <div *ngIf="f.ElectionName.errors.pattern">Valid Election Name is required</div>
                                 </div>
                             </div>
                             <div class="mb-3">

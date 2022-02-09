@@ -164,6 +164,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
       if (res.data == 0) {
         this.spinner.hide();
         this.voterHasVisitTypesData = res.data1;
+     
         // ----------------- get voter Visit Details Bind  by  VoterId  start here -------------------------//
         //if (this.voterHasVisitTypesData.lenght != 0) {
         //  this.voterHasVisitTypesData.forEach((element: any) => {
