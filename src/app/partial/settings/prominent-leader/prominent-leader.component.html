@@ -42,7 +42,7 @@
                            </div>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3" *ngIf="globalClientId == 0">
                             <label for="txtElectionName" class="form-label required-field">Select Client</label>
                             <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId" optionValueField="id" optionTextField="Fullname"
                              (select)="getElection()" [disabled]="clientNameArray?.length == 1" (remove)="clearFormData('client')" placeholder="Select Client" 

@@ -37,6 +37,7 @@ export class ProminentLeaderComponent implements OnInit {
   politicalPartyArray: any;
   deleteObj: any;
   ProminentLeaderObj: any;
+  globalClientId: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -51,6 +52,7 @@ export class ProminentLeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.globalClientId = this.commonService.getlocalStorageData().ClientId;
     this.defaultProminentLeaderForm();
     this.getClientName();
     this.getPoliticalPartyList();
