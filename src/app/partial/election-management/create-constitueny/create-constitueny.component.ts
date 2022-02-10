@@ -282,23 +282,25 @@ export class CreateConstituenyComponent implements OnInit {
   }
 
   GetConstituencyName(ElectionId: any) {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + ElectionId, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+    // if(typeof(ElectionId) == 'number'){
+      this.spinner.show();
+      this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + ElectionId, false, false, false, 'electionServiceForWeb');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.data == 0) {
+          this.spinner.hide();
+          this.constituencyArray = res.data1;
+        } else {
+          this.spinner.hide();
+          this.constituencyArray = [];
+          this.toastrService.error("Constituency Name is not available");
+        }
+      }, (error: any) => {
         this.spinner.hide();
-        this.constituencyArray = res.data1;
-      } else {
-        this.spinner.hide();
-        this.constituencyArray = [];
-        this.toastrService.error("Constituency Name is not available");
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
+        if (error.status == 500) {
+          this.router.navigate(['../500'], { relativeTo: this.route });
+        }
+      })
+    // }
   }
 
   editConstituency(masterId: any) {//Edit api
