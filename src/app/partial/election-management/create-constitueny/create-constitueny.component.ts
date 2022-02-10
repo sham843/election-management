@@ -327,7 +327,7 @@ export class CreateConstituenyComponent implements OnInit {
     if (subEleId == 1) {
       this.subConstituencyDivHide = true;
       this.subConstituencyTableDiv = true;
-      this.prevArrayData.length != 0 ? this.addSubConstituencyArray = this.prevArrayData : this.addSubConstituencyArray = [];
+      this.prevArrayData?.length != 0 ? this.addSubConstituencyArray = this.prevArrayData : this.addSubConstituencyArray = [];
     } else {
       this.prevArrayData = this.addSubConstituencyArray;
       this.addSubConstituencyArray = [];
