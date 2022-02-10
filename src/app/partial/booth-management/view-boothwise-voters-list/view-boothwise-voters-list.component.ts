@@ -420,6 +420,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       if (res.data == 0) {
         this.boothDataHide = true;
         this.spinner.hide();
+        this.defaultShowVoterList();
         this.clickBoothListArray = res.data1[0];
       } else {
         this.boothDataHide = false;
