@@ -193,7 +193,7 @@
                                <span>{{voterProfileData?.IsSugarCaneCutter == 0 ? '' : voterProfileData?.IsSugarCaneCutter == 1 ? 'SugarCane Cutter / Worker, ' : ''}}</span> 
                                <span>{{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ? 'Farmer, ' : ''}} </span> 
                                <span>{{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ? 'Business, ' : ''}}</span> 
-                               <span *ngIf="voterProfileData?.BusinnessDetails">({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }})</span> 
+                               <span *ngIf="voterProfileData?.BusinnessDetails">({{voterProfileData?.BusinnessDetails ? voterProfileData?.BusinnessDetails : '' }}),</span> 
                                <span *ngIf="voterProfileData?.HaveVehicle"> {{voterProfileData?.HaveVehicle == 1 ? 'Bike' : voterProfileData?.HaveVehicle == 2 ?
                                 'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},</span>
                                <span> {{voterProfileData?.FinancialCondition == 1 ? 'Low Income Family' :
