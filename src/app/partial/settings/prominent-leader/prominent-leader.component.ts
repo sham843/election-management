@@ -29,7 +29,6 @@ export class ProminentLeaderComponent implements OnInit {
   HighlightRow: any;
   // ProminentLeaderObj: any;
   clientNameArray: any;
-  HideClientFilter: boolean = true;
   ClientIdTop = new FormControl(0);
   Search = new FormControl('');
   subject: Subject<any> = new Subject();
@@ -91,7 +90,6 @@ export class ProminentLeaderComponent implements OnInit {
         this.clientNameArray = res.data1;
 
         if (this.clientNameArray.length == 1) {
-          this.HideClientFilter = false;
           this.prominentLeaderForm.patchValue({ ClientId: this.clientNameArray[0].id });
           this.getElection();
           this.ClientIdTop.setValue(this.clientNameArray[0].id);

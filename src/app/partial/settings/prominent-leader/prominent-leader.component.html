@@ -94,7 +94,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row g-2 justify-content-end">
-                        <div class="col-sm-4" *ngIf="HideClientFilter">
+                        <div class="col-sm-4" *ngIf="globalClientId == 0">
                             <ngx-select [items]="clientNameArray" [allowClear]="true" [formControl]="ClientIdTop"
                                 (select)="getProminentLeader(); clearForm()" (remove)="clearTopFilter('clientId')"
                                 optionValueField="id" optionTextField="Fullname" placeholder="Select Client">

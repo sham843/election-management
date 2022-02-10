@@ -32,7 +32,8 @@ export class AgentSettingComponent implements OnInit {
   Search = new FormControl('');
   subject: Subject<any> = new Subject();
   searchFilter = "";
-  HideClientFilter:boolean = true;
+  globalClientId: any;
+  //HideClientFilter:boolean = true;
   
 
   constructor(
@@ -46,6 +47,7 @@ export class AgentSettingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.globalClientId = this.commonService.getlocalStorageData().ClientId;
     this.getClientName();
     //this.getAgentSetting();
     this.searchFilters('false');
@@ -60,7 +62,7 @@ export class AgentSettingComponent implements OnInit {
         this.clientNameArray = res.data1;
 
         if (this.clientNameArray.length == 1) {
-          this.HideClientFilter = false;
+          //this.HideClientFilter = false;
           this.ClientId.setValue(this.clientNameArray[0].id); 
         }
         this.getAgentSetting();
