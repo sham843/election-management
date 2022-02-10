@@ -91,16 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col" *ngIf="agentProfileData?.SubusertypeId == 4">
-                                <div class="card shadow-none border">
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileCardData?.TotalAssigned}}</h5>
-                                        <p class="card-text">
-                                            Total Assigned
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                           
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
@@ -111,6 +102,40 @@
                                     </div>
                                 </div>
                             </div>
+                           
+                            <div class="col">
+                                <div class="card shadow-none border">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalMigrated}}</h5>
+                                        <p class="card-text">
+                                            Total Migrated
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col" *ngIf="agentProfileData?.SubusertypeId == 4">
+                                <div class="card shadow-none border">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{agentProfileCardData?.TotalAssigned}}</h5>
+                                        <p class="card-text">
+                                            Total Assigned
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col" *ngIf="agentProfileData?.SubusertypeId == 4">
+                                <div class="card shadow-none border">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{agentProfileCardData?.AssignedDatafilled}}</h5>
+                                        <p class="card-text">
+                                            Assigned Filled
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                           
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
@@ -124,29 +149,20 @@
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileCardData?.TotalMigrated}}</h5>
+                                        <h5 class="card-title">{{agentProfileCardData?.NewVoter}}</h5>
                                         <p class="card-text">
-                                            Total Migrated
+                                            New Voters
                                         </p>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col">
                                 <div class="card shadow-none border">
                                     <div class="card-body p-2">
                                         <h5 class="card-title">{{agentProfileCardData?.TotalFamily}}</h5>
                                         <p class="card-text">
                                             Total Families
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card shadow-none border">
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">{{agentProfileCardData?.NewVoter}}</h5>
-                                        <p class="card-text">
-                                            New Voters
                                         </p>
                                     </div>
                                 </div>

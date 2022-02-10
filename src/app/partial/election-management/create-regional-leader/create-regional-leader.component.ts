@@ -134,6 +134,8 @@ export class CreateRegionalLeaderComponent implements OnInit {
           this.getVillage(this.globalEditData.TalukaId)
         }
         
+      } else {
+        this.spinner.hide();
       }
     }, (error: any) => {
       if (error.status == 500) {
@@ -157,6 +159,7 @@ export class CreateRegionalLeaderComponent implements OnInit {
         this.spinner.hide();
       }
     }, (error: any) => {
+      this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../../500'], { relativeTo: this.route });
       }
