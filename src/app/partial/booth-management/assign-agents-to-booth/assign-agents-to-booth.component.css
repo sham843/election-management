@@ -5,3 +5,9 @@
 
 
 .disabledNoOfCasesDiv{ pointer-events: none; opacity: 2.0;}
+
+
+.chartbox .table th, .chartbox .table td {
+    cursor: auto;
+    vertical-align: middle;
+}

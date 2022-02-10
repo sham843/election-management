@@ -315,6 +315,7 @@
                                             <th>Visit Time</th>
                                             <th>Gender</th>
                                             <th>Contact No1/Contact No2</th>
+                                            <th>Booth Name</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -331,6 +332,7 @@
                                             <td>{{clientBooth?.SurveyDate | dateTransform}}</td>
                                             <td>{{clientBooth?.Gender == 'F' ? 'Female' : 'Male'}}</td>
                                             <td>{{clientBooth?.MobileNo1 ? clientBooth?.MobileNo1 : '-'}}<span *ngIf="clientBooth?.MobileNo2">  {{clientBooth?.MobileNo2}}</span></td>
+                                            <td>{{clientBooth?.BoothNickName? clientBooth?.BoothNickName : '-'}}</td>
                                         </tr>
 
                                     </tbody>
@@ -400,8 +402,8 @@
                                             </div>
                                             <div class="col-sm-2">{{familiyList.Qualification ? familiyList.Qualification : '-'}}
                                             </div> 
-                                            <div class="col-sm-1">{{familiyList?.Migrated == 'yes' ? 'Yes' :
-                                                familiyList?.Migrated == 'no' ? 'No' : '-' }}</div>
+                                            <div class="col-sm-1">{{familiyList?.MigratedCity ?
+                                                familiyList?.MigratedCity : '-' }}</div>
                                             <div class="col-sm-1">
                                                 <a class="accordion-button collapsed" data-bs-toggle="collapse"
                                                     [attr.data-bs-target]="'#flush-collapseOne'+i" aria-expanded="false"
@@ -433,8 +435,8 @@
                                                 <div class="col-sm-2">
                                                     {{boothFamilyDetails?.Qualification ? boothFamilyDetails?.Qualification : '-'}}
                                                 </div>
-                                                <div class="col-sm-1">{{boothFamilyDetails?.Migrated == 'yes' ? 'Yes' :
-                                                    boothFamilyDetails?.Migrated == 'no' ? 'No' : '-' }}</div>
+                                                <div class="col-sm-1">{{boothFamilyDetails?.Address ?
+                                                    boothFamilyDetails?.Address : '-' }}</div>
                                                 <div class="col-sm-1"></div>
                                             </div>
                                             <div class="mt-2 text-end" *ngIf="boothFamilyDetailsArray?.length == 0">

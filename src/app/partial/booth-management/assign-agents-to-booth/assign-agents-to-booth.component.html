@@ -41,14 +41,14 @@
                         <ngx-select [allowClear]="true" [items]="filterAssemblyArray"
                             (remove)="clearFilter('AssemblyId');filterClientHaveSubEleOrNonSubEle()" formControlName="AssemblyId" optionValueField="Id"
                             optionTextField="ConstituencyName"
-                            (select)="filterBoothsByAssembleId();filterClientHaveSubEleOrNonSubEle()"
+                            (select)="paginationNo = 1; filterBoothsByAssembleId();filterClientHaveSubEleOrNonSubEle()"
                             [disabled]="filterAssemblyArray?.length == 0 || !this.filterForm.value.ConstituencyId" placeholder="Select Assembly">
                         </ngx-select>
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="filterAssembleListArray"
                             (remove)="clearFilter('BoothId');filterClientHaveSubEleOrNonSubEle()" formControlName="BoothId" optionValueField="BoothId"
-                            optionTextField="BoothNickName" (select)="filterClientHaveSubEleOrNonSubEle()"
+                            optionTextField="BoothNickName" (select)="paginationNo = 1; filterClientHaveSubEleOrNonSubEle()"
                             [disabled]="filterAssembleListArray?.AssemblyId == 0 || !this.filterForm.value.AssemblyId" placeholder="Select Booth">
                         </ngx-select>
                     </div>
