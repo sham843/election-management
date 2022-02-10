@@ -159,7 +159,7 @@ export class AssignAgentsToBoothComponent implements OnInit {
         
         //this.clientNameArray?.length == 1  ?  (this.assAgentToBoothForm.controls['ClientId'].setValue(this.clientNameArray[0].id), this.getClientAgentList()) :  '';
        
-        if (this.btnText == 'Update agent' && this.clientNameArray?.length == 1 ) {
+        if (this.btnText == 'Update agent' || this.clientNameArray?.length == 1 ) {
           this.assAgentToBoothForm.controls['ClientId'].setValue(this.globalEditObj.ClientId);
           this.getClientAgentList();
         }

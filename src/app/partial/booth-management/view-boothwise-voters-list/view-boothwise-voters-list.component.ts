@@ -405,8 +405,6 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
 
     this.globalboothVoterData = boothDetailsById[0];
     this.HighlightRow = boothDetailsById[0]?.BoothId;
-    // let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' +  this.filterForm.value?.getBoothId;
-    let formDataCrmFilter = this.crmFilterForm.value;
     let formDataTopFilter = this.filterForm.value;
     let villageId: any;
     formDataTopFilter.village == null || formDataTopFilter.village == undefined || formDataTopFilter.village == '' ? villageId = 0 : villageId = formDataTopFilter.village;
