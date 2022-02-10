@@ -404,7 +404,13 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
 
   getpiChartArray(piChartData: any) {
     // data transform from orignal array 
-    let obj: any = [{ 'category': "Total Filled", 'categoryCount': piChartData.TotalFilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
+   let obj:any;
+    if(this.agentProfileData?.SubusertypeId == 4){
+      obj = [{ 'category': "Assigned Filled", 'categoryCount': piChartData.AssignedDatafilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
+    } else{
+      obj = [{ 'category': "Total Filled", 'categoryCount': piChartData.TotalFilled }, , { 'category': 'Pending', 'categoryCount': piChartData.Pending }]
+    }
+   
     this.piChartArray = obj;
     this.piechartAgentProfile();
   }
