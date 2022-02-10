@@ -272,6 +272,7 @@ export class BoothAnalyticsComponent implements OnInit {
   }
 
   bindData() { 
+    this.impLeadersPaginationNo = 1;
     this.selectedBoot = [];
     this.selectedBoothIds = [];
     if (this.filterForm.value.BoothId) {
