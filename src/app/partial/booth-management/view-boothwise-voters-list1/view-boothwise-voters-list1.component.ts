@@ -438,13 +438,13 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       if (res.data == 0) {
         this.boothDataHide = true;
         this.spinner.hide();
-        this.defaultShowVoterList();
         this.clickBoothListArray = res.data1[0];
       } else {
         this.boothDataHide = false;
         this.spinner.hide();
       }
-      this.boothVoterList();
+      // this.boothVoterList();
+      this.defaultShowVoterList();
     }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
@@ -501,7 +501,7 @@ clearBoothVotersFilterForm(){
   this.globalFilterDataForm();
   this.nullishGlobalFilterForm();
   this.filteredValueNameArray = [];
-  this.boothVoterList();
+  //this.boothVoterList(); //HIDE ONE LINE EFFECT PENDING MY SIDE
 }
 
 nullishDefaultFilterForm() {
@@ -1481,8 +1481,7 @@ nullishDefaultFilterForm() {
     })
   }
 
-  defaultShowVoterList() {
-    // let defualt click voters tab 
+  defaultShowVoterList() { // defualt click voters tab 
     let clickOnVoterTab: any = document.getElementById('pills-voters-tab');
     clickOnVoterTab.click();
   }
