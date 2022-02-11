@@ -149,7 +149,6 @@ export class NameCorrectionComponent implements OnInit {
       this.ClientWiseBoothList();
       // this.boothDataHide = false;
     }
-
   }
 
   getIsSubEleAppId(eleId: any) {
@@ -277,7 +276,6 @@ export class NameCorrectionComponent implements OnInit {
     return eleIsSubElectionApplicable;
   }
 
-
   clearFilter(flag: any) {
     if (flag == 'clientId') {
       this.filterForm.reset();
@@ -306,11 +304,7 @@ export class NameCorrectionComponent implements OnInit {
       this.filterForm.controls['BoothId'].setValue(0);
       this.getClientHaveSubEleOrNonSubEle();
     }
-
-    
-
   }
-
 
   nullishFilterForm(){
     let fromData = this.filterForm.value;
