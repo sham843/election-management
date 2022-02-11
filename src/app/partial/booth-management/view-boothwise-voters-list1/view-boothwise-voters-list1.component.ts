@@ -13,6 +13,7 @@ import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dia
 import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
 import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
+import { ExcelService } from '../../../services/excel.service'
 
 @Component({
   selector: 'app-view-boothwise-voters-list1',
@@ -28,13 +29,15 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   paginationNo: number = 1;
   pageSize: number = 10;
   total: any;
-  votersSubject: Subject<any> = new Subject();
-  familySubject: Subject<any> = new Subject();
-  pendingSubject: Subject<any> = new Subject();
-  migratedSubject: Subject<any> = new Subject();
-  agentSubject: Subject<any> = new Subject();
-  crmSubject: Subject<any> = new Subject();
-  crmHistorySubject: Subject<any> = new Subject();
+  subjectVoters: Subject<any> = new Subject();
+  subjectFamily: Subject<any> = new Subject();
+  subjectMigrated: Subject<any> = new Subject();
+  subjectPending: Subject<any> = new Subject();
+  subjectAgent: Subject<any> = new Subject();
+  subjectCrm: Subject<any> = new Subject();
+  subjectCrmHistory: Subject<any> = new Subject();
+  subjectExpired: Subject<any> = new Subject();
+  subjectLeaders: Subject<any> = new Subject();
   clientWiseBoothListArray: any;
   IsSubElectionApplicable: any;
   villageDropdown: any;
@@ -49,6 +52,10 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   searchPending = new FormControl('');
   searchAgent = new FormControl('');
   searchFamily = new FormControl('');
+
+  votersPaginationNo = 1;
+  votersPageSize: number = 10;
+  votersTotal: any;
 
   boothMigratedListArray: any;
   migratedPaginationNo = 1;
@@ -103,37 +110,53 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   feedbacksPaginationNo: any = 1;
   feedbacksPageSize: number = 10;
   showBoothName: any;
+  // Main Global Filter Variable Declreation
 
-    // Voters Variable Declreation
+  fillDataId1 = 0;
 
-    globalFilterForm!: FormGroup;
-    votersPaginationNo = 1;
-    votersPageSize: number = 10;
-    votersTotal: any;
-    voterListArray: any;
-    politicalPartyArray: any;
-    religionListArray: any;
-    VoterCastListArray: any;
-    favourofListArray: any;
-    opposeOfListArray: any;
-    professionArray = [{id:1,name:'Dairy Farm'},{id:2,name:'Goat/Sheep Herd	'},{id:3,name:'Sugar Cane Cutter	'},{id:4,name:'Farmer'},{id:5,name:'Business'},]
-    genderArray = [{ id: 1, name: 'Male' }, { id: 2, name: 'Female' }, { id: 3, name: 'Other' }];
-    mobileNoAvailableArray = [{ id: 1, name: 'Yes' }, { id: 2, name: 'No' }];
-    bussinessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
-    ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '1.5 Star' }, { id: 3, name: '2 Star' }, { id: 4, name: '2.5 Star' }, { id: 5, name: '3 Star' },
-    { id: 6, name: '3.5 Star' }, { id: 7, name: '4 Star' }, { id: 8, name: '4.5 Star' }, { id: 9, name: '5 Star' }];
-    yuvakArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
-    ageArray = [{ id: 1, name: '18-40' }, { id: 2, name: '40-60' }, { id: 3, name: '60 and Above' }];
-    familySizeArray = [{ id: 1, name: '1-5' }, { id: 2, name: '5-10' }, { id: 3, name: '10 and Above' }];
-    filteredValueNameArray:any = [];
-    checkedDataflag: boolean = true;
-    indexNo: any;
-  globalAssemblyId: any;
+  BoothAnalyticsObj = {ClientId: 0, ElectionId: 0, ConstituencyId: 0,VillageId: 0, BoothId: 0, flag: 0}
 
-  BoothAnalyticsObj = {ClientId: 0,ElectionId: 0,ConstituencyId: 0,
-    VillageId:0,BoothId:0,flag:0}
+  searchExpired = new FormControl('');
+  ExpiredListArray: any;
+  ExpiredPaginationNo = 1;
+  ExpiredPageSize: number = 10;
+  ExpiredTotal: any;
 
-    filterSidebarFlag = 'VotersFlag';
+  searchLeaders = new FormControl('');
+  LeadersListArray: any;
+  LeadersPaginationNo = 1;
+  LeadersPageSize: number = 10;
+  LeadersTotal: any;
+  VoterListDownloadExcel: any;
+  topClientName: any;
+  topElectionName: any;
+  topConstituencyName: any;
+
+
+      // Voters Variable Declreation
+
+      globalFilterForm!: FormGroup;
+      voterListArray: any;
+      politicalPartyArray: any;
+      religionListArray: any;
+      VoterCastListArray: any;
+      favourofListArray: any;
+      opposeOfListArray: any;
+      professionArray = [{id:1,name:'Dairy Farm'},{id:2,name:'Goat/Sheep Herd	'},{id:3,name:'Sugar Cane Cutter	'},{id:4,name:'Farmer'},{id:5,name:'Business'},]
+      genderArray = [{ id: 1, name: 'Male' }, { id: 2, name: 'Female' }, { id: 3, name: 'Other' }];
+      mobileNoAvailableArray = [{ id: 1, name: 'Yes' }, { id: 2, name: 'No' }];
+      bussinessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+      ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '1.5 Star' }, { id: 3, name: '2 Star' }, { id: 4, name: '2.5 Star' }, { id: 5, name: '3 Star' },
+      { id: 6, name: '3.5 Star' }, { id: 7, name: '4 Star' }, { id: 8, name: '4.5 Star' }, { id: 9, name: '5 Star' }];
+      yuvakArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+      ageArray = [{ id: 1, name: '18-40' }, { id: 2, name: '40-60' }, { id: 3, name: '60 and Above' }];
+      familySizeArray = [{ id: 1, name: '1-5' }, { id: 2, name: '5-10' }, { id: 3, name: '10 and Above' }];
+      filteredValueNameArray:any = [];
+      checkedDataflag: boolean = true;
+      indexNo: any;
+      globalAssemblyId: any;
+      filterSidebarFlag = 'VotersFlag';
+
 
 
   constructor(
@@ -147,14 +170,18 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     public dialog: MatDialog,
     private datePipe: DatePipe,
     public dateTimeAdapter: DateTimeAdapter<any>,
-  ) { dateTimeAdapter.setLocale('en-IN');
-
-  let getUrlData: any = this.route.snapshot.params.id;
-  if (getUrlData) {
-    getUrlData = getUrlData.split('.');
-    this.BoothAnalyticsObj = { 'ClientId': +getUrlData[0], 'ElectionId': +getUrlData[1], 'ConstituencyId': +getUrlData[2] 
-                               ,'VillageId': +getUrlData[3] , 'BoothId': +getUrlData[4], 'flag': +getUrlData[5]}
-  } }
+    public excelService: ExcelService,
+  ) {
+    dateTimeAdapter.setLocale('en-IN');
+    let getUrlData: any = this.route.snapshot.params.id;
+    if (getUrlData) {
+      getUrlData = getUrlData.split('.');
+      this.BoothAnalyticsObj = {
+        'ClientId': +getUrlData[0], 'ElectionId': +getUrlData[1], 'ConstituencyId': +getUrlData[2]
+        , 'VillageId': +getUrlData[3], 'BoothId': +getUrlData[4], 'flag': +getUrlData[5]
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.defaultFilterForm();
@@ -168,12 +195,13 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     this.searchFamilyFilters('false');
     this.searchCrmFilter('false');
     this.searchCrmHistoryFilter('false');
+    this.searchExpiredFilters('false');
+    this.searchLeadersFilters('false');
     this.agentForm();
-
-
-    this.globalFilterDataForm();
     this.boothAnalyticsRedData();
 
+    
+    this.globalFilterDataForm();
   }
 
   defaultFilterForm() {
@@ -185,11 +213,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       getBoothId: [this.BoothAnalyticsObj.BoothId || 0],
       Search: ['']
     })
-  }
-
-  nullishDefaultFilterForm() {
-    let fromData = this.filterForm.value;
-    fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0);
   }
 
   getClientName() {
@@ -221,7 +244,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.electionNameArray = res.data1;
         this.electionNameArray.length == 1 ? (this.filterForm.patchValue({ ElectionId: this.electionNameArray[0].ElectionId }), this.IsSubElectionApplicable = this.electionNameArray[0].IsSubElectionApplicable, this.getConstituencyName(), this.electionFlag = false) : '';
-        if(this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 1){
+        if (this.electionNameArray.length > 1 && this.BoothAnalyticsObj.flag == 1) {
           this.getConstituencyName();
         }
       } else {
@@ -245,7 +268,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.constituencyNameArray = res.data1;
         this.getIsSubEleAppId(this.filterForm.value.ElectionId);
-        this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.boothSummary(),this.selBoothList(0)) : '';
+        this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].ConstituencyId }), this.constituencyFlag = false), this.boothSummary()) : '';
       } else {
         this.constituencyNameArray = [];
         this.spinner.hide();
@@ -262,7 +285,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   boothSummary() {
     this.nullishFilterForm(); //Check all value null || undefind || empty
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable
+      + '&AssemblyId=' + 0 + '&IsSubElectionApplicable=' + this.IsSubElectionApplicable;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Clientwise_BoothSummary?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -296,11 +319,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.clientWiseBoothListArray = res.data1;
-        if(this.BoothAnalyticsObj.flag == 1){
+        if (this.BoothAnalyticsObj.flag == 1) {
           this.selBoothList(this.BoothAnalyticsObj.BoothId);
         }
-        //res.data1[0].AssemblyId ? this.globalAssemblyId = res.data1[0].AssemblyId : '';
-        this.boothDataHide=true
         this.dataNotFound = true;
       } else {
         this.clientWiseBoothListArray = [];
@@ -313,11 +334,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
-  }
-
-  globalAssemblyFilter(event:any){
-    let AssemblyId = event[0]?.data.AssemblyId;
-    AssemblyId ? this.globalAssemblyId = AssemblyId : '';
   }
 
 
@@ -334,27 +350,28 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         getBoothId: 0
       })
     } else if (flag == 'electionId') {
-      this.filterForm.patchValue({ ClientId: this.filterForm.value.ClientId, 
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
         ElectionId: 0,
-        ConstituencyId:0,
-        village:0,
-        getBoothId:0
+        ConstituencyId: 0,
+        village: 0,
+        getBoothId: 0
       })
     } else if (flag == 'constituencyId') {
       this.filterForm.patchValue({
         ClientId: this.filterForm.value.ClientId,
         ElectionId: this.filterForm.value.ElectionId,
-        ConstituencyId:0,
-        village:0,
-        getBoothId:0
+        ConstituencyId: 0,
+        village: 0,
+        getBoothId: 0
       })
     } else if (flag == 'village') {
       this.filterForm.patchValue({
         ClientId: this.filterForm.value.ClientId,
         ElectionId: this.filterForm.value.ElectionId,
         ConstituencyId: this.filterForm.value.ConstituencyId,
-        village:0,
-        getBoothId:0
+        village: 0,
+        getBoothId: 0
       });
       this.ClientWiseBoothList();
     } else if (flag == 'BoothId') {
@@ -362,12 +379,11 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         ClientId: this.filterForm.value.ClientId,
         ElectionId: this.filterForm.value.ElectionId,
         ConstituencyId: this.filterForm.value.ConstituencyId,
-        village:0,
-        getBoothId: 0
+        village: 0,
       })
     }
     this.dataNotFound = false;
-    this.showBoothName = '' ;
+    this.showBoothName = '';
 
     // this.paginationNo = 1;
     // this.getClientAgentWithBooths();
@@ -388,53 +404,30 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     // this.getClientAgentWithBooths();
   }
 
-  // onKeyUpFilter() {
-  //   this.subject.next();
-  // }
-
-  // searchFilter(flag: any) {
-  //   if (flag == 'true') {
-  //     if (this.filterForm.value.Search == "" || this.filterForm.value.Search == null) {
-  //       this.toastrService.error("Please search and try again");
-  //       return
-  //     }
-  //   }
-  //   this.subject
-  //     .pipe(debounceTime(700))
-  //     .subscribe(() => {
-  //       this.filterForm.value.Search = this.filterForm.value.Search;
-  //     }
-  //     );
-  // }
 
   // ------------------------------------------filter data all methodes start here ------------------------------ //
 
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   selBoothList(BoothId: any) {
-    this.nullishFilterForm();
-    if(BoothId != 0){
-      this.clientWiseBoothListArray.map((ele:any)=>{ // Show Booth Name When Select Booth
-        if(ele.BoothId == this.filterForm.value.getBoothId){
-          this.showBoothName = ele.BoothNickName;
-        }
-      })
+    this.clientWiseBoothListArray.map((ele: any) => { // Show Booth Name When Select Booth
+      if (ele.BoothId == this.filterForm.value.getBoothId) {
+        this.showBoothName = ele.BoothNickName;
+      }
+    })
 
-      let boothDetailsById = this.clientWiseBoothListArray.filter((ele: any) => { if (ele.BoothId == BoothId) return ele })
-      // Start Data Filled Filed Checkbox code
-      this.isChecked.setValue(false);
-      this.fillDataId = 0;
-      this.votersPaginationNo = 1;
-      //End Data Filled Filed Checkbox code
-  
-      this.globalboothVoterData = boothDetailsById[0];
-      this.HighlightRow = boothDetailsById[0]?.BoothId;
-    }
+    let boothDetailsById = this.clientWiseBoothListArray.filter((ele: any) => { if (ele.BoothId == BoothId) return ele })
+    // Start Data Filled Filed Checkbox code
+    this.isChecked.setValue(false);
+    this.fillDataId = 0;
+    this.votersPaginationNo = 1;
+    //End Data Filled Filed Checkbox code
 
-    // let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' +  this.filterForm.value?.getBoothId;
+    this.globalboothVoterData = boothDetailsById[0];
+    this.HighlightRow = boothDetailsById[0]?.BoothId;
     let formDataTopFilter = this.filterForm.value;
-    let villageId:any;
-    formDataTopFilter.village == null || formDataTopFilter.village == undefined || formDataTopFilter.village == '' ?  villageId =0 : villageId = formDataTopFilter.village;
+    let villageId: any;
+    formDataTopFilter.village == null || formDataTopFilter.village == undefined || formDataTopFilter.village == '' ? villageId = 0 : villageId = formDataTopFilter.village;
     let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
       '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
       this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&VillageId=' + villageId;
@@ -445,8 +438,8 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       if (res.data == 0) {
         this.boothDataHide = true;
         this.spinner.hide();
-        this.clickBoothListArray = res.data1[0];
         this.defaultShowVoterList();
+        this.clickBoothListArray = res.data1[0];
       } else {
         this.boothDataHide = false;
         this.spinner.hide();
@@ -458,6 +451,12 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+  }
+
+// get Assembly Id
+  globalAssemblyFilter(event:any){
+    let AssemblyId = event[0]?.data.AssemblyId;
+    AssemblyId ? this.globalAssemblyId = AssemblyId : '';
   }
 
    // ------------------------------------------ Global Main filter start here  ------------------------------------------//
@@ -502,6 +501,12 @@ clearBoothVotersFilterForm(){
   this.globalFilterDataForm();
   this.nullishGlobalFilterForm();
   this.filteredValueNameArray = [];
+  this.boothVoterList();
+}
+
+nullishDefaultFilterForm() {
+  let fromData = this.filterForm.value;
+  fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0);
 }
 
   //.......... get Voter Area List ...............//
@@ -803,89 +808,88 @@ clearBoothVotersFilterForm(){
 
     // ------------------------------------------ Global Main filter End here  ------------------------------------------//
 
+
+
+
+
+
+
+
+
+
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
-  
 
-      boothVoterList() {
-        this.spinner.show();
-        this.nullishGlobalFilterForm();
-        let votersData = this.globalFilterForm.value;
-        let topFilterFormData = this.filterForm.value;
-        let AssemblyId = this.globalAssemblyId || 0;
-        let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
-       
-         let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
-          '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
-          AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
-          topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
-          '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
-          votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
-          votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
-          '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
-          + '&CastId=' + votersData.CastId + '&nopage=' + this.votersPaginationNo + '&ProfessionId=' + votersData.ProfessionId;
-    
-        let url = '';
-       
-        this.IsSubElectionApplicable == 0 ? url = 'Web_Get_VoterList_Filter_Voters_NoSubEle?' + obj : url = 'Web_Get_VoterList_Filter_Voters?' + obj
-        this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
-        this.callAPIService.getHttp().subscribe((res: any) => {
-          if (res.data == 0) {
-            this.spinner.hide();
-            this.boothVoterListArray = res.data1;
-            this.votersTotal = res.data2[0].TotalCount;
-          } else {
-            this.boothVoterListArray = [];
-            this.spinner.hide();
-          }
-        }, (error: any) => {
-          this.spinner.hide();
-          if (error.status == 500) {
-            this.router.navigate(['../500'], { relativeTo: this.route });
-          }
-        })
-        
+  boothVoterList() {
+    this.spinner.show();
+    this.nullishGlobalFilterForm();
+    let votersData = this.globalFilterForm.value;
+    let topFilterFormData = this.filterForm.value;
+    let AssemblyId = this.globalAssemblyId || 0;
+    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+   
+    // '&IsFilled=' + this.fillDataId1;
+
+     let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
+      '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
+      AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
+      topFilterFormData.village + '&Search=' + this.searchVoters.value + '&AreaId=' + votersData.AreaId +
+      '&Gender=' + genderData + '&HaveMobileNo=' + votersData.HaveMobileNo + '&HaveBussiness=' +
+      votersData.HaveBussiness + '&PartyId=' + votersData.PartyId + '&LeadeImp=' + votersData.LeadeImp + '&IsYuvak=' +
+      votersData.IsYuvak + '&InFavourofId=' + votersData.InFavourofId + '&InOpposeOfId=' + votersData.InOpposeOfId +
+      '&AgegroupId=' + votersData.AgegroupId + '&FamilySize=' + votersData.FamilySize + '&ReligionId=' + votersData.ReligionId
+      + '&CastId=' + votersData.CastId + '&nopage=' + this.votersPaginationNo + '&ProfessionId=' + votersData.ProfessionId;
+
+    let url = '';
+   
+    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_VoterList_Filter_Voters_NoSubEle?' + obj : url = 'Web_Get_VoterList_Filter_Voters?' + obj
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.boothVoterListArray = res.data1;
+        this.votersTotal = res.data2[0].TotalCount;
+      } else {
+        this.boothVoterListArray = [];
+        this.spinner.hide();
       }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
 
-      onCheckFillData(event: any) {
-        event.target.checked == true ? this.fillDataId = 1 : this.fillDataId = 0; this.votersPaginationNo = 1;
+  onClickPagintionVoters(pageNo: any) {
+    this.votersPaginationNo = pageNo;
+    this.boothVoterList();
+  }
+
+  onKeyUpFilterVoters() {
+    this.subjectVoters.next();
+  }
+
+  searchVotersFilters(flag: any) {
+    this.subjectVoters
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchVoters.value;
+        this.votersPaginationNo = 1;
         this.boothVoterList();
       }
-    
-      onClickPagintionVoters(pageNo: any) {
-        this.votersPaginationNo = pageNo;
-        this.boothVoterList();
-      }
-    
-      onKeyUpFilterVoters() {
-        this.votersSubject.next();
-      }
-    
-      searchVotersFilters(flag: any) {
-        if (flag == 'true') {
-          if (this.searchVoters.value == "" || this.searchVoters == null) {
-            this.toastrService.error("Please search and try again");
-            return
-          }
-        }
-        this.votersSubject
-          .pipe(debounceTime(700))
-          .subscribe(() => {
-            this.searchVoters.value;
-            this.votersPaginationNo = 1;
-            this.boothVoterList();
-          }
-          );
-      }
+      );
+  }
   // ------------------------------------------  vooter list with filter end here ------------------------------------------//
 
   // ------------------------------------------  Family list with filter end here ------------------------------------------//
+
   boothFamilyList() {
     this.nullishGlobalFilterForm();
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
     let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
-    
+
      let obj = '&ClientId=' + topFilterFormData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + topFilterFormData.ElectionId + '&ConstituencyId=' + topFilterFormData.ConstituencyId + '&AssemblyId=' +
       AssemblyId  + '&BoothId=' + topFilterFormData.getBoothId + '&VillageId=' +
@@ -918,13 +922,14 @@ clearBoothVotersFilterForm(){
     })
   }
 
+
   onClickPagintionFamily(pageNo: any) {
     this.familyPaginationNo = pageNo;
     this.boothFamilyList();
   }
 
   onKeyUpFilterFamily() {
-    this.familySubject.next();
+    this.subjectFamily.next();
   }
 
   searchFamilyFilters(flag: any) {
@@ -934,7 +939,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.familySubject
+    this.subjectFamily
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchFamily.value;
@@ -944,8 +949,8 @@ clearBoothVotersFilterForm(){
       );
   }
 
-  familyDetails(ParentVoterId: any,UserId:any) {
-    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + this.filterForm.value.ClientId + '&AgentId=' + UserId  + '&Search=';
+  familyDetails(ParentVoterId: any) {
+    let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + this.filterForm.value.ClientId + '&Search=';
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_FamilyMember?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -1011,7 +1016,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterMigrated() {
-    this.migratedSubject.next();
+    this.subjectMigrated.next();
   }
 
   searchMigratedFilters(flag: any) {
@@ -1021,7 +1026,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.migratedSubject
+    this.subjectMigrated
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchMigrated.value;
@@ -1033,6 +1038,7 @@ clearBoothVotersFilterForm(){
   // ------------------------------------------  Migrated  list with filter end here  ------------------------------------------//
 
   // ------------------------------------------  Pending  list with filter start here  ------------------------------------------//
+
   boothPendingList() {
     this.spinner.show();
     this.nullishGlobalFilterForm();
@@ -1077,7 +1083,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterPending() {
-    this.pendingSubject.next();
+    this.subjectPending.next();
   }
 
   searchPendingFilters(flag: any) {
@@ -1087,7 +1093,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.pendingSubject
+    this.subjectPending
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchPending.value;
@@ -1100,6 +1106,7 @@ clearBoothVotersFilterForm(){
   // ------------------------------------------  Pending  list with filter start here  ------------------------------------------//
 
   // ------------------------------------------  Agent  list with filter start here  ------------------------------------------//
+
   boothAgentList() { 
     let topFilterFormData = this.filterForm.value;
     let AssemblyId = this.globalAssemblyId || 0;
@@ -1128,7 +1135,7 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterAgent() {
-    this.agentSubject.next();
+    this.subjectAgent.next();
   }
 
   searchAgentFilters(flag: any) {
@@ -1138,7 +1145,7 @@ clearBoothVotersFilterForm(){
         return
       }
     }
-    this.agentSubject.pipe(debounceTime(700)).subscribe(() => {
+    this.subjectAgent.pipe(debounceTime(700)).subscribe(() => {
       this.searchAgent.value;
       this.boothAgentList();
     });
@@ -1155,11 +1162,11 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterCrmSearch() {
-    this.crmSubject.next();
+    this.subjectCrm.next();
   }
 
   searchCrmFilter(flag: any) {
-    this.crmSubject
+    this.subjectCrm
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmFilterForm.value.SearchText
@@ -1221,6 +1228,19 @@ clearBoothVotersFilterForm(){
     })
   }
 
+  crmAndCrmHistorySearchClear(flag: any) {
+    if (flag == 'crm') {
+      this.crmFilterForm.controls["SearchText"].setValue('');
+    } else if (flag == 'crmHistory') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+    } else if (flag == 'crm1') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.getCrmTableData();
+    } else if (flag == 'crmHistory1') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.getCrmHistoryTableData();
+    }
+  }
 
   // ------------------------------------------  CRM with filter End here  ------------------------------------------//
 
@@ -1236,11 +1256,11 @@ clearBoothVotersFilterForm(){
   }
 
   onKeyUpFilterCrmHistorySearch() {
-    this.crmHistorySubject.next();
+    this.subjectCrmHistory.next();
   }
 
   searchCrmHistoryFilter(flag: any) {
-    this.crmHistorySubject
+    this.subjectCrmHistory
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.crmHistoryFilterForm.value.SearchText
@@ -1314,7 +1334,117 @@ clearBoothVotersFilterForm(){
     })
   }
 
+
   // ------------------------------------------  CRM History with filter End here  ------------------------------------------//
+
+
+  // ------------------------------------------  Expired filter start here  ------------------------------------------//
+
+  getExpiredList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchExpired.value + '&nopage=' + this.ExpiredPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_Expired_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.ExpiredListArray = res.data1;
+        this.ExpiredTotal = res.data2[0].TotalCount;
+      } else {
+        this.ExpiredListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionExpired(pageNo: any) {
+    this.ExpiredPaginationNo = pageNo;
+    this.getExpiredList();
+  }
+
+  onKeyUpFilterExpired() {
+    this.subjectExpired.next();
+  }
+
+  searchExpiredFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchExpired.value == "" || this.searchExpired == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subjectExpired
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchExpired.value;
+        this.ExpiredPaginationNo = 1;
+        this.getExpiredList();
+      }
+      );
+  }
+
+  // ------------------------------------------  Expired filter End here  ------------------------------------------//
+
+
+  // ------------------------------------------  Leaders filter start here  ------------------------------------------//
+
+  getLeadersList() {
+    let obj = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&BoothId=' + this.globalboothVoterData.BoothId +
+      '&AssemblyId=' + this.globalboothVoterData.AssemblyId + '&Search=' + this.searchLeaders.value + '&nopage=' + this.LeadersPaginationNo;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Client_Booth_ImpLeaders_VoterList?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.LeadersListArray = res.data1;
+        this.LeadersTotal = res.data2[0].TotalCount;
+      } else {
+        this.LeadersListArray = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  onClickPagintionLeaders(pageNo: any) {
+    this.LeadersPaginationNo = pageNo;
+    this.getLeadersList();
+  }
+
+  onKeyUpFilterLeaders() {
+    this.subjectLeaders.next();
+  }
+
+  searchLeadersFilters(flag: any) {
+    if (flag == 'true') {
+      if (this.searchLeaders.value == "" || this.searchLeaders == null) {
+        this.toastrService.error("Please search and try again");
+        return
+      }
+    }
+    this.subjectLeaders
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchLeaders.value;
+        this.LeadersPaginationNo = 1;
+        this.getLeadersList();
+      }
+      );
+  }
+
+  // ------------------------------------------  Leaders filter End here  ------------------------------------------//
+
 
   // ------------------------------------------  global uses start here   ------------------------------------------//
   clearFiltersBooth(flag: any) {
@@ -1333,12 +1463,13 @@ clearBoothVotersFilterForm(){
     } else if (flag == 'clearFiltersAgent') {
       this.searchAgent.setValue('');
       this.boothAgentList();
+    } else if (flag == 'clearFiltersExpired') {
+      this.searchExpired.setValue('');
+      this.getExpiredList();
+    } else if (flag == 'clearFiltersLeaders') {
+      this.searchLeaders.setValue('');
+      this.getLeadersList();
     }
-    //  else if (flag == 'village') {
-    //   this.selVillage.setValue(0);
-    //   this.ClientWiseBoothList();
-    //   this.boothDataHide =false;
-    // }
 
   }
 
@@ -1351,10 +1482,10 @@ clearBoothVotersFilterForm(){
   }
 
   defaultShowVoterList() {
-      let clickOnVoterTab: any = document.getElementById('pills-voters-tab');
-      clickOnVoterTab?.click();
+    // let defualt click voters tab 
+    let clickOnVoterTab: any = document.getElementById('pills-voters-tab');
+    clickOnVoterTab.click();
   }
-
   // ------------------------------------------  global uses end here   ------------------------------------------//
 
   //  ------------------------------------------   Add Agent modal function's start here  ------------------------------------------ //
@@ -1443,7 +1574,7 @@ clearBoothVotersFilterForm(){
       width: '99%'
     });
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(`Dialog result: ${result}`);
+      console.log(`Dialog result: ${result}`);
     });
   }
 
@@ -1451,22 +1582,80 @@ clearBoothVotersFilterForm(){
     const dialogRef = this.dialog.open(NameCorrectionDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(`Dialog result: ${result}`);
+      console.log(`Dialog result: ${result}`);
     });
   }
 
-    // ..................................   redirected Booth Analytics Code Start Here  ...........................//
+  // ..................................   redirected Booth Analytics Code Start Here  ...........................//
 
-    boothAnalyticsRedData(){
-      if(this.BoothAnalyticsObj.flag == 1){
-        this.getElectionName();
+  boothAnalyticsRedData() {
+    if (this.BoothAnalyticsObj.flag == 1) {
+      this.getElectionName();
+    }
+  }
+
+  // ..................................   redirected Booth Analytics Code End Here  ...........................//
+
+  // ..................................   Download Excel VoterList Code Start Here  ...........................//
+
+  getVoterListDownloadExcel() {
+
+    let formDataTopFilter = this.filterForm.value;
+    let villageId: any;
+    formDataTopFilter.village == null || formDataTopFilter.village == undefined || formDataTopFilter.village == '' ? villageId = 0 : villageId = formDataTopFilter.village;
+    let obj: any = 'UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + formDataTopFilter.ClientId + '&ElectionId=' + formDataTopFilter.ElectionId +
+      '&ConstituencyId=' + formDataTopFilter.ConstituencyId + '&AssemblyId=' + 0 + '+&IsSubElectionApplicable=' +
+      this.IsSubElectionApplicable + '&BoothId=' + formDataTopFilter.getBoothId + '&VillageId=' + villageId;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Client_VoterDetails_Download_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.spinner.hide();
+        this.VoterListDownloadExcel = res.data1;
+        this.downloadExcel();
+      } else {
+        this.toastrService.error("No Data Found");
+        this.VoterListDownloadExcel = [];
+        this.spinner.hide();
       }
-    }
-    
-    ngOnDestroy() {
-      localStorage.removeItem('BoothAnalyticsData');
-    }
-  
-     // ..................................   redirected Booth Analytics Code End Here  ...........................//
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
 
- }
+  
+  onSelectionObj(event:any,flag:any){ // Top Filter selection Value Name Get
+    if(flag == 'client'){
+      this.topClientName = event[0]?.data.Fullname;
+    } else if(flag == 'election'){
+      this.topElectionName = event[0]?.data.ElectionName;
+    } else if(flag == 'constituency'){
+      this.topConstituencyName = event[0]?.data.ConstituencyName;
+    }
+  }
+
+  downloadExcel() {
+    let keyValue = this.VoterListDownloadExcel.map((value: any) => Object.keys(value));
+    let keyData = keyValue[0]; // key Name
+
+    let ValueData = this.VoterListDownloadExcel.reduce(
+      (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)],
+      []
+    );// Value Name
+
+    let TopHeadingData = { ClientName:this.topClientName, ElectionName:this.topElectionName,
+      ConstituencyName:this.topConstituencyName, BoothName:this.showBoothName,
+      PageName:'VoterList',headingName:'VoterList Data'}
+
+    this.excelService.generateExcel(keyData, ValueData, TopHeadingData);
+  }
+
+
+
+  // ..................................  Download Excel VoterList Code End Here  ...........................//
+
+}
