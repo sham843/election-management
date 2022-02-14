@@ -783,7 +783,7 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
     } else if (flag == 'crmHistory') {
       this.crmHistoryFilterForm.controls["SearchText"].setValue('');
     } else if (flag == 'crm1') {
-      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.crmFilterForm.controls["SearchText"].setValue('');
       this.getCrmTableData();
     } else if (flag == 'crmHistory1') {
       this.crmHistoryFilterForm.controls["SearchText"].setValue('');
