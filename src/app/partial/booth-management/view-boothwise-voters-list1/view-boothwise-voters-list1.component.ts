@@ -364,10 +364,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     }
     this.dataNotFound = false;
     this.showBoothName = '';
-
-    // this.paginationNo = 1;
-    // this.getClientAgentWithBooths();
-  }
+ }
 
   nullishFilterForm() {
     let fromData = this.filterForm.value;
