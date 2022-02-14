@@ -120,29 +120,6 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row align-items-start">
-                              <!--  <div class="col-sm-3" id="boothlist">
-                             <div class="mb-3 form-container">
-                                    <ngx-select [allowClear]="true" [items]="villageDropdown"
-                                        (remove)="clearFiltersBooth('village')" [formControl]="selVillage"
-                                        (select)="ClientWiseBoothList();boothDataHide=false"
-                                        optionValueField="VillageId" optionTextField="VillageName"
-                                        placeholder="Select Village">
-                                    </ngx-select>
-                                </div> -->
-                                <!-- <div class="list-group">
-                                    <a class="list-group-item d-flex justify-content-between align-items-start"
-                                        aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"
-                                        (click)="this.searchVoters.setValue('');selBoothList(boothList); boothVoterList()"
-                                        [class.active]="boothList.BoothId == HighlightRow">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold">{{boothList?.BoothNickName}}</div>
-                                            <small *ngIf="boothList?.Villagename">{{boothList?.Villagename}}</small>
-                                        </div>
-                                        <span
-                                            class="badge bg-light text-dark rounded-pill">{{boothList?.VoterCount}}</span>
-                                    </a>
-                                </div>
-                            </div> -->
                             <div class="col-sm-12" id="boothdetails" *ngIf="boothDataHide">
                                 <div class="card shadow-none border">
                                     <div class="card-header border-bottom">
