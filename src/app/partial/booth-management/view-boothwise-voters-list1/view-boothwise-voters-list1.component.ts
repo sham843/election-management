@@ -316,7 +316,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     })
   }
 
-
   // ------------------------------------------filter data all methodes start here ------------------------------ //
 
   clearTopFilter(flag: any) {
