@@ -22,18 +22,17 @@ export class ExcelService {
     // Add Row and formatting
 
     worksheet.addRow([]);
-    worksheet.getCell('E2').value = TopHeadingData.headingName
+    worksheet.getCell('E2').value = TopHeadingData.ElectionName
     // worksheet.getRow(1).getCell(5).font = {color: {argb: "004e47cc"}};
     worksheet.getCell('E2').font = {
       name: 'Corbel', family: 4, size: 20, underline: 'double', bold: true, color: { argb: "004e47cc" },
     };
 
     worksheet.addRow([]);
-    worksheet.getCell('C4').value = 'Client Name:' + TopHeadingData.ClientName + ' ,'
-      + 'Election Name:' + TopHeadingData.ElectionName + ' ,' + 'Constituency Name:' + TopHeadingData.ConstituencyName
+    worksheet.getCell('D4').value = 'Constituency Name:' + TopHeadingData.ConstituencyName
       + ' ,' + 'Booth Name:' + TopHeadingData.BoothName;
 
-    worksheet.getCell('C4').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
+    worksheet.getCell('D4').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
 
     // worksheet.mergeCells('A1:D2');
 

@@ -19,7 +19,11 @@ export class CallAPIService {
       
       //development server base url 
        case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
+
+      // MicroServices Api
+      case 'electionMicroServiceForWeb': return 'http://electionclientapp.erpguru.in/'; break;
       default: return ''; break;
+
     }
   }
   private httpObj: any = {

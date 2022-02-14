@@ -1234,7 +1234,7 @@ nullishDefaultFilterForm() {
     } else if (flag == 'crmHistory') {
       this.crmHistoryFilterForm.controls["SearchText"].setValue('');
     } else if (flag == 'crm1') {
-      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.crmFilterForm.controls["SearchText"].setValue('');
       this.getCrmTableData();
     } else if (flag == 'crmHistory1') {
       this.crmHistoryFilterForm.controls["SearchText"].setValue('');
@@ -1646,9 +1646,9 @@ nullishDefaultFilterForm() {
       []
     );// Value Name
 
-    let TopHeadingData = { ClientName:this.topClientName, ElectionName:this.topElectionName,
+    let TopHeadingData = {ElectionName:this.topElectionName,
       ConstituencyName:this.topConstituencyName, BoothName:this.showBoothName,
-      PageName:'VoterList',headingName:'VoterList Data'}
+      PageName:'VoterList'}
 
     this.excelService.generateExcel(keyData, ValueData, TopHeadingData);
   }

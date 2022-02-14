@@ -1186,9 +1186,9 @@ export class ViewBoothwiseVotersListComponent implements OnInit {
       []
     );// Value Name
 
-    let TopHeadingData = { ClientName:this.topClientName, ElectionName:this.topElectionName,
+    let TopHeadingData = {ElectionName:this.topElectionName,
       ConstituencyName:this.topConstituencyName, BoothName:this.showBoothName,
-      PageName:'VoterList',headingName:'VoterList Data'}
+      PageName:'VoterList'}
 
     this.excelService.generateExcel(keyData, ValueData, TopHeadingData);
   }
