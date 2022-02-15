@@ -21,7 +21,7 @@ export class CallAPIService {
        case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
 
       // MicroServices Api
-      case 'electionMicroServiceForWeb': return 'http://electionclientapp.erpguru.in/'; break;
+      case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
       default: return ''; break;
 
     }
