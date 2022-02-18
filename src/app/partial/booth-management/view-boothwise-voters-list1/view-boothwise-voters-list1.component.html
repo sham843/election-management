@@ -325,8 +325,7 @@
                                                                     class="text-muted">{{boothVoterList?.partyShortCode}}</small>
                                                                 <small class="text-muted"
                                                                     *ngIf="boothVoterList?.leader == 'yes'">
-                                                                    {{boothVoterList?.leaderImportance}} <i
-                                                                        class="fas fa-star"></i></small>
+                                                                    {{boothVoterList?.leaderImportance}} <i class='fa fa-star' style='color: #f3da35'></i></small>
                                                             </td>
                                                             <td>
                                                                 <div *ngIf="boothVoterList?.gender == 'F'">Female</div>
@@ -417,7 +416,7 @@
                                                                     </div>
                                                                     <div class="col-sm-2">
                                                                         <a (click)="redirectToVoterPrfile(boothFamilyList)"
-                                                                            class="text-main">{{boothFamilyList?.englishName}}</a>
+                                                                            class="text-main">{{boothFamilyList?.englishName}}({{boothFamilyList?.familySize}})</a>
                                                                     </div>
                                                                     <div class="col-sm-1">
                                                                         <div *ngIf="boothFamilyList?.gender == 'F'">
@@ -571,7 +570,7 @@
                                                             <th>Sr. No.</th>
                                                             <th>Agents Name</th>
                                                             <th>Contact No</th>
-                                                            <th>Booth Name</th>
+                                                            <th *ngIf="!topBoothName">Booth Name</th>
                                                             <th>Area</th>
                                                             <th>Voters</th>
                                                             <th>Filled</th>
@@ -605,7 +604,7 @@
                                                                 </div>
                                                                 <div *ngIf="!agentList?.mobileNo">-</div>
                                                             </td>
-                                                            <td>{{agentList?.boothNickName}}</td>
+                                                            <td *ngIf="!topBoothName">{{agentList?.boothNickName}}</td>
                                                             <td>
                                                                 <div *ngIf="agentList?.area">{{agentList?.area}}</div>
                                                                 <div *ngIf="!agentList?.area">-</div>
@@ -960,7 +959,7 @@
                     </div>
                     <div class="col-sm-6 text-end">
                         <button type="button" class="btn btn-main btn-sm" data-bs-dismiss="offcanvas"
-                            (click)="globalFilterShowData()">Filter Data</button>
+                            (click)="globalFilterShowData()">Apply</button>
                     </div>
                 </div>
             </div>

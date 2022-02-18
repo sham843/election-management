@@ -8,7 +8,6 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
-import { NameCorrectionDialogComponent } from '../../dialogs/name-correction-dialog/name-correction-dialog.component';
 import { VoterCallEntriesComponent } from '../../dialogs/voter-call-entries/voter-call-entries.component';
 import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
@@ -67,8 +66,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   genderArray = [{ id: 1, name: 'Male' }, { id: 2, name: 'Female' }, { id: 3, name: 'Other' }];
   mobileNoAvailableArray = [{ id: 1, name: 'Yes' }, { id: 2, name: 'No' }];
   bussinessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
-  ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '1.5 Star' }, { id: 3, name: '2 Star' }, { id: 4, name: '2.5 Star' }, { id: 5, name: '3 Star' },
-  { id: 6, name: '3.5 Star' }, { id: 7, name: '4 Star' }, { id: 8, name: '4.5 Star' }, { id: 9, name: '5 Star' }];
+  ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '2 Star' }, { id: 3, name: '3 Star' }, { id: 4, name: '4 Star' }, { id: 5, name: '5 Star' }];
   yuvakArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   ageArray = [{ id: 1, name: '18-40' }, { id: 2, name: '40-60' }, { id: 3, name: '60 and Above' }];
   familySizeArray = [{ id: 1, name: '1-5' }, { id: 2, name: '5-10' }, { id: 3, name: '10 and Above' }];
