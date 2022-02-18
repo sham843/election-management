@@ -76,8 +76,8 @@ export class ForwardActivitiesComponent implements OnInit {
     this.forwardActivitiForm = this.fb.group({
       Id: [0],
       CreatedBy:[this.commonService.loggedInUserId()],
-      activityTitle: ['', [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
-      activityBody: ['', [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
+      activityTitle: ['', [Validators.required, Validators.pattern(/^[^\s]+(\s+[^\s]+)*$/)]],
+      activityBody: ['', [Validators.required, Validators.pattern(/^[^\s]+(\s+[^\s]+)*$/)]],
       hashtags_Activity: [''],
       IsChangeImage: [0],
       NewsType:[''],

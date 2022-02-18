@@ -14,13 +14,18 @@ export class CallAPIService {
   tokanExpiredFlag: boolean = false;
   getBaseurl(url: string) {
     switch (url) {
-      //Live server base url 
-     //case 'electionServiceForWeb': return 'http://electionwservice.erpguru.in/service.asmx/'; 
-      
-      //development server base url 
+    
+  // Live server base url 
+    //  case 'electionServiceForWeb': return 'http://electionwservice.erpguru.in/service.asmx/'; 
+
+  // live server base url  MicroServices
+      // case 'electionMicroServiceForWeb': return 'http://electionclientapp.erpguru.in/ClientMasterWebApi/'; break;
+      // default: return ''; break;
+
+  // development server base url 
        case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
 
-      // MicroServices Api
+  // development server base url MicroServices
       case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
       default: return ''; break;
 

@@ -16,7 +16,7 @@
                         <form [formGroup]="forwardActivitiForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
                             <div class="form-container">
                                 <div class="mb-2">
-                                    <label for="txtActivityTitle" class="form-label">Activity Title</label>
+                                    <label for="txtActivityTitle" class="form-label required-field">Activity Title</label>
                                     <input type="text" class="form-control" formControlName="activityTitle" id="txtActivityTitle" placeholder="Activity Title">
                                     <div *ngIf="submitted && f.activityTitle.errors" class="invalid-feedback">
                                         <div *ngIf="f.activityTitle.errors.required">Activity Title is required</div>
@@ -25,7 +25,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="txtBody" class="form-label">Activity Body</label>
+                                    <label for="txtBody" class="form-label required-field">Activity Body</label>
                                     <textarea type="text" rows="6" formControlName="activityBody" class="form-control" id="txtBody" placeholder="Activity Body"></textarea>
                                     <div *ngIf="submitted && f.activityBody.errors" class="invalid-feedback">
                                         <div *ngIf="f.activityBody.errors.required">Activity Body is required</div>
