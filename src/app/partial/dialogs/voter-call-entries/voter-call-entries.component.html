@@ -234,15 +234,21 @@
                                             placeholder="dd/mM/yyyy hh:mm:ss">
                                     </div>
                                     <owl-date-time #dt3></owl-date-time>
+                                    <div *ngIf="submitted && f.FollowupDate.errors" class="invalid-feedback">
+                                        <div *ngIf="f.FollowupDate.errors.required">Followup Date is required</div>
+                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-4">
-                                    <label class="form-label">Feedback Type</label>
+                                    <label class="form-label required-field">Feedback Type</label>
                                     <ngx-select [allowClear]="true" [items]="feedbackTypeArray"
                                         formControlName="FeedBackType" optionValueField="id" optionTextField="name"
                                         placeholder="Select Feedback Type">
                                     </ngx-select>
+                                    <div *ngIf="submitted && f.FeedBackType.errors" class="invalid-feedback">
+                                        <div *ngIf="f.FeedBackType.errors.required">Feedback is required</div>
+                                     </div>
                                 </div>
 
                             </div>

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -59,9 +59,9 @@ export class VoterCallEntriesComponent implements OnInit {
   defaultFeedbackForm(){
     this.enterNewFeedbackForm = this.fb.group({
       Id:[0],	
-      FeedBackType:	[''],
+      FeedBackType:	['',Validators.required],
       Description:[''],	
-      FollowupDate:[''],
+      FollowupDate:['',Validators.required],
       NotToCall:[0],
     })
   }
@@ -95,12 +95,10 @@ export class VoterCallEntriesComponent implements OnInit {
   
  onSubmitFeedbackForm(){
      this.submitted = true;
-     let data = this.enterNewFeedbackForm.value;
-     if (data.FeedBackType == '' && data.Description == '' && data.FollowupDate == '') {
-       this.toastrService.error("Please Enter Field");
-       this.spinner.hide();
-       return;
-     } else {
+     if (this.enterNewFeedbackForm.invalid) {
+      this.spinner.hide();
+      return;
+    } else {
        this.spinner.show();
        let data = this.enterNewFeedbackForm.value;
        data.NotToCall == true ? data.NotToCall = 1 : data.NotToCall = 0 ;
