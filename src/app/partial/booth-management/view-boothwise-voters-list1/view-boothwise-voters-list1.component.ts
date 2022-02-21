@@ -1012,6 +1012,8 @@ crmAndCrmHistorySearchClear(flag: any) {
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
     let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let followupStatusIdCheckNull = crmHistoryFilterData.Followupstatusid == null ? 0 : crmHistoryFilterData.Followupstatusid;
+    let feedbackStatusIdCheckNull = crmHistoryFilterData.feedbackstatus == null ? 0 : crmHistoryFilterData.feedbackstatus;
     
     let obj = {
       "agentId": this.commonService.loggedInUserId(),
@@ -1038,8 +1040,8 @@ crmAndCrmHistorySearchClear(flag: any) {
       "isFilled": this.fillDataId,
       "pageno": this.crmHistoryPaginationNo,
       "pagesize": this.crmHistoryPageSize,
-      "followupStatusId": crmHistoryFilterData.Followupstatusid,
-      "feedbackStatusId": crmHistoryFilterData.feedbackstatus,
+      "followupStatusId": followupStatusIdCheckNull,
+      "feedbackStatusId": feedbackStatusIdCheckNull,
       "follwupdate": crmHistoryFilterData.date,
     }
     this.callAPIService.setHttp('post', 'VoterList/GetVoterListCRMHistory', false, obj, false, 'electionMicroServiceForWeb');
