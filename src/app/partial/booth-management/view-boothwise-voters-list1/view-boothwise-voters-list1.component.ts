@@ -893,6 +893,7 @@ getCrmTableData() {
   let votersData = this.globalFilterForm.value;
   let topFilterFormData = this.filterForm.value;
   let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+  let followupStatusIdCheckNull = this.crmFilterForm.value.Followupstatusid == null ? 0 : this.crmFilterForm.value.Followupstatusid;
   
   let obj = {
     "agentId": this.commonService.loggedInUserId(),
@@ -919,7 +920,7 @@ getCrmTableData() {
     "isFilled": this.fillDataId,
     "pageno": this.crmPaginationNo,
     "pagesize": this.votersPageSize,
-    "followupStatusId": this.crmFilterForm.value.Followupstatusid
+    "followupStatusId": followupStatusIdCheckNull
   }
 
   this.callAPIService.setHttp('post', 'VoterList/GetVoterListCRM', false, obj, false, 'electionMicroServiceForWeb');
