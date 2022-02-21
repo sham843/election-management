@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-sm">
                         <ngx-select [allowClear]="true" [items]="villageDropdown" formControlName="village"
-                            optionValueField="villageId"
+                            optionValueField="villageId" 
                             (select)="this.filterForm.value.getBoothId = 0;boothWiseSummaryCount(); ClientWiseBoothList();clearBoothVotersFilterForm()"
                             (remove)="clearTopFilter('village')" optionTextField="villageName"
                             [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
