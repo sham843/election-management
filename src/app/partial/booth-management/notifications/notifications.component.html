@@ -244,7 +244,8 @@
                                             class="btn btn-light text-primary btn-sm me-1"
                                             (click)="pushMotificationStatus(notificationScope?.Id, notificationScope?.ScopeId)">
                                             <i class="fas fa-paper-plane"></i></button>
-                                        <button type="button" title="Edit Notification"
+                                        <button type="button" *ngIf="notificationScope?.IsPushed
+                                        != 1" title="Edit Notification"
                                             class="btn btn-light text-edit me-1 btn-sm"
                                             (click)="editNotification(notificationScope)"><i
                                                 class="fas fa-edit"></i></button>
