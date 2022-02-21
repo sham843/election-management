@@ -30,6 +30,7 @@ export class VoterCallEntriesComponent implements OnInit {
   VPCommentData: any;
   posNegativeInfData: any;
   Date:any = new Date();
+  max = new Date();
 
 
   constructor(

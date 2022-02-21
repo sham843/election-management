@@ -254,7 +254,8 @@
                                             </button>
                                         </li>
                                        
-                                        <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'CRMHistoryFlag'; fillDataId = 2; crmHistoryPaginationNo = 1; crmAndCrmHistorySearchClear('crmHistory'); getCrmHistoryTableData();">
+                                        <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'CRMHistoryFlag'; fillDataId = 2; crmHistoryPaginationNo = 1; crmAndCrmHistorySearchClear('crmHistory');
+                                        deafultCrmHistoryFilterForm(); getCrmHistoryTableData();">
                                             <button class="nav-link" id="pills-crm-history-tab"
                                                 data-bs-toggle="pill" data-bs-target="#pills-crm-history"
                                                 type="button" role="tab" aria-controls="pills-crm-history"
@@ -679,7 +680,7 @@
                                                     <tbody>
                                                         <tr *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
                                                             <td >{{crmTableList.voterNo}}</td>
-                                                            <td [ngClass]="{'text-main' : crmTableList.followupstatus == 'Todays Followup','text-success' : crmTableList.followupstatus == 'Upcomming Followup','text-danger' : crmTableList.followupstatus == 'Not To Call','text-info' : crmTableList.followupstatus == 'New', 'text-dark' : crmTableList.followupstatus == 'Missed Followup'}">{{crmTableList.marathiName}}</td>
+                                                            <td [ngClass]="{'text-main' : crmTableList.followupstatus == 'Todays Followup','text-success' : crmTableList.followupstatus == 'Upcomming Followup','text-danger' : crmTableList.followupstatus == 'Not To Call','text-info' : crmTableList.followupstatus == 'New', 'text-dark' : crmTableList.followupstatus == 'Missed Followup'}">{{crmTableList.englishName}}</td>
                                                             <td>{{crmTableList.mobileNo1}}</td>
                                                             <td>{{crmTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
                                                             <td>{{crmTableList.areaName}}</td>
@@ -780,7 +781,7 @@
                                       <tbody>
                                           <tr *ngFor="let CrmHistoryTableList of getCrmHistoryTableList | paginate: {id: 'crmHistoryPagination', itemsPerPage: 10, currentPage: crmHistoryPaginationNo, totalItems:getCrmHistoryTableListrTotal};">
                                               <td>{{CrmHistoryTableList.voterNo}}</td>
-                                              <td [ngClass]="{'text-main' : CrmHistoryTableList.followupstatus == 'Todays Followup','text-success' : CrmHistoryTableList.followupstatus == 'Upcomming Followup','text-danger' : CrmHistoryTableList.followupstatus == 'Not To Call','text-info' : CrmHistoryTableList.followupstatus == 'New', 'text-dark' : CrmHistoryTableList.followupstatus == 'Missed Followup'}">{{CrmHistoryTableList.marathiName}}</td>
+                                              <td [ngClass]="{'text-main' : CrmHistoryTableList.followupstatus == 'Todays Followup','text-success' : CrmHistoryTableList.followupstatus == 'Upcomming Followup','text-danger' : CrmHistoryTableList.followupstatus == 'Not To Call','text-info' : CrmHistoryTableList.followupstatus == 'New', 'text-dark' : CrmHistoryTableList.followupstatus == 'Missed Followup'}">{{CrmHistoryTableList.englishName}}</td>
                                               <td>{{CrmHistoryTableList.mobileNo1}}</td>
                                               <td>{{CrmHistoryTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
                                               <td>{{CrmHistoryTableList.followupDate? CrmHistoryTableList.followupDate : '-'}}</td>

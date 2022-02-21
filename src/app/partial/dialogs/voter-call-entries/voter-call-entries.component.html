@@ -228,7 +228,7 @@
                                     <label class="form-label">Followup Date-Time</label>
                                     <div class="input-group">
 
-                                        <input [owlDateTime]="dt3" formControlName="FollowupDate"
+                                        <input [owlDateTime]="dt3" formControlName="FollowupDate" [max]="max"
                                             (dateTimeChange)="voterDateRangeSelect(this.enterNewFeedbackForm.value.FollowupDate)"
                                             class="form-control" [owlDateTimeTrigger]="dt3"
                                             placeholder="dd/mM/yyyy hh:mm:ss">

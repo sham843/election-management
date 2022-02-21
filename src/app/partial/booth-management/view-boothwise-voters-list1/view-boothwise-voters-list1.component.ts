@@ -853,7 +853,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
 deafultCrmFilterForm() {
   this.crmFilterForm = this.fb.group({
-    Followupstatusid: [0],
+    Followupstatusid: [0], 
     SearchText: [''],
   })
 }
