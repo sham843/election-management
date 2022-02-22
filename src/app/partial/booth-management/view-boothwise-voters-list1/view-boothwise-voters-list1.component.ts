@@ -83,22 +83,24 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   searchAgent = new FormControl('');
   boothFamilyDetailsArray: any;
 
- // crm tab var start 
- followupStatusDropDownData = [{ id: 1, name: 'Todays Followups', class: 'text-main' }, { id: 2, name: 'Upcoming Followups', class: 'text-success' }, { id: 3, name: 'Missed Followups', class: 'text-dark' }, { id: 4, name: 'Not To Call', class: 'text-danger' }, { id: 5, name: 'New', class: 'text-info' }]
+  // crm tab var start 
+  followupStatusDropDownData = [{ id: 1, name: 'Todays Followups', class: 'text-main' }, { id: 2, name: 'Upcoming Followups', class: 'text-success' }, { id: 3, name: 'Missed Followups', class: 'text-dark' }, { id: 4, name: 'Not To Call', class: 'text-danger' }, { id: 5, name: 'New', class: 'text-info' }]
 
- crmFilterForm!: FormGroup;
- getCrmTableListrTotal: any;
- getCrmTableList: any;
- crmPaginationNo: number = 1;
- crmPageSize: number = 10;
+  crmFilterForm!: FormGroup;
+  getCrmTableListrTotal: any;
+  getCrmTableList: any;
+  crmPaginationNo: number = 1;
+  crmPageSize: number = 10;
 
- crmHistoryFilterForm!: FormGroup;
- getCrmHistoryTableListrTotal: any;
- getCrmHistoryTableList: any;
- crmHistoryPaginationNo: number = 1;
- crmHistoryPageSize: number = 10;
- feedbackTypeArray = [{ id: 1, name: 'Positive' }, { id: 2, name: 'Negitive' }, { id: 3, name: 'Neutral' }];
- defaultCloseBtn: boolean = false;
+  crmHistoryFilterForm!: FormGroup;
+  getCrmHistoryTableListrTotal: any;
+  getCrmHistoryTableList: any;
+  crmHistoryPaginationNo: number = 1;
+  crmHistoryPageSize: number = 10;
+  feedbackTypeArray = [{ id: 1, name: 'Positive' }, { id: 2, name: 'Negitive' }, { id: 3, name: 'Neutral' }];
+  defaultCloseBtn: boolean = false;
+
+  offCanvasSidebarCheck: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -135,6 +137,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     this.searchCrmHistoryFilter('false');
 
     this.globalFilterDataForm();
+    this.SideBarOutsideClick();
   }
 
   defaultMainFilterForm() {
@@ -198,7 +201,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.constituencyNameArray = res.responseData;
         // this.dataNotFound = true;
-        this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].constituencyId })), this.dataNotFound = true, this.getVillageData(),this.clearBoothVotersFilterForm()) : '';
+        this.constituencyNameArray.length == 1 ? ((this.filterForm.patchValue({ ConstituencyId: this.constituencyNameArray[0].constituencyId })), this.dataNotFound = true, this.getVillageData(), this.clearBoothVotersFilterForm()) : '';
       } else {
         this.constituencyNameArray = [];
         this.spinner.hide();
@@ -374,6 +377,18 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   // ------------------------------------------ Global Main filter start here  ------------------------------------------//
 
+
+  SideBarOutsideClick() { // SideBar Outside Click then Call Function
+    var myOffcanvas: any = document.getElementById('offcanvasRight')
+    myOffcanvas.addEventListener('hidden.bs.offcanvas', () => {
+      if (this.offCanvasSidebarCheck == false) {
+        this.clearBoothVotersFilterForm();
+        this.boothVoterList();
+      }else{
+        this.offCanvasSidebarCheck = false ;
+      }
+    })
+  }
 
   globalFilterDataForm() {
     this.globalFilterForm = this.fb.group({
@@ -636,10 +651,10 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       //   this.votersPaginationNo = 1;
       //   this.boothVoterList();
       // }
-      else if(this.filterSidebarFlag =='CRMFlag'){
+      else if (this.filterSidebarFlag == 'CRMFlag') {
         this.crmPaginationNo = 1;
         this.getCrmTableData();
-      } else if(this.filterSidebarFlag =='CRMHistoryFlag'){
+      } else if (this.filterSidebarFlag == 'CRMHistoryFlag') {
         this.crmHistoryPaginationNo = 1;
         this.getCrmHistoryTableData();
       }
@@ -667,9 +682,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     // } else if (this.filterSidebarFlag == 'PendingFlag') {
     //   this.boothVoterList();
     // }
-     else if(this.filterSidebarFlag =='CRMFlag'){
+    else if (this.filterSidebarFlag == 'CRMFlag') {
       this.getCrmTableData();
-    } else if(this.filterSidebarFlag =='CRMHistoryFlag'){
+    } else if (this.filterSidebarFlag == 'CRMHistoryFlag') {
       this.getCrmHistoryTableData();
     }
   }
@@ -706,10 +721,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   }
 
   // ------------------------------------------ Global Main filter End here  ------------------------------------------//
-
-
-
-
 
 
   // ------------------------------------------ vooter list with filter start here  ------------------------------------------//
@@ -756,7 +767,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.boothVoterListArray = res.responseData.responseData1;
         this.votersTotal = res.responseData.responseData2.totalPages * this.votersPageSize;
-      
+
       } else {
         this.boothVoterListArray = [];
         this.spinner.hide();
@@ -791,7 +802,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   // ------------------------------------------  Family Details Start here ------------------------------------------//
 
-  familyDetails(ParentVoterId: any,AgentId:any) {
+  familyDetails(ParentVoterId: any, AgentId: any) {
     let obj = 'ParentVoterId=' + ParentVoterId + '&ClientId=' + this.filterForm.value.ClientId + '&AgentId=' + AgentId;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'VoterList/GetFamilyMember?' + obj, false, false, false, 'electionMicroServiceForWeb');
@@ -805,7 +816,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
   // ------------------------------------------  Family Details end here ------------------------------------------//
@@ -833,7 +844,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
@@ -849,111 +860,111 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   }
   // ------------------------------------------  Agent  list with filter End here  ------------------------------------------//
 
-// ------------------------------------------  CRM with filter start here  ------------------------------------------//
+  // ------------------------------------------  CRM with filter start here  ------------------------------------------//
 
-deafultCrmFilterForm() {
-  this.crmFilterForm = this.fb.group({
-    Followupstatusid: [0], 
-    SearchText: [''],
-  })
-}
-
-onKeyUpFilterCrmSearch() {
-  this.subjectCrm.next();
-}
-
-searchCrmFilter(flag: any) {
-  this.subjectCrm
-    .pipe(debounceTime(700))
-    .subscribe(() => {
-      this.crmFilterForm.value.SearchText
-      this.crmPaginationNo = 1;
-      this.getCrmTableData();
-    }
-    );
-}
-
-clearCrmFilter(flag: any) {
-  if (flag == 'Followupstatus') {
-    this.crmFilterForm.controls["Followupstatusid"].setValue(0);
-  }
-  this.crmPaginationNo = 1;
-  this.getCrmTableData();
-}
-
-onClickPagintionCrm(pageNo: any) {
-  this.crmPaginationNo = pageNo;
-  this.getCrmTableData();
-}
-
-getCrmTableData() {
-  this.spinner.show();
-  this.nullishFilterForm();
-  this.nullishGlobalFilterForm();
-  let votersData = this.globalFilterForm.value;
-  let topFilterFormData = this.filterForm.value;
-  let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
-  let followupStatusIdCheckNull = this.crmFilterForm.value.Followupstatusid == null ? 0 : this.crmFilterForm.value.Followupstatusid;
-  
-  let obj = {
-    "agentId": this.commonService.loggedInUserId(),
-    "clientId": Number(topFilterFormData.ClientId),
-    "electionId": topFilterFormData.ElectionId,
-    "constituencyId": topFilterFormData.ConstituencyId,
-    "villageId": topFilterFormData.village,
-    "boothId": topFilterFormData.getBoothId,
-    "areaId": votersData.AreaId,
-    "search": this.crmFilterForm.value.SearchText,
-    "gender": genderData,
-    "haveMobileNo": votersData.HaveMobileNo,
-    "haveBussiness": votersData.HaveBussiness,
-    "partyId": votersData.PartyId,
-    "localLeaderId": votersData.LocalLeaderId,
-    "leadeImp": votersData.LeadeImp,
-    "isYuvak": votersData.IsYuvak,
-    "inFavourofId": votersData.InFavourofId,
-    "inOpposeOfId": votersData.InOpposeOfId,
-    "agegroupId": votersData.AgegroupId,
-    "familySize": votersData.FamilySize,
-    "religionId": votersData.ReligionId,
-    "castId": votersData.CastId,
-    "isFilled": this.fillDataId,
-    "pageno": this.crmPaginationNo,
-    "pagesize": this.votersPageSize,
-    "followupStatusId": followupStatusIdCheckNull
+  deafultCrmFilterForm() {
+    this.crmFilterForm = this.fb.group({
+      Followupstatusid: [0],
+      SearchText: [''],
+    })
   }
 
-  this.callAPIService.setHttp('post', 'VoterList/GetVoterListCRM', false, obj, false, 'electionMicroServiceForWeb');
-  this.callAPIService.getHttp().subscribe((res: any) => {
-    if (res.responseData != null && res.statusCode == "200") {
-      this.spinner.hide();
-      this.getCrmTableList = res.responseData.responseData1;
-      this.getCrmTableListrTotal = res.responseData.responseData2.totalPages * this.crmPageSize;
-    } else {
-      this.getCrmTableList = [];
-      this.spinner.hide();
-    }
-  }, (error: any) => {
-    this.spinner.hide();
-      this.router.navigate(['../500'], { relativeTo: this.route });
-  })
-}
+  onKeyUpFilterCrmSearch() {
+    this.subjectCrm.next();
+  }
 
-crmAndCrmHistorySearchClear(flag: any) {
-  if (flag == 'crm') {
-    this.crmFilterForm.controls["SearchText"].setValue('');
-  } else if (flag == 'crmHistory') {
-    this.crmHistoryFilterForm.controls["SearchText"].setValue('');
-  } else if (flag == 'crm1') {
-    this.crmFilterForm.controls["SearchText"].setValue('');
+  searchCrmFilter(flag: any) {
+    this.subjectCrm
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.crmFilterForm.value.SearchText
+        this.crmPaginationNo = 1;
+        this.getCrmTableData();
+      }
+      );
+  }
+
+  clearCrmFilter(flag: any) {
+    if (flag == 'Followupstatus') {
+      this.crmFilterForm.controls["Followupstatusid"].setValue(0);
+    }
+    this.crmPaginationNo = 1;
     this.getCrmTableData();
-  } else if (flag == 'crmHistory1') {
-    this.crmHistoryFilterForm.controls["SearchText"].setValue('');
-    this.getCrmHistoryTableData();
   }
-}
 
-// ------------------------------------------  CRM with filter End here  ------------------------------------------//
+  onClickPagintionCrm(pageNo: any) {
+    this.crmPaginationNo = pageNo;
+    this.getCrmTableData();
+  }
+
+  getCrmTableData() {
+    this.spinner.show();
+    this.nullishFilterForm();
+    this.nullishGlobalFilterForm();
+    let votersData = this.globalFilterForm.value;
+    let topFilterFormData = this.filterForm.value;
+    let genderData = votersData.Gender == 1 ? 'M' : votersData.Gender == 2 ? 'F' : votersData.Gender == 3 ? 'T' : '';
+    let followupStatusIdCheckNull = this.crmFilterForm.value.Followupstatusid == null ? 0 : this.crmFilterForm.value.Followupstatusid;
+
+    let obj = {
+      "agentId": this.commonService.loggedInUserId(),
+      "clientId": Number(topFilterFormData.ClientId),
+      "electionId": topFilterFormData.ElectionId,
+      "constituencyId": topFilterFormData.ConstituencyId,
+      "villageId": topFilterFormData.village,
+      "boothId": topFilterFormData.getBoothId,
+      "areaId": votersData.AreaId,
+      "search": this.crmFilterForm.value.SearchText,
+      "gender": genderData,
+      "haveMobileNo": votersData.HaveMobileNo,
+      "haveBussiness": votersData.HaveBussiness,
+      "partyId": votersData.PartyId,
+      "localLeaderId": votersData.LocalLeaderId,
+      "leadeImp": votersData.LeadeImp,
+      "isYuvak": votersData.IsYuvak,
+      "inFavourofId": votersData.InFavourofId,
+      "inOpposeOfId": votersData.InOpposeOfId,
+      "agegroupId": votersData.AgegroupId,
+      "familySize": votersData.FamilySize,
+      "religionId": votersData.ReligionId,
+      "castId": votersData.CastId,
+      "isFilled": this.fillDataId,
+      "pageno": this.crmPaginationNo,
+      "pagesize": this.votersPageSize,
+      "followupStatusId": followupStatusIdCheckNull
+    }
+
+    this.callAPIService.setHttp('post', 'VoterList/GetVoterListCRM', false, obj, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.getCrmTableList = res.responseData.responseData1;
+        this.getCrmTableListrTotal = res.responseData.responseData2.totalPages * this.crmPageSize;
+      } else {
+        this.getCrmTableList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  crmAndCrmHistorySearchClear(flag: any) {
+    if (flag == 'crm') {
+      this.crmFilterForm.controls["SearchText"].setValue('');
+    } else if (flag == 'crmHistory') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+    } else if (flag == 'crm1') {
+      this.crmFilterForm.controls["SearchText"].setValue('');
+      this.getCrmTableData();
+    } else if (flag == 'crmHistory1') {
+      this.crmHistoryFilterForm.controls["SearchText"].setValue('');
+      this.getCrmHistoryTableData();
+    }
+  }
+
+  // ------------------------------------------  CRM with filter End here  ------------------------------------------//
 
   // ------------------------------------------  CRM History with filter start here  ------------------------------------------//
 
@@ -1012,10 +1023,10 @@ crmAndCrmHistorySearchClear(flag: any) {
     crmHistoryFilterData.date = crmHistoryFilterData.date ? this.datePipe.transform(crmHistoryFilterData.date, 'yyyy/MM/dd') : '';
     let votersData = this.globalFilterForm.value;
     let topFilterFormData = this.filterForm.value;
-    let genderData = votersData.Gender == 1 ?'M' : votersData.Gender == 2 ?'F' : votersData.Gender == 3 ?'T' : '' ;
+    let genderData = votersData.Gender == 1 ? 'M' : votersData.Gender == 2 ? 'F' : votersData.Gender == 3 ? 'T' : '';
     let followupStatusIdCheckNull = crmHistoryFilterData.Followupstatusid == null ? 0 : crmHistoryFilterData.Followupstatusid;
     let feedbackStatusIdCheckNull = crmHistoryFilterData.feedbackstatus == null ? 0 : crmHistoryFilterData.feedbackstatus;
-    
+
     let obj = {
       "agentId": this.commonService.loggedInUserId(),
       "clientId": Number(topFilterFormData.ClientId),
@@ -1048,16 +1059,16 @@ crmAndCrmHistorySearchClear(flag: any) {
     this.callAPIService.setHttp('post', 'VoterList/GetVoterListCRMHistory', false, obj, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
-       this.spinner.hide();
-       this.getCrmHistoryTableList = res.responseData.responseData1;
-       this.getCrmHistoryTableListrTotal = res.responseData.responseData2.totalPages * this.crmHistoryPageSize;
+        this.spinner.hide();
+        this.getCrmHistoryTableList = res.responseData.responseData1;
+        this.getCrmHistoryTableListrTotal = res.responseData.responseData2.totalPages * this.crmHistoryPageSize;
       } else {
         this.getCrmHistoryTableList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
@@ -1076,7 +1087,7 @@ crmAndCrmHistorySearchClear(flag: any) {
     } else if (flag == 'clearFiltersAgent') {
       this.searchAgent.setValue('');
       this.boothAgentList();
-    } 
+    }
   }
 
   defaultShowVoterList() { // defualt click voters tab 
@@ -1094,9 +1105,9 @@ crmAndCrmHistorySearchClear(flag: any) {
   }
 
   //....................................  Voter Call Entries Start Here...........................................//
-  
+
   openDialogVoterCallEntries(obj: any) {
-    let Obj1 = {'VoterId':obj.voterId,'ClientId':obj.clientId,'AgentId':obj.agentId}
+    let Obj1 = { 'VoterId': obj.voterId, 'ClientId': obj.clientId, 'AgentId': obj.agentId }
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
       data: Obj1,
       panelClass: 'fullscreen-dialog',
@@ -1110,7 +1121,7 @@ crmAndCrmHistorySearchClear(flag: any) {
 
   //....................................  Voter Call Entries End Here...........................................//
 
-   // ..................................   Download Excel VoterList Code Start Here  ...........................//
+  // ..................................   Download Excel VoterList Code Start Here  ...........................//
 
   getVoterListDownloadExcel() {
     this.spinner.show();
@@ -1120,33 +1131,33 @@ crmAndCrmHistorySearchClear(flag: any) {
     let topFilterFormData = this.filterForm.value;
     let genderData = votersData.Gender == 1 ? 'M' : votersData.Gender == 2 ? 'F' : votersData.Gender == 3 ? 'T' : '';
 
-      let obj = {
-        "agentId": this.commonService.loggedInUserId(),
-        "clientId": Number(topFilterFormData.ClientId),
-        "electionId": topFilterFormData.ElectionId,
-        "constituencyId": topFilterFormData.ConstituencyId,
-        "villageId": topFilterFormData.village,
-        "boothId": topFilterFormData.getBoothId,
-        "areaId": votersData.AreaId,
-        "search": this.searchVoters.value,
-        "gender": genderData,
-        "haveMobileNo": votersData.HaveMobileNo,
-        "haveBussiness": votersData.HaveBussiness,
-        "partyId": votersData.PartyId,
-        "localLeaderId": votersData.LocalLeaderId,
-        "leadeImp": votersData.LeadeImp,
-        "isYuvak": votersData.IsYuvak,
-        "inFavourofId": votersData.InFavourofId,
-        "inOpposeOfId": votersData.InOpposeOfId,
-        "agegroupId": votersData.AgegroupId,
-        "familySize": votersData.FamilySize,
-        "religionId": votersData.ReligionId,
-        "castId": votersData.CastId,
-        "isFilled": this.fillDataId,
-        "pageno": this.votersPaginationNo,
-        "pagesize": this.votersPageSize,
-        "showFlag": this.ShowFlagType
-      }
+    let obj = {
+      "agentId": this.commonService.loggedInUserId(),
+      "clientId": Number(topFilterFormData.ClientId),
+      "electionId": topFilterFormData.ElectionId,
+      "constituencyId": topFilterFormData.ConstituencyId,
+      "villageId": topFilterFormData.village,
+      "boothId": topFilterFormData.getBoothId,
+      "areaId": votersData.AreaId,
+      "search": this.searchVoters.value,
+      "gender": genderData,
+      "haveMobileNo": votersData.HaveMobileNo,
+      "haveBussiness": votersData.HaveBussiness,
+      "partyId": votersData.PartyId,
+      "localLeaderId": votersData.LocalLeaderId,
+      "leadeImp": votersData.LeadeImp,
+      "isYuvak": votersData.IsYuvak,
+      "inFavourofId": votersData.InFavourofId,
+      "inOpposeOfId": votersData.InOpposeOfId,
+      "agegroupId": votersData.AgegroupId,
+      "familySize": votersData.FamilySize,
+      "religionId": votersData.ReligionId,
+      "castId": votersData.CastId,
+      "isFilled": this.fillDataId,
+      "pageno": this.votersPaginationNo,
+      "pagesize": this.votersPageSize,
+      "showFlag": this.ShowFlagType
+    }
 
     this.callAPIService.setHttp('post', 'VoterList/GetVoterListDownload', false, obj, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -1162,7 +1173,7 @@ crmAndCrmHistorySearchClear(flag: any) {
       }
     }, (error: any) => {
       this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
