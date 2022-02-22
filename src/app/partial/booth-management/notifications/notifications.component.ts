@@ -270,11 +270,11 @@ export class NotificationsComponent implements OnInit {
   resetNotificationForm() {
     this.NotificationText = "Push";
     this.submitted = false;
-    // this.paginationNo = 1;
     this.getImgPath = null;
     this.notificationForm.reset();
     if (this.clientNameArray.length == 1) {
       this.notificationForm.controls['ClientId'].setValue(this.clientNameArray[0].id);
+      this.validationAddScope();
     }
   }
 
