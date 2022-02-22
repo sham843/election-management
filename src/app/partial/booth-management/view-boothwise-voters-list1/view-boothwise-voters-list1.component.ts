@@ -1093,8 +1093,6 @@ crmAndCrmHistorySearchClear(flag: any) {
     window.open('../voters-profile/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId);
   }
 
-  // ..................................   Download Excel VoterList Code Start Here  ...........................//
-
   //....................................  Voter Call Entries Start Here...........................................//
   
   openDialogVoterCallEntries(obj: any) {
@@ -1111,6 +1109,8 @@ crmAndCrmHistorySearchClear(flag: any) {
   }
 
   //....................................  Voter Call Entries End Here...........................................//
+
+   // ..................................   Download Excel VoterList Code Start Here  ...........................//
 
   getVoterListDownloadExcel() {
     this.spinner.show();
