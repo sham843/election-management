@@ -418,7 +418,7 @@ export class BoothAnalytics1Component implements OnInit {
       this.getAgeWiseVoterCount();
       this.getReligionWiseVoterCount();
       this.getCastWiseVoterCount();
-    }, 300);
+    }, 500);
   }
 
   getAgeWiseVoterCount() {
@@ -433,7 +433,7 @@ export class BoothAnalytics1Component implements OnInit {
         this.isAgewiseChart = true;
         this.agewiseVotersChart(this.ageWiseVoterCountData);
       } else {
-        this.isAgewiseChart = false
+        this.isAgewiseChart = false;
         this.ageWiseVoterCountData = [];
         this.spinner.hide();
       }
