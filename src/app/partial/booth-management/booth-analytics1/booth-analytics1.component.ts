@@ -414,11 +414,9 @@ export class BoothAnalytics1Component implements OnInit {
   }
 
   boothSummaryGraphs() { // age,Religion,Cast Chart Api
-    setTimeout(() => {
       this.getAgeWiseVoterCount();
       this.getReligionWiseVoterCount();
       this.getCastWiseVoterCount();
-    }, 500);
   }
 
   getAgeWiseVoterCount() {
@@ -431,7 +429,9 @@ export class BoothAnalytics1Component implements OnInit {
         this.spinner.hide();
         this.ageWiseVoterCountData = res.responseData;
         this.isAgewiseChart = true;
-        this.agewiseVotersChart(this.ageWiseVoterCountData);
+        setTimeout(() => {
+          this.agewiseVotersChart(this.ageWiseVoterCountData);
+        }, 400);
       } else {
         this.isAgewiseChart = false;
         this.ageWiseVoterCountData = [];
@@ -453,7 +453,9 @@ export class BoothAnalytics1Component implements OnInit {
         this.spinner.hide();
         this.religionWiseVoterCountData = res.responseData;
         this.isReligionwiseChart = true;
-        this.religionwiseChart(this.religionWiseVoterCountData);
+        setTimeout(() => {
+          this.religionwiseChart(this.religionWiseVoterCountData);
+        }, 400);
       } else {
         this.isReligionwiseChart = false
         this.religionWiseVoterCountData = [];
@@ -475,7 +477,9 @@ export class BoothAnalytics1Component implements OnInit {
         this.spinner.hide();
         this.castWiseVoterCountData = res.responseData;
         this.isCasteWiseChart = true;
-        this.casteWiseChart(this.castWiseVoterCountData);
+        setTimeout(() => {
+          this.casteWiseChart(this.castWiseVoterCountData);
+        }, 400);
       } else {
         this.isCasteWiseChart = false
         this.castWiseVoterCountData = [];
@@ -709,7 +713,7 @@ export class BoothAnalytics1Component implements OnInit {
           this.socialMediaSuprtList.length > 0 ? (this.isocialMediaSuprtChart = true, this.socialMediaSuprtChart(this.socialMediaSuprtList)) : this.isocialMediaSuprtChart = false;
         }, 500)
       } else {
-        this.isocialMediaSuprtChart = false
+        this.isocialMediaSuprtChart = false;
         this.socialMediaSuprtList = [];
         this.spinner.hide();
       }
