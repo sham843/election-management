@@ -139,11 +139,13 @@
                                             </div>
                                         </div>
 
+<!-- ////////////////////////////////  Global Filter Chieped Code Start /////////////////////////////////////// -->
+
                                         <div class="row" id="filter-alerts" *ngIf="filterSidebarFlag != 'AgentFlag'">
                                             <div class="col-sm-12">
                                                 <span class="alert alert-secondary alert-dismissible fade show"
                                                     role="alert"
-                                                    *ngFor="let filteredValueName of filteredValueNameArray; let i=index">
+                                                    *ngFor="let filteredValueName of filteredValueNameArray1; let i=index">
                                                     {{filteredValueName.name}} <button type="button" class="btn-close"
                                                         (click)="clearGlobalFilterForm(i,filteredValueName,'chipFlag')"
                                                         data-bs-dismiss="alert" aria-label="Close"></button>
@@ -151,6 +153,8 @@
                                             </div>
                                         </div>
                                     </div>
+
+<!-- ////////////////////////////////  Global Filter Chieped Code End /////////////////////////////////////// -->
 
                                     <!-- Voter SummaryBoothwise Count Click -->
                                     <div class="card-header p-0">

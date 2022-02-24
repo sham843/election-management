@@ -101,6 +101,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   defaultCloseBtn: boolean = false;
 
   offCanvasSidebarCheck: boolean = false;
+  filteredValueNameArray1: any = [];
+  // checkArrayData:any;
+
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -377,28 +380,15 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   // ------------------------------------------ Global Main filter start here  ------------------------------------------//
 
-
-  SideBarOutsideClick() { // SideBar Outside Click then Call Function
-    var myOffcanvas: any = document.getElementById('offcanvasRight')
-    myOffcanvas.addEventListener('hidden.bs.offcanvas', () => {
-      if (this.offCanvasSidebarCheck == false) {
-        this.clearBoothVotersFilterForm();
-        this.boothVoterList();
-      }else{
-        this.offCanvasSidebarCheck = false ;
-      }
-    })
-  }
-
   globalFilterDataForm() {
     this.globalFilterForm = this.fb.group({
-      ClientId: [0],
-      ElectionId: [0],
-      ConstituencyId: [0],
-      VillageId: [0],
-      AssemblyId: [0],
-      BoothId: [0],
-      Search: [''],
+      // ClientId: [0],
+      // ElectionId: [0],
+      // ConstituencyId: [0],
+      // VillageId: [0],
+      // AssemblyId: [0],
+      // BoothId: [0],
+      // Search: [''],
       AreaId: [0],
       Gender: [''],
       HaveMobileNo: [0],
@@ -418,6 +408,39 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   }
 
   globalFilterOnInitData() {
+    if (this.filteredValueNameArray1.length != 0) {
+      let FormArray: any = Object.keys(this.globalFilterForm.value);
+      // console.log(FormArray,'1')
+
+      let checkArray: any = [];
+      FormArray.filter((ele: any) => {
+        this.filteredValueNameArray1.forEach((element: any) => {
+          if (element.flag == ele) {
+            checkArray.push(ele);
+          }
+        })
+      })
+
+      let FindLastKey = FormArray.filter(function (val: any) {
+        return checkArray.indexOf(val) == -1;
+      });
+
+      // this.checkArrayData = checkArray;
+      
+      FindLastKey.forEach((ele:any)=>{    
+        if(ele == 'IsYuvak'){
+          this.globalFilterForm.controls[ele].setValue(2)
+        }else if(ele == 'HaveBussiness'){
+          this.globalFilterForm.controls[ele].setValue(2)
+        }else if(ele == 'Gender'){
+          this.globalFilterForm.controls[ele].setValue('')
+        } else{
+          this.globalFilterForm.controls[ele].setValue(0)
+        }
+      })
+
+    }
+    //console.log(this.globalFilterForm.value , 'formValue')
     this.getVoterAreaList();
     this.getPoliticalPartyList();
     this.getReligionList();
@@ -430,7 +453,15 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   clearBoothVotersFilterForm() {
     this.globalFilterDataForm();
     this.nullishGlobalFilterForm();
-    this.filteredValueNameArray = [];
+    this.filteredValueNameArray1 = [];
+    if (this.filterSidebarFlag == 'VotersFlag') {
+      this.boothVoterList();
+    }
+    else if (this.filterSidebarFlag == 'CRMFlag') {
+      this.getCrmTableData();
+    } else if (this.filterSidebarFlag == 'CRMHistoryFlag') {
+      this.getCrmHistoryTableData();
+    }
   }
 
   nullishDefaultFilterForm() {
@@ -551,6 +582,23 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     })
   }
 
+  /////////////////////////////////////////////// ...WORKING... ///////////////////////////////////////////////////
+
+  SideBarOutsideClick() { // SideBar Outside Click then Call Function
+    var myOffcanvas: any = document.getElementById('offcanvasRight')
+    myOffcanvas.addEventListener('hidden.bs.offcanvas', () => {
+      if (this.offCanvasSidebarCheck == false) {
+        this.filteredValueNameArray1.length == 0 ? (this.globalFilterDataForm(),this.filteredValueNameArray = []): '';
+        // if(this.checkArrayData.length == this.filteredValueNameArray1.length){
+          this.filteredValueNameArray = [...this.filteredValueNameArray1];
+        // }
+      } else {
+        this.offCanvasSidebarCheck = false;
+      }
+    })
+  }
+
+
   insertUpdateFilterData(obj: any, flagName: any) {
     this.checkedDataflag = true;
     if (this.filteredValueNameArray.length == 0) {
@@ -567,6 +615,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     if (this.checkedDataflag && this.filteredValueNameArray.length >= 1) {
       this.filteredValueNameArray.push(obj);
     }
+
   }
 
   changedFilterData(event: any, flagName: any) {
@@ -641,16 +690,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.votersPaginationNo = 1
         this.boothVoterList();
       }
-      // else if (this.filterSidebarFlag == 'FamiliesFlag') {
-      //   this.votersPaginationNo = 1;
-      //   this.boothVoterList();
-      // } else if (this.filterSidebarFlag == 'MigratedFlag') {
-      //   this.votersPaginationNo = 1;
-      //   this.boothVoterList();
-      // } else if (this.filterSidebarFlag == 'PendingFlag') {
-      //   this.votersPaginationNo = 1;
-      //   this.boothVoterList();
-      // }
       else if (this.filterSidebarFlag == 'CRMFlag') {
         this.crmPaginationNo = 1;
         this.getCrmTableData();
@@ -672,16 +711,10 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
   }
 
   globalFilterShowData() {
+    this.filteredValueNameArray1 = [...this.filteredValueNameArray];
     if (this.filterSidebarFlag == 'VotersFlag') {
       this.boothVoterList();
     }
-    // else if (this.filterSidebarFlag == 'FamiliesFlag') {
-    //   this.boothVoterList();
-    // } else if (this.filterSidebarFlag == 'MigratedFlag') {
-    //   this.boothVoterList();
-    // } else if (this.filterSidebarFlag == 'PendingFlag') {
-    //   this.boothVoterList();
-    // }
     else if (this.filterSidebarFlag == 'CRMFlag') {
       this.getCrmTableData();
     } else if (this.filterSidebarFlag == 'CRMHistoryFlag') {
@@ -691,15 +724,14 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   nullishGlobalFilterForm() {
     let fromData = this.globalFilterForm.value;
+    // fromData.ClientId ?? this.globalFilterForm.controls['ClientId'].setValue(0);
+    // fromData.ElectionId ?? this.globalFilterForm.controls['ElectionId'].setValue(0);
+    // fromData.ConstituencyId ?? this.globalFilterForm.controls['ConstituencyId'].setValue(0);
+    // fromData.VillageId ?? this.globalFilterForm.controls['VillageId'].setValue(0);
+    // fromData.AssemblyId ?? this.globalFilterForm.controls['AssemblyId'].setValue(0);
+    // fromData.BoothId ?? this.globalFilterForm.controls['BoothId'].setValue(0);
+    // fromData.Search ?? this.globalFilterForm.controls['Search'].setValue('');
 
-    fromData.ClientId ?? this.globalFilterForm.controls['ClientId'].setValue(0);
-    fromData.ElectionId ?? this.globalFilterForm.controls['ElectionId'].setValue(0);
-    fromData.ConstituencyId ?? this.globalFilterForm.controls['ConstituencyId'].setValue(0);
-    fromData.VillageId ?? this.globalFilterForm.controls['VillageId'].setValue(0);
-    fromData.AssemblyId ?? this.globalFilterForm.controls['AssemblyId'].setValue(0);
-    fromData.BoothId ?? this.globalFilterForm.controls['BoothId'].setValue(0);
-
-    fromData.Search ?? this.globalFilterForm.controls['Search'].setValue('');
     fromData.AreaId ?? this.globalFilterForm.controls['AreaId'].setValue(0);
     fromData.Gender ?? this.globalFilterForm.controls['Gender'].setValue('');
     fromData.HaveMobileNo ?? this.globalFilterForm.controls['HaveMobileNo'].setValue(0);
@@ -719,6 +751,8 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
     fromData.LocalLeaderId ?? this.globalFilterForm.controls['LocalLeaderId'].setValue(0);
   }
+
+
 
   // ------------------------------------------ Global Main filter End here  ------------------------------------------//
 
