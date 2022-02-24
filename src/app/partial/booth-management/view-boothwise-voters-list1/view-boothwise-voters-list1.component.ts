@@ -102,8 +102,6 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   offCanvasSidebarCheck: boolean = false;
   filteredValueNameArray1: any = [];
-  // checkArrayData:any;
-
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -409,25 +407,25 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   globalFilterOnInitData() {
     if (this.filteredValueNameArray1.length != 0) {
-      let FormArray: any = Object.keys(this.globalFilterForm.value);
-      // console.log(FormArray,'1')
-
-      let checkArray: any = [];
+      let FormArray: any = Object.keys(this.globalFilterForm.value); //Filter Dropdown all FormControl Name Get
+      let checkArray: any = []; // Filter Dropdown selected Value get
       FormArray.filter((ele: any) => {
         this.filteredValueNameArray1.forEach((element: any) => {
-          if (element.flag == ele) {
+          if (element.flag == ele) { 
             checkArray.push(ele);
+
+            checkArray.filter((selval: any) =>{ // Patch Submited Array value in globalFilterForm Form
+              this.globalFilterForm.controls[selval].setValue(element.id)
+            });
           }
         })
       })
 
-      let FindLastKey = FormArray.filter(function (val: any) {
+      let FindLastKey = FormArray.filter(function (val: any) {  // Filter Dropdown Non selected Value get
         return checkArray.indexOf(val) == -1;
       });
 
-      // this.checkArrayData = checkArray;
-      
-      FindLastKey.forEach((ele:any)=>{    
+      FindLastKey.forEach((ele:any)=>{   // Set Non selected Value 
         if(ele == 'IsYuvak'){
           this.globalFilterForm.controls[ele].setValue(2)
         }else if(ele == 'HaveBussiness'){
@@ -438,9 +436,8 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
           this.globalFilterForm.controls[ele].setValue(0)
         }
       })
-
     }
-    //console.log(this.globalFilterForm.value , 'formValue')
+    
     this.getVoterAreaList();
     this.getPoliticalPartyList();
     this.getReligionList();
@@ -582,16 +579,12 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     })
   }
 
-  /////////////////////////////////////////////// ...WORKING... ///////////////////////////////////////////////////
-
   SideBarOutsideClick() { // SideBar Outside Click then Call Function
     var myOffcanvas: any = document.getElementById('offcanvasRight')
     myOffcanvas.addEventListener('hidden.bs.offcanvas', () => {
       if (this.offCanvasSidebarCheck == false) {
         this.filteredValueNameArray1.length == 0 ? (this.globalFilterDataForm(),this.filteredValueNameArray = []): '';
-        // if(this.checkArrayData.length == this.filteredValueNameArray1.length){
           this.filteredValueNameArray = [...this.filteredValueNameArray1];
-        // }
       } else {
         this.offCanvasSidebarCheck = false;
       }
@@ -697,6 +690,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.crmHistoryPaginationNo = 1;
         this.getCrmHistoryTableData();
       }
+      this.filteredValueNameArray1.splice(index, 1); 
     }
   }
 
