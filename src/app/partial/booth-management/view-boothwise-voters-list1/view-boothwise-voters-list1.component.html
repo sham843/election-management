@@ -274,7 +274,7 @@
                                                 aria-labelledby="pills-voters-tab">
                                                 <div class="row justify-content-end mb-3 g-2">
                                                     <div class="col-sm-4 offset-5">
-                                                        <span class="text-success">25 Results Found</span>
+                                                        <span class="text-success">{{rowTotalCountVoter}} Results Found</span>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <div class="form-container">
@@ -322,8 +322,8 @@
                                                                     <small *ngIf="boothVoterList?.familyHead == 'yes'">
                                                                         (Head) </small>
                                                                 </p>
-                                                                <small
-                                                                    class="text-muted">{{boothVoterList?.partyShortCode}}</small>
+                                                                <small class="text-muted" *ngIf="!boothVoterList?.localLeader">{{boothVoterList?.partyShortCode}}</small>
+                                                                <small class="text-muted" *ngIf="boothVoterList?.partyShortCode && boothVoterList?.localLeader">{{boothVoterList?.localLeader}}</small>
                                                                 <small class="text-muted"
                                                                     *ngIf="boothVoterList?.leader == 'yes'">
                                                                     {{boothVoterList?.leaderImportance}} <i class='fa fa-star' style='color: #f3da35'></i></small>
@@ -377,6 +377,9 @@
                                                 aria-labelledby="pills-family-tab">
                                                 <ng-container>
                                                     <div class="row justify-content-end mb-3">
+                                                        <div class="col-sm-4 offset-5">
+                                                            <span class="text-success">{{rowTotalCountVoter}} Results Found</span>
+                                                        </div>
                                                         <div class="col-sm-3">
                                                             <div class="form-container">
                                                                 <div class="input-group">
@@ -663,7 +666,7 @@
                                                             <i class="fas fa-square me-1"></i>
                                                             {{dropDownData?.name}}
                                                         </span>
-                                                        <span class="text-success offset-1" [ngStyle]="{'font-size.px':15}">25 Results Found</span>
+                                                        <span class="text-success offset-1" [ngStyle]="{'font-size.px':15}">{{rowTotalCountCRM}} Results Found</span>
                                                     </caption>
                                                     <thead>
                                                         <tr>
@@ -765,7 +768,7 @@
                                               <i class="fas fa-square me-1"></i>
                                               {{dropDownData?.name}}
                                           </span>
-                                            <span class="text-success offset-1" [ngStyle]="{'font-size.px':15}">25 Results Found</span>
+                                            <span class="text-success offset-1" [ngStyle]="{'font-size.px':15}">{{rowTotalCountCRMHistory}} Results Found</span>
                                       </caption> 
                                       <thead>
                                           <tr>

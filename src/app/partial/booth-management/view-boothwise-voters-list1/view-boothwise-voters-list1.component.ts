@@ -102,6 +102,9 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   offCanvasSidebarCheck: boolean = false;
   filteredValueNameArray1: any = [];
+  rowTotalCountVoter: any;
+  rowTotalCountCRM: any;
+  rowTotalCountCRMHistory: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -773,6 +776,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       "gender": genderData,
       "haveMobileNo": votersData.HaveMobileNo,
       "haveBussiness": votersData.HaveBussiness,
+      "professionId": votersData.ProfessionId,
       "partyId": votersData.PartyId,
       "localLeaderId": votersData.LocalLeaderId,
       "leadeImp": votersData.LeadeImp,
@@ -795,7 +799,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.boothVoterListArray = res.responseData.responseData1;
         this.votersTotal = res.responseData.responseData2.totalPages * this.votersPageSize;
-
+        this.rowTotalCountVoter = res.responseData.responseData2.totalCount;
       } else {
         this.boothVoterListArray = [];
         this.spinner.hide();
@@ -946,6 +950,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       "gender": genderData,
       "haveMobileNo": votersData.HaveMobileNo,
       "haveBussiness": votersData.HaveBussiness,
+      "professionId": votersData.ProfessionId,
       "partyId": votersData.PartyId,
       "localLeaderId": votersData.LocalLeaderId,
       "leadeImp": votersData.LeadeImp,
@@ -968,6 +973,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.getCrmTableList = res.responseData.responseData1;
         this.getCrmTableListrTotal = res.responseData.responseData2.totalPages * this.crmPageSize;
+        this.rowTotalCountCRM = res.responseData.responseData2.totalCount;
       } else {
         this.getCrmTableList = [];
         this.spinner.hide();
@@ -1067,6 +1073,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
       "gender": genderData,
       "haveMobileNo": votersData.HaveMobileNo,
       "haveBussiness": votersData.HaveBussiness,
+      "professionId": votersData.ProfessionId,
       "partyId": votersData.PartyId,
       "localLeaderId": votersData.LocalLeaderId,
       "leadeImp": votersData.LeadeImp,
@@ -1090,6 +1097,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
         this.spinner.hide();
         this.getCrmHistoryTableList = res.responseData.responseData1;
         this.getCrmHistoryTableListrTotal = res.responseData.responseData2.totalPages * this.crmHistoryPageSize;
+        this.rowTotalCountCRMHistory = res.responseData.responseData2.totalCount;
       } else {
         this.getCrmHistoryTableList = [];
         this.spinner.hide();
