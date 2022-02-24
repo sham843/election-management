@@ -129,6 +129,10 @@
                             <span class="voter-data">{{voterProfileData?.PostalFlag == 0 ? 'No' :
                                 voterProfileData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="voterProfileData?.PostalFlag == 1">
+                            <span class="voter-label">Postal Voting Reason :</span>
+                            <span class="voter-data">{{voterProfileData?.WhyIsPostal}}</span>
+                        </li>
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
                             <div class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}
@@ -378,7 +382,19 @@
                             <span class="voter-label">Postal Voting :</span>
                             <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
                                 VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
-
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="VPMemberDetailsData?.PostalFlag == 1">
+                            <span class="voter-label">Postal Voting Reason:</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.WhyIsPostal}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Leader:</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.Leader == 'no' ? 'No' :
+                                VPMemberDetailsData?.Leader == 'yes' ? 'Yes' : '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="VPMemberDetailsData?.LeaderImportance">
+                            <span class="voter-label">Leader Importance:</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.LeaderImportance}} <i class="fas fa-star text-warning"></i></span>
                         </li>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
