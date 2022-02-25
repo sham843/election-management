@@ -454,6 +454,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
     this.globalFilterDataForm();
     this.nullishGlobalFilterForm();
     this.filteredValueNameArray1 = [];
+    this.filteredValueNameArray = [];
     if (this.filterSidebarFlag == 'VotersFlag') {
       this.boothVoterList();
     }
@@ -709,6 +710,7 @@ export class ViewBoothwiseVotersList1Component implements OnInit {
 
   globalFilterShowData() {
     this.filteredValueNameArray1 = [...this.filteredValueNameArray];
+    console.log(this.filteredValueNameArray1)
     if (this.filterSidebarFlag == 'VotersFlag') {
       this.boothVoterList();
     }

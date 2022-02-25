@@ -144,7 +144,11 @@
                                                 <span class="alert alert-secondary alert-dismissible fade show"
                                                     role="alert"
                                                     *ngFor="let filteredValueName of filteredValueNameArray1; let i=index">
-                                                    {{filteredValueName.name}} <button type="button" class="btn-close"
+                                                   <span *ngIf="filteredValueName.flag == 'HaveMobileNo'">{{filteredValueName?.name == 'Yes' ? 'HaveMobileNo : Yes' : filteredValueName?.name == 'No' ? 'HaveMobileNo : No' : '-'}}</span>
+                                                   <span *ngIf="filteredValueName.flag == 'HaveBussiness'">{{filteredValueName?.name == 'Yes' ? 'HaveBussiness : Yes' : filteredValueName?.name == 'No' ? 'HaveBussiness : No' : '-'}}</span>
+                                                   <span *ngIf="filteredValueName.flag == 'IsYuvak'">{{filteredValueName?.name == 'Yes' ? 'IsYuvak : Yes' : filteredValueName?.name == 'No' ? 'IsYuvak : No' : '-'}}</span>
+                                                   <span *ngIf="filteredValueName.flag != 'HaveMobileNo' && filteredValueName.flag != 'HaveBussiness' && filteredValueName.flag != 'IsYuvak'">{{filteredValueName.name}}</span>
+                                                   <button type="button" class="btn-close"
                                                         (click)="clearGlobalFilterForm(i,filteredValueName,'chipFlag')"
                                                         data-bs-dismiss="alert" aria-label="Close"></button>
                                                 </span>
