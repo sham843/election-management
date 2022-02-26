@@ -215,13 +215,13 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let row of migrationPatternList | paginate: migrationPatternConfig">
-                                  <td>{{row?.SrNo}}</td>
-                                  <td>{{row?.Migratedcity}}</td>
-                                  <td *ngIf="row.TotalVoters == 0">{{row?.TotalVoters}}</td>
-                                  <td *ngIf="row.TotalVoters != 0">
+                                  <td>{{row?.srNo}}</td>
+                                  <td>{{row?.migratedCity}}</td>
+                                  <td *ngIf="row.totalVoters == 0">{{row?.totalVoters}}</td>
+                                  <td *ngIf="row.totalVoters != 0">
                                     <a (click)="onClickMigratedCount(row)" class="text-main"
                                        data-bs-toggle="modal" data-bs-target="#BoothMigratedVotersList">
-                                      {{row?.TotalVoters}}
+                                      {{row?.totalVoters}}
                                     </a>
                                   </td>
                                 </tr>
@@ -288,20 +288,20 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let row of partyVotersList">
-                                  <td>{{row?.SrNo}}</td>
-                                  <td>{{row?.PartyName}}</td>
-                                  <td *ngIf="row.TotalFamily == 0">{{row?.TotalFamily}}</td>
-                                  <td *ngIf="row.TotalFamily != 0">
+                                  <td>{{row?.partyId}}</td>
+                                  <td>{{row?.partyName}}</td>
+                                  <td *ngIf="row.totalFamily == 0">{{row?.totalFamily}}</td>
+                                  <td *ngIf="row.totalFamily != 0">
                                     <a (click)="onClickFamilyCount(row,1)" class="text-main"
                                        data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList">
-                                      {{row?.TotalFamily}}
+                                      {{row?.totalFamily}}
                                     </a>
                                   </td>
-                                  <td *ngIf="row.TotalVoter == 0">{{row?.TotalVoter}} </td>
-                                  <td *ngIf="row.TotalVoter != 0">
+                                  <td *ngIf="row.totalVoter == 0">{{row?.totalVoter}} </td>
+                                  <td *ngIf="row.totalVoter != 0">
                                     <a (click)="onClickPartyVoter(row, 2)"
                                        class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
-                                      {{row?.TotalVoter}}
+                                      {{row?.totalVoter}}
                                     </a>
                                   </td>
                                 </tr>
@@ -347,14 +347,14 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let leader of impLeadersList | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage: impLeadersPaginationNo, totalItems:impLeadersTotal}">
-                                  <td>{{leader?.SrNo}}</td>
-                                  <td>{{leader?.VoterNo}}</td>
-                                  <td>{{leader?.LeaderName}}</td>
-                                  <td>{{leader?.AreaName}}</td>
-                                  <td>{{leader?.BoothNickName}}</td>
-                                  <td>{{leader?.PartyName}}</td>
-                                  <td>{{leader?.LeaderImportance}}<i class="fas fa-star ms-1 text-warning"></i></td>
-                                  <td>{{leader?.Contact.split(',')[0]}} <span *ngIf="leader?.Contact.split(',')[1]">, {{leader?.Contact.split(',')[1]}}</span></td>
+                                  <td>{{leader?.srNo}}</td>
+                                  <td>{{leader?.voterNo}}</td>
+                                  <td>{{leader?.englishName}}</td>
+                                  <td>{{leader?.areaName}}</td>
+                                  <td>{{leader?.boothNickName}}</td>
+                                  <td>{{leader?.partyName}}</td>
+                                  <td>{{leader?.importance}}<i class="fas fa-star ms-1 text-warning"></i></td>
+                                  <td>{{leader?.mobileNo.split(',')[0]}} <span *ngIf="leader?.mobileNo.split(',')[1]">, {{leader?.mobileNo.split(',')[1]}}</span></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -385,14 +385,14 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let supporter of socialMediaSuprtList | paginate: socialSupporterConfig">
-                                  <td>{{supporter?.SrNo}}</td>
-                                  <td>{{supporter?.SupporterName}}</td>
-                                  <td *ngIf="supporter.TotalVoter == 0">{{supporter?.TotalVoter}}</td>
-                                  <td *ngIf="supporter.TotalVoter != 0">
+                                  <td>{{supporter?.srNo}}</td>
+                                  <td>{{supporter?.supporterName}}</td>
+                                  <td *ngIf="supporter.totalVoter == 0">{{supporter?.totalVoter}}</td>
+                                  <td *ngIf="supporter.totalVoter != 0">
                                     <a (click)="showVotersList(supporter);" class="text-main" data-bs-toggle="modal"
-                                       data-bs-target="#ModalVotersList">{{supporter?.TotalVoter}}</a>
+                                       data-bs-target="#ModalVotersList">{{supporter?.totalVoter}}</a>
                                   </td>
-                                  <td>{{supporter?.Support}}</td>
+                                  <td>{{supporter?.support}}</td>
                                 </tr>
                               </tbody>
                             </table>
