@@ -420,15 +420,17 @@
                       <div class="col-sm-6">
                         <div class="card shadow-none border">
                           <div class="card-header pb-0">
-                            Area Wise Voters
+                            <span *ngIf= "selectedBoot.length > 0">Booth Wise Voters</span> 
+                            <span *ngIf= "selectedBoot.length <= 0">Area Wise Voters</span> 
                             <a class="btn btn-link float-end" *ngIf="HideVoterListLink" (click)="redToViewBoothWiseVoterListPage()"><u>Voter List</u></a>
                           </div>
                           <div class="card-body">
                             <table class="table table-hover mb-0">
                               <thead>
                                 <tr>
-                                  <th>Sr. No.</th>
-                                  <th>Area</th>
+                                  <th>Sr.No.</th>
+                                  <th *ngIf= "selectedBoot.length <= 0">Booth Name</th>
+                                  <th *ngIf= "selectedBoot.length > 0">Area Name</th>
                                   <th>Total Voters</th>
                                   <th>Families</th>
                                   <th>Updated Voters</th>
@@ -437,28 +439,28 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let areaWiseVoter of areaWiseVotersList | paginate: areaWiseVoterConfig">
-                                  <td>{{areaWiseVoter?.SrNo}}</td>
-                                  <td>{{areaWiseVoter?.AreaName}}</td>
-                                  <td *ngIf="areaWiseVoter.TotalVoters == 0">{{areaWiseVoter?.TotalVoters}}</td>
-                                  <td *ngIf="areaWiseVoter.TotalVoters != 0">
+                                  <td>{{areaWiseVoter?.srNo}}</td>
+                                  <td>{{areaWiseVoter?.boothName}}</td>
+                                  <td *ngIf="areaWiseVoter.totalVoters == 0">{{areaWiseVoter?.totalVoters}}</td>
+                                  <td *ngIf="areaWiseVoter.totalVoters != 0">
                                     <a (click)="onClickAreaVoter(areaWiseVoter,2,'t')" class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
-                                      {{areaWiseVoter?.TotalVoters}}
+                                      {{areaWiseVoter?.totalVoters}}
                                     </a>
                                   </td>
-                                  <td *ngIf="areaWiseVoter.TotalFamily == 0">{{areaWiseVoter?.TotalFamily}}</td>
-                                  <td *ngIf="areaWiseVoter.TotalFamily != 0">
+                                  <td *ngIf="areaWiseVoter.totalFamily == 0">{{areaWiseVoter?.totalFamily}}</td>
+                                  <td *ngIf="areaWiseVoter.totalFamily != 0">
                                     <a (click)="onClickFamilyCount(areaWiseVoter,2)" class="text-main" data-bs-toggle="modal" data-bs-target="#BoothModalFamiliesList">
-                                      {{areaWiseVoter?.TotalFamily}}
+                                      {{areaWiseVoter?.totalFamily}}
                                     </a>
                                   </td>
-                                  <td *ngIf="areaWiseVoter.UpdatedVoters == 0">{{areaWiseVoter?.UpdatedVoters}}</td>
-                                  <td *ngIf="areaWiseVoter.UpdatedVoters != 0">
+                                  <td *ngIf="areaWiseVoter.updatedVoters == 0">{{areaWiseVoter?.updatedVoters}}</td>
+                                  <td *ngIf="areaWiseVoter.updatedVoters != 0">
                                     <a (click)="onClickAreaVoter(areaWiseVoter,1,'u')" class="text-main"
                                        data-bs-toggle="modal" data-bs-target="#BoothModalVotersList">
-                                      {{areaWiseVoter?.UpdatedVoters}}
+                                      {{areaWiseVoter?.updatedVoters}}
                                     </a>
                                   </td>
-                                  <td>{{areaWiseVoter?.Representative ? areaWiseVoter?.Representative : '-'}}</td>
+                                  <td>{{areaWiseVoter?.representative ? areaWiseVoter?.representative : '-'}}</td>
                                 </tr>
                               </tbody>
                             </table>

@@ -99,6 +99,7 @@ export class BoothAnalytics1Component implements OnInit {
   migPatternpagesize: number = 10;  
   impLeaderspagesize: number = 10;
   socialSupppagesize: number = 10;
+  areaWisepagesize: number = 10;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -636,23 +637,28 @@ export class BoothAnalytics1Component implements OnInit {
   }
 
   bindAreaWiseVoters() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.areaWiseVoterConfig.currentPage
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.areaWiseVoterConfig.currentPage + '&pagesize=' + this.areaWisepagesize 
+    let obj1 = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.areaWiseVoterConfig.currentPage + '&pagesize=' + this.areaWisepagesize 
+
+   
+    let url;
+    this.filterForm.value.BoothId ? url = 'BoothAnalytics/GetAreaWiseVoters?' + obj1 : url = 'BoothAnalytics/GetBoothWiseVoterSummary?' + obj ;
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Voters?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionMicroServiceForWeb');  
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
         this.spinner.hide();
-        this.areaWiseVotersList = res.data1;
-        this.areaWiseVoterConfig.totalItems = res.data2[0].TotalCount;
+        this.areaWiseVotersList = res.responseData.responseData1;
+        this.areaWiseVoterConfig.totalItems = res.responseData.responseData2.totalPages * this.areaWisepagesize;
       } else {
         this.areaWiseVotersList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
-      }
     })
   }
 
@@ -733,6 +739,9 @@ export class BoothAnalytics1Component implements OnInit {
 
   bindAreaWiseCommonIssues() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.comnIssueConfig.currentPage
+    // let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    // + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.comnIssueConfig.currentPage + '&pagesize=' + this.migPatternpagesize 
+   
     this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Common_Issues?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -806,9 +815,9 @@ export class BoothAnalytics1Component implements OnInit {
   onClickAreaVoter(obj: any, isFill: any, voterType: any) {
     this.searchVoters.setValue('');
     this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
-    this.PartyId = 0; this.AreaId = obj.Id;
-    this.selectedTitle = obj.AreaName;
-    this.selectedVoterCount = (voterType == 't' ? obj.TotalVoters : obj.UpdatedVoters);
+    this.PartyId = 0; this.AreaId = obj.boothId;
+    this.selectedTitle = obj.boothName;
+    this.selectedVoterCount = (voterType == 't' ? obj.totalVoters : obj.updatedVoters);
     this.IsFilled = isFill;
     this.boothwiseVotersList = [];
     this.viewBoothwiseVotersList();
@@ -903,7 +912,7 @@ export class BoothAnalytics1Component implements OnInit {
 
   onClickFamilyCount(obj: any, isFamily: any) {
     isFamily == 1 && (this.AreaId = 0, this.ProfessionId = 0, this.PartyId = obj.partyId, this.selectedTitle = obj.partyName, this.selectedVoterCount = obj.totalFamily)
-    isFamily == 2 && (this.PartyId = 0, this.ProfessionId = 0, this.AreaId = obj.Id, this.selectedTitle = obj.AreaName, this.selectedVoterCount = obj.TotalFamily)
+    isFamily == 2 && (this.PartyId = 0, this.ProfessionId = 0, this.AreaId = obj.boothId, this.selectedTitle = obj.boothName, this.selectedVoterCount = obj.totalFamily)
     isFamily == 3 && (this.PartyId = 0, this.AreaId = 0, this.ProfessionId = obj.srNo, this.selectedTitle = obj.profession, this.selectedVoterCount = obj.totalVoters)
     this.searchVoters.setValue('');
     this.bootwiseFamiliesConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
