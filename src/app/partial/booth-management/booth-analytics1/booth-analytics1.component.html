@@ -528,9 +528,9 @@
                               <tbody>
                                 <tr *ngFor="let commonIssue of commonIssuesList | paginate: comnIssueConfig">
                                   <td>
-                                    <span class="fw-bold text-main">{{commonIssue?.EnglishName}}</span>
+                                    <span class="fw-bold text-main">{{commonIssue?.agentName}}</span>
                                     <div class="text-break">
-                                      {{commonIssue?.VisitDetails || '-'}}
+                                      {{commonIssue?.issueDetails || '-'}}
                                     </div>
                                   </td>
                                 </tr>
