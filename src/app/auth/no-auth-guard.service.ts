@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { CommonService } from '../services/common.service';
 import { AuthService } from './auth.service';
 
-
 @Injectable({
   providedIn: 'root'
 })
