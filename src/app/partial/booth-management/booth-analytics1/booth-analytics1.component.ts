@@ -100,7 +100,6 @@ export class BoothAnalytics1Component implements OnInit {
   impLeaderspagesize: number = 10;
   socialSupppagesize: number = 10;
   areaWisepagesize: number = 10;
-  commonIssueagesize: number = 10;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -286,9 +285,10 @@ export class BoothAnalytics1Component implements OnInit {
   }
 
   boothSummary() { // Get Voter Top Client Summary Count
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId;
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0);
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'VoterSummary/GetClientVoterSummary?' + obj, false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.setHttp('get', 'BoothAnalytics/GetBoothAnalyticsSummary?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
@@ -739,23 +739,26 @@ export class BoothAnalytics1Component implements OnInit {
   }
 
   bindAreaWiseCommonIssues() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.comnIssueConfig.currentPage + '&pagesize=' + this.commonIssueagesize 
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.comnIssueConfig.currentPage
+    // let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    // + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.comnIssueConfig.currentPage + '&pagesize=' + this.migPatternpagesize 
    
-    this.spinner.show();   
-    this.callAPIService.setHttp('get', 'BoothAnalytics/GetCommonBoothIssue?' + obj, false, false, false, 'electionMicroServiceForWeb');
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Common_Issues?' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
+      if (res.data == 0) {
         this.spinner.hide();
-        this.commonIssuesList = res.responseData.responseData1;
-        this.comnIssueConfig.totalItems = res.responseData.responseData2.totalPages * this.commonIssueagesize;
+        this.commonIssuesList = res.data1;
+        this.comnIssueConfig.totalItems = res.data2[0].TotalCount;
       } else {
         this.commonIssuesList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
+      if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
+      }
     })
   }
 
