@@ -95,11 +95,21 @@ export class BoothAnalytics1Component implements OnInit {
   ageWiseVoterCountData: any;
   religionWiseVoterCountData: any;
   castWiseVoterCountData: any;
+  boothFamilyDetailsArray: any
 
-  migPatternpagesize: number = 10;  
+  migPatternpagesize: number = 10;
   impLeaderspagesize: number = 10;
   socialSupppagesize: number = 10;
   areaWisepagesize: number = 10;
+
+  migVoterListpagesize: number = 10;
+  ProfwiseFamilyListpagesize: number = 10;
+  boothwiseVotersListpagesize: number = 10; 
+  socialMediaSupVoterspagesize: number = 10;
+  commonBoothIssuepagesize: number = 10;
+  localLeaderWiseVoterspagesize: number = 10;
+
+  isFamilyCheck:any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -281,12 +291,12 @@ export class BoothAnalytics1Component implements OnInit {
     this.bindAreaWiseVoters();
     this.bindSocialMediaSuprt();
     this.bindAreaWiseCommonIssues();
-    this.viewBoothwiseFamiliesList();
+    // this.viewBoothwiseFamiliesList();
   }
 
   boothSummary() { // Get Voter Top Client Summary Count
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0);
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0);
     this.spinner.show();
     this.callAPIService.setHttp('get', 'BoothAnalytics/GetBoothAnalyticsSummary?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -305,53 +315,51 @@ export class BoothAnalytics1Component implements OnInit {
     })
   }
 
-  casteWiseChart(obj: any) {
-    // Create chart instance
-    var chart = am4core.create("castewisediv", am4charts.XYChart);
+  //............................................... Chart CoDE Start Here ..............................................//
 
-    // Add data
+  agewiseVotersChart(obj: any) {
+    am4core.useTheme(am4themes_animated);
+    var chart = am4core.create('chartdiv', am4charts.XYChart)
+    chart.colors.step = 2;
+    chart.legend = new am4charts.Legend()
+    chart.legend.position = 'bottom'
+    chart.legend.paddingBottom = 20
+    chart.legend.labels.template.maxWidth = 95
+    var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
+    xAxis.dataFields.category = 'ageGroup'
+    xAxis.fontSize = 13;
+    xAxis.renderer.cellStartLocation = 0.1
+    xAxis.renderer.cellEndLocation = 0.9
+    xAxis.renderer.grid.template.location = 0;
+    xAxis.renderer.labels.template.fontSize = 10;
+    var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    yAxis.min = 0;
+    yAxis.renderer.labels.template.fontSize = 10;
+    function createSeries(value: any, name: any) {
+      var series = chart.series.push(new am4charts.ColumnSeries())
+      series.dataFields.valueY = value
+      series.dataFields.categoryX = 'ageGroup'
+      series.name = name
+      series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+      series.columns.template.height = am4core.percent(100);
+      series.sequencedInterpolation = true;
+      return series;
+    }
     chart.data = obj;
-
-    // Create axes
-    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "castName";
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 30;
-
-    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-    // Create series
-    var series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = "totalVoters";
-    series.dataFields.categoryX = "castName";
-    series.columns.template.strokeWidth = 0;
-
-    var bullet = series.bullets.push(new am4charts.LabelBullet());
-    bullet.label.text = "{valueY}";
-    bullet.label.verticalCenter = "bottom";
-    bullet.label.dy = -5;
-
-    chart.maskBullets = false;
-
-    series.columns.template.adapter.add("fill", function (fill: any, target: any) {
-      return chart.colors.getIndex(target.dataItem.index);
-    })
-
+    createSeries('totalFemale', 'Female');
+    createSeries('totalMale', 'Male');
+    chart.scrollbarX = new am4core.Scrollbar();
   }
 
   religionwiseChart(obj: any) {
     let chart = am4core.create("religionwisediv", am4charts.PieChart);
-    // Add data
     chart.data = obj;
     let colorSet = new am4core.ColorSet();
-
-    // Add and configure Series
     var pieSeries = chart.series.push(new am4charts.PieSeries());
     pieSeries.dataFields.value = "totalVoters";
     pieSeries.dataFields.category = "religionName";
     pieSeries.innerRadius = am4core.percent(50);
     pieSeries.ticks.template.disabled = true;
-    //pieSeries.labels.template.disabled = false;
     pieSeries.colors = colorSet;
     pieSeries.ticks.template.disabled = true;
     pieSeries.alignLabels = false;
@@ -378,35 +386,53 @@ export class BoothAnalytics1Component implements OnInit {
     let marker = chart.legend.markers.template.children.getIndex(0);
     chart.legend.valueLabels.template.text = "{value.value}";
     chart.legend.valueLabels.template.align = "left";
-
   }
 
-  agewiseVotersChart(obj: any) {
-    am4core.useTheme(am4themes_animated);
-    var chart = am4core.create('chartdiv', am4charts.XYChart)
-    chart.colors.step = 2;
+  casteWiseChart(obj: any) {
+    var chart = am4core.create("castewisediv", am4charts.XYChart);
+    chart.data = obj;
+    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "castName";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    var series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "totalVoters";
+    series.dataFields.categoryX = "castName";
+    series.columns.template.strokeWidth = 0;
+    var bullet = series.bullets.push(new am4charts.LabelBullet());
+    bullet.label.text = "{valueY}";
+    bullet.label.verticalCenter = "bottom";
+    bullet.label.dy = -5;
+    chart.maskBullets = false;
+    series.columns.template.adapter.add("fill", function (fill: any, target: any) {
+      return chart.colors.getIndex(target.dataItem.index);
+    })
+  }
 
+  partywiseVotersChart(obj: any) {
+    am4core.useTheme(am4themes_animated);
+    var chart = am4core.create('partywiseVoterschartdiv', am4charts.XYChart)
+    chart.colors.step = 2;
     chart.legend = new am4charts.Legend()
     chart.legend.position = 'bottom'
     chart.legend.paddingBottom = 20
     chart.legend.labels.template.maxWidth = 95
-
     var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
-    xAxis.dataFields.category = 'ageGroup'
+    xAxis.dataFields.category = 'partyshortcode'
     xAxis.fontSize = 13;
     xAxis.renderer.cellStartLocation = 0.1
     xAxis.renderer.cellEndLocation = 0.9
     xAxis.renderer.grid.template.location = 0;
     xAxis.renderer.labels.template.fontSize = 10;
-
+    xAxis.renderer.minGridDistance = 30;
     var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.min = 0;
     yAxis.renderer.labels.template.fontSize = 10;
-
     function createSeries(value: any, name: any) {
       var series = chart.series.push(new am4charts.ColumnSeries())
       series.dataFields.valueY = value
-      series.dataFields.categoryX = 'ageGroup'
+      series.dataFields.categoryX = 'partyshortcode'
       series.name = name
       series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
       series.columns.template.height = am4core.percent(100);
@@ -414,15 +440,51 @@ export class BoothAnalytics1Component implements OnInit {
       return series;
     }
     chart.data = obj;
-    createSeries('totalFemale', 'Female');
-    createSeries('totalMale', 'Male');
+    createSeries("totalFamily", "Family");
+    createSeries("totalVoter", "Voter");
     chart.scrollbarX = new am4core.Scrollbar();
   }
 
+  socialMediaSuprtChart(obj: any) {
+    let chart = am4core.create("socialMediaSuprtdiv", am4charts.PieChart);
+    chart.data = obj;
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "support";
+    pieSeries.dataFields.category = "supporterName";
+    pieSeries.ticks.template.disabled = true;
+    pieSeries.alignLabels = false;
+    pieSeries.labels.template.fontSize = 10;
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+    pieSeries.labels.template.radius = am4core.percent(-40);
+    pieSeries.labels.template.fill = am4core.color("white");
+    pieSeries.labels.template.adapter.add("radius", function (radius, target) {
+      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
+        return 0;
+      }
+      return radius;
+    });
+    pieSeries.labels.template.adapter.add("fill", function (color, target) {
+      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
+        return am4core.color("#000");
+      }
+      return color;
+    });
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "right";
+    chart.legend.contentAlign = "left";
+    chart.legend.valueLabels.template.text = "{category.category}";
+    chart.legend.scrollable = true;
+  }
+
+  //............................................... Chart CoDE End Here ..............................................//
+
+
+  //............................................... Chart Api CoDE Start Here ..............................................//
+
   boothSummaryGraphs() { // age,Religion,Cast Chart Api
-      this.getAgeWiseVoterCount();
-      this.getReligionWiseVoterCount();
-      this.getCastWiseVoterCount();
+    this.getAgeWiseVoterCount();
+    this.getReligionWiseVoterCount();
+    this.getCastWiseVoterCount();
   }
 
   getAgeWiseVoterCount() {
@@ -497,6 +559,119 @@ export class BoothAnalytics1Component implements OnInit {
     })
   }
 
+  partyWiseVoters() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0)
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'BoothAnalytics/GetPartywiseVoter?' + obj, false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        // this.professionFamiliesList = res.data2;
+        this.partyVotersList = res.responseData;
+        setTimeout(() => { // bind charts
+          this.partyVotersList.length > 0 ? (this.isPartyVotersChart = true, this.partywiseVotersChart(this.partyVotersList)) : this.isPartyVotersChart = false;
+        }, 500)
+
+      } else {
+        // this.professionFamiliesList = [];
+        this.partyVotersList = [];
+        this.isPartyVotersChart = false
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  //............................................... Chart Api CoDE End Here ..............................................//
+
+
+  //.............................. Migration Pattern Table CoDE Start Here ............................//
+
+  onClickPagintionMigrattionPattern(pageNo: any) {
+    this.migrationPatternConfig.currentPage = pageNo;
+    this.bindMigratedVoters();
+  }
+
+  bindMigratedVoters() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.migrationPatternConfig.currentPage + '&pagesize=' + this.migPatternpagesize
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'BoothAnalytics/GetMigrationPatternCount?' + obj, false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.migrationPatternList = res.responseData.responseData1;
+        this.migrationPatternConfig.totalItems = res.responseData.responseData2.totalPages * this.migPatternpagesize;
+      } else {
+        this.migrationPatternList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  //..................... Inside Code Start Here ..........................//
+
+  onKeyUpFilterMigrated() {
+    this.subject.next();
+  }
+
+  searchMigratedFilters(flag: any) {
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchVoters.value;
+        this.bootMigratedConfig.currentPage = 1; this.bootMigratedConfig.totalItems = 0;
+        this.viewMigrationVotersList();
+      });
+  }
+
+  onClickMigratedCount(obj: any) {
+    this.CityName = obj.migratedCity, this.selectedTitle = obj.migratedCity, this.selectedVoterCount = obj.totalVoters
+    this.searchVoters.setValue('');
+    this.bootMigratedConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
+    this.boothMigratedList = [];
+    this.viewMigrationVotersList();
+  }
+
+  onClickPagintionBoothMigrated(pageNo: any) {
+    this.bootMigratedConfig.currentPage = pageNo;
+    this.viewMigrationVotersList();
+  }
+
+  viewMigrationVotersList() {
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootMigratedConfig.currentPage + '&Search=' + this.searchVoters.value
+      + '&CityName=' + this.CityName + '&pagesize=' + this.migVoterListpagesize;
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'BoothAnalytics/GetMigratedVoterList?' + obj, false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.boothMigratedList = res.responseData.responseData1;
+        this.bootMigratedConfig.totalItems = res.responseData.responseData2.totalPages * this.migVoterListpagesize;
+      } else {
+        this.boothMigratedList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  //..................... Inside Code End Here ..........................// 
+
+  //.............................. Migration Pattern Table CoDE End Here ............................//
+
+  //.............................. Profession Wise Families Table CoDE Start Here ............................//
+
   getProfessionWiseFamiliesCount() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
       + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0)
@@ -516,97 +691,10 @@ export class BoothAnalytics1Component implements OnInit {
     })
   }
 
-  partywiseVotersChart(obj: any) {
-    am4core.useTheme(am4themes_animated);
-    var chart = am4core.create('partywiseVoterschartdiv', am4charts.XYChart)
-    chart.colors.step = 2;
+  //.............................. Profession Wise Families Table CoDE End Here ............................//
 
-    chart.legend = new am4charts.Legend()
-    chart.legend.position = 'bottom'
-    chart.legend.paddingBottom = 20
-    chart.legend.labels.template.maxWidth = 95
+  //.......................... Important Leaders In This Village/Booth Table CoDE Start Here .........................//
 
-    var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
-    xAxis.dataFields.category = 'partyshortcode'
-    xAxis.fontSize = 13;
-    xAxis.renderer.cellStartLocation = 0.1
-    xAxis.renderer.cellEndLocation = 0.9
-    xAxis.renderer.grid.template.location = 0;
-    xAxis.renderer.labels.template.fontSize = 10;
-    xAxis.renderer.minGridDistance = 30;
-
-    var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    yAxis.min = 0;
-    yAxis.renderer.labels.template.fontSize = 10;
-
-    function createSeries(value: any, name: any) {
-      var series = chart.series.push(new am4charts.ColumnSeries())
-      series.dataFields.valueY = value
-      series.dataFields.categoryX = 'partyshortcode'
-      series.name = name
-
-      series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
-      series.columns.template.height = am4core.percent(100);
-      series.sequencedInterpolation = true;
-      return series;
-    }
-    chart.data = obj;
-    createSeries("totalFamily", "Family");
-    createSeries("totalVoter", "Voter");
-
-    chart.scrollbarX = new am4core.Scrollbar();
-  }
-
-  partyWiseVoters() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0)
-     this.spinner.show();
-    this.callAPIService.setHttp('get', 'BoothAnalytics/GetPartywiseVoter?' + obj, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
-        this.spinner.hide();
-        // this.professionFamiliesList = res.data2;
-        this.partyVotersList = res.responseData;
-        setTimeout(() => { // bind charts
-          this.partyVotersList.length > 0 ? (this.isPartyVotersChart = true, this.partywiseVotersChart(this.partyVotersList)) : this.isPartyVotersChart = false;
-        }, 500)
-
-      } else {
-        // this.professionFamiliesList = [];
-        this.partyVotersList = [];
-        this.isPartyVotersChart = false
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
-    })
-  }
-
-  onClickPagintionMigrattionPattern(pageNo: any) {
-    this.migrationPatternConfig.currentPage = pageNo;
-    this.bindMigratedVoters();
-  }
-
-  bindMigratedVoters() {
-   let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.migrationPatternConfig.currentPage + '&pagesize=' + this.migPatternpagesize 
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'BoothAnalytics/GetMigrationPatternCount?' + obj, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
-        this.spinner.hide();
-        this.migrationPatternList = res.responseData.responseData1;
-        this.migrationPatternConfig.totalItems = res.responseData.responseData2.totalPages * this.migPatternpagesize;
-      } else {
-        this.migrationPatternList = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
-    })
-  }
   onClickPagintionImpLeaders(pageNo: any) {
     this.impLeadersPaginationNo = pageNo;
     this.bindImpLeaders();
@@ -614,11 +702,11 @@ export class BoothAnalytics1Component implements OnInit {
 
   bindImpLeaders() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.impLeadersPaginationNo + '&pagesize=' + this.impLeaderspagesize 
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.impLeadersPaginationNo + '&pagesize=' + this.impLeaderspagesize
     this.spinner.show();
     this.callAPIService.setHttp('get', 'BoothAnalytics/GetBoothWiseImpLeaders?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.impLeadersList = res.responseData.responseData1;
         this.impLeadersTotal = res.responseData.responseData2.totalPages * this.impLeaderspagesize;
@@ -628,9 +716,44 @@ export class BoothAnalytics1Component implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  //........................... Important Leaders In This Village/Booth Table CoDE End Here ........................//
+
+  //........................... Common Issues In This Area Table CoDE Start Here ........................//
+
+  onClickPagintionCommonIssues(pageNo: any) {
+    this.comnIssueConfig.currentPage = pageNo;
+    this.bindAreaWiseCommonIssues();
+  }
+
+  bindAreaWiseCommonIssues() {
+
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.comnIssueConfig.currentPage + '&pagesize=' + this.commonBoothIssuepagesize
+
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'BoothAnalytics/GetCommonBoothIssue?' + obj, false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.commonIssuesList = res.responseData.responseData1;
+        this.comnIssueConfig.totalItems = res.responseData.responseData2.totalPages * this.commonBoothIssuepagesize;
+      } else {
+        this.commonIssuesList = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
         this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
+
+  //........................... Common Issues In This Area Table CoDE End Here ........................//
+
+  //........................... Area Wise Voters Table CoDE Start Here ........................//
 
   onClickPagintionareaWiseVoters(pageNo: any) {
     this.areaWiseVoterConfig.currentPage = pageNo;
@@ -639,17 +762,16 @@ export class BoothAnalytics1Component implements OnInit {
 
   bindAreaWiseVoters() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.areaWiseVoterConfig.currentPage + '&pagesize=' + this.areaWisepagesize 
+      + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.areaWiseVoterConfig.currentPage + '&pagesize=' + this.areaWisepagesize
     let obj1 = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.areaWiseVoterConfig.currentPage + '&pagesize=' + this.areaWisepagesize 
-
-   
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.areaWiseVoterConfig.currentPage + '&pagesize=' + this.areaWisepagesize
     let url;
-    this.filterForm.value.BoothId ? url = 'BoothAnalytics/GetAreaWiseVoters?' + obj1 : url = 'BoothAnalytics/GetBoothWiseVoterSummary?' + obj ;
+    //this.filterForm.value.BoothId ? url = 'BoothAnalytics/GetAreaWiseVoters?' + obj1 : url = 'BoothAnalytics/GetBoothWiseVoterSummary?' + obj;
+    url = 'BoothAnalytics/GetAreaWiseVoters?' + obj1 
     this.spinner.show();
-    this.callAPIService.setHttp('get', url, false, false, false, 'electionMicroServiceForWeb');  
+    this.callAPIService.setHttp('get', url, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.areaWiseVotersList = res.responseData.responseData1;
         this.areaWiseVoterConfig.totalItems = res.responseData.responseData2.totalPages * this.areaWisepagesize;
@@ -659,50 +781,13 @@ export class BoothAnalytics1Component implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
-  socialMediaSuprtChart(obj: any) {
-    // Create chart instance
-    let chart = am4core.create("socialMediaSuprtdiv", am4charts.PieChart);
+  //........................... Area Wise Voters Table CoDE End Here ........................//
 
-    // Add data
-    chart.data = obj;
-
-    // Add and configure Series
-    var pieSeries = chart.series.push(new am4charts.PieSeries());
-    pieSeries.dataFields.value = "support";
-    pieSeries.dataFields.category = "supporterName";
-
-    pieSeries.ticks.template.disabled = true;
-    pieSeries.alignLabels = false;
-    //pieSeries.labels.template.text = "{value}";
-    pieSeries.labels.template.fontSize = 10;
-    pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
-    pieSeries.labels.template.radius = am4core.percent(-40);
-    pieSeries.labels.template.fill = am4core.color("white");
-
-    pieSeries.labels.template.adapter.add("radius", function (radius, target) {
-      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
-        return 0;
-      }
-      return radius;
-    });
-
-    pieSeries.labels.template.adapter.add("fill", function (color, target) {
-      if (target.dataItem && (target.dataItem.values.value.percent < 10)) {
-        return am4core.color("#000");
-      }
-      return color;
-    });
-
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = "right";
-    chart.legend.contentAlign = "left";
-    chart.legend.valueLabels.template.text = "{category.category}";
-    chart.legend.scrollable = true;
-  }
+  //........................... Social Media Supporter Table CoDE Start Here ........................//
 
   onClickPagintionsocialSupporter(pageNo: any) {
     this.socialSupporterConfig.currentPage = pageNo;
@@ -710,12 +795,12 @@ export class BoothAnalytics1Component implements OnInit {
   }
   bindSocialMediaSuprt() {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.socialSupporterConfig.currentPage + '&pagesize=' + this.socialSupppagesize 
-    
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.socialSupporterConfig.currentPage + '&pagesize=' + this.socialSupppagesize
+
     this.spinner.show();
     this.callAPIService.setHttp('get', 'BoothAnalytics/GetSocialMediaSupport?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200"){
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.socialMediaSuprtList = res.responseData.responseData1;
         this.socialSupporterConfig.totalItems = res.responseData.responseData2.totalPages * this.socialSupppagesize;
@@ -729,36 +814,7 @@ export class BoothAnalytics1Component implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
-    })
-  }
-
-  onClickPagintionCommonIssues(pageNo: any) {
-    this.comnIssueConfig.currentPage = pageNo;
-    this.bindAreaWiseCommonIssues();
-  }
-
-  bindAreaWiseCommonIssues() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&nopage=' + this.comnIssueConfig.currentPage
-    // let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-    // + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.comnIssueConfig.currentPage + '&pagesize=' + this.migPatternpagesize 
-   
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Areawise_Common_Issues?' + obj, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.commonIssuesList = res.data1;
-        this.comnIssueConfig.totalItems = res.data2[0].TotalCount;
-      } else {
-        this.commonIssuesList = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
@@ -772,56 +828,54 @@ export class BoothAnalytics1Component implements OnInit {
     this.selectedTitle = supporter.supporterName
     this.selectedVoterCount = supporter.totalVoter
     this.votersList = [];
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&BoothId=' + this.selectedBoothIds + '&SupportToid=' + this.supportToid + '&nopage=' + this.votersConfig.currentPage
+
+    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&SupportToid=' 
+    + this.supportToid + '&pageno=' + this.votersConfig.currentPage + '&pagesize=' + this.socialMediaSupVoterspagesize + '&Search=' +''
+
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_Get_Booth_Analytics_Summary_Media_Support_Voterlist?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'BoothAnalytics/GetSocialMediaSupporterVoters?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.votersList = res.data1;
-        this.votersConfig.totalItems = res.data2[0].TotalCount;
+        this.votersList = res.responseData.responseData1;
+        this.votersConfig.totalItems = res.responseData.responseData2.totalPages * this.socialMediaSupVoterspagesize;
       } else {
         this.votersList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
-      }
     })
   }
 
-  redirectToVoterPrfile(obj: any) {
-    window.open('../voters-profile/' + (obj.UserId || obj.userid || obj.AgentId || 0) + '.' + this.filterForm.value.ClientId + '.' + obj.VoterId);
-  }
+//........................... Social Media Supporter Table CoDE End Here ........................//
 
-  onClickPartyVoter(obj: any, isFill: any) {
+ //...............................  Voter Table Code Start Here ................................//
+
+  onClickAreaVoter(obj: any, isFill: any, voterType: any) {
     this.searchVoters.setValue('');
-    this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
-    this.AreaId = 0; this.PartyId = obj.partyId;
-    this.selectedTitle = obj.partyName;
-    this.selectedVoterCount = obj.totalVoter;
+    this.bootwiseVotersConfig.currentPage = 1;
+     this.bootwiseVotersConfig.totalItems = 0;
+    if(voterType == 'PartyVoter'){
+      this.AreaId = 0; this.PartyId = obj.partyId;
+      this.selectedTitle = obj.partyName;
+      this.selectedVoterCount = obj.totalVoter;
+    } else{
+      this.PartyId = 0; this.AreaId = obj.boothId;
+      this.selectedTitle = obj.boothName;
+      this.selectedVoterCount = (voterType == 'totalVoters' ? obj.totalVoters : obj.updatedVoters);
+    }
     this.IsFilled = isFill;
     this.boothwiseVotersList = [];
+    this.IsPartyCheck = obj.isParty;
+    this.PartyIdper = obj.partyId;
     if (obj.isParty == 2) {
-      this.IsPartyCheck = obj.isParty;
-      this.PartyIdper = obj.partyId;
       this.boothVLNoSubPromLeader(obj.partyId);
     } else {
       this.viewBoothwiseVotersList();
     }
-  }
-
-  onClickAreaVoter(obj: any, isFill: any, voterType: any) {
-    this.searchVoters.setValue('');
-    this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
-    this.PartyId = 0; this.AreaId = obj.boothId;
-    this.selectedTitle = obj.boothName;
-    this.selectedVoterCount = (voterType == 't' ? obj.totalVoters : obj.updatedVoters);
-    this.IsFilled = isFill;
-    this.boothwiseVotersList = [];
-    this.viewBoothwiseVotersList();
   }
 
   onClickPagintionBoothVoters(pageNo: any) {
@@ -834,27 +888,39 @@ export class BoothAnalytics1Component implements OnInit {
   }
 
   viewBoothwiseVotersList() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value + '&AreaId=' + this.AreaId
-      + '&Gender=&HaveMobileNo=0&HaveBussiness=2&PartyId=' + this.PartyId + '&LeadeImp=0&IsYuvak=2&InFavourofId=0&InOpposeOfId=0&AgegroupId=0&FamilySize=0&ReligionId=0&CastId=0&IsFilled=' + this.IsFilled
+    let obj:any;
+    let url:any;
+    if(this.IsFilled == 1){ //updatedVoter
+      url = 'BoothAnalytics/GetAreaWiseUpdatedVoters?';
+      obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value +
+      '&AreaId=' + this.AreaId + '&pagesize=' + this.boothwiseVotersListpagesize 
+    } else if(this.IsFilled == 2){ //totalVoters
+      url = 'BoothAnalytics/GetAreaWiseTotalVoterList?';
+      obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value +
+      '&AreaId=' + this.AreaId + '&pagesize=' + this.boothwiseVotersListpagesize
+    } else if(this.IsFilled == 3){ //PartyVoter
+      url = 'BoothAnalytics/GetPartyWiseVoters?';
+      obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value +
+      '&PartyId=' + this.PartyId + '&pagesize=' + this.boothwiseVotersListpagesize + '&IsFamily=' + 0
+    }
+
     this.spinner.show();
-    let url = '';
-    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_BoothVoterList_1_0_No_SubConsti?' + obj : url = 'Web_Get_Client_BoothVoterList_1_0?' + obj
-    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', url + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.boothwiseVotersList = res.data1;
-        this.bootwiseVotersConfig.totalItems = res.data2[0].TotalCount;
+        this.boothwiseVotersList = res.responseData.responseData1;
+        this.bootwiseVotersConfig.totalItems = res.responseData.responseData2.totalPages * this.boothwiseVotersListpagesize;
       } else {
         this.boothwiseVotersList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
@@ -868,10 +934,40 @@ export class BoothAnalytics1Component implements OnInit {
       .subscribe(() => {
         this.searchVoters.value;
         this.bootwiseVotersConfig.currentPage = 1; this.bootwiseVotersConfig.totalItems = 0;
-        this.viewBoothwiseVotersList();
+        if (this.IsPartyCheck == 2) {
+          this.boothVLNoSubPromLeader(this.PartyIdper);
+        } else {
+          this.viewBoothwiseVotersList();
+        }
       }
       );
   }
+
+  clearFiltersVoters(flag: any) {  //families & voters Search Clear
+    if (flag == 'clearSearchVoters') {
+      this.searchVoters.setValue('');
+      this.bootwiseVotersConfig.currentPage = 1;
+      if (this.IsPartyCheck == 2) {
+        this.boothVLNoSubPromLeader(this.PartyIdper);
+      } else {
+        this.viewBoothwiseVotersList();
+      }
+    } else if (flag == 'clearSearchFamilies') {
+      this.searchVoters.setValue('');
+      this.bootwiseFamiliesConfig.currentPage = 1;
+      if (this.IsPartyCheck == 2) {
+        this.boothFamillyVLNoSubPromLeader(this.PartyIdper);
+      } else {
+        this.viewBoothwiseFamiliesList();
+      }
+    } else if (flag == 'clearSearchMigrated') {
+      this.searchVoters.setValue('');
+      this.bootMigratedConfig.currentPage = 1;
+      this.viewMigrationVotersList();
+    }
+  }
+
+   //...............................  Families Table Code Start Here ................................//
 
   onKeyUpFilterFamilies() {
     this.subjectForFamily.next();
@@ -882,22 +978,32 @@ export class BoothAnalytics1Component implements OnInit {
       .pipe(debounceTime(700))
       .subscribe(() => {
         this.searchVoters.value;
-        this.bootwiseFamiliesConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
-        this.viewBoothwiseFamiliesList();
+        this.bootwiseFamiliesConfig.currentPage = 1;
+         this.bootwiseFamiliesConfig.totalItems = 0;
+         if (this.IsPartyCheck == 2) {
+          this.boothFamillyVLNoSubPromLeader(this.PartyIdper);
+        } else {
+          this.viewBoothwiseFamiliesList();
+        }
       }
       );
   }
 
-  clearFiltersVoters(flag: any) {
-    if (flag == 'clearSearchVoters') {
-      this.searchVoters.setValue('');
-      this.viewBoothwiseVotersList();
-    } else if (flag == 'clearSearchFamilies') {
-      this.searchVoters.setValue('');
+  onClickFamilyCount(obj: any, isFamily: any) {
+    this.isFamilyCheck = isFamily;
+    isFamily == 1 && (this.AreaId = 0, this.ProfessionId = 0, this.PartyId = obj.partyId, this.selectedTitle = obj.partyName, this.selectedVoterCount = obj.totalFamily)
+    isFamily == 2 && (this.PartyId = 0, this.ProfessionId = 0, this.AreaId = obj.boothId, this.selectedTitle = obj.boothName, this.selectedVoterCount = obj.totalFamily)
+    isFamily == 3 && (this.PartyId = 0, this.AreaId = 0, this.ProfessionId = obj.srNo, this.selectedTitle = obj.profession, this.selectedVoterCount = obj.totalVoters)
+    this.searchVoters.setValue('');
+    this.bootwiseFamiliesConfig.currentPage = 1; 
+    this.bootwiseFamiliesConfig.totalItems = 0;
+    this.boothwiseFamiliesList = [];
+    this.IsPartyCheck = obj.isParty;
+    this.PartyIdper = obj.partyId;
+    if (obj.isParty == 2) {
+      this.boothFamillyVLNoSubPromLeader(obj.partyId);
+    } else {
       this.viewBoothwiseFamiliesList();
-    } else if (flag == 'clearSearchMigrated') {
-      this.searchVoters.setValue('');
-      this.viewMigrationVotersList();
     }
   }
 
@@ -911,118 +1017,67 @@ export class BoothAnalytics1Component implements OnInit {
     }
   }
 
-  onClickFamilyCount(obj: any, isFamily: any) {
-    isFamily == 1 && (this.AreaId = 0, this.ProfessionId = 0, this.PartyId = obj.partyId, this.selectedTitle = obj.partyName, this.selectedVoterCount = obj.totalFamily)
-    isFamily == 2 && (this.PartyId = 0, this.ProfessionId = 0, this.AreaId = obj.boothId, this.selectedTitle = obj.boothName, this.selectedVoterCount = obj.totalFamily)
-    isFamily == 3 && (this.PartyId = 0, this.AreaId = 0, this.ProfessionId = obj.srNo, this.selectedTitle = obj.profession, this.selectedVoterCount = obj.totalVoters)
-    this.searchVoters.setValue('');
-    this.bootwiseFamiliesConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
-    this.boothwiseFamiliesList = [];
-    if (obj.IsParty == 2) {
-      this.IsPartyCheck = obj.IsParty;
-      this.PartyIdper = obj.PartyId;
-      this.boothFamillyVLNoSubPromLeader(obj.PartyId);
-    } else {
-      this.viewBoothwiseFamiliesList();
-    }
-  }
-
   viewBoothwiseFamiliesList() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseFamiliesConfig.currentPage + '&Search=' + this.searchVoters.value + '&AreaId=' + this.AreaId
-      + '&PartyId=' + this.PartyId + '&ProfessionId=' + this.ProfessionId
+    let obj:any;
+    let url:any;
+    if(this.isFamilyCheck == 1){
+      url = 'BoothAnalytics/GetPartyWiseVoters?';
+      obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseFamiliesConfig.currentPage  + '&Search=' + this.searchVoters.value +
+      '&PartyId=' + this.PartyId + '&pagesize=' + this.boothwiseVotersListpagesize + '&IsFamily=' + 1
+    } else if(this.isFamilyCheck == 2) {
+      url = 'BoothAnalytics/GetAreaWiseFamilies?';
+      obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseFamiliesConfig.currentPage + '&Search=' + this.searchVoters.value
+      + '&AreaId=' + this.AreaId + '&pagesize=' + this.ProfwiseFamilyListpagesize
+    } if(this.isFamilyCheck == 3) {
+      url = 'BoothAnalytics/GetProfessionwiseFamilyList?';
+      obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseFamiliesConfig.currentPage + '&Search=' + this.searchVoters.value
+      + '&ProfessionId=' + this.ProfessionId + '&pagesize=' + this.ProfwiseFamilyListpagesize
+    }
+
     this.spinner.show();
-    let url = '';
-    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_Booth_Familly_VoterList_1_0_No_SubEle?' + obj : url = 'Web_Get_Client_Booth_Familly_VoterList_1_0?' + obj
-    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', url + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.boothwiseFamiliesList = res.data1;
-        this.bootwiseFamiliesConfig.totalItems = res.data2[0].TotalCount;
+        this.boothwiseFamiliesList = res.responseData.responseData1;
+        this.bootwiseFamiliesConfig.totalItems = res.responseData.responseData2.totalPages * this.ProfwiseFamilyListpagesize;
       } else {
         this.boothwiseFamiliesList = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
-  onKeyUpFilterMigrated() {
-    this.subject.next();
-  }
-
-  searchMigratedFilters(flag: any) {
-    this.subject
-      .pipe(debounceTime(700))
-      .subscribe(() => {
-        this.searchVoters.value;
-        this.bootMigratedConfig.currentPage = 1; this.bootMigratedConfig.totalItems = 0;
-        this.viewMigrationVotersList();
-      });
-  }
-  onClickMigratedCount(obj: any) {
-    this.CityName = obj.migratedCity, this.selectedTitle = obj.migratedCity, this.selectedVoterCount = obj.totalVoters
-    this.searchVoters.setValue('');
-    this.bootMigratedConfig.currentPage = 1; this.bootwiseFamiliesConfig.totalItems = 0;
-    this.boothMigratedList = [];
-    this.viewMigrationVotersList();
-  }
-
-  onClickPagintionBoothMigrated(pageNo: any) {
-    this.bootMigratedConfig.currentPage = pageNo;
-    this.viewMigrationVotersList();
-  }
-  viewMigrationVotersList() {
-    let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootMigratedConfig.currentPage + '&Search=' + this.searchVoters.value + '&CityName=' + this.CityName
-    this.spinner.show();
-    let url = '';
-    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_Booth_MigrationCitywise_VoterList_1_0_No_Sub?' + obj : url = 'Web_Get_Client_Booth_MigrationCitywise_VoterList_1_0?' + obj
-    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.boothMigratedList = res.data1;
-        this.bootMigratedConfig.totalItems = res.data2[0].TotalCount;
-      } else {
-        this.boothMigratedList = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
-
-  boothFamilyDetailsArray: any
   familyDetails(ParentVoterId: any, AgentId: any) {
-    let obj = 'ParentVoterId=' + ParentVoterId + '&AgentId=' + AgentId + '&ClientId=' + this.filterForm.value.ClientId + '&Search=';
+    let obj = 'ParentVoterId=' + ParentVoterId + '&AgentId=' + AgentId + '&ClientId=' + this.filterForm.value.ClientId;
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_FamilyMember_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'VoterList/GetFamilyMember?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.boothFamilyDetailsArray = res.data1;
+        this.boothFamilyDetailsArray = res.responseData;
       } else {
         this.boothFamilyDetailsArray = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
+  
   // Web_Get_Client_Booth_MigrationCitywise_VoterList_1_0(long ClientId, long UserId, long ElectionId, long ConstituencyId, long AssemblyId, long BoothId, long VillageId, string Search, int nopage, string CityName)
   // ------------------------------------------filter data all methodes start here ------------------------------ //
+
+  redirectToVoterPrfile(obj: any) {
+    window.open('../voters-profile/' + (obj.UserId || obj.userid || obj.agentId || 0) + '.' + this.filterForm.value.ClientId + '.' + obj.voterId);
+  }
 
   clearForm() {
     this.cardData = [];
@@ -1095,16 +1150,16 @@ export class BoothAnalytics1Component implements OnInit {
 
   boothVLNoSubPromLeader(PartyId: any) {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
-    this.spinner.show();
-    let url = '';
-    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_BoothVoterList_NoSub_PromLeader_1_0?' + obj : url = 'Web_Get_Client_BoothVoterList_PromLeader_1_0?' + obj
-    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+    + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseVotersConfig.currentPage + '&Search=' + this.searchVoters.value +
+   '&ProminentLeaderId=' + PartyId + '&pagesize=' + this.localLeaderWiseVoterspagesize + '&IsFamily=' + 0 
+   
+   this.spinner.show();
+   this.callAPIService.setHttp('get', 'BoothAnalytics/GetLocalLeaderWiseVoters?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.boothwiseVotersList = res.data1;  // Array Name is Same As viewBoothwiseVotersList();
-        this.bootwiseVotersConfig.totalItems = res.data2[0].TotalCount;
+        this.boothwiseVotersList = res.responseData.responseData1;
+        this.bootwiseVotersConfig.totalItems = res.responseData.responseData2.totalPages * this.localLeaderWiseVoterspagesize;
       } else {
         this.boothwiseVotersList = [];
         this.spinner.hide();
@@ -1119,16 +1174,16 @@ export class BoothAnalytics1Component implements OnInit {
 
   boothFamillyVLNoSubPromLeader(PartyId: any) {
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
-      + '&AssemblyId=' + 0 + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&nopage=' + this.bootwiseFamiliesConfig.currentPage + '&Search=' + this.searchVoters.value + '&ProminentLeaderId=' + PartyId
+      + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&pageno=' + this.bootwiseFamiliesConfig.currentPage + '&Search=' + this.searchVoters.value +
+     '&ProminentLeaderId=' + PartyId + '&pagesize=' + this.localLeaderWiseVoterspagesize + '&IsFamily=' + 1
+   
     this.spinner.show();
-    let url = '';
-    this.IsSubElectionApplicable == 0 ? url = 'Web_Get_Client_Booth_Familly_VoterList_PromLeader_No_SubEle?' + obj : url = 'Web_Get_Client_Booth_Familly_VoterList_1_0_PromLeader_1_0?' + obj
-    this.callAPIService.setHttp('get', url, false, false, false, 'electionServiceForWeb');
+   this.callAPIService.setHttp('get', 'BoothAnalytics/GetLocalLeaderWiseVoters?' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != 0 && res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.boothwiseFamiliesList = res.data1; //  Array Name is Same As viewBoothwiseFamiliesList();
-        this.bootwiseFamiliesConfig.totalItems = res.data2[0].TotalCount;
+        this.boothwiseFamiliesList = res.responseData.responseData1; //  Array Name is Same As viewBoothwiseFamiliesList();
+        this.bootwiseFamiliesConfig.totalItems = res.responseData.responseData2.totalPages * this.localLeaderWiseVoterspagesize;
       } else {
         this.boothwiseFamiliesList = [];
         this.spinner.hide();
@@ -1140,4 +1195,7 @@ export class BoothAnalytics1Component implements OnInit {
       }
     })
   }
+
+  //............................   Prominent Leader Regarding Code End Here ...................................//
+
 }
