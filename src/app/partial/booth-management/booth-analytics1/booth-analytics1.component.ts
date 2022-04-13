@@ -499,7 +499,7 @@ export class BoothAnalytics1Component implements OnInit {
         this.isAgewiseChart = true;
         setTimeout(() => {
           this.agewiseVotersChart(this.ageWiseVoterCountData);
-        }, 400);
+        }, 1000);
       } else {
         this.isAgewiseChart = false;
         this.ageWiseVoterCountData = [];
@@ -523,7 +523,7 @@ export class BoothAnalytics1Component implements OnInit {
         this.isReligionwiseChart = true;
         setTimeout(() => {
           this.religionwiseChart(this.religionWiseVoterCountData);
-        }, 400);
+        }, 1000);
       } else {
         this.isReligionwiseChart = false
         this.religionWiseVoterCountData = [];
@@ -547,7 +547,7 @@ export class BoothAnalytics1Component implements OnInit {
         this.isCasteWiseChart = true;
         setTimeout(() => {
           this.casteWiseChart(this.castWiseVoterCountData);
-        }, 400);
+        }, 1000);
       } else {
         this.isCasteWiseChart = false
         this.castWiseVoterCountData = [];
@@ -571,7 +571,7 @@ export class BoothAnalytics1Component implements OnInit {
         this.partyVotersList = res.responseData;
         setTimeout(() => { // bind charts
           this.partyVotersList.length > 0 ? (this.isPartyVotersChart = true, this.partywiseVotersChart(this.partyVotersList)) : this.isPartyVotersChart = false;
-        }, 500)
+        }, 1000)
 
       } else {
         // this.professionFamiliesList = [];
@@ -806,7 +806,7 @@ export class BoothAnalytics1Component implements OnInit {
         this.socialSupporterConfig.totalItems = res.responseData.responseData2.totalPages * this.socialSupppagesize;
         setTimeout(() => { // bind charts
           this.socialMediaSuprtList.length > 0 ? (this.isocialMediaSuprtChart = true, this.socialMediaSuprtChart(this.socialMediaSuprtList)) : this.isocialMediaSuprtChart = false;
-        }, 500)
+        }, 1000)
       } else {
         this.isocialMediaSuprtChart = false;
         this.socialMediaSuprtList = [];
