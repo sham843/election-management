@@ -1,0 +1,1389 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">BoothWise Voters
+            </span>
+        </div>
+        <!-- id="pageheader" -->
+        <div class="col-sm text-end">
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <!-- clientIdFlag -->
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
+                            (remove)="clearTopFilter('clientId')" (selectionChanges)="onSelectionObj($event,'client')"
+                            (select)="clearTopFilter('electionId'); boothDataHide=false; getElectionName()" optionValueField="id"
+                            optionTextField="Fullname" placeholder="Select Leader">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <!-- electionFlag -->
+                        <ngx-select [allowClear]="true" [items]="electionNameArray"
+                            (remove)="clearTopFilter('electionId')" (selectionChanges)="onSelectionObj($event,'election')"
+                            (select)="boothDataHide=false;  getConstituencyName()"
+                            formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                            placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <!-- constituencyFlag -->
+                        <ngx-select [allowClear]="true" [items]="constituencyNameArray"
+                            (remove)="clearTopFilter('constituencyId')" (selectionChanges)="onSelectionObj($event,'constituency')"
+                            (select)="boothDataHide=false;  boothSummary()"
+                            formControlName="ConstituencyId" optionValueField="ConstituencyId"
+                            optionTextField="ConstituencyName" [disabled]="!this.filterForm.value.ElectionId"
+                            placeholder="Select Constituency">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="villageDropdown" [disabled]="!this.filterForm.value.ConstituencyId"
+                        (remove)="clearTopFilter('village');boothDataHide =false;" formControlName="village"
+                        (select)="ClientWiseBoothList();boothDataHide=false;"
+                        optionValueField="VillageId" optionTextField="VillageName"
+                        placeholder="Select Village">
+                    </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" [disabled]="!this.filterForm.value.ConstituencyId"
+                            formControlName="getBoothId"  optionValueField="BoothId" (select)="dataNotFound = true;boothDataHide=true; selBoothList($event)" (remove)="clearTopFilter('BoothId')" 
+                            optionTextField="BoothNickName"
+                            placeholder="Select Booth">
+                        </ngx-select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-container *ngIf="dataNotFound">
+        <div class="row g-2" id="dash-stats">
+            <div class="col-sm">
+                <div class="card card-body bg-cyan">
+                    <i class="fas fa-person-booth"></i>
+                    <p>Booths</p>
+                    <h3>{{cardData?.TotalBooths}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-green">
+                    <i class="fas fa-users"></i>
+                    <p>Voters</p>
+                    <h3>{{cardData?.TotalVoters}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-blue">
+                    <i class="fas fa-house-user"></i>
+                    <p>Families</p>
+                    <h3>{{cardData?.TotalFamilies}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-gold">
+                    <i class="fas fa-plane-departure"></i>
+                    <p>Migrated</p>
+                    <h3>{{cardData?.TotalMigrated}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-gold">
+                    <i class="fas fa-plane-departure"></i>
+                    <p>Leaders</p>
+                    <h3>{{cardData?.TotalLeader}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-red">
+                    <i class="fas fa-star-half-alt"></i>
+                    <p>Fill / Pending</p>
+                    <h3>{{cardData?.TotalFilled}}/{{cardData?.TotalPending}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-voilet">
+                    <i class="fas fa-user-cog"></i>
+                    <p>Agents</p>
+                    <h3>{{cardData?.TotalAgents}}</h3>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card card-body bg-voilet">
+                    <i class="fas fa-user-cog"></i>
+                    <p>Expired</p>
+                    <h3>{{cardData?.TotalExpired}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row chartbox mb-3">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-start">
+                              <!--  <div class="col-sm-3" id="boothlist">
+                             <div class="mb-3 form-container">
+                                    <ngx-select [allowClear]="true" [items]="villageDropdown"
+                                        (remove)="clearFiltersBooth('village')" [formControl]="selVillage"
+                                        (select)="ClientWiseBoothList();boothDataHide=false"
+                                        optionValueField="VillageId" optionTextField="VillageName"
+                                        placeholder="Select Village">
+                                    </ngx-select>
+                                </div> -->
+                                <!-- <div class="list-group">
+                                    <a class="list-group-item d-flex justify-content-between align-items-start"
+                                        aria-current="true" *ngFor="let boothList of clientWiseBoothListArray"
+                                        (click)="this.searchVoters.setValue('');selBoothList(boothList); boothVoterList()"
+                                        [class.active]="boothList.BoothId == HighlightRow">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">{{boothList?.BoothNickName}}</div>
+                                            <small *ngIf="boothList?.Villagename">{{boothList?.Villagename}}</small>
+                                        </div>
+                                        <span
+                                            class="badge bg-light text-dark rounded-pill">{{boothList?.VoterCount}}</span>
+                                    </a>
+                                </div>
+                            </div> -->
+                            <div class="col-sm-12" id="boothdetails" *ngIf="boothDataHide">
+                                <div class="card shadow-none border">
+                                    <div class="card-header border-bottom">
+                                        <h6 class="mb-0 fw-bold text-main">{{showBoothName}}</h6>
+                                    </div>
+                                    <div class="card-header p-0">
+                                        <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
+                                            <!-- this.fillDataId = 0;   ==  remove this-->
+                                            <li class="nav-item" role="presentation"
+                                                (click)="votersPaginationNo = 1; this.fillDataId1 = 0; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
+                                                <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-voters" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalVoters}}</h5>
+                                                    Voters
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation"
+                                            (click)="votersPaginationNo = 1; this.fillDataId1 = 1; this.isChecked.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
+                                            <button class="nav-link" id="pills-totalFilled-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-voters" type="button" role="tab"
+                                                aria-controls="pills-voters" aria-selected="false">
+                                                <h5 class="mb-0">{{clickBoothListArray?.TotalFilled}}</h5>
+                                                Filled
+                                            </button>
+                                        </li>
+
+                                            <li class="nav-item" role="presentation"
+                                                (click)="familyPaginationNo = 1; this.searchFamily.setValue(''); boothFamilyList()">
+                                                <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-family" type="button" role="tab"
+                                                    aria-controls="pills-family" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalFamilies}}</h5>
+                                                    Families
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation"
+                                                (click)="migratedPaginationNo = 1; this.searchMigrated.setValue(''); boothMigratedList()">
+                                                <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-migrated" type="button" role="tab"
+                                                    aria-controls="pills-migrated" aria-selected="true">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalMigrated}}</h5>
+                                                    Migrated
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation"
+                                            (click)="LeadersPaginationNo = 1; this.searchLeaders.setValue(''); getLeadersList()">
+                                                <button class="nav-link" id="pills-Leaders-tab" data-bs-toggle="pill"
+                                                 data-bs-target="#pills-Leaders" type="button" role="tab"
+                                                    aria-controls="pills-Leaders" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalLeader}}</h5>
+                                                    Leaders
+                                                </button>
+                                               </li>
+
+                                               <li class="nav-item" role="presentation"
+                                               (click)="ExpiredPaginationNo = 1; this.searchExpired.setValue(''); getExpiredList()">
+                                                   <button class="nav-link" id="pills-Expired-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-Expired" type="button" role="tab"
+                                                       aria-controls="pills-Expired" aria-selected="false">
+                                                       <h5 class="mb-0">{{clickBoothListArray?.TotalExpired}}</h5>
+                                                       Expired
+                                                   </button>
+                                                  </li>
+
+                                            <li class="nav-item" role="presentation"
+                                                (click)="pendingPaginationNo = 1; this.searchPending.setValue(''); boothPendingList()">
+                                                <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-pending" type="button" role="tab"
+                                                    aria-controls="pills-pending" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalPending}}</h5>
+                                                    Pending
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="this.searchAgent.setValue(''); boothAgentList();">
+                                                <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-agents" type="button" role="tab"
+                                                    aria-controls="pills-agents" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.TotalAgents}}</h5>
+                                                    Agents
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation" (click)="getCrmTableData();crmAndCrmHistorySearchClear('crm')">
+                                                <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-crm" type="button" role="tab"
+                                                    aria-controls="pills-crm" aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.CRM}}</h5>
+                                                    CRM
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation" (click)="getCrmHistoryTableData();crmAndCrmHistorySearchClear('crmHistory')">
+                                                <button class="nav-link" id="pills-crm-history-tab"
+                                                    data-bs-toggle="pill" data-bs-target="#pills-crm-history"
+                                                    type="button" role="tab" aria-controls="pills-crm-history"
+                                                    aria-selected="false">
+                                                    <h5 class="mb-0">{{clickBoothListArray?.CRMHistory}}</h5>
+                                                    CRM History
+                                                </button>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="pills-tabContent">
+                                            <!-- Voters tab start here   -->
+                                            <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
+                                                aria-labelledby="pills-voters-tab">
+                                                <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm pt-1 d-none">
+                                                        <span class="text-success">25 Results Found</span>
+                                                    </div>
+                                                    <div class="col-sm-auto">
+                                                        <button type="button" (click)="getVoterListDownloadExcel()" class="btn btn-main btn-sm me-2">Export to
+                                                            Excel</button>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm d-none"
+                                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                                            aria-controls="offcanvasRight"><i
+                                                                class="fas fa-filter"></i></button>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..." [formControl]="searchVoters"
+                                                                    (keyup)="onKeyUpFilterVoters()" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearSearchVoters')"
+                                                                    *ngIf="searchVoters.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchVoters.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row mb-3 d-none" id="filter-alerts">
+                                                    <div class="col-sm-12">
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Male <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            18 To 30 Years <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Male <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            18 To 30 Years <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            Farmer <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                        <span class="alert alert-secondary alert-dismissible fade show"
+                                                            role="alert">
+                                                            5 star <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <table class="table table-hover mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voters Name</th>
+                                                            <th>Gender</th>
+                                                            <th>Contact No</th>
+                                                            <th>Occupation</th>
+                                                            <th>Comments</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
+                                                            <!-- <td>{{boothVoterList?.SrNo}}</td> -->
+                                                            <td>{{boothVoterList?.VoterNo}}</td>
+                                                            <!-- <td><a (click)="redirectToVoterPrfile(boothVoterList)" class="text-primary" style="cursor: pointer;">{{boothVoterList?.EnglishName}}</a></td> -->
+                                                            <!-- <td> <a (click)="redirectToVoterPrfile(boothVoterList)"  href="voters-profile/{{encryptData}}" target="_blank">{{boothVoterList?.EnglishName}}</a></td> -->
+
+                                                            <!-- <td>{{boothVoterList?.SrNo}}</td> -->
+
+                                                            <td>
+                                                                <p class="mb-0">
+                                                                    <a   (click)="redirectToVoterPrfile(boothVoterList)"
+                                                                    class="text-main">{{boothVoterList?.EnglishName}}</a>
+                                                                </p>
+                                                                <small class="text-muted" *ngIf="boothVoterList?.Leader == 'yes'">{{boothVoterList?.Leader}}
+                                                                    {{boothVoterList?.LeaderImportance}} <i class="fas fa-star"></i></small>
+                                                            </td>
+                                                            <!-- <td> <a   target="_blank"  (click)="redirectToVoterPrfile(boothVoterList)">{{boothVoterList?.EnglishName}}</a></td> -->
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="boothVoterList?.Gender == 'M'">Male</div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.MobileNo1"><a
+                                                                        class="text-main"
+                                                                        href="tel:{{boothVoterList?.MobileNo1}}">{{boothVoterList?.MobileNo1}}</a>
+                                                                </div>
+                                                                <!-- <div *ngIf="boothVoterList?.MobileNo1">
+                                                                    {{boothVoterList?.MobileNo1}}
+                                                                </div> -->
+                                                                <div *ngIf="!boothVoterList?.MobileNo1">-</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.Occupation">{{boothVoterList?.Occupation}}</div>
+                                                                <div *ngIf="!boothVoterList?.Occupation">-</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="boothVoterList?.Comment">{{boothVoterList?.Comment}}</div>
+                                                                <div *ngIf="!boothVoterList?.Comment">-</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="voterPagination"
+                                                    *ngIf="boothVoterListArray?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionVoters(votersPageSize = $event)">
+                                                </pagination-controls>
+                                                <!-- Voters table end here  -->
+                                            </div>
+                                            <!-- family table start here   -->
+                                            <div class="tab-pane fade" id="pills-family" role="tabpanel"
+                                                aria-labelledby="pills-family-tab">
+                                                <!--  Remove Ng-Container ==> *ngIf="boothFamilyListArray?.length != 0" -->
+                                                <ng-container>
+                                                    <div class="row justify-content-end mb-3">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        [formControl]="searchFamily"
+                                                                        (keyup)="onKeyUpFilterFamily()" />
+                                                                    <button type="button"
+                                                                        class="btn btn-light border btn-sm"
+                                                                        (click)="clearFiltersBooth('clearFamilyVoters')"
+                                                                        *ngIf="searchFamily.value"><i
+                                                                            class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!searchFamily.value"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion accordion-flush" id="familytreeaccordion">
+                                                        <div class="row familytree-header">
+                                                            <div class="col-sm-1">Sr. No.</div>
+                                                            <div class="col-sm-3">Voter Name</div>
+                                                            <div class="col-sm-2">Mobile No.</div>
+                                                            <div class="col-sm-2">Occupation</div>
+                                                            <div class="col-sm-2">Qualification</div>
+                                                            <div class="col-sm-auto">Migration</div>
+                                                            <div class="col-sm"></div>
+                                                        </div>
+                                                        <div class="accordion-item"
+                                                            *ngFor="let boothFamilyList of boothFamilyListArray  | paginate: {id: 'familyPagination', itemsPerPage: 10, currentPage: familyPaginationNo, totalItems:familyTotal}; let i = index">
+
+                                                            <div class="accordion-header familytree-row">
+                                                                <div class="row">
+                                                                    <div class="col-sm-1">{{boothFamilyList.SrNo}}
+                                                                    </div>
+                                                                    <!-- <div class="col-sm-3">{{boothFamilyList.Family | titlecase}}  </div>-->
+                                                                    <div class="col-sm-3">
+                                                                        <a (click)="redirectToVoterPrfile(boothFamilyList)"
+                                                                            class="text-main">{{boothFamilyList?.Family}}</a>
+                                                                        <!-- {{boothFamilyList?.Family}} {{boothFamilyList?.Family}} -->
+                                                                    </div>
+                                                                    <div class="col-sm-2">
+                                                                        <div *ngIf="boothFamilyList?.MobileNo1"><a
+                                                                                class="text-main"
+                                                                                href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a>
+                                                                        </div>
+                                                                        <div *ngIf="!boothFamilyList?.MobileNo1">-</div>
+                                                                    </div>
+                                                                    <div class="col-sm-2">{{boothFamilyList.occupation ?
+                                                                        (boothFamilyList.occupation | titlecase) : '-'}}
+                                                                    </div>
+                                                                    <div class="col-sm-2">
+                                                                        {{boothFamilyList?.qualification ?
+                                                                        boothFamilyList.qualification : "-"}}</div>
+                                                                    <div class="col-sm-auto">
+                                                                        <div>{{boothFamilyList.migrated ?
+                                                                            (boothFamilyList.migrated | titlecase) :
+                                                                            '-'}} </div>
+                                                                    </div>
+                                                                    <div class="col-sm">
+                                                                        <a class="accordion-button collapsed"
+                                                                            data-bs-toggle="collapse"
+                                                                            [attr.data-bs-target]="'#flush-collapseOne'+i"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="flush-collapseOne"
+                                                                            (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.ParentVoterId)">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="flush-collapseOne{{i}}"
+                                                                class="accordion-collapse collapse"
+                                                                aria-labelledby="family-1"
+                                                                data-bs-parent="#familytreeaccordion">
+                                                                <div class="accordion-body p-0">
+                                                                    <!-- *ngIf="boothFamilyList.expanded" -->
+                                                                    <ng-container>
+                                                                        <div class="row familytree-details"
+                                                                            *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.SrNo}}</div>
+                                                                            <div class="col-sm-3">
+                                                                                {{boothFamilyDetails?.Family}}</div>
+                                                                            <!-- <div class="col-sm-2"><a (click)="redirectToVoterPrfile(boothFamilyDetails)" class="text-primary" style="cursor: pointer;">{{boothFamilyDetails?.Family}}</a></div> -->
+                                                                            <div class="col-sm-2">
+                                                                                <span
+                                                                                    *ngIf="boothFamilyDetails?.MobileNo1"><a
+                                                                                        class="calltomember"
+                                                                                        href="tel:{{boothFamilyDetails?.MobileNo1}}">{{boothFamilyDetails?.MobileNo1}}</a>
+                                                                                </span>
+                                                                                <span
+                                                                                    *ngIf="!boothFamilyDetails?.MobileNo1">-</span>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                {{boothFamilyDetails?.Occupation ?
+                                                                                (boothFamilyDetails?.Occupation |
+                                                                                titlecase) : '-'}}</div>
+                                                                            <div class="col-sm-2">
+                                                                                {{boothFamilyDetails?.Qualification ?
+                                                                                (boothFamilyDetails?.Qualification |
+                                                                                titlecase) : '-'}}
+                                                                            </div>
+                                                                            <div class="col-sm-1">
+                                                                                {{boothFamilyDetails?.Migrated ?
+                                                                                (boothFamilyDetails?.Migrated |
+                                                                                titlecase) : '-'}}</div>
+                                                                            <div class="col-sm-1"></div>
+                                                                        </div>
+                                                                        <div class="mt-2 text-end"
+                                                                            *ngIf="boothFamilyDetailsArray?.length == 0">
+                                                                            <div
+                                                                                class="alert alert-danger text-center py-2">
+                                                                                No Data Found..!
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </ng-container>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                                <div class="mt-2 text-end" *ngIf="boothFamilyListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="familyPagination"
+                                                    *ngIf="boothFamilyListArray?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionFamily(familyPageSize = $event)">
+                                                </pagination-controls>
+                                            </div>
+                                            <!-- migrated tab start here   -->
+                                            <div class="tab-pane fade" id="pills-migrated" role="tabpanel"
+                                                aria-labelledby="pills-migrated-tab">
+
+                                                <div class="row justify-content-end mb-3">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..."
+                                                                    [formControl]="searchMigrated"
+                                                                    (keyup)="onKeyUpFilterMigrated()" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearFiltersMigrated')"
+                                                                    *ngIf="searchMigrated.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchMigrated.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Migrated  table start here  -->
+                                                <table class="table table-hover mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th>Sr. No.</th> -->
+                                                            <th>Voter NO.</th>
+                                                            <th>Voters Name</th>
+                                                            <th>Gender</th>
+                                                            <th>Contact No</th>
+                                                            <th>Migrated To</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            *ngFor="let MigratedList of boothMigratedListArray  | paginate: {id: 'migratedPagination', itemsPerPage: 10, currentPage:  migratedPaginationNo, totalItems:migratedTotal};">
+                                                            <!-- <td>{{MigratedList?.SrNo}}</td> -->
+                                                            <td>{{MigratedList?.VoterNo}}</td>
+                                                            <td><a (click)="redirectToVoterPrfile(MigratedList)"
+                                                                    class="text-main"
+                                                                    style="cursor: pointer;">{{MigratedList?.EnglishName}}</a>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="MigratedList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="MigratedList?.Gender == 'M'">Male</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="MigratedList?.MobileNo1"><a
+                                                                        class="text-main"
+                                                                        href="tel:{{MigratedList?.MobileNo1}}">{{MigratedList?.MobileNo1}}</a>
+                                                                </div>
+                                                                <div *ngIf="!MigratedList?.MobileNo1">-</div>
+                                                            </td>
+                                                            <td>{{MigratedList?.MigratedCity}}</td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                                <div class="mt-2 text-end" *ngIf="boothMigratedListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="migratedPagination"
+                                                    *ngIf="boothMigratedListArray?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionMigrated(votersPageSize = $event)">
+                                                </pagination-controls>
+                                                <!-- Migrated  table end here  -->
+                                            </div>
+                                            <!-- Pending tab start here   -->
+                                            <div class="tab-pane fade" id="pills-pending" role="tabpanel"
+                                                aria-labelledby="pills-pending-tab">
+                                                <div class="row justify-content-end mb-3">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..."
+                                                                    [formControl]="searchPending"
+                                                                    (keyup)="onKeyUpFilterPending()" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearFiltersPending')"
+                                                                    *ngIf="searchPending.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchPending.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- pending table start here  -->
+                                                <table class="table table-hover mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter NO.</th>
+                                                            <th>Voters Name</th>
+                                                            <th>Gender</th>
+                                                            <th>Contact No</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            *ngFor="let PendingList of boothPendingListArray  | paginate: {id: 'pendingPagination', itemsPerPage: 10, currentPage:  pendingPaginationNo, totalItems:pendingTotal};">
+                                                            <!-- <td>{{PendingList?.SrNo}}</td> -->
+                                                            <td>{{PendingList?.VoterNo}}</td>
+                                                            <td><a (click)="redirectToVoterPrfile(PendingList)"
+                                                                    class="text-main"
+                                                                    style="cursor: pointer;">{{PendingList?.EnglishName}}</a>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="PendingList?.Gender == 'F'">Female</div>
+                                                                <div *ngIf="PendingList?.Gender == 'M'">Male</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="PendingList?.MobileNo1"><a class="text-main"
+                                                                        href="tel:{{PendingList?.MobileNo1}}">{{PendingList?.MobileNo1}}</a>
+                                                                </div>
+                                                                <div *ngIf="!PendingList?.MobileNo1">-</div>
+                                                            </td>
+                                                        </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                                <!-- pending table end here  -->
+                                                <div class="mt-2 text-end" *ngIf="boothPendingListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="pendingPagination"
+                                                    *ngIf="boothPendingListArray?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionPending(pendingPageSize  = $event)">
+                                                </pagination-controls>
+                                            </div>
+                                            <!-- Agents tab start here   -->
+                                            <div class="tab-pane fade" id="pills-agents" role="tabpanel"
+                                                aria-labelledby="pills-agents-tab">
+                                                <div class="row justify-content-end mb-3">
+                                                    <div class="col-sm-auto">
+                                                        <button type="button" class="btn btn-sm btn-main"
+                                                            data-bs-toggle="modal" data-bs-target="#AddAgentModal">
+                                                            Add Agents
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..." [formControl]="searchAgent"
+                                                                    (keyup)="onKeyUpFilterAgent()" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearFiltersAgent')"
+                                                                    *ngIf="searchAgent.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchAgent.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Agents table start here  -->
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span class="text-main me-3">
+                                                            <i class="fas fa-star me-1"></i> Indicates Booth Agent
+                                                        </span>
+                                                        <span class="text-dark">
+                                                            <i class="far fa-star me-1"></i> Indicates Area Agent
+                                                        </span>
+                                                    </caption>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr. No.</th>
+                                                            <th>Agents Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Area</th>
+                                                            <th>Voters</th>
+                                                            <th>Filled</th>
+                                                            <th>Migrated</th>
+                                                            <th>Families</th>
+                                                            <th>Pending</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let agentList of boothAgentListArray">
+                                                            <td>{{agentList?.SrNo}}</td>
+                                                            <td>
+                                                                <!-- (click)="redirectToAgentDetails(agentList)" -->
+                                                                <a  (click)="redirectToAgentDetails(agentList)">
+                                                                    <span *ngIf="agentList?.SubUserTypeId==3"
+                                                                        class="text-main" style=" cursor: pointer;">
+                                                                        <i class="fas fa-star me-1"></i>
+                                                                        {{agentList?.FullName}}
+                                                                    </span>
+                                                                </a>
+                                                                <!-- (click)="redirectToAgentDetails(agentList)" -->
+                                                                <a (click)="redirectToAgentDetails(agentList)">
+                                                                    <span *ngIf="agentList?.SubUserTypeId==4"
+                                                                        class="text-main" style=" cursor: pointer;">
+                                                                        <i class="far fa-star me-1"></i>
+                                                                        {{agentList?.FullName}}
+                                                                    </span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.MobileNo"><a class="text-main"
+                                                                        href="tel:{{agentList?.MobileNo}}">{{agentList?.MobileNo}}</a>
+                                                                </div>
+                                                                <div *ngIf="!agentList?.MobileNo">-</div>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.Area">{{agentList?.Area}}</div>
+                                                                <div *ngIf="!agentList?.Area">-</div>
+                                                            </td>
+                                                            <td>{{agentList?.TotalVoter}}</td>
+                                                            <td>{{agentList?.TotalFilled}}</td>
+                                                            <td>{{agentList?.TotalMigrated}}</td>
+                                                            <td>{{agentList?.TotalFamily}}</td>
+                                                            <td>{{agentList?.Pending}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="mt-2 text-end" *ngIf="boothAgentListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+
+                                                <!-- Agents table start here  -->
+                                            </div>
+                                            <!-- CRM tab start here   -->
+                                            <div class="tab-pane fade" id="pills-crm" role="tabpanel"
+                                                aria-labelledby="pills-crm-tab">
+                                                <div class="form-container">
+                                                   <form  [formGroup]="crmFilterForm">
+                                                    <div class="row justify-content-end mb-3 g-2">
+                                                        <div class="col-sm-3">
+                                                            <ngx-select [allowClear]="true" (select)="getCrmTableData()" (remove)="clearCrmFilter('Followupstatus')" [items]="followupStatusDropDownData" 
+                                                            optionTextField="name" optionValueField="id" formControlName="Followupstatusid" placeholder="Select Followup Status">
+                                                        </ngx-select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        formControlName="SearchText"
+                                                                        (keyup)="onKeyUpFilterCrmSearch()" />
+                                                                    <button type="button"
+                                                                        class="btn btn-light border btn-sm" (click)="crmAndCrmHistorySearchClear('crm1')"
+                                                                        *ngIf="crmFilterForm.value.SearchText"><i class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!crmFilterForm.value.SearchText"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   </form>
+                                                </div>
+                                                <!-- CRM table start here  -->
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span *ngFor="let dropDownData of followupStatusDropDownData"  class="me-4 {{dropDownData.class}}">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            {{dropDownData?.name}}
+                                                        </span>
+                                                    </caption>
+                                                    <!-- <caption>
+                                                        <span class="text-main me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Todays Followups
+                                                        </span>
+                                                        <span class="text-success me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Upcoming Followups
+                                                        </span>
+                                                        <span class="text-dark me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Missed Followups
+                                                        </span>
+                                                        <span class="text-danger me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Not To Call
+                                                        </span>
+                                                        <span class="text-info">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            New
+                                                        </span>
+                                                    </caption> -->
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Gender</th>
+                                                            <th>Area</th>
+                                                            <th>Followup Date-Time</th>
+                                                            <th>Last Feedback</th>
+                                                            <th>CRM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
+                                                            <td >{{crmTableList.VoterNo}}</td>
+                                                            <td [ngClass]="{'text-main' : crmTableList.Followupstatus == 'Todays Followup','text-success' : crmTableList.Followupstatus == 'Upcomming Followup','text-danger' : crmTableList.Followupstatus == 'Not To Call','text-info' : crmTableList.Followupstatus == 'New', 'text-dark' : crmTableList.Followupstatus == 'Missed Followup'}">{{crmTableList.MarathiName}}</td>
+                                                            <td>{{crmTableList.MobileNo}}</td>
+                                                            <td>{{crmTableList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                                            <td>{{crmTableList.AreaName}}</td>
+                                                            <td>{{crmTableList.FollowupDate ? crmTableList.FollowupDate : '-'}}</td>
+                                                            <td>{{crmTableList.LastFeedback ? crmTableList.LastFeedback : '-'}}</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(crmTableList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="mt-2 text-end" *ngIf="getCrmTableList?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="crmPagination"
+                                                    *ngIf="getCrmTableList?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionCrm(crmPageSize  = $event)">
+                                                </pagination-controls>
+                                            </div>
+                                            <!-- CRM History tab start here   -->
+                                            <div class="tab-pane fade" id="pills-crm-history" role="tabpanel"
+                                                aria-labelledby="pills-crm-history-tab">
+                                                <div class="form-container">
+                                                    <form  [formGroup]="crmHistoryFilterForm">
+                                                    <div class="row justify-content-end mb-3 g-2">
+                                                        <div class="col-sm-3">
+                                                                <ngx-select [allowClear]="true" (remove)="clearCrmHistoryFilter('feedbackstatus')" (select)="getCrmHistoryTableData()" [items]="feedbackTypeArray"
+                                                                    formControlName="feedbackstatus" optionValueField="id" optionTextField="name"
+                                                                    placeholder="Select Feedback Type">
+                                                                </ngx-select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <ngx-select [allowClear]="true" (remove)="clearCrmHistoryFilter('Followupstatus')"  (select)="getCrmHistoryTableData()" [items]="followupStatusDropDownData" 
+                                                            optionTextField="name" optionValueField="id" formControlName="Followupstatusid" placeholder="Select Followup Status">
+                                                        </ngx-select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <!-- <div class="input-group">
+                                                                <input [owlDateTime]="dt3" formControlName="date"
+                                                                    class="form-control" [owlDateTimeTrigger]="dt3" placeholder="Select Date">
+                                                            </div>
+ -->
+
+                                                            <div class="input-group">
+                                                                <input [owlDateTime]="dt3" formControlName="date" (dateTimeChange)="filterDateData('range')"
+                                                                 class="form-control" [owlDateTimeTrigger]="dt3" placeholder="Select Date">
+                                                                <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3" *ngIf="!defaultCloseBtn">
+                                                                    <i class="fas fa-calendar-alt"></i></button>
+                                                                <button class="btn btn-light border btn-sm" type="button" *ngIf="defaultCloseBtn" (click)="clearCrmHistoryFilter('dateRangePIcker')">
+                                                                    <i class="fas fa-times"></i></button>
+                                                            </div>
+
+                                                            <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        formControlName="SearchText"
+                                                                        (keyup)="onKeyUpFilterCrmHistorySearch()" />
+                                                                    <button type="button" (click)="crmAndCrmHistorySearchClear('crmHistory1')"
+                                                                        class="btn btn-light border btn-sm"
+                                                                        *ngIf="crmHistoryFilterForm.value.SearchText"><i
+                                                                            class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!crmHistoryFilterForm.value.SearchText"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                </div>
+                                                <!-- CRM History table start here  -->
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <!-- <caption>
+                                                        <span class="text-main me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Todays Followups
+                                                        </span>
+                                                        <span class="text-success me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Upcoming Followups
+                                                        </span>
+                                                        <span class="text-dark me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Missed Followups
+                                                        </span>
+                                                        <span class="text-danger me-4">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            Not To Call
+                                                        </span>
+                                                        <span class="text-info">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            New
+                                                        </span>
+                                                    </caption> -->
+                                                    <caption>
+                                                        <span *ngFor="let dropDownData of followupStatusDropDownData"  class="me-4 {{dropDownData.class}}">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            {{dropDownData?.name}}
+                                                        </span>
+                                                    </caption>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Gender</th>
+                                                            <!-- <th>Feedback</th> -->
+                                                            <th>Followup Date-Time</th>
+                                                            <th>Last Feedback</th>
+                                                            <th>CRM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let CrmHistoryTableList of getCrmHistoryTableList | paginate: {id: 'crmHistoryPagination', itemsPerPage: 10, currentPage: crmHistoryPaginationNo, totalItems:getCrmHistoryTableListrTotal};">
+                                                            <td>{{CrmHistoryTableList.VoterNo}}</td>
+                                                            <td [ngClass]="{'text-main' : CrmHistoryTableList.Followupstatus == 'Todays Followup','text-success' : CrmHistoryTableList.Followupstatus == 'Upcomming Followup','text-danger' : CrmHistoryTableList.Followupstatus == 'Not To Call','text-info' : CrmHistoryTableList.Followupstatus == 'New', 'text-dark' : CrmHistoryTableList.Followupstatus == 'Missed Followup'}">{{CrmHistoryTableList.MarathiName}}</td>
+                                                            <td>{{CrmHistoryTableList.MobileNo}}</td>
+                                                            <td>{{CrmHistoryTableList?.Gender == 'F' ? 'Female' : 'Male'}}</td>
+                                                            <!-- <td>{{CrmHistoryTableList.LastFeedback}}</td> -->
+                                                            <td>{{CrmHistoryTableList.FollowupDate? CrmHistoryTableList.FollowupDate : '-'}}</td>
+                                                            <td>{{CrmHistoryTableList.LastFeedback? CrmHistoryTableList.LastFeedback : '-'}}</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(CrmHistoryTableList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="mt-2 text-end" *ngIf="getCrmHistoryTableList?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="crmHistoryPagination"
+                                                    *ngIf="getCrmHistoryTableList?.length != 0" previousLabel=""
+                                                    nextLabel=""
+                                                    (pageChange)="onClickPagintionCrmHistory(crmHistoryPageSize  = $event)">
+                                                </pagination-controls>
+                                            </div>
+
+
+      <!-- Expired tab start here   -->
+      <div class="tab-pane fade" id="pills-Expired" role="tabpanel"
+      aria-labelledby="pills-Expired-tab">
+      <div class="row justify-content-end mb-3">
+          <div class="col-sm-3">
+              <div class="form-container">
+                  <div class="input-group">
+                      <input class="form-control" type="text"
+                          placeholder="Search..."
+                          [formControl]="searchExpired"
+                          (keyup)="onKeyUpFilterExpired()" />
+                      <button type="button"
+                          class="btn btn-light border btn-sm"
+                          (click)="clearFiltersBooth('clearFiltersExpired')"
+                          *ngIf="searchExpired.value"><i
+                              class="fas fa-times"></i></button>
+                      <button type="button" *ngIf="!searchExpired.value"
+                          class="btn btn-sm border btn-light"><i
+                              class="fas fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Expired table start here  -->
+      <table class="table table-hover mb-0">
+          <thead>
+              <tr>
+                  <!-- <th>Sr. No.</th> -->
+                  <th>Voter NO.</th>
+                  <th>Voters Name</th>
+                  <th>Gender</th>
+                  <th>Contact No</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr
+                  *ngFor="let expiredList of ExpiredListArray  | paginate: {id: 'ExpiredPagination', itemsPerPage: 10, currentPage:  ExpiredPaginationNo, totalItems:ExpiredTotal};">
+                  <!-- <td>{{expiredList?.SrNo}}</td> -->
+                  <td>{{expiredList?.VoterNo}}</td>
+                  <td>{{expiredList?.EnglishName}}</td>
+                  <td>
+                      <div *ngIf="expiredList?.Gender == 'F'">Female</div>
+                      <div *ngIf="expiredList?.Gender == 'M'">Male</div>
+                  </td>
+                  <td>
+                      <div><a class="text-main"
+                              href="tel:{{expiredList?.MobileNo1}}">{{expiredList?.MobileNo1 ? expiredList?.MobileNo1 : '-'}}</a>
+                      </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <!-- Expired table end here  -->
+      <div class="mt-2 text-end" *ngIf="ExpiredListArray?.length == 0">
+          <div class="alert alert-danger text-center py-2">No Data Found..!
+          </div>
+      </div>
+      <pagination-controls id="ExpiredPagination"
+          *ngIf="ExpiredListArray?.length != 0" previousLabel=""
+          nextLabel=""
+          (pageChange)="onClickPagintionExpired(ExpiredPageSize  = $event)">
+      </pagination-controls>
+  </div>
+
+  <!-- Expired Code end here  -->
+
+       <!-- Leaders tab start here   -->
+       <div class="tab-pane fade" id="pills-Leaders" role="tabpanel"
+       aria-labelledby="pills-Leaders-tab">
+       <div class="row justify-content-end mb-3">
+           <div class="col-sm-3">
+               <div class="form-container">
+                   <div class="input-group">
+                       <input class="form-control" type="text"
+                           placeholder="Search..."
+                           [formControl]="searchLeaders"
+                           (keyup)="onKeyUpFilterLeaders()" />
+                       <button type="button"
+                           class="btn btn-light border btn-sm"
+                           (click)="clearFiltersBooth('clearFiltersLeaders')"
+                           *ngIf="searchLeaders.value"><i
+                               class="fas fa-times"></i></button>
+                       <button type="button" *ngIf="!searchLeaders.value"
+                           class="btn btn-sm border btn-light"><i
+                               class="fas fa-search"></i></button>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+      <!-- Leaders table start here  -->
+      <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <!-- <th>Sr. No.</th> -->
+                <th>Voter NO.</th>
+                <th>Leader Name</th>
+                <th>Contact No</th>
+                <th>Party Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let leadesList of LeadersListArray  | paginate: {id: 'LeadersPagination', itemsPerPage: 10, currentPage:  LeadersPaginationNo, totalItems:LeadersTotal};">
+                <!-- <td>{{leadesList?.SrNo}}</td> -->
+                <td>{{leadesList?.VoterNo}}</td>
+                <!-- <td>{{leadesList?.LeaderName}}</td> -->
+                <td>{{leadesList?.LeaderName}}
+                    <small class="text-muted" *ngIf="leadesList?.LeaderImportance"> ({{leadesList?.LeaderImportance}} )<i class="fas fa-star"></i></small>
+                </td>
+                <td>
+                    <div><a class="text-main"
+                            href="tel:{{leadesList?.Contact}}">{{leadesList?.Contact ? leadesList?.Contact : '-'}}</a>
+                    </div>
+                </td>
+                <td>{{leadesList?.PartyName ? leadesList?.PartyName : '-'}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Leaders table end here  -->
+    <div class="mt-2 text-end" *ngIf="LeadersListArray?.length == 0">
+        <div class="alert alert-danger text-center py-2">No Data Found..!
+        </div>
+    </div>
+    <pagination-controls id="LeadersPagination"
+        *ngIf="LeadersListArray?.length != 0" previousLabel=""
+        nextLabel=""
+        (pageChange)="onClickPagintionLeaders(LeadersPageSize  = $event)">
+    </pagination-controls>
+</div>
+
+<!-- Leaders Code end here  -->
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!dataNotFound">
+        <div class="alert alert-danger text-center py-2 mb-0">No Voters Information Found for this Candidate..!</div>
+    </ng-container>
+</div>
+
+
+<!-- Modal to show voters list -->
+<div class="modal fade" id="ViewVotersModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="ViewVotersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title mb-0" id="ViewVotersModalLabel">Voters List</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Voter Name</th>
+                            <th>Voter NO.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Ravikumar Rajesh Wadekar</td>
+                            <td>1234567</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add agents -->
+<div class="modal fade" id="AddAgentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="AddAgentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddAgentModalLabel">Add Agent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="this.submitted=false"></button>
+            </div>
+            <div class="modal-body chartbox">
+                <form [formGroup]="assignAgentForm">
+                    <div class="form-container">
+
+                        <div class="row mb-3 g-2">
+                            <div class="col-sm-4">
+                                <label class="form-label required-field">First Name</label>
+                                <input type="text" class="form-control" formControlName="FName" placeholder="First Name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                                <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.FName.errors.required">First name is required
+                                    </div>
+                                    <div *ngIf="f.FName.errors.pattern">First name can not contain space</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="txtFullName" class="form-label required-field">Middle Name</label>
+                                <input type="text" class="form-control" formControlName="MName"
+                                    placeholder="Middle Name" [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                                <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.MName.errors.required">Middle name is required
+                                    </div>
+                                    <div *ngIf="f.MName.errors.pattern">Middle name can not contain space</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="txtFullName" class="form-label required-field">Last Name</label>
+                                <input type="text" class="form-control" formControlName="LName" placeholder="Last Name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                                <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.LName.errors.required">Last name is required
+                                    </div>
+                                    <div *ngIf="f.LName.errors.pattern">Last name can not contain space</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-12">
+                                <label for="txtContactNo" class="form-label required-field">Contact No.</label>
+                                <input type="text" class="form-control" id="txtContactNo1" maxlength="10" (keypress)=Vali_AcceptOnlyNumber($event)
+                                    formControlName="MobileNo" placeholder="Contact No." 
+                                    [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                                <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                    <div *ngIf="f.MobileNo.errors.required">Contact No. is required</div>
+                                    <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit valid Number.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Address1" class="form-label">Address</label>
+                            <textarea class="form-control" id="txtAddress" formControlName="Address"
+                                placeholder="Address"
+                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
+                            <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                <div *ngIf="f.Address.errors.required">Address is required</div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="IsMemberAddAllow"
+                                    value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Allow Sub Member
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                    (click)="this.submitted=false; agentForm()">Clear</button>
+                            </div>
+                            <div class="col-sm-6 text-end">
+                                <button type="button" class="btn btn-primary btn-main btn-sm"
+                                    (click)="addAgent()">{{btnText}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Off canvas for filters -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h6 id="offcanvasRightLabel" class="mb-0">Filters</h6>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="form-container">
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">Select Area</option>
+                </select>
+            </div>
+            <div class="row mb-3 g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Select Gender</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Mobile No. Available</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">Select Business</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">Political Party</option>
+                </select>
+            </div>
+            <div class="mb-3 row g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Select Stars</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Yuvak</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">In Favour Of</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <select class="form-select">
+                    <option value="">In Oppose Of</option>
+                </select>
+            </div>
+            <div class="row mb-3 g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Age</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Family Size</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3 g-2">
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Religion</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-select">
+                        <option value="">Caste</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-secondary btn-sm">Clear All</button>
+                </div>
+                <div class="col-sm-6 text-end">
+                    <button type="button" class="btn btn-main btn-sm">Show Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -213,7 +213,31 @@
                     <div class="card-body pt-1">
                         <div class="form-container">
                             <div class="row mb-2 g-2">
-                                <div class="col-sm-4">
+
+                                <!-- <div class="col-sm-4">
+                                    <label class="form-label required-field">Feedback Type</label>
+                                    <ngx-select [allowClear]="true" [items]="feedbackTypeArray"
+                                        formControlName="FeedBackType" optionValueField="id" optionTextField="name"
+                                        placeholder="Select Feedback Type">
+                                    </ngx-select>
+                                    <div *ngIf="submitted && f.FeedBackType.errors" class="invalid-feedback">
+                                        <div *ngIf="f.FeedBackType.errors.required">Feedback is required</div>
+                                     </div>
+                                </div> -->
+
+                                <div class="col-sm-6">
+                                    <label class="form-label required-field">Feedback Type</label>
+                                    <div class="form-check form-check-inline" *ngFor="let feedbackTy of feedbackTypeArray">
+                                        <input class="form-check-input" formControlName="FeedBackType" name="IsBody" type="radio"
+                                         id="chkIsMultipleYes" [value]="feedbackTy.id">
+                                        <label class="form-check-label" for="chkIsMultipleYes">{{feedbackTy.name}}</label>
+                                    </div>
+                                    <div *ngIf="submitted && f.FeedBackType.errors" class="invalid-feedback">
+                                        <div *ngIf="f.FeedBackType.errors.required">Feedback Type is required</div>
+                                     </div>
+                                </div>
+
+                                <div class="col-sm-3">
                                     <label class="form-label">Do Not Call</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="chkDoNotCall"
@@ -224,7 +248,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <label class="form-label">Followup Date-Time</label>
                                     <div class="input-group">
 
@@ -238,19 +262,6 @@
                                         <div *ngIf="f.FollowupDate.errors.required">Followup Date is required</div>
                                      </div>
                                 </div>
-
-
-                                <div class="col-sm-4">
-                                    <label class="form-label required-field">Feedback Type</label>
-                                    <ngx-select [allowClear]="true" [items]="feedbackTypeArray"
-                                        formControlName="FeedBackType" optionValueField="id" optionTextField="name"
-                                        placeholder="Select Feedback Type">
-                                    </ngx-select>
-                                    <div *ngIf="submitted && f.FeedBackType.errors" class="invalid-feedback">
-                                        <div *ngIf="f.FeedBackType.errors.required">Feedback is required</div>
-                                     </div>
-                                </div>
-
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Feedback</label>

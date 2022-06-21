@@ -3,6 +3,22 @@
         <img src="/assets/images/logo.png" />
     </div>
     <div class="accordion accordion-flush w-100" id="accordionExample">
+
+      <!-- static Add Crm Link Code Start-->
+      <div class="accordion-item" routerLinkActive="active">
+        <div class="accordion-header">
+            <button class="accordion-button no-sub" type="button" routerLink="crm">
+                <label for="group-list">
+                    <div class="side-icon">
+                        <i class="fas fa-vote-yea"></i>
+                    </div>
+                    CRM
+                </label>
+            </button>
+        </div>
+    </div>
+    <!-- static Add Crm Link Code End-->
+
         <ng-container *ngFor="let pages of loginPages; let i = index">
             <div class="accordion-item" routerLinkActive="active" *ngIf="(pages.PageGroup == pages.pageName)">
                 <div class="accordion-header">

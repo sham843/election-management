@@ -37,6 +37,7 @@ const routes: Routes = [
       { path: 'view-boothwise-voters-list/:id', loadChildren: () => import('./partial/booth-management/view-boothwise-voters-list/view-boothwise-voters-list.module').then(m => m.ViewBoothwiseVotersListModule),data:{ title:'View Booth Wise Voters List',allowedRoles:['1','2'] } },
       { path: 'view-boothwise-voters-list1', loadChildren: () => import('./partial/booth-management/view-boothwise-voters-list1/view-boothwise-voters-list1.module').then(m => m.ViewBoothwiseVotersList1Module),data:{ title:'View Booth Wise Voters List1',allowedRoles:['1','2'] } },
       { path: 'add-supervisor', loadChildren: () => import('./partial/booth-management/add-supervisor/add-supervisor.module').then(m => m.AddSupervisorModule),data:{ title:'Add Supervisor',allowedRoles:['1','2'] } },
+      { path: 'crm', loadChildren: () => import('./partial/booth-management/crm/crm.module').then(m => m.CrmModule) ,data:{ title:'CRM',allowedRoles:['1','2'] }},
 
       { path: 'voters-profile/:id', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2'] } },
       { path: 'restricted-mobile', loadChildren: () => import('./partial/settings/restricted-mobile/restricted-mobile.module').then(m => m.RestrictedMobileModule),data:{ title:'Restricted Mobile',allowedRoles:['1','2'] } },
@@ -49,10 +50,6 @@ const routes: Routes = [
       ]
   },
   { path: '500', component: ServerErrorComponent },
-  
-  
-  
- 
   { path: '**', component: PageNotFoundComponent },
 ];
 
