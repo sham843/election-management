@@ -1102,6 +1102,8 @@ export class CrmComponent implements OnInit {
   // ------------------------------------------ Booth details ------------------------------ -------------------- //
 
   openDialogVoterCallEntries(obj: any) {
+
+    obj.hasOwnProperty('ClientID') ? (obj['ClientId'] = obj['ClientID'],delete obj['ClientID']) : ''; // key name change
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
       data: obj,
       panelClass: 'fullscreen-dialog',

@@ -350,6 +350,7 @@
                                                             <th>Contact No</th>
                                                             <th>Occupation</th>
                                                             <th>Comments</th>
+                                                            <th>CRM</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -394,6 +395,12 @@
                                                                 <div *ngIf="boothVoterList?.Comment">{{boothVoterList?.Comment}}</div>
                                                                 <div *ngIf="!boothVoterList?.Comment">-</div>
                                                             </td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(boothVoterList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -437,10 +444,11 @@
                                                         <div class="row familytree-header">
                                                             <div class="col-sm-1">Sr. No.</div>
                                                             <div class="col-sm-3">Voter Name</div>
-                                                            <div class="col-sm-2">Mobile No.</div>
+                                                            <div class="col-sm-1">Mobile No.</div>
                                                             <div class="col-sm-2">Occupation</div>
                                                             <div class="col-sm-2">Qualification</div>
-                                                            <div class="col-sm-auto">Migration</div>
+                                                            <div class="col-sm-1">Migration</div>
+                                                            <div class="col-sm-1">CRM</div>
                                                             <div class="col-sm"></div>
                                                         </div>
                                                         <div class="accordion-item"
@@ -456,7 +464,7 @@
                                                                             class="text-main">{{boothFamilyList?.Family}}</a>
                                                                         <!-- {{boothFamilyList?.Family}} {{boothFamilyList?.Family}} -->
                                                                     </div>
-                                                                    <div class="col-sm-2">
+                                                                    <div class="col-sm-1">
                                                                         <div *ngIf="boothFamilyList?.MobileNo1"><a
                                                                                 class="text-main"
                                                                                 href="tel:{{boothFamilyList?.MobileNo1}}">{{boothFamilyList?.MobileNo1}}</a>
@@ -469,10 +477,16 @@
                                                                     <div class="col-sm-2">
                                                                         {{boothFamilyList?.qualification ?
                                                                         boothFamilyList.qualification : "-"}}</div>
-                                                                    <div class="col-sm-auto">
+                                                                    <div class="col-sm-1">
                                                                         <div>{{boothFamilyList.migrated ?
                                                                             (boothFamilyList.migrated | titlecase) :
                                                                             '-'}} </div>
+                                                                    </div>
+                                                                    <div class="col-sm-1">
+                                                                        <button class="btn btn-light btn-sm text-main"
+                                                                        (click)="openDialogVoterCallEntries(boothFamilyList)">
+                                                                        <i class="fas fa-phone-alt"></i>
+                                                                    </button>
                                                                     </div>
                                                                     <div class="col-sm">
                                                                         <a class="accordion-button collapsed"
@@ -500,7 +514,7 @@
                                                                             <div class="col-sm-3">
                                                                                 {{boothFamilyDetails?.Family}}</div>
                                                                             <!-- <div class="col-sm-2"><a (click)="redirectToVoterPrfile(boothFamilyDetails)" class="text-primary" style="cursor: pointer;">{{boothFamilyDetails?.Family}}</a></div> -->
-                                                                            <div class="col-sm-2">
+                                                                            <div class="col-sm-1">
                                                                                 <span
                                                                                     *ngIf="boothFamilyDetails?.MobileNo1"><a
                                                                                         class="calltomember"
@@ -521,7 +535,13 @@
                                                                             <div class="col-sm-1">
                                                                                 {{boothFamilyDetails?.Migrated ?
                                                                                 (boothFamilyDetails?.Migrated |
-                                                                                titlecase) : '-'}}</div>
+                                                                                titlecase) : '-'}}
+                                                                            </div>
+                                                                            <div class="col-sm-1">
+                                                                                <button class="btn btn-light btn-sm text-main" (click)="openDialogVoterCallEntries(boothFamilyDetails)">
+                                                                                    <i class="fas fa-phone-alt"></i>
+                                                                                </button>
+                                                                            </div>
                                                                             <div class="col-sm-1"></div>
                                                                         </div>
                                                                         <div class="mt-2 text-end"
@@ -583,6 +603,7 @@
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
                                                             <th>Migrated To</th>
+                                                            <th>CRM</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -606,6 +627,12 @@
                                                                 <div *ngIf="!MigratedList?.MobileNo1">-</div>
                                                             </td>
                                                             <td>{{MigratedList?.MigratedCity}}</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(MigratedList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
                                                         </tr>
 
                                                     </tbody>
@@ -652,6 +679,7 @@
                                                             <th>Voters Name</th>
                                                             <th>Gender</th>
                                                             <th>Contact No</th>
+                                                            <th>CRM</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -673,9 +701,13 @@
                                                                 </div>
                                                                 <div *ngIf="!PendingList?.MobileNo1">-</div>
                                                             </td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(PendingList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
                                                         </tr>
-
-
                                                     </tbody>
                                                 </table>
                                                 <!-- pending table end here  -->
@@ -1046,6 +1078,7 @@
                   <th>Voters Name</th>
                   <th>Gender</th>
                   <th>Contact No</th>
+                  <th>CRM</th>
               </tr>
           </thead>
           <tbody>
@@ -1063,6 +1096,12 @@
                               href="tel:{{expiredList?.MobileNo1}}">{{expiredList?.MobileNo1 ? expiredList?.MobileNo1 : '-'}}</a>
                       </div>
                   </td>
+                  <td>
+                    <button class="btn btn-light btn-sm text-main"
+                        (click)="openDialogVoterCallEntries(expiredList)">
+                        <i class="fas fa-phone-alt"></i>
+                    </button>
+                </td>
               </tr>
           </tbody>
       </table>
@@ -1113,6 +1152,7 @@
                 <th>Leader Name</th>
                 <th>Contact No</th>
                 <th>Party Name</th>
+                <th>CRM</th>
             </tr>
         </thead>
         <tbody>
@@ -1130,6 +1170,12 @@
                     </div>
                 </td>
                 <td>{{leadesList?.PartyName ? leadesList?.PartyName : '-'}}</td>
+                <td>
+                    <button class="btn btn-light btn-sm text-main"
+                        (click)="openDialogVoterCallEntries(leadesList)">
+                        <i class="fas fa-phone-alt"></i>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>
