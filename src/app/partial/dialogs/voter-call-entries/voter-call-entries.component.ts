@@ -32,7 +32,6 @@ export class VoterCallEntriesComponent implements OnInit {
   Date:any = new Date();
   max = new Date();
 
-
   constructor(
     public dialogRef: MatDialogRef<VoterCallEntriesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,

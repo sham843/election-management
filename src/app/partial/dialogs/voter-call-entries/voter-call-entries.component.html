@@ -226,7 +226,7 @@
                                 </div> -->
 
                                 <div class="col-sm-6">
-                                    <label class="form-label required-field">Feedback Type</label>
+                                    <label class="form-label required-field">Feedback Type</label><br>
                                     <div class="form-check form-check-inline" *ngFor="let feedbackTy of feedbackTypeArray">
                                         <input class="form-check-input" formControlName="FeedBackType" type="radio"
                                          [value]="feedbackTy?.id">
@@ -249,7 +249,7 @@
                                 </div>
 
                                 <div class="col-sm-3">
-                                    <label class="form-label">Followup Date-Time</label>
+                                    <label class="form-label required-field">Followup Date-Time</label>
                                     <div class="input-group">
 
                                         <input [owlDateTime]="dt3" formControlName="FollowupDate" [max]="max"
