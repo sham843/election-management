@@ -50,7 +50,7 @@ export class CrmHistoryComponent implements OnInit {
     let getUrlData: any = this.route.snapshot.params.id;
     if (getUrlData) {
       getUrlData = getUrlData.split('.');
-      this.voterListData = { 'AgentId': +getUrlData[0], 'ClientID': +getUrlData[1], 'VoterId': +getUrlData[2] }
+      this.voterListData = { 'AgentId': +getUrlData[0], 'ClientId': +getUrlData[1], 'VoterId': +getUrlData[2] }
     }
   }
 
