@@ -1153,7 +1153,7 @@ export class CrmComponent implements OnInit {
     const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
       data: Obj1,
       panelClass: 'fullscreen-dialog',
-      height: '98vh',
+      height: '96vh',
       width: '99%'
     });
     dialogRef.afterClosed().subscribe(result => {
