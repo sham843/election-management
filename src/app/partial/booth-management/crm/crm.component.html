@@ -126,9 +126,8 @@
                                             <div class="col-sm-8">
                                                 <div class="row justify-content-end g-2">
                                                     <div class="col-sm-auto">
-                                                        <button type="button" (click)="getVoterListDownloadExcel()"
-                                                            class="btn btn-main btn-sm me-2">Export to
-                                                            Excel</button>
+                                                        <button type="button" *ngIf="filterSidebarFlag != 'AgentFlag'" (click)="getVoterListDownloadExcel()"
+                                                            class="btn btn-main btn-sm me-2">Export to Excel</button>
                                                         <button type="button" *ngIf="filterSidebarFlag != 'AgentFlag'" class="btn btn-outline-secondary btn-sm"
                                                             data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                                                             (click)="globalFilterOnInitData()"

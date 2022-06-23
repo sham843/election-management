@@ -27,6 +27,7 @@ export class CallAPIService {
 
   // development server base url MicroServices
       case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
+      case 'electionMicroSerApp': return 'http://demoelectionclientapp.eanifarm.com/'; break;
       default: return ''; break;
 
     }
