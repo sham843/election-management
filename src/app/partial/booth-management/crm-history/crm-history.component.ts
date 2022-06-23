@@ -154,6 +154,24 @@ export class CrmHistoryComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+
+ // this.spinner.show();
+  //   let obj = 'ClientId=' + this.voterListData.ClientId + 
+  //   '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
+  //   this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRM?' + obj, false, false, false, 'electionMicroSerApp');
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.responseData != null && res.statusCode == "200") {
+  //       this.spinner.hide();
+  //       let obj = res.responseData[0];
+  //       this.checkValueNullOrUnd(obj);
+  //     } else {
+  //       this.spinner.hide();
+  //     }
+  //   }, (error: any) => {
+  //     this.spinner.hide();
+  //     this.router.navigate(['../500'], { relativeTo: this.route });
+  //   })
+
   }
 
   checkValueNullOrUnd(obj:any){
@@ -185,6 +203,24 @@ export class CrmHistoryComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+
+  // this.spinner.show();
+    // let obj = 'ClientId=' + this.voterListData.ClientId + 
+    // '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
+    // this.callAPIService.setHttp('get', 'ClientMasterApp/VoterList/GetVoterFamilyMember?' + obj, false, false, false, 'electionMicroSerApp');
+    // this.callAPIService.getHttp().subscribe((res: any) => {
+    //   if (res.responseData != null && res.statusCode == "200") {
+    //     this.spinner.hide();
+    //     this.voterProfileFamilyData = res.responseData;
+    //   } else {
+    //     this.voterProfileFamilyData = [];
+    //     this.spinner.hide();
+    //   }
+    // }, (error: any) => {
+    //   this.spinner.hide();
+    //   this.router.navigate(['../500'], { relativeTo: this.route });
+    // })
+
   }
 
                               // data1: get ostive Negative Influence & data2: get Comment Data  //
@@ -207,6 +243,26 @@ export class CrmHistoryComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
     })
+
+ // this.spinner.show();
+    // let obj = 'ClientId=' + this.voterListData.ClientId + 
+    // '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
+    // this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRMVoterComments?' + obj, false, false, false, 'electionMicroSerApp');
+    // this.callAPIService.getHttp().subscribe((res: any) => {
+    //   if (res.responseData != null && res.statusCode == "200") {
+    //     this.spinner.hide();
+    //     this.VPCommentData = res.responseData.responseData1;
+    //     this.posNegativeInfData = res.responseData.responseData2;
+    //   } else {
+    //     this.VPCommentData = [];
+    //     this.posNegativeInfData = [];
+    //     this.spinner.hide();
+    //   }
+    // }, (error: any) => {
+    //   this.spinner.hide();
+    //   this.router.navigate(['../500'], { relativeTo: this.route });
+    // })
+
   }
 
   clearForm(){
@@ -220,7 +276,227 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   voterDateRangeSelect(asd:any){
-
   }
+
+  // Voter Profile form code
+
+voterProfileForm!:FormGroup | any;
+
+
+
+defaultvoterProfileForm(){
+  this.voterProfileForm = this.fb.group({
+
+    Id: [''],
+    mobileNo1: [''],
+    mobileNo2: [''],
+    email: [''],
+    castId: [''],
+    partyId: [''],
+    religionId: [''],
+    watsApp1: [''],
+    watsApp2: [''],
+    leader: [''],
+    migratedArea: [''],
+    head: [''],
+    dateOfBirth: [''],
+    comment: [''],
+    voterMarking: [''],
+    migratedCity: [''],
+    latitude: [''],
+    longitude: [''],
+    nickName: [''],
+    migrated: [''],
+    area: [''],
+    migratedLatitude: [''],
+    migratedLongitude: [''],
+    occupation: [''],
+    isNameChange: [''],
+    mfName: [''],
+    mmName: [''],
+    mlName: [''],
+    efName: [''],
+    emName: [''],
+    elName: [''],
+    qualification: [''],
+    bloodgroup: [''],
+    isNotCall: [''],
+    isDairyFarmer: [''],
+    isGoatSheepFarmer: [''],
+    isSugarCaneCutter: [''],
+    haveVehicle: [''],
+    isFarmer: [''],
+    haveBusiness: [''],
+    isYuvak: [''],
+    financialCondition: [''],
+    isExpired: [''],
+    prominentLeaderId: [''],
+    needSupportFlag: [''],
+    needSupportText: [''],
+    postalFlag: [''],
+    whyIsPostal: [''],
+  })
+}
+
+get v() { return this.voterProfileForm.controls };
+
+editVoterProfileData(){
+  this.voterProfileForm.patchValue({
+    mobileNo1: [''],
+    mobileNo2: [''],
+    email: [''],
+    castId: [''],
+    partyId: [''],
+    religionId: [''],
+    watsApp1: [''],
+    watsApp2: [''],
+    leader: [''],
+    migratedArea: [''],
+    head: [''],
+    dateOfBirth: [''],
+    comment: [''],
+    voterMarking: [''],
+    migratedCity: [''],
+    latitude: [''],
+    longitude: [''],
+    nickName: [''],
+    migrated: [''],
+    area: [''],
+    migratedLatitude: [''],
+    migratedLongitude: [''],
+    occupation: [''],
+    isNameChange: [''],
+    mfName: [''],
+    mmName: [''],
+    mlName: [''],
+    efName: [''],
+    emName: [''],
+    elName: [''],
+    qualification: [''],
+    bloodgroup: [''],
+    isNotCall: [''],
+    isDairyFarmer: [''],
+    isGoatSheepFarmer: [''],
+    isSugarCaneCutter: [''],
+    haveVehicle: [''],
+    isFarmer: [''],
+    haveBusiness: [''],
+    isYuvak: [''],
+    financialCondition: [''],
+    isExpired: [''],
+    prominentLeaderId: [''],
+    needSupportFlag: [''],
+    needSupportText: [''],
+    postalFlag: [''],
+    whyIsPostal: [''],
+  })
+}
+
+submittedVP:boolean = false;
+
+onSubmitVoterProfile(){
+let formData = this.voterProfileForm.value;
+  this.submittedVP = true;
+  if (this.voterProfileForm.invalid) {
+   this.spinner.hide();
+   return;
+ } else {
+
+  let obj = {
+    "serverId": 0,
+    "voterId": 0,
+    "mobileNo1": "string",
+    "mobileNo2": "string",
+    "landline": "string",
+    "email": "string",
+    "followers": "string",
+    "castId": 0,
+    "partyId": 0,
+    "familysize": "string",
+    "religionId": 0,
+    "partyAffection": "string",
+    "leaderImportance": "string",
+    "watsApp1": "string",
+    "watsApp2": "string",
+    "facebookId": "string",
+    "leader": "string",
+    "migratedArea": "string",
+    "regionalLang1": "string",
+    "regionalLang2": "string",
+    "userId": 0,
+    "head": "string",
+    "villageId": 0,
+    "boothId": 0,
+    "assemblyId": 0,
+    "dateOfBirth": "2022-06-23T10:32:04.461Z",
+    "comment": "string",
+    "voterMarking": "string",
+    "oppCandidateId": 0,
+    "feedback": "string",
+    "migratedCity": "string",
+    "latitude": 0,
+    "longitude": 0,
+    "voterNo": "string",
+    "nickName": "string",
+    "clientId": 0,
+    "migrated": "string",
+    "area": "string",
+    "migratedLatitude": 0,
+    "migratedLongitude": 0,
+    "surveyDate": "2022-06-23T10:32:04.461Z",
+    "buildingID": 0,
+    "needSupportFlag": 0,
+    "needSupportText": "string",
+    "postalFlag": 0,
+    "occupation": "string",
+    "isNameChange": 0,
+    "mfName": "string",
+    "mmName": "string",
+    "mlName": "string",
+    "efName": "string",
+    "emName": "string",
+    "elName": "string",
+    "createdDate": "2022-06-23T10:32:04.461Z",
+    "qualification": "string",
+    "bloodgroup": "string",
+    "isNotCall": 0,
+    "isDairyFarmer": 0,
+    "isGoatSheepFarmer": 0,
+    "isSugarCaneCutter": 0,
+    "haveVehicle": 0,
+    "isFarmer": 0,
+    "haveBusiness": 0,
+    "isYuvak": 0,
+    "financialCondition": 0,
+    "businnessDetails": "string",
+    "isExpired": 0,
+    "prominentLeaderId": 0,
+    "whyIsPostal": "string",
+    "isWrongMobileNo": 0,
+    "pollingAgent": 0
+  }
+
+  this.spinner.show();
+  let urlType;  
+  let urlName; 
+  formData.Id == 0 ? urlType = 'POST' : urlType = 'PUT' 
+  formData.Id == 0 ? urlName = 'ClientMasterWebApi/VoterCRM/InsertVoterDetails' : urlName = 'ClientMasterWebApi/VoterCRM/UpdateVoterDetails'
+
+  this.callAPIService.setHttp(urlType , urlName , false, JSON.stringify(obj), false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+      this.spinner.hide();
+      this.toastrService.success(res.statusMessage);
+    } else {
+      this.toastrService.error(res.statusMessage);
+      this.spinner.hide();
+    }
+  },(error: any) => {
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      });
+  
+ }
+}
   
 }
