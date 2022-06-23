@@ -24,3 +24,18 @@
     line-height: unset !important;
     background-color: rgba(0,0,0,.03) !important;
 }
+.form-check{
+    min-height: unset !important;
+}
+.table-height {
+    height: 300px;
+  overflow-y: auto;
+}
+.table-height .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table-height thead{
+    position: sticky;
+  top: 0;
+}
