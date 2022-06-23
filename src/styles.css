@@ -624,8 +624,8 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     /* height: 89vh !important; */
   }
   .table-feedbacks{
-    height: 47vh;
-    max-height: 47vh;
+    height: 45vh;
+    max-height: 45vh;
     overflow-y: auto;
   }
   .uploadimg {
