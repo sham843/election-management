@@ -1148,17 +1148,18 @@ export class CrmComponent implements OnInit {
 
   openDialogVoterCallEntries(obj: any) {
     obj.hasOwnProperty('clientId') ? '' : obj['clientId'] = this.familyClientId ;
-    // obj.hasOwnProperty('ClientID') ? (obj['ClientId'] = obj['ClientID'],delete obj['ClientID']) : ''; // key name change
-    let Obj1 = { 'VoterId': obj.voterId, 'ClientId': obj.clientId, 'AgentId': obj.agentId }
-    const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
-      data: Obj1,
-      panelClass: 'fullscreen-dialog',
-      height: '96vh',
-      width: '99%'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    // let Obj1 = { 'VoterId': obj.voterId, 'ClientId': obj.clientId, 'AgentId': obj.agentId }
+    // const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
+    //   data: Obj1,
+    //   panelClass: 'fullscreen-dialog',
+    //   height: '96vh',
+    //   width: '99%'
+    // });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
+    window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId);
+
   }
 
   //....................................  Voter Call Entries End Here...........................................//
