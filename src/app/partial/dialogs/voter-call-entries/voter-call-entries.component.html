@@ -16,12 +16,20 @@
 </div>
 <mat-dialog-content>
     <div class="row chartbox">
-        <div class="col-sm-5">
+        <div class="col-sm-7">
             <div class="form-container">
-                <div class="card shadow-none border">
-                    <div class="card-header pb-0">Voter Information</div>
+                <div class="card shadow-none border modal-height">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Voter's Information</span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Is Expired
+                            </label>
+                        </div>
+                    </div>
                     <div class="card-body pt-1">
-                        <div class=" row mb-2">
+                        <!-- <div class=" row mb-2">
                             <div class="col-sm-6">
                                 <label class="form-label">Voters Full Name</label>
                                 <div class="form-data">{{voterProfileData?.MarathiName}}</div>
@@ -58,7 +66,6 @@
                                 {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
                             </div>
                         </div>
-
                         <div class="mb-2">
                             <label class="form-label">Area</label>
                             <div class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</div>
@@ -88,10 +95,11 @@
                                 <span class="text-danger" *ngIf="VPCommentData?.length == 0">No Comments</span>
                             </div>
                         </div>
-
-                        <div><label class="form-label"
+                        <div>
+                            <label class="form-label"
                                 *ngIf="voterProfileData?.LocalLeader || voterProfileData?.partyname">Political
-                                Information:</label></div>
+                                Information:</label>
+                        </div>
                         <div class="mb-2">
                             <div class="form-data mb-2" *ngIf="voterProfileData?.LocalLeader">
                                 <label class="form-label">Local Leader Name: </label>
@@ -117,12 +125,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="mb-2">
                             <span class="form-label">Family Information</span>
-                            <span class="form-data">
-                                <!-- {{voterProfileData?.Head}} Family ({{voterProfileData?.Familysize}} Members) -->
-                            </span>
                             <table class="table table-hover mb-0 table-sm">
                                 <thead>
                                     <tr>
@@ -151,12 +155,234 @@
                             <div class="mt-2 text-end" *ngIf="voterProfileFamilyData?.length == 0">
                                 <div class="alert alert-danger text-center py-2">No Data Found..!</div>
                             </div>
+                        </div> -->
+
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <img src="assets/images/user.png" alt="Profile" class="profile-pic">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="row mb-2 g-2">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Voters Full Name</label>
+                                        <div class="form-data">{{voterProfileData?.MarathiName}}</div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="form-label">Age</label>
+                                        <div class="form-data">18</div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="form-label">Gender</label>
+                                        <div class="form-data">Female</div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="form-label">House No.</label>
+                                        <div class="form-data">401 D</div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="form-label">Area</label>
+                                        <div class="form-data">Flat No. 22, Poonam Apartment, Salisbury Park, Gultekdi,
+                                            Pune - 411037</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <div class="card">
+                            <div class="card-header pb-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Name Correction
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-sm-1">
+                                        <label class="form-label">मराठी</label>
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" type="text" placeholder="आडनाव">
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" type="text" placeholder="नाव">
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" type="text" placeholder="मधले नाव">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <label class="form-label">English</label>
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" type="text" placeholder="Last Name">
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" type="text" placeholder="First Name">
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" type="text" placeholder="Middle Name">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        Contact Information
+                    </div>
+                    <div class="card-body pt-1">
+                        <div class="row align-items-end g-2">
+                            <div class="col-sm-3">
+                                <label class="form-label">Nick Name</label>
+                                <input class="form-control" type="text" placeholder="Nick Name">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Mobile No. 1</label>
+                                <input class="form-control" type="text" placeholder="Mobile No. 1">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Mobile No. 2</label>
+                                <input class="form-control" type="text" placeholder="Mobile No. 2">
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Do Not Call
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        General Information
+                    </div>
+                    <div class="card-body pt-1">
+                        <div class="row align-items-end mb-2 g-2">
+                            <div class="col-sm-3">
+                                <label class="form-label">Select Religion</label>
+                                <select class="form-select">
+                                    <option value="">Select Religion</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Select Caste</label>
+                                <select class="form-select">
+                                    <option value="">Select Caste</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Family Head</label>
+                                <div class="d-block">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                            id="inlineRadio1" value="Yes">
+                                        <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                            id="inlineRadio2" value="No">
+                                        <label class="form-check-label" for="inlineRadio2">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label class="form-label">Family Size</label>
+                                <input class="form-control" type="number" placeholder="Size">
+                            </div>
+                            <div class="col-sm-auto">
+                                <button type="submit" class="btn btn-light btn-sm text-main">
+                                    <i class="fas fa-user-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-12">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Name</th>
+                                            <th>Age</th>
+                                            <th>Migration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Nana Kundalik Dembare</td>
+                                            <td>22</td>
+                                            <td>Yes (Bangalore)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row align-items-center g-2">
+                            <div class="col-sm-3">
+                                <label class="form-label">Date of birth</label>
+                                <input class="form-control" type="date" placeholder="Date of Birth">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Select Blood Group</label>
+                                <select class="form-select">
+                                    <option value="">Select Blood Group</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Qualification</label>
+                                <input class="form-control" type="text" placeholder="Qualification">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Occupation</label>
+                                <input class="form-control" type="text" placeholder="Occupation">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        Political Information
+                    </div>
+                    <div class="card-body pt-1">
+                        <div class="row align-items-center g-2">
+                            <div class="col-sm-3">
+                                <label class="form-label">Select Party</label>
+                                <select class="form-select">
+                                    <option value="">Select Party</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label">Leader</label>
+                                <div class="d-block">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Yes">
+                                        <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="No">
+                                        <label class="form-check-label" for="inlineRadio2">No</label>
+                                      </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label class="form-label">Select Rating</label>
+                                <select class="form-select">
+                                    <option value="">Select Rating</option>
+                                </select>
+                            </div>
+                            <div class="col-sm">
+                                <label class="form-label">Associate Local Leader</label>
+                                <select class="form-select">
+                                    <option value="">Select Leader Name</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        Migration Information
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-5">
             <p class="mb-1 fw-bold small">Feedbacks</p>
             <div class="table-feedbacks mb-3">
                 <table class="table table-hover mb-0">
@@ -212,7 +438,7 @@
                 <form [formGroup]="enterNewFeedbackForm" (ngSubmit)="onSubmitFeedbackForm()">
                     <div class="card-body pt-1">
                         <div class="form-container">
-                            <div class="row mb-2 g-2">
+                            <div class="row mb-2 g-2 align-items-center">
 
                                 <!-- <div class="col-sm-4">
                                     <label class="form-label required-field">Feedback Type</label>
@@ -225,19 +451,21 @@
                                      </div>
                                 </div> -->
 
-                                <div class="col-sm-6">
+                                <div class="col-sm-auto">
                                     <label class="form-label required-field">Feedback Type</label><br>
-                                    <div class="form-check form-check-inline" *ngFor="let feedbackTy of feedbackTypeArray">
+                                    <div class="form-check form-check-inline"
+                                        *ngFor="let feedbackTy of feedbackTypeArray">
                                         <input class="form-check-input" formControlName="FeedBackType" type="radio"
-                                         [value]="feedbackTy?.id">
-                                        <label class="form-check-label" for="chkIsMultipleYes">{{feedbackTy?.name}}</label>
+                                            [value]="feedbackTy?.id">
+                                        <label class="form-check-label"
+                                            for="chkIsMultipleYes">{{feedbackTy?.name}}</label>
                                     </div>
                                     <div *ngIf="submitted && f.FeedBackType.errors" class="invalid-feedback">
                                         <div *ngIf="f.FeedBackType.errors.required">Feedback Type is required</div>
-                                     </div>
+                                    </div>
                                 </div>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-auto">
                                     <label class="form-label">Do Not Call</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="chkDoNotCall"
@@ -248,7 +476,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm">
                                     <label class="form-label required-field">Followup Date-Time</label>
                                     <div class="input-group">
 
@@ -260,7 +488,7 @@
                                     <owl-date-time #dt3></owl-date-time>
                                     <div *ngIf="submitted && f.FollowupDate.errors" class="invalid-feedback">
                                         <div *ngIf="f.FollowupDate.errors.required">Followup Date is required</div>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mb-2">
