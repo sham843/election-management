@@ -14,15 +14,14 @@
                             <div class="col-sm-8">
                                 <div class="card shadow-none border mb-3">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <span class="votername">{{voterProfileData?.MarathiName}} </span>
+                                        <span class="votername">{{voterProfileData?.marathiName}}</span>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="flexCheckDefault">
+                                            <input class="form-check-input" type="checkbox" (change)="isExpiredCheckBox($event)" >
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 Is Expired
                                             </label>
                                         </div>
-                                        <button type="submit" class="btn btn-light btn-sm text-main">
+                                        <button type="submit" class="btn btn-light btn-sm text-main" (click)="disableDiv = false">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </div>
@@ -35,42 +34,40 @@
                                                 <div class="row mb-2 g-2">
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Age</label>
-                                                        <div class="form-data">18</div>
+                                                        <div class="form-data">{{voterProfileData?.age ? voterProfileData?.age : '-'}}</div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Gender</label>
-                                                        <div class="form-data">Female</div>
+                                                        <div class="form-data">{{voterProfileData?.gender == 'M' ? 'Male' : 'Female'}}</div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">House No.</label>
-                                                        <div class="form-data">401 D</div>
+                                                        <div class="form-data">{{voterProfileData?.houseNo ? voterProfileData?.houseNo : '-'}}</div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Booth Name</label>
-                                                        <div class="form-data">180 - Kurnewadi</div>
+                                                        <div class="form-data">{{voterProfileData?.boothName}}</div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Family Head</label>
-                                                        <div class="form-data">Yes (4 Members)</div>
+                                                        <div class="form-data"> {{voterProfileData?.head == 'yes' ? 'Yes' : 'No'}} ({{voterProfileData?.familySize}} Members)</div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Area</label>
-                                                        <div class="form-data">
-                                                            Prathmik Shala Juni Bangarwadi
-                                                        </div>
+                                                        <div class="form-data"> {{voterProfileData?.area}} </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Party Supported</label>
                                                         <div class="form-data">
-                                                            <img src="assets/images/logos/ncp.png"
-                                                                class="party-logo me-2">
-                                                            (4 <i class="fas fa-star"></i>)
+                                                            <!-- {{voterProfileData?.partyShortCode}} -->
+                                                            <img src="assets/images/logos/ncp.png" class="party-logo me-2">
+                                                            ({{voterProfileData?.leaderImportance}} <i class="fas fa-star"></i>)
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Migrated</label>
                                                         <div class="form-data">
-                                                            Yes (Mumbai)
+                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}} {{voterProfileData?.migratedArea ? (voterProfileData?.migratedArea) : ''}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -121,25 +118,32 @@
 
                                 <div class="card-header">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <input class="form-check-input" type="checkbox" value="" (change)="nameCorrectionCheckBox($event)"
+                                        id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Name Correction
                                         </label>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                          
+                                   <!-- ...................... voterProfileForm code start here ...............    -->
+                            
+                              <div [ngClass]="{'divDisabled':disableDiv}">
+                                <form [formGroup]="voterProfileForm">
+
+                                <div class="card-body" *ngIf="nameCorrectionDivHide">
                                     <div class="row mb-2">
                                         <div class="col-sm-1">
                                             <label class="form-label">मराठी</label>
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="आडनाव">
+                                            <input class="form-control" type="text" placeholder="आडनाव" formControlName="mlName">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="नाव">
+                                            <input class="form-control" type="text" placeholder="नाव" formControlName="mfName">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="मधले नाव">
+                                            <input class="form-control" type="text" placeholder="मधले नाव" formControlName="mmName">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -147,13 +151,13 @@
                                             <label class="form-label">English</label>
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="Last Name">
+                                            <input class="form-control" type="text" placeholder="Last Name" formControlName="elName">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="First Name">
+                                            <input class="form-control" type="text" placeholder="First Name" formControlName="efName">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="Middle Name">
+                                            <input class="form-control" type="text" placeholder="Middle Name" formControlName="emName"> 
                                         </div>
                                     </div>
                                 </div>
@@ -164,19 +168,19 @@
                                     <div class="row align-items-end g-2">
                                         <div class="col-sm-3">
                                             <label class="form-label">Nick Name</label>
-                                            <input class="form-control" type="text" placeholder="Nick Name">
+                                            <input class="form-control" type="text" placeholder="Nick Name" formControlName="nickName">
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Mobile No. 1</label>
-                                            <input class="form-control" type="text" placeholder="Mobile No. 1">
+                                            <input class="form-control" type="text" placeholder="Mobile No. 1" formControlName="mobileNo1">
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Mobile No. 2</label>
-                                            <input class="form-control" type="text" placeholder="Mobile No. 2">
+                                            <input class="form-control" type="text" placeholder="Mobile No. 2" formControlName="mobileNo2">
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value=""
+                                                <input class="form-check-input" type="checkbox" value="" formControlName="isNotCall"
                                                     id="flexCheckDefault">
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     Do Not Call
@@ -192,58 +196,57 @@
                                     <div class="row align-items-end mb-2 g-2">
                                         <div class="col-sm-3">
                                             <label class="form-label">Select Religion</label>
-                                            <select class="form-select">
-                                                <option value="">Select Religion</option>
-                                            </select>
+                                            <ngx-select [allowClear]="true" [items]="religionListArray" formControlName="religionId" (remove)="this.voterProfileForm.controls['castId'].setValue('')"
+                                              (select)="getVoterCastList()" optionValueField="reliogionId" optionTextField="religionName" placeholder="Select Religion">
+                                            </ngx-select>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Select Caste</label>
-                                            <select class="form-select">
-                                                <option value="">Select Caste</option>
-                                            </select>
+                                            <ngx-select [allowClear]="true" [items]="VoterCastListArray" formControlName="castId" [disabled]="!voterProfileForm.value.religionId"
+                                            optionValueField="castId" optionTextField="castName" placeholder="Select Caste">
+                                        </ngx-select>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Family Head</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let head of headCheckArray">
+                                                    <input class="form-check-input" type="radio" formControlName="head" 
+                                                    (change)="familyHeadRadiobtn()" name="inlineRadioOptions1" id="inlineRadio1" value="{{head}}">
+                                                    <label class="form-check-label" for="inlineRadio1" >{{head}}</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm">
-                                            <label class="form-label">Family Size</label>
-                                            <input class="form-control" type="number" placeholder="Size">
-                                        </div>
-                                        <div class="col-sm-auto">
-                                            <button type="submit" class="btn btn-light btn-sm text-main"
-                                                data-bs-toggle="modal" data-bs-target="#SelectFamilyModal">
-                                                <i class="fas fa-user-plus"></i>
-                                            </button>
-                                        </div>
+                                      
+                                        <ng-container *ngIf="headhideDiv">
+                                            <div class="col-sm">
+                                                <label class="form-label">Family Size</label>
+                                                <input class="form-control" type="number" [readOnly]="true" placeholder="Size" formControlName="familysize">
+                                            </div>
+                                            <div class="col-sm-auto">
+                                                <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
+                                                    data-bs-target="#SelectFamilyModal">
+                                                    <i class="fas fa-user-plus"></i>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+
                                         <div class="col-sm-12">
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
                                                         <th>No.</th>
                                                         <th>Name</th>
-                                                        <th>Age</th>
+                                                        <th>Mobile No</th>
                                                         <th>Migration</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Nana Kundalik Dembare</td>
-                                                        <td>22</td>
-                                                        <td>Yes (Bangalore)</td>
+                                                    <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index">
+                                                        <td>{{i+1}}</td>
+                                                        <td>{{familyMember?.family}}</td>
+                                                        <td>{{familyMember?.mobileNo1 ? familyMember?.mobileNo1 : '-'}}</td>
+                                                        <td>{{familyMember?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                                         <td>
                                                             <button type="submit" class="btn btn-light btn-sm text-main"
                                                                 data-bs-toggle="modal"
@@ -259,21 +262,25 @@
                                     <div class="row align-items-center g-2">
                                         <div class="col-sm-3">
                                             <label class="form-label">Date of birth</label>
-                                            <input class="form-control" type="date" placeholder="Date of Birth">
-                                        </div>
-                                        <div class="col-sm-3">
+                                                <input [owlDateTime]="dt2" formControlName="dateOfBirth"
+                                                    [max]="max"
+                                                    class="form-control" [owlDateTimeTrigger]="dt2"
+                                                    placeholder="dd/mm/yyyy">
+                                            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                                         </div>
+                                         <div class="col-sm-3">
                                             <label class="form-label">Select Blood Group</label>
-                                            <select class="form-select">
-                                                <option value="">Select Blood Group</option>
-                                            </select>
+                                            <ngx-select [allowClear]="true" [items]="bloodGroupArray" formControlName="bloodgroup" optionValueField="name"
+                                                optionTextField="name" placeholder="Select Blood Group">
+                                            </ngx-select>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Qualification</label>
-                                            <input class="form-control" type="text" placeholder="Qualification">
+                                            <input class="form-control" type="text" placeholder="Qualification" formControlName="qualification">
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Occupation</label>
-                                            <input class="form-control" type="text" placeholder="Occupation">
+                                            <input class="form-control" type="text" placeholder="Occupation" formControlName="occupation">
                                         </div>
                                     </div>
                                 </div>
@@ -284,36 +291,32 @@
                                     <div class="row align-items-center g-2">
                                         <div class="col-sm-3">
                                             <label class="form-label">Select Party</label>
-                                            <select class="form-select">
-                                                <option value="">Select Party</option>
-                                            </select>
+                                            <ngx-select [allowClear]="true" [items]="politicalPartyArray" formControlName="partyId"
+                                             optionValueField="partyId" optionTextField="partyName" placeholder="Select Party">
+                                        </ngx-select>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Leader</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let leader of leaderCheckArray">
+                                                    <input class="form-check-input" type="radio" formControlName="leader" 
+                                                    (change)="leaderRadiobtn()" name="inlineRadioOptions2" id="inlineRadio2" value="{{leader}}">
+                                                    <label class="form-check-label" for="inlineRadio2" >{{leader}}</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm">
+                                        <div class="col-sm" *ngIf="leaderhideDiv">
                                             <label class="form-label">Select Rating</label>
-                                            <select class="form-select">
-                                                <option value="">Select Rating</option>
-                                            </select>
+                                            <ngx-select [allowClear]="true" [items]="ratingStarArray" formControlName="leaderImportance"
+                                            optionValueField="id" optionTextField="name" placeholder="Select Rating">
+                                        </ngx-select>
                                         </div>
                                         <div class="col-sm">
                                             <label class="form-label">Associate Local Leader</label>
-                                            <select class="form-select">
-                                                <option value="">Select Leader Name</option>
-                                            </select>
+                                            <ngx-select [allowClear]="true" [items]="prominentleaderArray" formControlName="prominentLeaderId"
+                                            optionValueField="prominentleaderId" optionTextField="leaderName"
+                                            placeholder="Select Local leader">
+                                        </ngx-select>
                                         </div>
                                     </div>
                                 </div>
@@ -325,55 +328,52 @@
                                         <div class="col-sm-3">
                                             <label class="form-label">Migrated</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let migrated of migratedCheckArray">
+                                                    <input class="form-check-input" type="radio" formControlName="migrated" 
+                                                    (change)="migratedRadiobtn()" name="inlineRadioOptions3" id="inlineRadio3" value="{{migrated}}">
+                                                    <label class="form-check-label" for="inlineRadio3" >{{migrated}}</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-9">
-                                            <label class="form-label">Migrated City</label>
-                                            <input class="form-control" type="text" placeholder="Migrated City">
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <label class="form-label">Migrated Reason</label>
-                                            <input class="form-control" type="text" placeholder="Migrated Reason">
-                                        </div>
+                                        <ng-container *ngIf="migratedhideDiv">
+                                            <div class="col-sm-9">
+                                                <label class="form-label">Migrated City</label>
+                                                <input class="form-control" type="text" placeholder="Migrated City" formControlName="migratedCity">
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <label class="form-label">Migrated Area</label>
+                                                <input class="form-control" type="text" placeholder="Migrated Area" formControlName="migratedArea">
+                                            </div>
+                                        </ng-container>
                                     </div>
                                     <div class="row mb-2 align-items-end">
                                         <div class="col-sm-3">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                    id="flexCheckDefault">
+                                                <input class="form-check-input" type="checkbox" value="" formControlName="postalFlag"
+                                                    id="flexCheckDefault" (click)="postalVotingCheckBox($event)">
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     Postal Voting
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9" *ngIf="postalVotingDivHide">
                                             <label class="form-label">Postal Voting Reason</label>
-                                            <input class="form-control" type="text" placeholder="Postal Voting Reason">
+                                            <input class="form-control" type="text" placeholder="Postal Voting Reason" formControlName="whyIsPostal">
                                         </div>
                                     </div>
                                     <div class="row mb-2 align-items-end">
                                         <div class="col-sm-3">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                    id="flexCheckDefault">
+                                                <input class="form-check-input" type="checkbox" value="" formControlName="needSupportFlag"
+                                                    id="flexCheckDefault" (click)="needSupportCheckBox($event)">
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     Need Support?
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9" *ngIf="needSupportDivHide">
                                             <label class="form-label">Support Details</label>
-                                            <input class="form-control" type="text" placeholder="Support Details">
+                                            <input class="form-control" type="text" placeholder="Support Details" formControlName="needSupportText">
                                         </div>
                                     </div>
                                 </div>
@@ -385,138 +385,87 @@
                                         <div class="col-sm-3">
                                             <label class="form-label">Daily Farmer</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let dairyFarmer of dairyFarmerArray">
+                                                    <input class="form-check-input" type="radio" formControlName="isDairyFarmer" 
+                                                     name="inlineRadioOptions4" id="inlineRadio4" value="{{dairyFarmer.id}}">
+                                                    <label class="form-check-label" for="inlineRadio4" >{{dairyFarmer.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Goat/Sheep Farmer</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let goatSheepFarmer of goatSheepFarmerArray">
+                                                    <input class="form-check-input" type="radio" formControlName="isGoatSheepFarmer" 
+                                                     name="inlineRadioOptions5" id="inlineRadio5" value="{{goatSheepFarmer.id}}">
+                                                    <label class="form-check-label" for="inlineRadio5" >{{goatSheepFarmer.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Sugarcane Cutter Worker</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let sugarCaneCutter of sugarCaneCutterArray">
+                                                    <input class="form-check-input" type="radio" formControlName="isSugarCaneCutter" 
+                                                     name="inlineRadioOptions6" id="inlineRadio6" value="{{sugarCaneCutter.id}}">
+                                                    <label class="form-check-label" for="inlineRadio6" >{{sugarCaneCutter.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Farmer</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let farmer of farmerArray">
+                                                    <input class="form-check-input" type="radio" formControlName="isFarmer" 
+                                                     name="inlineRadioOptions7" id="inlineRadio7" value="{{farmer.id}}">
+                                                    <label class="form-check-label" for="inlineRadio7" >{{farmer.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Business</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let business of businessArray">
+                                                    <input class="form-check-input" type="radio" formControlName="haveBusiness" 
+                                                     name="inlineRadioOptions8" id="inlineRadio8" value="{{business.id}}">
+                                                    <label class="form-check-label" for="inlineRadio8" >{{business.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Yuvak</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Yes">
-                                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="No">
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                <div class="form-check form-check-inline" *ngFor="let yuvak of yuvakArray">
+                                                    <input class="form-check-input" type="radio" formControlName="isYuvak" 
+                                                     name="inlineRadioOptions9" id="inlineRadio9" value="{{yuvak.id}}">
+                                                    <label class="form-check-label" for="inlineRadio9" >{{yuvak.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Vehicle</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Bike">
-                                                    <label class="form-check-label" for="inlineRadio1">Bike</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="Family Car">
-                                                    <label class="form-check-label" for="inlineRadio2">Family
-                                                        Car</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio3" value="None">
-                                                    <label class="form-check-label" for="inlineRadio3">None</label>
+                                                <div class="form-check form-check-inline" *ngFor="let vehicle of vehicleArray">
+                                                    <input class="form-check-input" type="radio" formControlName="haveVehicle" 
+                                                     name="inlineRadioOptions10" id="inlineRadio10" value="{{vehicle.id}}">
+                                                    <label class="form-check-label" for="inlineRadio10" >{{vehicle.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Income Group</label>
                                             <div class="d-block">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio1" value="Low">
-                                                    <label class="form-check-label" for="inlineRadio1">Low</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio2" value="Middle">
-                                                    <label class="form-check-label" for="inlineRadio2">Middle</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="inlineRadioOptions" id="inlineRadio3" value="High">
-                                                    <label class="form-check-label" for="inlineRadio3">High</label>
+                                                <div class="form-check form-check-inline" *ngFor="let financialCon of financialConditionArray">
+                                                    <input class="form-check-input" type="radio" formControlName="financialCondition" 
+                                                     name="inlineRadioOptions11" id="inlineRadio11" value="{{financialCon.id}}">
+                                                    <label class="form-check-label" for="inlineRadio11" >{{financialCon.name}}</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Comment</label>
-                                        <textarea class="form-control" rows="4"
+                                        <textarea class="form-control" rows="4" formControlName="comment" 
                                             placeholder="Comment (If Any)"></textarea>
                                     </div>
 
@@ -525,67 +474,12 @@
                                         <button type="button" class="btn btn-main">Submit</button>
                                     </div>
                                 </div>
-
+                            </form>
+                        </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <p class="mb-1 fw-bold small">Feedbacks</p>
-                        <div class="table-feedbacks mb-3">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Feedback Details</th>
-                                        <th>Followup</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
-                                        <td>{{feedbacksList?.SrNo}}</td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <small class="text-muted">{{feedbacksList?.FeedBackDate}}</small>
-                                                </div>
-                                                <div class="col-sm-6 text-end">
-                                                    <span class="badge rounded-pill bg-success fw-normal"
-                                                        *ngIf="feedbacksList?.FeedBackTypeId == 1">
-                                                        {{feedbacksList?.FeedBackType |
-                                                        titlecase}}</span>
-                                                    <span class="badge rounded-pill bg-danger fw-normal"
-                                                        *ngIf="feedbacksList?.FeedBackTypeId == 2">
-                                                        {{feedbacksList?.FeedBackType |
-                                                        titlecase}}</span>
-                                                    <span class="badge rounded-pill bg-warning fw-normal text-dark"
-                                                        *ngIf="feedbacksList?.FeedBackTypeId == 3">
-                                                        {{feedbacksList?.FeedBackType |
-                                                        titlecase}}</span>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    {{feedbacksList?.Description ? (feedbacksList?.Description |
-                                                    titlecase) : '-'}}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {{feedbacksList?.FollowupDate}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length == 0">
-                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
-                            </div>
-                            <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length != 0">
-                                <pagination-controls previousLabel="" nextLabel=""
-                                    (pageChange)="onClickPagintion(feedbacksPageSize = $event)">
-                                </pagination-controls>
-                            </div>
-                        </div>
                         <div class="card shadow-none border">
                             <div class="card-header">Enter New Feedback</div>
                             <form [formGroup]="enterNewFeedbackForm" (ngSubmit)="onSubmitFeedbackForm()">
@@ -657,6 +551,62 @@
                                 </div>
                             </form>
                         </div>
+
+                        <p class="mb-1 fw-bold small mt-3">Feedbacks</p>
+                        <div class="table-feedbacks mb-3">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Feedback Details</th>
+                                        <th>Followup</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
+                                        <td>{{feedbacksList?.SrNo}}</td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <small class="text-muted">{{feedbacksList?.FeedBackDate}}</small>
+                                                </div>
+                                                <div class="col-sm-6 text-end">
+                                                    <span class="badge rounded-pill bg-success fw-normal"
+                                                        *ngIf="feedbacksList?.FeedBackTypeId == 1">
+                                                        {{feedbacksList?.FeedBackType |
+                                                        titlecase}}</span>
+                                                    <span class="badge rounded-pill bg-danger fw-normal"
+                                                        *ngIf="feedbacksList?.FeedBackTypeId == 2">
+                                                        {{feedbacksList?.FeedBackType |
+                                                        titlecase}}</span>
+                                                    <span class="badge rounded-pill bg-warning fw-normal text-dark"
+                                                        *ngIf="feedbacksList?.FeedBackTypeId == 3">
+                                                        {{feedbacksList?.FeedBackType |
+                                                        titlecase}}</span>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    {{feedbacksList?.Description ? (feedbacksList?.Description |
+                                                    titlecase) : '-'}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{feedbacksList?.FollowupDate}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                            </div>
+                            <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length != 0">
+                                <pagination-controls previousLabel="" nextLabel=""
+                                    (pageChange)="onClickPagintion(feedbacksPageSize = $event)">
+                                </pagination-controls>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
