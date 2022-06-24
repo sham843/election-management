@@ -667,3 +667,8 @@ g[shape-rendering="auto"]{
 .ngx-select__choices{
     z-index: 6;
 }
+
+.divDisabled{
+    pointer-events: none;
+    opacity: 0.6;
+}
