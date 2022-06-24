@@ -1,41 +1,58 @@
-.btn-modal-close{
-    padding: 0;
-    border: 0;
-    background: none;
-    font-size: 1.5rem;
-    position: absolute;
-    top: -20px;
-    right: -14px;
-    color: #555;
+.btn-modal-close {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.5rem;
+  position: absolute;
+  top: -20px;
+  right: -14px;
+  color: #555;
 }
-.modal-height{
-    height: 89vh;
-    max-height: 89vh;
-    overflow: auto;
+
+.modal-height {
+  height: 89vh;
+  max-height: 89vh;
+  overflow: auto;
 }
-.profile-pic{
-    width: 95px;
-    border: solid 1px #eee;
-    height: 95px;
-    object-fit: contain;
-    object-position: top;
+
+.profile-pic {
+  width: 95px;
+  border: solid 1px #eee;
+  height: 95px;
+  object-fit: contain;
+  object-position: top;
 }
-.card-header{
-    line-height: unset !important;
-    background-color: rgba(0,0,0,.03) !important;
+
+.card-header {
+  line-height: unset !important;
+  background-color: rgba(0, 0, 0, .03) !important;
 }
-.form-check{
-    min-height: unset !important;
+
+.form-check {
+  min-height: unset !important;
 }
+
 .table-height {
-    height: 300px;
+  height: 300px;
   overflow-y: auto;
 }
+
 .table-height .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .table-height thead{
-    position: sticky;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-height thead {
+  position: sticky;
   top: 0;
+}
+
+.votername {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--main-color);
+}
+
+.party-logo {
+  width: 26px;
 }
