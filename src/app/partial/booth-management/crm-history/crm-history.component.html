@@ -8,35 +8,91 @@
     <div class="row chartbox">
         <div class="col-sm-12">
             <div class="card card-body">
-                <div class="row chartbox">
-                    <div class="col-sm-7">
-                        <div class="form-container">
-                            <div class="card shadow-none border">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <span class="votername">{{voterProfileData?.MarathiName}} </span>
-                                    <span class="votername">(9876543210, 798465130)</span>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Is Expired
-                                        </label>
+                <div class="row chartbox gx-2">
+                    <div class="col-sm-12">
+                        <div class="row form-container gx-2">
+                            <div class="col-sm-8">
+                                <div class="card shadow-none border mb-3">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span class="votername">{{voterProfileData?.MarathiName}} </span>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Is Expired
+                                            </label>
+                                        </div>
+                                        <button type="submit" class="btn btn-light btn-sm text-main">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                     </div>
-                                    <button type="submit" class="btn btn-light btn-sm text-main">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </div>
-                                <div class="card-body pt-1">
-                                    <!-- <div class="card mb-3">
-                                        <div class="card-header">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Please tick wrong mobile</span>
-                                                <span>
-                                                    <span class="text-success me-2"><i class="fas fa-square-full me-2"></i> Agents Entered no.</span>
-                                                    <span class="text-danger"><i class="fas fa-square-full me-2"></i> Other Entered no.</span>
-                                                </span>
+                                    <div class="card-body pt-1">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <img src="assets/images/user.png" alt="Profile" class="profile-pic">
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row mb-2 g-2">
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Age</label>
+                                                        <div class="form-data">18</div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Gender</label>
+                                                        <div class="form-data">Female</div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">House No.</label>
+                                                        <div class="form-data">401 D</div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Booth Name</label>
+                                                        <div class="form-data">180 - Kurnewadi</div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Family Head</label>
+                                                        <div class="form-data">Yes (4 Members)</div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Area</label>
+                                                        <div class="form-data">
+                                                            Prathmik Shala Juni Bangarwadi
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Party Supported</label>
+                                                        <div class="form-data">
+                                                            <img src="assets/images/logos/ncp.png"
+                                                                class="party-logo me-2">
+                                                            (4 <i class="fas fa-star"></i>)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Migrated</label>
+                                                        <div class="form-data">
+                                                            Yes (Mumbai)
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="card-body">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card mb-3 border shadow-none">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Please tick wrong mobile</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <span class="d-flex mb-3 small">
+                                            <span class="text-success me-2"><i class="fas fa-square-full me-2"></i>
+                                                Agents Entered no.</span>
+                                            <span class="text-danger"><i class="fas fa-square-full me-2"></i> Other
+                                                Entered no.</span>
+                                        </span>
                                         <div class="d-flex">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
@@ -55,61 +111,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    </div> -->
-
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <img src="assets/images/user.png" alt="Profile" class="profile-pic">
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <div class="row mb-2 g-2">
-                                                <div class="col-sm-2">
-                                                    <label class="form-label">Age</label>
-                                                    <div class="form-data">18</div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label class="form-label">Gender</label>
-                                                    <div class="form-data">Female</div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label class="form-label">House No.</label>
-                                                    <div class="form-data">401 D</div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label class="form-label">Booth Name</label>
-                                                    <div class="form-data">180 - Kurnewadi</div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <label class="form-label">Family Head</label>
-                                                    <div class="form-data">Yes (4 Members)</div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <label class="form-label">Area</label>
-                                                    <div class="form-data">
-                                                        Prathmik Shala Juni Bangarwadi
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <label class="form-label">Party Supported</label>
-                                                    <div class="form-data">
-                                                        <img src="assets/images/logos/ncp.png" class="party-logo me-2">
-                                                        (4 <i class="fas fa-star"></i>)
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <label class="form-label">Migrated</label>
-                                                    <div class="form-data">
-                                                        Yes (Mumbai)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-container">
+                            <div class="card shadow-none border">
+
                                 <div class="card-header">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="flexCheckDefault">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Name Correction
                                         </label>
@@ -519,7 +531,7 @@
 
                         </div>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
                         <p class="mb-1 fw-bold small">Feedbacks</p>
                         <div class="table-feedbacks mb-3">
                             <table class="table table-hover mb-0">
