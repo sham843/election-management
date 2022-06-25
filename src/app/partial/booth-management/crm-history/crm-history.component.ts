@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -8,6 +8,8 @@ import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crm-history',
@@ -19,7 +21,7 @@ export class CrmHistoryComponent implements OnInit {
   getFeedbacksList: any;
   getFeedbacksListTotal: any;
   feedbacksPaginationNo: number = 1;
-  feedbacksPageSize: number = 10;
+  feedBackPageSize: number = 10;
 
   feedbackTypeArray = [{ id: 1, name: 'Positive' }, { id: 2, name: 'Negitive' }, { id: 3, name: 'Neutral' }]
   enterNewFeedbackForm!: FormGroup;
@@ -29,7 +31,6 @@ export class CrmHistoryComponent implements OnInit {
   voterProfileFamilyData: any;
   VPCommentData: any;
   posNegativeInfData: any;
-  Date: any = new Date();
   max = new Date();
 
   voterProfileForm!: FormGroup | any;
@@ -40,6 +41,14 @@ export class CrmHistoryComponent implements OnInit {
   VoterCastListArray:any;
   religionListArray:any;
   politicalPartyArray:any;
+
+  voterListforFamilyChildArray:any;
+  FamilyChildTotal: any;
+  FamilyChildPaginationNo: number = 1;
+  FamilyChildPageSize: number = 10;
+  searchFamilyChield = new FormControl('');
+  subjectSearchFamilyC: Subject<any> = new Subject();
+
   ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '2 Star' }, { id: 3, name: '3 Star' }, { id: 4, name: '4 Star' }, { id: 5, name: '5 Star' }];
   headCheckArray = ['Yes','No'];
   leaderCheckArray = ['Yes','No'];
@@ -93,6 +102,7 @@ export class CrmHistoryComponent implements OnInit {
     this.getReligionList();
     // this.getVoterCastList();
     this.getPoliticalPartyList();
+    this.searchFamilyChieldFilters('false');
   }
 
   defaultFeedbackForm() {
@@ -110,23 +120,22 @@ export class CrmHistoryComponent implements OnInit {
   //............................. Get Feedbacks List................................//
 
   feedbacksList() {
-    this.spinner.show();
-    let obj: any = 'VoterId=' + this.voterListData.VoterId + '&nopage=' + this.feedbacksPaginationNo + '&ClientId=' + this.voterListData.ClientId;
-    this.callAPIService.setHttp('get', 'Get_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+    this.spinner.show();    
+    let obj = 'ClientId=' + this.voterListData.ClientId + '&VoterId=' + this.voterListData.VoterId 
+    + '&UserId=' + this.commonService.loggedInUserId() + '&pageno=' + this.feedbacksPaginationNo + '&pagesize=' + this.feedBackPageSize
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFeedbackCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.getFeedbacksList = res.data1;
-        this.getFeedbacksListTotal = res.data2[0].TotalCount;
+        this.getFeedbacksList = res.responseData.responseData1;
+        this.getFeedbacksListTotal = res.responseData.responseData2.totalPages * this.feedBackPageSize;
       } else {
-        this.getFeedbacksList = [];
         this.spinner.hide();
+        this.getFeedbacksList = [];
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
 
@@ -141,17 +150,24 @@ export class CrmHistoryComponent implements OnInit {
       this.spinner.show();
       let data = this.enterNewFeedbackForm.value;
       data.NotToCall == true ? data.NotToCall = 1 : data.NotToCall = 0;
-      data.FollowupDate = this.datePipe.transform(data.FollowupDate, 'yyyy/MM/dd HH:mm:ss');
-      this.Date = this.datePipe.transform(this.Date, 'yyyy/MM/dd HH:mm:ss');
 
-      let obj = 'Id=' + data.Id + '&VoterId=' + this.voterListData.VoterId + '&FeedBackDate=' + this.Date + '&FeedBackType=' + data.FeedBackType
-        + '&Description=' + data.Description + '&FollowupDate=' + data.FollowupDate + '&CreatedBy=' + this.commonService.loggedInUserId() + '&NotToCall=' + data.NotToCall + '&ClientId=' + this.voterListData.ClientId;
+    let obj = {
+        "id": data.Id,
+        "voterId": this.voterListData.VoterId ,
+        "feedBackDate": new Date(),
+        "feedBackType": data.FeedBackType,
+        "description": data.Description,
+        "followupDate": data.FollowupDate,
+        "notToCall": data.NotToCall,
+        "createdBy": this.commonService.loggedInUserId(),
+        "clientId": this.voterListData.ClientId
+      }
 
-      this.callAPIService.setHttp('get', 'Insert_Electioncrm_1_0?' + obj, false, false, false, 'electionServiceForWeb');
+      this.callAPIService.setHttp('POST', 'ClientMasterWebApi/VoterCRM/InsertVoterFeedback', false, obj, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.data == 0) {
-          this.toastrService.success(res.data1[0].Msg);
+        if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
+          this.toastrService.success(res.statusMessage);
           this.feedbacksList();
           this.clearForm();
           this.submitted = false;
@@ -159,9 +175,8 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
         }
       }, (error: any) => {
-        if (error.status == 500) {
-          this.router.navigate(['../500'], { relativeTo: this.route });
-        }
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
       })
     }
   }
@@ -177,6 +192,7 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileData = res.responseData;
+        this.editVoterProfileData(this.voterProfileData);
       } else {
         this.spinner.hide();
       }
@@ -321,7 +337,48 @@ export class CrmHistoryComponent implements OnInit {
       this.router.navigate(['../500'], { relativeTo: this.route });
     })
   }
+
+     //.......... get Voter for Family Child List Code Start...............//
+
+     getVoterListforFamilyChild() {
+      this.spinner.show();
+      let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
+      '&ElectionId=' + 43 + '&ConstituencyId=' + 56 + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim()
+      + '&pageno=' + this.FamilyChildPaginationNo + '&pagesize=' + this.FamilyChildPageSize;
+      this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj , false, false, false, 'electionMicroServiceForWeb');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.responseData != null && res.statusCode == "200") {  
+          this.spinner.hide();
+          this.voterListforFamilyChildArray = res.responseData.responseData1;
+          // this.FamilyChildTotal = res.responseData.responseData2.totalPages * this.FamilyChildPageSize;
+        } else {
+          this.spinner.hide();
+          this.voterListforFamilyChildArray = [];
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      })
+    }
+
+    onKeyUpFilterFamilyChield() {
+      this.subjectSearchFamilyC.next();
+    }
   
+    searchFamilyChieldFilters(flag: any) {
+      this.subjectSearchFamilyC.pipe(debounceTime(700)).subscribe(() => {
+        this.searchFamilyChield.value;
+        this.getVoterListforFamilyChild();
+      });
+    }
+
+    clearFilterFamilyChield(){
+      this.searchFamilyChield.setValue('');
+      this.getVoterListforFamilyChild();
+    }
+  
+    //.......... get Voter for Family Child List Code End...............//
+    
 
                               //....... Voter Profile form code Start Here........//
 
@@ -417,61 +474,60 @@ export class CrmHistoryComponent implements OnInit {
     })
   }
 
-  editVoterProfileData() {
+  editVoterProfileData(data:any) {
     this.voterProfileForm.patchValue({
-      mobileNo1: [''],
-      mobileNo2: [''],
-      email: [''],
-      castId: [''],
-      partyId: [''],
-      religionId: [''],
-      watsApp1: [''],
-      watsApp2: [''],
-      leader: [''],
-      migratedArea: [''],
-      head: [''],
-      dateOfBirth: [''],
-      leaderImportance: [''],
-      comment: [''],
-      voterMarking: [''],
-      migratedCity: [''],
-      latitude: [''],
-      longitude: [''],
-      nickName: [''],
-      migrated: [''],
-      area: [''],
-      migratedLatitude: [''],
-      migratedLongitude: [''],
-      occupation: [''],
-      isNameChange: [''],
-      mfName: [''],
-      mmName: [''],
-      mlName: [''],
-      efName: [''],
-      emName: [''],
-      elName: [''],
-      qualification: [''],
-      bloodgroup: [''],
-      isNotCall: [''],
-      isDairyFarmer: [''],
-      isGoatSheepFarmer: [''],
-      isSugarCaneCutter: [''],
-      haveVehicle: [''],
-      isFarmer: [''],
-      haveBusiness: [''],
-      isYuvak: [''],
-      financialCondition: [''],
-      isExpired: [''],
-      prominentLeaderId: [''],
-      needSupportFlag: [''],
-      needSupportText: [''],
-      postalFlag: [''],
-      whyIsPostal: [''],
-      familysize: [''],
+      Id: this.voterProfileData.voterId,
+      mobileNo1: data?.mobileNo1,
+      mobileNo2: data?.mobileNo2,
+      email:data.email,
+      castId: data.castId,
+      partyId: data.partyId,
+      religionId: data.religionId,
+      watsApp1: data.watsApp1,
+      watsApp2: data.watsApp2,
+      leader: data.leader,
+      migratedArea: data.migratedArea,
+      head: data.head,
+      dateOfBirth: data.dateOfBirth,
+      leaderImportance: data.leaderImportance,
+      comment: data.comment,
+      voterMarking: data.voterMarking,
+      migratedCity: data.migratedCity,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      nickName: data.nickName,
+      migrated: data.migrated,
+      area: data.area,
+      migratedLatitude: data.migratedLatitude,
+      migratedLongitude: data.migratedLongitude,
+      occupation: data.occupation,
+      isNameChange: data.isNameChange,
+      mfName: data?.mfName,
+      mmName: data?.mmName,
+      mlName: data?.mlName,
+      efName: data.efName,
+      emName: data.emName,
+      elName: data.elName,
+      qualification: data.qualification,
+      bloodgroup: data.bloodgroup,
+      isNotCall: data.isNotCall,
+      isDairyFarmer: data.isDairyFarmer,
+      isGoatSheepFarmer: data.isGoatSheepFarmer,
+      isSugarCaneCutter: data.isSugarCaneCutter,
+      haveVehicle: data.haveVehicle,
+      isFarmer: data.isFarmer,
+      haveBusiness: data.haveBusiness,
+      isYuvak: data.isYuvak,
+      financialCondition: data.financialCondition,
+      isExpired: data.isExpired,
+      prominentLeaderId: data.prominentLeaderId,
+      needSupportFlag: data.needSupportFlag,
+      needSupportText: data.needSupportText,
+      postalFlag: data.postalFlag,
+      whyIsPostal: data.whyIsPostal,
+      familysize: data.familysize,
     })
   }
-
-
 
   onSubmitVoterProfile() {
     let formData = this.voterProfileForm.value;
@@ -482,75 +538,75 @@ export class CrmHistoryComponent implements OnInit {
     } else {
 
       let obj = {
-        "serverId": 0,
-        "voterId": 0,
-        "mobileNo1": "string",
-        "mobileNo2": "string",
+        "serverId": this.voterProfileData.serverId,
+        "voterId": this.voterProfileData.voterId,
+        "mobileNo1": formData.mobileNo1,
+        "mobileNo2": formData.mobileNo2,
         "landline": "string",
         "email": "string",
         "followers": "string",
-        "castId": 0,
-        "partyId": 0,
-        "familysize": "string",
-        "religionId": 0,
+        "castId": formData.castId,
+        "partyId": formData.partyId,
+        "familysize": formData.familysize,
+        "religionId": formData.religionId,
         "partyAffection": "string",
-        "leaderImportance": "string",
-        "watsApp1": "string",
-        "watsApp2": "string",
+        "leaderImportance": formData.leaderImportance,
+        "watsApp1": formData.watsApp1,
+        "watsApp2": formData.watsApp2,
         "facebookId": "string",
-        "leader": "string",
-        "migratedArea": "string",
+        "leader": formData.leader,
+        "migratedArea": formData.migratedArea,
         "regionalLang1": "string",
         "regionalLang2": "string",
-        "userId": 0,
-        "head": "string",
-        "villageId": 0,
-        "boothId": 0,
-        "assemblyId": 0,
-        "dateOfBirth": "2022-06-23T10:32:04.461Z",
-        "comment": "string",
+        "userId": this.commonService.loggedInUserId(),
+        "head": formData.head,
+        "villageId": this.voterProfileData.villageId,
+        "boothId": this.voterProfileData.boothId,
+        "assemblyId": this.voterProfileData.assemblyId,
+        "dateOfBirth": formData.dateOfBirth,
+        "comment": formData.comment,
         "voterMarking": "string",
         "oppCandidateId": 0,
         "feedback": "string",
-        "migratedCity": "string",
+        "migratedCity": formData.migratedCity,
         "latitude": 0,
         "longitude": 0,
-        "voterNo": "string",
-        "nickName": "string",
-        "clientId": 0,
-        "migrated": "string",
-        "area": "string",
+        "voterNo": this.voterProfileData.voterNo,
+        "nickName":  formData.nickName,
+        "clientId": this.voterProfileData.clientId,
+        "migrated": formData.migrated,
+        "area": formData.area,
         "migratedLatitude": 0,
         "migratedLongitude": 0,
         "surveyDate": "2022-06-23T10:32:04.461Z",
         "buildingID": 0,
-        "needSupportFlag": 0,
-        "needSupportText": "string",
-        "postalFlag": 0,
-        "occupation": "string",
+        "needSupportFlag": formData.needSupportFlag,
+        "needSupportText": formData.needSupportText,
+        "postalFlag": formData.postalFlag,
+        "occupation": formData.occupation,
         "isNameChange": 0,
-        "mfName": "string",
-        "mmName": "string",
-        "mlName": "string",
-        "efName": "string",
-        "emName": "string",
-        "elName": "string",
-        "createdDate": "2022-06-23T10:32:04.461Z",
-        "qualification": "string",
-        "bloodgroup": "string",
-        "isNotCall": 0,
-        "isDairyFarmer": 0,
-        "isGoatSheepFarmer": 0,
-        "isSugarCaneCutter": 0,
-        "haveVehicle": 0,
-        "isFarmer": 0,
-        "haveBusiness": 0,
-        "isYuvak": 0,
-        "financialCondition": 0,
+        "mfName": formData.mfName,
+        "mmName": formData.mmName,
+        "mlName": formData.mlName,
+        "efName": formData.efName,
+        "emName": formData.emName,
+        "elName": formData.elName,
+        "createdDate": new Date(),
+        "qualification": formData.qualification,
+        "bloodgroup": formData.bloodgroup,
+        "isNotCall": formData.isNotCall,
+        "isDairyFarmer": formData.isDairyFarmer,
+        "isGoatSheepFarmer": formData.isGoatSheepFarmer,
+        "isSugarCaneCutter": formData.isSugarCaneCutter,
+        "haveVehicle": formData.haveVehicle,
+        "isFarmer": formData.isFarmer,
+        "haveBusiness": formData.haveBusiness,
+        "isYuvak": formData.isYuvak,
+        "financialCondition": formData.financialCondition,
         "businnessDetails": "string",
-        "isExpired": 0,
-        "prominentLeaderId": 0,
-        "whyIsPostal": "string",
+        "isExpired": formData.isExpired,
+        "prominentLeaderId": formData.prominentLeaderId,
+        "whyIsPostal": formData.whyIsPostal,
         "isWrongMobileNo": 0,
         "pollingAgent": 0
       }
@@ -565,6 +621,7 @@ export class CrmHistoryComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
+          this.submittedVP = false;
           this.toastrService.success(res.statusMessage);
         } else {
           this.toastrService.error(res.statusMessage);

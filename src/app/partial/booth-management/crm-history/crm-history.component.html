@@ -167,16 +167,36 @@
                                 <div class="card-body pt-1">
                                     <div class="row align-items-end g-2">
                                         <div class="col-sm-3">
-                                            <label class="form-label">Nick Name</label>
-                                            <input class="form-control" type="text" placeholder="Nick Name" formControlName="nickName">
-                                        </div>
-                                        <div class="col-sm-3">
                                             <label class="form-label">Mobile No. 1</label>
                                             <input class="form-control" type="text" placeholder="Mobile No. 1" formControlName="mobileNo1">
                                         </div>
                                         <div class="col-sm-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" formControlName="watsApp1"
+                                                    id="flexCheckDefault">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    WhatsApp
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
                                             <label class="form-label">Mobile No. 2</label>
                                             <input class="form-control" type="text" placeholder="Mobile No. 2" formControlName="mobileNo2">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" formControlName="watsApp2"
+                                                    id="flexCheckDefault">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    WhatsApp
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-end g-2">
+                                        <div class="col-sm-3">
+                                            <label class="form-label">Nick Name</label>
+                                            <input class="form-control" type="text" placeholder="Nick Name" formControlName="nickName">
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-check">
@@ -211,7 +231,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let head of headCheckArray">
                                                     <input class="form-check-input" type="radio" formControlName="head" 
-                                                    (change)="familyHeadRadiobtn()" name="inlineRadioOptions1" id="inlineRadio1" value="{{head}}">
+                                                    (change)="familyHeadRadiobtn()" name="head" id="inlineRadio1" value="{{head}}">
                                                     <label class="form-check-label" for="inlineRadio1" >{{head}}</label>
                                                 </div>
                                             </div>
@@ -224,7 +244,7 @@
                                             </div>
                                             <div class="col-sm-auto">
                                                 <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
-                                                    data-bs-target="#SelectFamilyModal">
+                                                    data-bs-target="#SelectFamilyModal" (click)="getVoterListforFamilyChild()">
                                                     <i class="fas fa-user-plus"></i>
                                                 </button>
                                             </div>
@@ -300,7 +320,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let leader of leaderCheckArray">
                                                     <input class="form-check-input" type="radio" formControlName="leader" 
-                                                    (change)="leaderRadiobtn()" name="inlineRadioOptions2" id="inlineRadio2" value="{{leader}}">
+                                                    (change)="leaderRadiobtn()" name="leader" id="inlineRadio2" value="{{leader}}">
                                                     <label class="form-check-label" for="inlineRadio2" >{{leader}}</label>
                                                 </div>
                                             </div>
@@ -330,7 +350,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let migrated of migratedCheckArray">
                                                     <input class="form-check-input" type="radio" formControlName="migrated" 
-                                                    (change)="migratedRadiobtn()" name="inlineRadioOptions3" id="inlineRadio3" value="{{migrated}}">
+                                                    (change)="migratedRadiobtn()" name="migrated" id="inlineRadio3" value="{{migrated}}">
                                                     <label class="form-check-label" for="inlineRadio3" >{{migrated}}</label>
                                                 </div>
                                             </div>
@@ -387,7 +407,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let dairyFarmer of dairyFarmerArray">
                                                     <input class="form-check-input" type="radio" formControlName="isDairyFarmer" 
-                                                     name="inlineRadioOptions4" id="inlineRadio4" value="{{dairyFarmer.id}}">
+                                                     name="isDairyFarmer" id="inlineRadio4" value="{{dairyFarmer.id}}">
                                                     <label class="form-check-label" for="inlineRadio4" >{{dairyFarmer.name}}</label>
                                                 </div>
                                             </div>
@@ -397,7 +417,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let goatSheepFarmer of goatSheepFarmerArray">
                                                     <input class="form-check-input" type="radio" formControlName="isGoatSheepFarmer" 
-                                                     name="inlineRadioOptions5" id="inlineRadio5" value="{{goatSheepFarmer.id}}">
+                                                     name="isGoatSheepFarmer" id="inlineRadio5" value="{{goatSheepFarmer.id}}">
                                                     <label class="form-check-label" for="inlineRadio5" >{{goatSheepFarmer.name}}</label>
                                                 </div>
                                             </div>
@@ -407,7 +427,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let sugarCaneCutter of sugarCaneCutterArray">
                                                     <input class="form-check-input" type="radio" formControlName="isSugarCaneCutter" 
-                                                     name="inlineRadioOptions6" id="inlineRadio6" value="{{sugarCaneCutter.id}}">
+                                                     name="isSugarCaneCutter" id="inlineRadio6" value="{{sugarCaneCutter.id}}">
                                                     <label class="form-check-label" for="inlineRadio6" >{{sugarCaneCutter.name}}</label>
                                                 </div>
                                             </div>
@@ -417,7 +437,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let farmer of farmerArray">
                                                     <input class="form-check-input" type="radio" formControlName="isFarmer" 
-                                                     name="inlineRadioOptions7" id="inlineRadio7" value="{{farmer.id}}">
+                                                     name="isFarmer" id="inlineRadio7" value="{{farmer.id}}">
                                                     <label class="form-check-label" for="inlineRadio7" >{{farmer.name}}</label>
                                                 </div>
                                             </div>
@@ -427,7 +447,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let business of businessArray">
                                                     <input class="form-check-input" type="radio" formControlName="haveBusiness" 
-                                                     name="inlineRadioOptions8" id="inlineRadio8" value="{{business.id}}">
+                                                     name="haveBusiness" id="inlineRadio8" value="{{business.id}}">
                                                     <label class="form-check-label" for="inlineRadio8" >{{business.name}}</label>
                                                 </div>
                                             </div>
@@ -437,7 +457,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let yuvak of yuvakArray">
                                                     <input class="form-check-input" type="radio" formControlName="isYuvak" 
-                                                     name="inlineRadioOptions9" id="inlineRadio9" value="{{yuvak.id}}">
+                                                     name="isYuvak" id="inlineRadio9" value="{{yuvak.id}}">
                                                     <label class="form-check-label" for="inlineRadio9" >{{yuvak.name}}</label>
                                                 </div>
                                             </div>
@@ -447,7 +467,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let vehicle of vehicleArray">
                                                     <input class="form-check-input" type="radio" formControlName="haveVehicle" 
-                                                     name="inlineRadioOptions10" id="inlineRadio10" value="{{vehicle.id}}">
+                                                     name="haveVehicle" id="inlineRadio10" value="{{vehicle.id}}">
                                                     <label class="form-check-label" for="inlineRadio10" >{{vehicle.name}}</label>
                                                 </div>
                                             </div>
@@ -457,7 +477,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let financialCon of financialConditionArray">
                                                     <input class="form-check-input" type="radio" formControlName="financialCondition" 
-                                                     name="inlineRadioOptions11" id="inlineRadio11" value="{{financialCon.id}}">
+                                                     name="financialCondition" id="inlineRadio11" value="{{financialCon.id}}">
                                                     <label class="form-check-label" for="inlineRadio11" >{{financialCon.name}}</label>
                                                 </div>
                                             </div>
@@ -471,7 +491,7 @@
 
                                     <div class="d-flex justify-content-between">
                                         <button type="button" class="btn btn-secondary">Cancel</button>
-                                        <button type="button" class="btn btn-main">Submit</button>
+                                        <button type="submit" class="btn btn-main" (click)="onSubmitVoterProfile()">Submit</button>
                                     </div>
                                 </div>
                             </form>
@@ -565,34 +585,34 @@
                                 <tbody>
                                     <tr
                                         *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
-                                        <td>{{feedbacksList?.SrNo}}</td>
+                                        <td>{{((feedbacksPaginationNo + 1) * 10 + i + 1)-20}}</td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <small class="text-muted">{{feedbacksList?.FeedBackDate}}</small>
+                                                    <small class="text-muted">{{feedbacksList?.feedBackDate}}</small>
                                                 </div>
                                                 <div class="col-sm-6 text-end">
                                                     <span class="badge rounded-pill bg-success fw-normal"
-                                                        *ngIf="feedbacksList?.FeedBackTypeId == 1">
-                                                        {{feedbacksList?.FeedBackType |
+                                                        *ngIf="feedbacksList?.feedBackTypeId == 1">
+                                                        {{feedbacksList?.feedBackType |
                                                         titlecase}}</span>
                                                     <span class="badge rounded-pill bg-danger fw-normal"
-                                                        *ngIf="feedbacksList?.FeedBackTypeId == 2">
-                                                        {{feedbacksList?.FeedBackType |
+                                                        *ngIf="feedbacksList?.feedBackTypeId == 2">
+                                                        {{feedbacksList?.feedBackType |
                                                         titlecase}}</span>
                                                     <span class="badge rounded-pill bg-warning fw-normal text-dark"
-                                                        *ngIf="feedbacksList?.FeedBackTypeId == 3">
-                                                        {{feedbacksList?.FeedBackType |
+                                                        *ngIf="feedbacksList?.feedBackTypeId == 3">
+                                                        {{feedbacksList?.feedBackType |
                                                         titlecase}}</span>
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    {{feedbacksList?.Description ? (feedbacksList?.Description |
+                                                    {{feedbacksList?.description ? (feedbacksList?.description |
                                                     titlecase) : '-'}}
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            {{feedbacksList?.FollowupDate}}
+                                            {{feedbacksList?.followupDate}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -602,7 +622,7 @@
                             </div>
                             <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length != 0">
                                 <pagination-controls previousLabel="" nextLabel=""
-                                    (pageChange)="onClickPagintion(feedbacksPageSize = $event)">
+                                    (pageChange)="onClickPagintion(feedBackPageSize = $event)">
                                 </pagination-controls>
                             </div>
                         </div>
@@ -626,11 +646,19 @@
             </div>
             <div class="modal-body">
                 <div class="form-container">
-                    <div class="input-group mb-3">
+                    <!-- <div class="input-group mb-3">
                         <input class="form-control" type="text" placeholder="Search Member">
                         <button type="button" class="btn btn-light">
                             <i class="fas fa-search"></i>
                         </button>
+                    </div> -->
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="text" placeholder="Search Member" [formControl]="searchFamilyChield"
+                            (keyup)="onKeyUpFilterFamilyChield()" />
+                        <button type="button" class="btn btn-light border btn-sm" (click)="clearFilterFamilyChield()"
+                            *ngIf="searchFamilyChield.value"><i class="fas fa-times"></i></button>
+                        <button type="button" *ngIf="!searchFamilyChield.value" class="btn btn-sm border btn-light"><i
+                                class="fas fa-search"></i></button>
                     </div>
                     <table class="table table-hover mb-0">
                         <thead>
@@ -642,270 +670,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Vasant Namdev Gharge (78)</td>
-                                <td>407</td>
+                            <!-- <tr *ngFor="let familyChild  of voterListforFamilyChildArray | paginate: { itemsPerPage: '', currentPage: FamilyChildPaginationNo, totalItems:FamilyChildTotal}; let i = index"> -->
+                            <tr *ngFor="let familyChild  of voterListforFamilyChildArray">
+                                <td>{{familyChild?.voterNo}}</td>
+                                <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
+                                <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -914,6 +683,10 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="voterListforFamilyChildArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer d-flex w-100 justify-content-between">
