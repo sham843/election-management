@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -68,6 +68,9 @@ export class CrmHistoryComponent implements OnInit {
   financialConditionArray = [{ id: 0, name: 'Low' }, { id: 1, name: 'Middle' }, { id: 2, name: 'High' }];
   bloodGroupArray = [{ id: 0, name: 'A+' }, { id: 1, name: 'A-' }, { id: 2, name: 'B+' },{ id: 3, name: 'B-' },
      { id: 4, name: 'O+' }, { id: 5, name: 'O-' }, { id: 6, name: 'AB+' }, { id: 7, name: 'AB-' }];
+  childVoterDetailArray: any[] = [];
+  checkedchildVoterflag: boolean = true;
+  @ViewChild('familyMemberModel') familyMemberModel: any;
 
 
   constructor(
@@ -77,7 +80,7 @@ export class CrmHistoryComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private fb: FormBuilder,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private toastrService: ToastrService,
     public dateTimeAdapter: DateTimeAdapter<any>,
     private datePipe: DatePipe,
@@ -376,7 +379,70 @@ export class CrmHistoryComponent implements OnInit {
       this.searchFamilyChield.setValue('');
       this.getVoterListforFamilyChild();
     }
-  
+
+    createFamilyTree() {
+      if (this.childVoterDetailArray.length == 0){
+        this.toastrService.error('Please Select at Least One Record');
+         return;
+      }
+      let obj = {
+        "parentVoterId": this.voterListData.VoterId,
+        "userId": this.commonService.loggedInUserId(),
+        "clientId": this.voterListData.ClientId,
+        "childVoterDetails": this.childVoterDetailArray
+      }
+        this.callAPIService.setHttp('POST', 'ClientMasterWebApi/VoterCRM/CreateFamilyTree', false, obj, false, 'electionMicroSerApp');
+        this.callAPIService.getHttp().subscribe((res: any) => {
+          if (res.responseData != null && res.statusCode == "200") {
+            this.spinner.hide();
+            this.toastrService.success(res.statusMessage);
+            this.familyMemberModel.nativeElement.click();
+            this.getVoterListforFamilyChild();
+            this.clearFamilyTree();
+          } else {
+            this.spinner.hide();
+          }
+        }, (error: any) => {
+          this.spinner.hide();
+          this.router.navigate(['../500'], { relativeTo: this.route });
+        })
+      }
+      
+  onCheckChangeChildVoterDetail(event: any, data: any) {
+    let obj =  {
+      "childVoterId": data.voterId,
+      "voter_uid": this.commonService.loggedInUserId(),
+      "voter_no": data.voterNo
+    }
+    if (event.target.checked == true) {
+      this.checkUniqueData(obj, data.voterId);
+    } else { //delete record when event False
+      this.childVoterDetailArray.splice(this.childVoterDetailArray.findIndex((ele: any) => ele.childVoterId === data.voterId), 1);
+    }
+  }
+
+  checkUniqueData(obj: any, voterId: any) { //Check Unique Data then Insert or Update
+    this.checkedchildVoterflag = true;
+    if (this.childVoterDetailArray.length <= 0) {
+      obj['checked'] = true;
+      this.childVoterDetailArray.push(obj);
+      this.checkedchildVoterflag = false;
+    } else {
+      this.childVoterDetailArray.map((ele: any, index: any) => {
+        if (ele.childVoterId == voterId) {
+          this.childVoterDetailArray[index] = obj;
+          this.checkedchildVoterflag = false;
+        }
+      })
+    }
+    this.checkedchildVoterflag && this.childVoterDetailArray.length >= 1 ? this.childVoterDetailArray.push(obj) : '';
+  }
+
+  clearFamilyTree(){
+    this.childVoterDetailArray = [];
+  }
+
+
     //.......... get Voter for Family Child List Code End...............//
     
 
