@@ -675,3 +675,7 @@ g[shape-rendering="auto"]{
 .pac-container{
     z-index: 9999 !important;
 }
+
+ngx-select.ng-untouched.ng-invalid.is-invalid .ngx-select__toggle {
+    border: solid 1px red !important;
+}

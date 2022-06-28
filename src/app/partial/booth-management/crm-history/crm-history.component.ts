@@ -86,6 +86,7 @@ export class CrmHistoryComponent implements OnInit {
   HighlightRow: any;
   isExpiredVoter = new FormControl('');
 
+  padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   userFilter: any = { name: '' };
 
 
@@ -474,6 +475,14 @@ export class CrmHistoryComponent implements OnInit {
 
   leaderRadiobtn(){
     this.voterProfileForm.value.leader == 'yes' ? this.leaderhideDiv = true : this.leaderhideDiv = false;
+      if (this.voterProfileForm.value.leader == 'yes') {
+        this.voterProfileForm.controls["leaderImportance"].setValidators([Validators.required]);
+        this.voterProfileForm.controls["leaderImportance"].updateValueAndValidity();
+      } else {
+        this.voterProfileForm.controls['leaderImportance'].setValue('');
+        this.voterProfileForm.controls['leaderImportance'].clearValidators();
+        this.voterProfileForm.controls['leaderImportance'].updateValueAndValidity();
+      }
   }
 
   migratedRadiobtn(){
@@ -497,9 +506,9 @@ export class CrmHistoryComponent implements OnInit {
     this.voterProfileForm = this.fb.group({
 
       Id: [''],
-      mobileNo1: [''],
-      mobileNo2: [''],
-      email: [''],
+      mobileNo1: ['',[Validators.pattern('[6-9]\\d{9}')]],
+      mobileNo2: ['',[Validators.pattern('[6-9]\\d{9}')]],
+      email: ['',[Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]],
       castId: [''],
       partyId: [''],
       religionId: [''],
@@ -518,8 +527,8 @@ export class CrmHistoryComponent implements OnInit {
       migrated: [''],
       area: [''],
       leaderImportance: [''],
-      migratedLatitude: [''],
-      migratedLongitude: [''],
+      // migratedLatitude: [''],
+      // migratedLongitude: [''],
       occupation: [''],
       isNameChange: [''],
       mfName: [''],
@@ -545,6 +554,7 @@ export class CrmHistoryComponent implements OnInit {
       needSupportText: [''],
       postalFlag: [''],
       whyIsPostal: [''],
+      isPadvidhar: [''],
     })
   }
 
@@ -561,8 +571,8 @@ export class CrmHistoryComponent implements OnInit {
       castId: data.castId,
       partyId: data.partyId,
       religionId: data.religionId,
-      watsApp1: data.watsApp1,
-      watsApp2: data.watsApp2,
+      watsApp1: data.watsApp1 ? true : false,
+      watsApp2: data.watsApp2 ? true : false,
       leader: data.leader,
       migratedArea: data.migratedArea,
       head: data.head,
@@ -576,8 +586,8 @@ export class CrmHistoryComponent implements OnInit {
       nickName: data.nickName,
       migrated: data.migrated,
       area: data.area,
-      migratedLatitude: data.migratedLatitude,
-      migratedLongitude: data.migratedLongitude,
+      // migratedLatitude: data.migratedLatitude,
+      // migratedLongitude: data.migratedLongitude,
       occupation: data.occupation,
       isNameChange: data.isNameChange,
       mfName: data?.mfName,
@@ -603,6 +613,7 @@ export class CrmHistoryComponent implements OnInit {
       needSupportText: data.needSupportText,
       postalFlag: data.postalFlag,
       whyIsPostal: data.whyIsPostal,
+      isPadvidhar: data.isPadvidhar,
     })
     this.getVoterCastList(data.religionId);
     this.familyHeadRadiobtn();
@@ -611,6 +622,8 @@ export class CrmHistoryComponent implements OnInit {
     this.postalVotingCheckBox(data.postalFlag == 1 ? true : false , 'edit');
     this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false ,'edit');
     this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false ,'edit');
+    this.latitude = data.migratedLatitude;
+    this.longitude = data.migratedLongitude;
   }
 
   onSubmitVoterProfile() {
@@ -624,26 +637,26 @@ export class CrmHistoryComponent implements OnInit {
       let obj = {
         "serverId": this.voterProfileData.serverId,
         "voterId": this.voterProfileData.voterId,
-        "mobileNo1": formData.mobileNo1,
-        "mobileNo2": formData.mobileNo2,
+        "mobileNo1": formData?.mobileNo1 || '',
+        "mobileNo2": formData?.mobileNo2 || '',
         "landline": "string",
-        "email": formData.email,
+        "email": formData.email || '',
         "followers": "string",
-        "castId": formData.castId,
-        "partyId": formData.partyId, 
+        "castId": formData.castId || 0,
+        "partyId": formData.partyId || 0, 
         "familysize": this.voterProfileData.familySize.toString(),
-        "religionId": formData.religionId,
+        "religionId": formData.religionId || 0,
         "partyAffection": "string",
-        "leaderImportance": formData.leaderImportance,
-        "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : '',
-        "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : '',
+        "leaderImportance": formData.leaderImportance || '',
+        "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : (this.voterProfileData.watsApp1 && formData.watsApp1 == true ? this.voterProfileData.watsApp1 : ''),
+        "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : (this.voterProfileData.watsApp2 && formData.watsApp2 == true ? this.voterProfileData.watsApp2 : ''),
         "facebookId": "string",
-        "leader": formData.leader,
-        "migratedArea": formData.migratedArea,
+        "leader": formData.leader || '',
+        "migratedArea": formData.migratedArea || '',
         "regionalLang1": "string",
         "regionalLang2": "string",
         "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
-        "head": formData.head,
+        "head": formData.head || '',
         "villageId": this.voterProfileData.villageId,
         "boothId": this.voterProfileData.boothId,
         "assemblyId": this.voterProfileData.assemblyId,
@@ -652,22 +665,22 @@ export class CrmHistoryComponent implements OnInit {
         "voterMarking": "string",
         "oppCandidateId": 0,
         "feedback": "string",
-        "migratedCity": formData.migratedCity,
+        "migratedCity": formData.migratedCity || '',
         "latitude": this.latitude,
         "longitude": this.longitude,
         "voterNo": this.voterProfileData.voterNo.toString(),
-        "nickName":  formData.nickName,
+        "nickName":  formData.nickName || '',
         "clientId": this.voterProfileData.clientId,
-        "migrated": formData.migrated,
-        "area": formData.area,
-        "migratedLatitude": 0,
-        "migratedLongitude": 0,
+        "migrated": formData.migrated || '', 
+        "area": formData.area, 
+        "migratedLatitude": this.latitude,
+        "migratedLongitude": this.longitude,
         "surveyDate": "2022-06-23T10:32:04.461Z",
         "buildingID": 0,
-        "needSupportFlag": formData.needSupportFlag,
-        "needSupportText": formData.needSupportText,
-        "postalFlag": formData.postalFlag,
-        "occupation": formData.occupation,
+        "needSupportFlag": formData.needSupportFlag == true ? 1 : 0,
+        "needSupportText": formData.needSupportText || '',
+        "postalFlag": formData.postalFlag == true ? 1 : 0,
+        "occupation": formData.occupation || '',
         "isNameChange": this.isNameCorrectionId,
         "mfName": formData.mfName || "",
         "mmName": formData.mmName || "",
@@ -676,8 +689,8 @@ export class CrmHistoryComponent implements OnInit {
         "emName": formData.emName || "",
         "elName": formData.elName || "",
         "createdDate": new Date(),
-        "qualification": formData.qualification,
-        "bloodgroup": formData.bloodgroup,
+        "qualification": formData.qualification || '',
+        "bloodgroup": formData.bloodgroup || '',
         "isNotCall": formData.isNotCall == true ? 1 : 0,
         "isDairyFarmer": formData.isDairyFarmer,
         "isGoatSheepFarmer": formData.isGoatSheepFarmer,
@@ -689,11 +702,11 @@ export class CrmHistoryComponent implements OnInit {
         "financialCondition": formData.financialCondition,
         "businnessDetails": "string",
         "isExpired": formData.isExpired,
-        "prominentLeaderId": formData.prominentLeaderId,
+        "prominentLeaderId": formData.prominentLeaderId || 0,
         "whyIsPostal": formData.whyIsPostal,
         "isWrongMobileNo": 0,
         "pollingAgent": 0,
-        "isPadvidhar": 0
+        "isPadvidhar": parseInt(formData.isPadvidhar)
       }
 
       this.spinner.show();
@@ -707,7 +720,9 @@ export class CrmHistoryComponent implements OnInit {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
           this.submittedVP = false;
+          this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.toastrService.success(res.statusMessage);
+          this.getVoterProfileData();
         } else {
           this.toastrService.error(res.statusMessage);
           this.spinner.hide();
