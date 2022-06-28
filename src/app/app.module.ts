@@ -23,8 +23,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { NameCorrectionDialogComponent } from './partial/dialogs/name-correction-dialog/name-correction-dialog.component';
 import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/voter-call-entries.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ExcelService } from '../../src/app/services/excel.service'
-
+import { ExcelService } from '../../src/app/services/excel.service';
 
 @NgModule({
   declarations: [

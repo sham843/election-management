@@ -1146,6 +1146,7 @@ export class CrmComponent implements OnInit {
   //....................................  Voter Call Entries Start Here...........................................//
 
   openDialogVoterCallEntries(obj: any) {
+    let formData = this.filterForm.value;
     obj.hasOwnProperty('clientId') ? '' : obj['clientId'] = this.familyClientId ;
     // let Obj1 = { 'VoterId': obj.voterId, 'ClientId': obj.clientId, 'AgentId': obj.agentId }
     // const dialogRef = this.dialog.open(VoterCallEntriesComponent, {
@@ -1157,7 +1158,7 @@ export class CrmComponent implements OnInit {
     // dialogRef.afterClosed().subscribe(result => {
     //   console.log(`Dialog result: ${result}`);
     // });
-    window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId);
+    window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId + '.' + formData.ElectionId + '.' + formData.ConstituencyId);
 
   }
 

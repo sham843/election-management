@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild,NgZone, ElementRef} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,6 +10,9 @@ import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { MapsAPILoader,MouseEvent } from '@agm/core';
+import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
+declare var google: any;
 
 @Component({
   selector: 'app-crm-history',
@@ -43,34 +46,47 @@ export class CrmHistoryComponent implements OnInit {
   politicalPartyArray:any;
 
   voterListforFamilyChildArray:any;
-  FamilyChildTotal: any;
-  FamilyChildPaginationNo: number = 1;
-  FamilyChildPageSize: number = 10;
   searchFamilyChield = new FormControl('');
   subjectSearchFamilyC: Subject<any> = new Subject();
 
-  ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '2 Star' }, { id: 3, name: '3 Star' }, { id: 4, name: '4 Star' }, { id: 5, name: '5 Star' }];
-  headCheckArray = ['Yes','No'];
-  leaderCheckArray = ['Yes','No'];
-  migratedCheckArray = ['Yes','No'];
+  ratingStarArray = [{ id: 1, name: '1.0' }, { id: 2, name: '2.0' }, { id: 3, name: '3.0' }, { id: 4, name: '4.0' }, { id: 5, name: '5.0' }];
+  headCheckArray = ['yes','no'];
+  leaderCheckArray = ['yes','no'];
+  migratedCheckArray = ['yes','no'];
   headhideDiv:boolean = false;  
   leaderhideDiv:boolean = false;
   migratedhideDiv:boolean = false;
   postalVotingDivHide:boolean = false;
   needSupportDivHide:boolean = false;
-  dairyFarmerArray = [{ id: 0, name: 'Yes' }, { id: 1, name: 'No' }];
-  goatSheepFarmerArray = [{ id: 0, name: 'Yes' }, { id: 1, name: 'No' }];
-  sugarCaneCutterArray = [{ id: 0, name: 'Yes' }, { id: 1, name: 'No' }];
-  yuvakArray = [{ id: 0, name: 'Yes' }, { id: 1, name: 'No' }];
-  farmerArray = [{ id: 0, name: 'Yes' }, { id: 1, name: 'No' }];
-  businessArray = [{ id: 0, name: 'Yes' }, { id: 1, name: 'No' }];
-  vehicleArray = [{ id: 0, name: 'Bike' }, { id: 1, name: 'Family Car' }, { id: 2, name: 'None' }];
-  financialConditionArray = [{ id: 0, name: 'Low' }, { id: 1, name: 'Middle' }, { id: 2, name: 'High' }];
+  dairyFarmerArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+  goatSheepFarmerArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+  sugarCaneCutterArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+  yuvakArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+  farmerArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+  businessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
+  vehicleArray = [{ id: 1, name: 'Bike' }, { id: 2, name: 'Family Car' }, { id: 3, name: 'None' }];
+  financialConditionArray = [{ id: 1, name: 'Low' }, { id: 2, name: 'Middle' }, { id: 3, name: 'High' }];
   bloodGroupArray = [{ id: 0, name: 'A+' }, { id: 1, name: 'A-' }, { id: 2, name: 'B+' },{ id: 3, name: 'B-' },
      { id: 4, name: 'O+' }, { id: 5, name: 'O-' }, { id: 6, name: 'AB+' }, { id: 7, name: 'AB-' }];
   childVoterDetailArray: any[] = [];
   checkedchildVoterflag: boolean = true;
   @ViewChild('familyMemberModel') familyMemberModel: any;
+  isNameCorrectionId:any;
+
+  latitude = 19.663280;
+  longitude = 75.300293;
+  cityName: any;
+  addressName:any;
+  geocoder: any;
+  @ViewChild('search') public searchElementRef!: ElementRef;
+  searchAdd = new FormControl('');
+
+  familyHeadVoterId:any;
+  familyHeadName:any;
+  HighlightRow: any;
+  isExpiredVoter = new FormControl('');
+
+  userFilter: any = { name: '' };
 
 
   constructor(
@@ -84,13 +100,16 @@ export class CrmHistoryComponent implements OnInit {
     private toastrService: ToastrService,
     public dateTimeAdapter: DateTimeAdapter<any>,
     private datePipe: DatePipe,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone,
   ) {
     dateTimeAdapter.setLocale('en-IN');
 
     let getUrlData: any = this.route.snapshot.params.id;
     if (getUrlData) {
       getUrlData = getUrlData.split('.');
-      this.voterListData = { 'AgentId': +getUrlData[0], 'ClientId': +getUrlData[1], 'VoterId': +getUrlData[2] }
+      this.voterListData = { 'AgentId': +getUrlData[0], 'ClientId': +getUrlData[1], 'VoterId': +getUrlData[2] 
+      , 'ElectionId': +getUrlData[3], 'ConstituencyId': +getUrlData[4]}
     }
   }
 
@@ -106,6 +125,7 @@ export class CrmHistoryComponent implements OnInit {
     // this.getVoterCastList();
     this.getPoliticalPartyList();
     this.searchFamilyChieldFilters('false');
+    this.searchAddress();
   }
 
   defaultFeedbackForm() {
@@ -186,15 +206,18 @@ export class CrmHistoryComponent implements OnInit {
 
   //........................ Get Voter Profile Data.....................//
 
-  getVoterProfileData() {
+  getVoterProfileData(data?:any) {
+    let voterId;
+    data ? voterId = data?.voterId : voterId = this.voterListData.VoterId;
     this.spinner.show();
     let obj = 'ClientId=' + this.voterListData.ClientId +
-      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId
+      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + voterId ;
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileData = res.responseData;
+        // this.voterProfileData?.head == 'yes' ? this.familyHeadName = this.voterProfileData?.marathiName : '';
         this.editVoterProfileData(this.voterProfileData);
       } else {
         this.spinner.hide();
@@ -211,11 +234,17 @@ export class CrmHistoryComponent implements OnInit {
     this.spinner.show();
     let obj = 'ClientId=' + this.voterListData.ClientId + 
     '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
-    this.callAPIService.setHttp('get', 'ClientMasterApp/VoterList/GetVoterFamilyMember?' + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFamilyMemberCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileFamilyData = res.responseData;
+        this.voterProfileFamilyData.map((ele:any)=>{ //get FamilyHead Name & VoterId 
+          if(ele.familyHead == 1){
+            this.familyHeadName = ele.family;   
+            this.familyHeadVoterId = ele.voterId;
+          }
+        })
       } else {
         this.voterProfileFamilyData = [];
         this.spinner.hide();
@@ -230,42 +259,23 @@ export class CrmHistoryComponent implements OnInit {
 
   getVPPoliticalInfluenceData() {
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_get_Voterprofile_Political_Influence?ClientId=' + this.voterListData.ClientId + '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId, false, false, false, 'electionServiceForWeb');
+    let obj = 'ClientId=' + this.voterListData.ClientId + 
+    '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRMVoterComments?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.VPCommentData = res.data1;
-        this.posNegativeInfData = res.data2;
+        this.VPCommentData = res.responseData.responseData1;
+        this.posNegativeInfData = res.responseData.responseData2;
       } else {
         this.VPCommentData = [];
+        this.posNegativeInfData = [];
         this.spinner.hide();
       }
     }, (error: any) => {
       this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
+      this.router.navigate(['../500'], { relativeTo: this.route });
     })
-
-    // this.spinner.show();
-    // let obj = 'ClientId=' + this.voterListData.ClientId + 
-    // '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
-    // this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRMVoterComments?' + obj, false, false, false, 'electionMicroSerApp');
-    // this.callAPIService.getHttp().subscribe((res: any) => {
-    //   if (res.responseData != null && res.statusCode == "200") {
-    //     this.spinner.hide();
-    //     this.VPCommentData = res.responseData.responseData1;
-    //     this.posNegativeInfData = res.responseData.responseData2;
-    //   } else {
-    //     this.VPCommentData = [];
-    //     this.posNegativeInfData = [];
-    //     this.spinner.hide();
-    //   }
-    // }, (error: any) => {
-    //   this.spinner.hide();
-    //   this.router.navigate(['../500'], { relativeTo: this.route });
-    // })
-
   }
 
   clearForm() {
@@ -312,9 +322,9 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   //.......... get Voter Cast List ...............//
-  getVoterCastList() {
+  getVoterCastList(religionId:any) {
     this.callAPIService.setHttp('get', 'Filter/GetCastDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
-      + this.commonService.loggedInUserId() + '&ReligionId=' + this.voterProfileForm.value.religionId, false, false, false, 'electionMicroServiceForWeb');
+      + this.commonService.loggedInUserId() + '&ReligionId=' + religionId, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.VoterCastListArray = res.responseData;
@@ -343,17 +353,15 @@ export class CrmHistoryComponent implements OnInit {
 
      //.......... get Voter for Family Child List Code Start...............//
 
-     getVoterListforFamilyChild() {
+     getVoterListforFamilyChild() {  
       this.spinner.show();
       let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
-      '&ElectionId=' + 43 + '&ConstituencyId=' + 56 + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim()
-      + '&pageno=' + this.FamilyChildPaginationNo + '&pagesize=' + this.FamilyChildPageSize;
+      '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim();
       this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj , false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
-          this.voterListforFamilyChildArray = res.responseData.responseData1;
-          // this.FamilyChildTotal = res.responseData.responseData2.totalPages * this.FamilyChildPageSize;
+          this.voterListforFamilyChildArray = res.responseData;
         } else {
           this.spinner.hide();
           this.voterListforFamilyChildArray = [];
@@ -386,8 +394,8 @@ export class CrmHistoryComponent implements OnInit {
          return;
       }
       let obj = {
-        "parentVoterId": this.voterListData.VoterId,
-        "userId": this.commonService.loggedInUserId(),
+        "parentVoterId": this.familyHeadVoterId,
+        "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
         "clientId": this.voterListData.ClientId,
         "childVoterDetails": this.childVoterDetailArray
       }
@@ -397,7 +405,7 @@ export class CrmHistoryComponent implements OnInit {
             this.spinner.hide();
             this.toastrService.success(res.statusMessage);
             this.familyMemberModel.nativeElement.click();
-            this.getVoterListforFamilyChild();
+            this.getVoterprofileFamilyData();
             this.clearFamilyTree();
           } else {
             this.spinner.hide();
@@ -411,7 +419,7 @@ export class CrmHistoryComponent implements OnInit {
   onCheckChangeChildVoterDetail(event: any, data: any) {
     let obj =  {
       "childVoterId": data.voterId,
-      "voter_uid": this.commonService.loggedInUserId(),
+      "voter_uid": data.voterId,
       "voter_no": data.voterNo
     }
     if (event.target.checked == true) {
@@ -424,7 +432,7 @@ export class CrmHistoryComponent implements OnInit {
   checkUniqueData(obj: any, voterId: any) { //Check Unique Data then Insert or Update
     this.checkedchildVoterflag = true;
     if (this.childVoterDetailArray.length <= 0) {
-      obj['checked'] = true;
+      // obj['checked'] = true;
       this.childVoterDetailArray.push(obj);
       this.checkedchildVoterflag = false;
     } else {
@@ -454,31 +462,32 @@ export class CrmHistoryComponent implements OnInit {
     flag == true ? this.disableDiv = true : this.disableDiv = false;
   }
 
-  nameCorrectionCheckBox(event: any) {
-    let flag = event.target.checked;
-    flag == true ? this.nameCorrectionDivHide = true : this.nameCorrectionDivHide = false;
+  nameCorrectionCheckBox(event: any , flag:any) {
+    let checkflag = (flag == 'noEdit' ? event.target.checked : event );
+    checkflag == true ? this.nameCorrectionDivHide = true : this.nameCorrectionDivHide = false;
+    this.isNameCorrectionId = checkflag == true ? 1 : 0 ;
   }
 
   familyHeadRadiobtn(){
-    this.voterProfileForm.value.head == 'Yes' ? this.headhideDiv = true : this.headhideDiv = false;
+    this.voterProfileForm.value.head == 'yes' ? this.headhideDiv = true : this.headhideDiv = false;
   }
 
   leaderRadiobtn(){
-    this.voterProfileForm.value.leader == 'Yes' ? this.leaderhideDiv = true : this.leaderhideDiv = false;
+    this.voterProfileForm.value.leader == 'yes' ? this.leaderhideDiv = true : this.leaderhideDiv = false;
   }
 
   migratedRadiobtn(){
-    this.voterProfileForm.value.migrated == 'Yes' ? this.migratedhideDiv = true : this.migratedhideDiv = false;
+    this.voterProfileForm.value.migrated == 'yes' ? this.migratedhideDiv = true : this.migratedhideDiv = false;
   }
 
-  postalVotingCheckBox(event: any) {
-    let flag = event.target.checked;
-    flag == true ? this.postalVotingDivHide = true : this.postalVotingDivHide = false;
+  postalVotingCheckBox(event: any , flag:any) {
+    let checkflag = (flag == 'noEdit' ? event.target.checked : event );
+    checkflag == true ? this.postalVotingDivHide = true : this.postalVotingDivHide = false;
   }
 
-  needSupportCheckBox(event: any) {
-    let flag = event.target.checked;
-    flag == true ? this.needSupportDivHide = true : this.needSupportDivHide = false;
+  needSupportCheckBox(event: any , flag:any) {
+    let checkflag = (flag == 'noEdit' ? event.target.checked : event );
+    checkflag == true ? this.needSupportDivHide = true : this.needSupportDivHide = false;
   }
 
 
@@ -536,12 +545,15 @@ export class CrmHistoryComponent implements OnInit {
       needSupportText: [''],
       postalFlag: [''],
       whyIsPostal: [''],
-      familysize: [''],
     })
   }
 
+  editFamilyMemberData(obj:any){
+   this.getVoterProfileData(obj);
+  }
+
   editVoterProfileData(data:any) {
-    this.voterProfileForm.patchValue({
+    this.voterProfileForm.patchValue({  
       Id: this.voterProfileData.voterId,
       mobileNo1: data?.mobileNo1,
       mobileNo2: data?.mobileNo2,
@@ -591,8 +603,14 @@ export class CrmHistoryComponent implements OnInit {
       needSupportText: data.needSupportText,
       postalFlag: data.postalFlag,
       whyIsPostal: data.whyIsPostal,
-      familysize: data.familysize,
     })
+    this.getVoterCastList(data.religionId);
+    this.familyHeadRadiobtn();
+    this.leaderRadiobtn();
+    this.migratedRadiobtn();
+    this.postalVotingCheckBox(data.postalFlag == 1 ? true : false , 'edit');
+    this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false ,'edit');
+    this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false ,'edit');
   }
 
   onSubmitVoterProfile() {
@@ -609,35 +627,35 @@ export class CrmHistoryComponent implements OnInit {
         "mobileNo1": formData.mobileNo1,
         "mobileNo2": formData.mobileNo2,
         "landline": "string",
-        "email": "string",
+        "email": formData.email,
         "followers": "string",
         "castId": formData.castId,
-        "partyId": formData.partyId,
-        "familysize": formData.familysize,
+        "partyId": formData.partyId, 
+        "familysize": this.voterProfileData.familySize.toString(),
         "religionId": formData.religionId,
         "partyAffection": "string",
         "leaderImportance": formData.leaderImportance,
-        "watsApp1": formData.watsApp1,
-        "watsApp2": formData.watsApp2,
+        "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : '',
+        "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : '',
         "facebookId": "string",
         "leader": formData.leader,
         "migratedArea": formData.migratedArea,
         "regionalLang1": "string",
         "regionalLang2": "string",
-        "userId": this.commonService.loggedInUserId(),
+        "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
         "head": formData.head,
         "villageId": this.voterProfileData.villageId,
         "boothId": this.voterProfileData.boothId,
         "assemblyId": this.voterProfileData.assemblyId,
         "dateOfBirth": formData.dateOfBirth,
-        "comment": formData.comment,
+        "comment": formData.comment || "",
         "voterMarking": "string",
         "oppCandidateId": 0,
         "feedback": "string",
         "migratedCity": formData.migratedCity,
-        "latitude": 0,
-        "longitude": 0,
-        "voterNo": this.voterProfileData.voterNo,
+        "latitude": this.latitude,
+        "longitude": this.longitude,
+        "voterNo": this.voterProfileData.voterNo.toString(),
         "nickName":  formData.nickName,
         "clientId": this.voterProfileData.clientId,
         "migrated": formData.migrated,
@@ -650,17 +668,17 @@ export class CrmHistoryComponent implements OnInit {
         "needSupportText": formData.needSupportText,
         "postalFlag": formData.postalFlag,
         "occupation": formData.occupation,
-        "isNameChange": 0,
-        "mfName": formData.mfName,
-        "mmName": formData.mmName,
-        "mlName": formData.mlName,
-        "efName": formData.efName,
-        "emName": formData.emName,
-        "elName": formData.elName,
+        "isNameChange": this.isNameCorrectionId,
+        "mfName": formData.mfName || "",
+        "mmName": formData.mmName || "",
+        "mlName": formData.mlName || "",
+        "efName": formData.efName || "",
+        "emName": formData.emName || "",
+        "elName": formData.elName || "",
         "createdDate": new Date(),
         "qualification": formData.qualification,
         "bloodgroup": formData.bloodgroup,
-        "isNotCall": formData.isNotCall,
+        "isNotCall": formData.isNotCall == true ? 1 : 0,
         "isDairyFarmer": formData.isDairyFarmer,
         "isGoatSheepFarmer": formData.isGoatSheepFarmer,
         "isSugarCaneCutter": formData.isSugarCaneCutter,
@@ -674,7 +692,8 @@ export class CrmHistoryComponent implements OnInit {
         "prominentLeaderId": formData.prominentLeaderId,
         "whyIsPostal": formData.whyIsPostal,
         "isWrongMobileNo": 0,
-        "pollingAgent": 0
+        "pollingAgent": 0,
+        "isPadvidhar": 0
       }
 
       this.spinner.show();
@@ -683,7 +702,7 @@ export class CrmHistoryComponent implements OnInit {
       formData.Id == 0 ? urlType = 'POST' : urlType = 'PUT'
       formData.Id == 0 ? urlName = 'ClientMasterWebApi/VoterCRM/InsertVoterDetails' : urlName = 'ClientMasterWebApi/VoterCRM/UpdateVoterDetails'
 
-      this.callAPIService.setHttp(urlType, urlName, false, JSON.stringify(obj), false, 'electionMicroSerApp');
+      this.callAPIService.setHttp(urlType, urlName, false, obj, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
@@ -700,5 +719,60 @@ export class CrmHistoryComponent implements OnInit {
 
     }
   }
+
+ //.........................................Address to get Pincode Code Start Here ..................................................//
+
+ searchAddress() {
+  this.mapsAPILoader.load().then(() => {
+    this.geocoder = new google.maps.Geocoder();
+    let autocomplete = new google.maps.places.Autocomplete(
+      this.searchElementRef.nativeElement
+    );
+    autocomplete.addListener('place_changed', () => {
+      this.ngZone.run(() => {
+        let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (place.geometry === undefined || place.geometry === null) {
+          return;
+        }
+        this.latitude = place.geometry.location.lat();
+        this.longitude = place.geometry.location.lng();
+        this.findAddressByCoordinates();
+      });
+    });
+  });
+}
+
+markerDragEnd($event: MouseEvent) {
+  this.latitude = $event.coords.lat;
+  this.longitude = $event.coords.lng;
+  this.findAddressByCoordinates();
+}
+
+findAddressByCoordinates() {
+  this.geocoder.geocode({
+    'location': {
+      lat: this.latitude,
+      lng: this.longitude
+    }
+  }, (results:any) => {
+    this.findAddress(results[0]);
+  });
+}
+
+findAddress(results:any) {
+  if(results){
+    this.addressName = results.formatted_address;
+        results.address_components.forEach((element: any) => {
+           if (element.types[0] == "locality") {
+            this.cityName = element.long_name;
+          }
+          this.searchAdd.setValue(this.addressName);
+          this.voterProfileForm.controls['migratedCity'].setValue(this.cityName);
+          this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
+        });
+  }
+}
+
+//.........................................Address to get Pincode Code End Here ....................................//
 
 }
