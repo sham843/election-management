@@ -105,26 +105,26 @@
                                                 Entered no.</span>
                                         </span>
                                         <div class="d-flex">
-                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo1">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" (change)="onCheckChangeChildVoterDetail1($event,contactlistArray?.mobileNo1)"
+                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo1?.length > 9">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo1)"
                                                     value="option1">
                                                 <label class="form-check-label text-success" for="inlineCheckbox1">{{contactlistArray?.mobileNo1}}</label>
                                             </div>
-                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo2">
+                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo2?.length > 9">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
-                                                    value="option2">
+                                                (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo2)" value="option2">
                                                 <label class="form-check-label text-success" for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
                                             </div>
-                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.otherMobileNo">
-                                                <div *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
+                                            <div class="form-check form-check-inline" *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
+                                                <div *ngIf="contactlistArray?.otherMobileNo">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
-                                                    value="option3">
+                                                (change)="onCheckWrongContactNumber($event,contactlist)" value="option3">
                                                 <label class="form-check-label text-danger" for="inlineCheckbox3">{{contactlist}}</label>
                                             </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <button type="submit" class="btn btn-main">Submit</button>
+                                        <div *ngIf="this.contactlistArray?.mobileNo1?.length > 9 || this.contactlistArray?.mobileNo2?.length > 9 ||  this.contactlistArray?.otherMobileNo?.length > 9">
+                                            <button type="submit" class="btn btn-main" (click)="updateContactlist()">Submit</button>
                                         </div>
                                     </div>
                                 </div>

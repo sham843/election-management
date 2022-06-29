@@ -874,6 +874,7 @@ updateContactlist() {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.toastrService.success(res.statusMessage);
+        this.getContactlist(this.voterProfileData)
       } else {
         this.spinner.hide();
       }
@@ -883,7 +884,7 @@ updateContactlist() {
     })
   }
 
-  onCheckChangeChildVoterDetail1(event: any, mobileNum: any) {
+  onCheckWrongContactNumber(event: any, mobileNum: any) {
     let obj =  {
       "voterId": this.voterProfileData.voterId,
       "isWrongMobileNo": event.target.checked == true ? 1 : 0,
@@ -892,14 +893,14 @@ updateContactlist() {
       "userId": this.commonService.loggedInUserId()
     }
     if (event.target.checked == true) {
-      this.checkUniqueData(obj, mobileNum);
+      this.checkUniqueDataContact(obj, mobileNum);
     } else { //delete record when event False
       this.wrongMobileNumberArray.splice(this.wrongMobileNumberArray.findIndex((ele: any) => ele.mobileNo === mobileNum), 1);
     }
     console.log(this.wrongMobileNumberArray)
   }
 
-  checkUniqueData1(obj: any, voterId: any) { //Check Unique Data then Insert or Update
+  checkUniqueDataContact(obj: any, voterId: any) { //Check Unique Data then Insert or Update
     this.checkWrongMobileNflag = true;
     if (this.wrongMobileNumberArray.length <= 0) {
       this.wrongMobileNumberArray.push(obj);
