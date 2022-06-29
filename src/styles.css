@@ -672,6 +672,11 @@ g[shape-rendering="auto"]{
     pointer-events: none;
     opacity: 0.6;
 }
+
+.divDisabled1{
+    pointer-events: none;
+    opacity: 0.6;
+}
 .pac-container{
     z-index: 9999 !important;
 }
