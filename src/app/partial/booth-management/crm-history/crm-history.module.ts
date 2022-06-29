@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { OwlNativeDateTimeModule, OwlDateTimeModule } from 'ng-pick-datetime';
 import { AgmCoreModule } from '@agm/core';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { AgmCoreModule } from '@agm/core';
     NgxSelectModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
+    FilterPipeModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
       language: 'en',

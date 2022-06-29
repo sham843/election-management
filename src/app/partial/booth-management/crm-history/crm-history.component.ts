@@ -88,12 +88,13 @@ export class CrmHistoryComponent implements OnInit {
   HighlightRow: any;
   isExpiredVoter = new FormControl('');
 
-  padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
-  userFilter: any = { name: '' };
+  padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }]; //Is Graduate
 
   contactlistArray:any;
   wrongMobileNumberArray: any[] = [];
   checkWrongMobileNflag: boolean = true;
+
+  familyMembersFilter: any = { englishName: '' };
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -369,6 +370,14 @@ export class CrmHistoryComponent implements OnInit {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
           this.voterListforFamilyChildArray = res.responseData;
+
+//           res.responseData.map((ele:any)=>{
+//            return ele['checked'] = false;
+//           })
+//  console.log(this.voterListforFamilyChildArray)
+
+
+
         } else {
           this.spinner.hide();
           this.voterListforFamilyChildArray = [];
@@ -729,7 +738,7 @@ export class CrmHistoryComponent implements OnInit {
         "nickName":  formData.nickName || '',
         "clientId":  this.voterListData?.ClientId,
         "migrated": formData.migrated || '', 
-        "area": formData.area, 
+        "area": formData.migratedArea ? formData.migratedArea : formData.area, 
         "migratedLatitude": this.latitude ? this.latitude : this.voterProfileData.migratedLatitude,
         "migratedLongitude": this.longitude ? this.longitude : this.voterProfileData.migratedLongitude,
         "surveyDate": "2022-06-23T10:32:04.461Z",

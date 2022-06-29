@@ -29,7 +29,10 @@
                                     </div>
                                     <div class="card-body pt-1">
                                         <div class="d-flex">
-                                            <div class="flex-shrink-0">
+                                            <div class="flex-shrink-0" *ngIf="voterProfileData?.voterPhoto">
+                                                <img src="{{voterProfileData?.voterPhoto}}" alt="Profile" class="profile-pic">
+                                            </div>
+                                            <div class="flex-shrink-0" *ngIf="!voterProfileData?.voterPhoto">
                                                 <img src="assets/images/user.png" alt="Profile" class="profile-pic">
                                             </div>
                                             <div class="flex-grow-1 ms-3">
@@ -50,13 +53,17 @@
                                                         <label class="form-label">Booth Name</label>
                                                         <div class="form-data">{{voterProfileData?.boothName}}</div>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Voter No</label>
+                                                        <div class="form-data">{{voterProfileData?.voterNo}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2">
                                                         <label class="form-label">Family Head</label>
                                                         <div class="form-data"> {{voterProfileData?.head == 'yes' ? 'Yes' : 'No'}} ({{voterProfileData?.familySize}} Members)</div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Area</label>
-                                                        <div class="form-data"> {{voterProfileData?.migratedArea ? voterProfileData?.migratedArea : voterProfileData?.area}} </div>
+                                                        <div class="form-data"> {{voterProfileData?.area}} </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Party Supported</label>
@@ -71,6 +78,10 @@
                                                         <div class="form-data">
                                                             {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}} ({{voterProfileData?.migratedArea ? voterProfileData?.migratedArea : ''}})
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Agent Name</label>
+                                                        <div class="form-data"> {{voterProfileData?.agentName}} </div>
                                                     </div>
                                                     <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Favouring</label>
@@ -727,20 +738,20 @@
             </div>
             <div class="modal-body">
                 <div class="form-container">
-                    <!-- <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Search Member">
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="text" placeholder="Search Member" [(ngModel)]="familyMembersFilter.englishName">
                         <button type="button" class="btn btn-light">
                             <i class="fas fa-search"></i>
                         </button>
-                    </div> -->
-                    <div class="input-group mb-3">
+                    </div>
+                    <!-- <div class="input-group mb-3">
                         <input class="form-control" type="text" placeholder="Search Member" [formControl]="searchFamilyChield"
                             (keyup)="onKeyUpFilterFamilyChield()" />
                         <button type="button" class="btn btn-light border btn-sm" (click)="clearFilterFamilyChield()"
                             *ngIf="searchFamilyChield.value"><i class="fas fa-times"></i></button>
                         <button type="button" *ngIf="!searchFamilyChield.value" class="btn btn-sm border btn-light"><i
                                 class="fas fa-search"></i></button>
-                    </div>
+                    </div> -->
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
@@ -751,7 +762,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let familyChild  of voterListforFamilyChildArray">
+                            <tr *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
                                 <td>{{familyChild?.voterNo}}</td>
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
                                 <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
