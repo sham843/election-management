@@ -56,7 +56,7 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Area</label>
-                                                        <div class="form-data"> {{voterProfileData?.area}} </div>
+                                                        <div class="form-data"> {{voterProfileData?.migratedArea ? voterProfileData?.migratedArea : voterProfileData?.area}} </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Party Supported</label>
@@ -105,21 +105,26 @@
                                                 Entered no.</span>
                                         </span>
                                         <div class="d-flex">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo1">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" (change)="onCheckChangeChildVoterDetail1($event,contactlistArray?.mobileNo1)"
                                                     value="option1">
-                                                <label class="form-check-label" for="inlineCheckbox1">9876543210</label>
+                                                <label class="form-check-label text-success" for="inlineCheckbox1">{{contactlistArray?.mobileNo1}}</label>
                                             </div>
-                                            <div class="form-check form-check-inline">
+                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo2">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
                                                     value="option2">
-                                                <label class="form-check-label" for="inlineCheckbox2">7984651230</label>
+                                                <label class="form-check-label text-success" for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
                                             </div>
-                                            <div class="form-check form-check-inline">
+                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.otherMobileNo">
+                                                <div *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
                                                     value="option3">
-                                                <label class="form-check-label" for="inlineCheckbox3">3698521470</label>
+                                                <label class="form-check-label text-danger" for="inlineCheckbox3">{{contactlist}}</label>
                                             </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-main">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -132,20 +137,28 @@
 
                                           <!-- ...................... voterProfileForm code start here ...............    -->
                             
-                              <div [ngClass]="{'divDisabled':disableDiv}">
+                            <div [ngClass]="{'divDisabled':disableDiv}">
                                 <form [formGroup]="voterProfileForm">
-
-                                <div class="card-header">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" [checked]="this.voterProfileData?.isNameChange == 1 ? true : false"
-                                         (change)="nameCorrectionCheckBox($event , 'noEdit')" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Name Correction
-                                        </label>
-                                    </div>
-                                </div>
+                                    <div [ngClass]="{'divDisabled1':expiredDisableDiv}">
+                                        <div class="card-header">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" formControlName="isNameChange"
+                                                    (change)="nameCorrectionCheckBox($event , 'noEdit')" id="flexCheckDefault">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    Name Correction
+                                                </label>
+                                            </div>
+                                        </div>
 
                                 <div class="card-body" *ngIf="nameCorrectionDivHide">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-1">
+                                            <label class="form-label">English Name:</label>
+                                        </div>
+                                        <div class="col-sm">
+                                            <p>{{voterProfileData?.englishName}}</p>
+                                        </div>
+                                    </div>
                                     <div class="row mb-2">
                                         <div class="col-sm-1">
                                             <label class="form-label">मराठी</label>
@@ -165,13 +178,16 @@
                                             <label class="form-label">English</label>
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="Last Name" formControlName="elName">
+                                            <input class="form-control" type="text" placeholder="Last Name" formControlName="elName"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.elName.errors }">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="First Name" formControlName="efName">
+                                            <input class="form-control" type="text" placeholder="First Name" formControlName="efName"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.efName.errors }">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="Middle Name" formControlName="emName"> 
+                                            <input class="form-control" type="text" placeholder="Middle Name" formControlName="emName"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.emName.errors }"> 
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +199,7 @@
                                         <div class="col-sm-3">
                                             <label class="form-label">Mobile No. 1</label>
                                             <input class="form-control" type="text" placeholder="Mobile No. 1" 
-                                            formControlName="mobileNo1" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="11"
+                                            formControlName="mobileNo1" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
                                             [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo1.errors }">
                                         </div>
                                         <div class="col-sm-3">
@@ -198,7 +214,7 @@
                                         <div class="col-sm-3">
                                             <label class="form-label">Mobile No. 2</label>
                                             <input class="form-control" type="text" placeholder="Mobile No. 2" 
-                                            formControlName="mobileNo2" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="11"
+                                            formControlName="mobileNo2" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
                                             [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo2.errors }">
                                         </div>
                                         <div class="col-sm-3">
@@ -222,15 +238,13 @@
                                             [ngClass]="{ 'is-invalid': submittedVP && v.email.errors }">
                                         </div>
                                         <div class="col-sm-3">
-                                            <label class="form-label">isPadvidhar</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let padvidhar of padvidharArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isPadvidhar" id="inlineRadio15"
-                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar" name="isPadvidhar" value="{{padvidhar.id}}">
-                                                    <label class="form-check-label" for="inlineRadio15" >{{padvidhar.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            <label class="form-label">Date of birth</label>
+                                                <input [owlDateTime]="dt2" formControlName="dateOfBirth"
+                                                    [max]="max"
+                                                    class="form-control" [owlDateTimeTrigger]="dt2"
+                                                    placeholder="dd/mm/yyyy">
+                                            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="" formControlName="isNotCall"
@@ -261,16 +275,16 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <label class="form-label">Family Head</label>
-                                            <div class="d-block" *ngIf="voterProfileData?.head == 'yes'">
+                                            <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let head of headCheckArray">
                                                     <input class="form-check-input" type="radio" formControlName="head" (change)="familyHeadRadiobtn()"
                                                     [checked]="head == voterProfileData?.head" name="head" id="inlineRadio1" value="{{head}}">
                                                     <label class="form-check-label" for="inlineRadio1" >{{head}}</label>
                                                 </div>
                                             </div>
-                                            <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
+                                            <!-- <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
                                                 <div><small>{{familyHeadName}}</small></div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                             <div class="col-sm-auto" *ngIf="headhideDiv">
                                                 <label class="form-label">Add Family Member</label>
@@ -317,14 +331,6 @@
                                         </div>
                                     </div>
                                     <div class="row align-items-center g-2">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Date of birth</label>
-                                                <input [owlDateTime]="dt2" formControlName="dateOfBirth"
-                                                    [max]="max"
-                                                    class="form-control" [owlDateTimeTrigger]="dt2"
-                                                    placeholder="dd/mm/yyyy">
-                                            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                                         </div>
                                          <div class="col-sm-3">
                                             <label class="form-label">Select Blood Group</label>
                                             <ngx-select [allowClear]="true" [items]="bloodGroupArray" formControlName="bloodgroup" optionValueField="name"
@@ -338,6 +344,16 @@
                                         <div class="col-sm-3">
                                             <label class="form-label">Occupation</label>
                                             <input class="form-control" type="text" placeholder="Occupation" formControlName="occupation">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="form-label">Is Graduate</label>
+                                            <div class="d-block">
+                                                <div class="form-check form-check-inline" *ngFor="let padvidhar of padvidharArray">
+                                                    <input class="form-check-input" type="radio" formControlName="isPadvidhar" id="inlineRadio15"
+                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar" name="isPadvidhar" value="{{padvidhar.id}}">
+                                                    <label class="form-check-label" for="inlineRadio15" >{{padvidhar.name}}</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -397,7 +413,8 @@
                                             
                                             <div class="col-sm-7">
                                                 <label class="form-label">Migrated City</label>
-                                                <input class="form-control" type="text" autocapitalize="off" spellcheck="off" formControlName="migratedCity">
+                                                <input class="form-control" type="text" [readOnly]="true" autocapitalize="off" placeholder="Migrated City" spellcheck="off"
+                                                 formControlName="migratedCity" [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
                                             </div>
                                             <div class="col-sm-2 mt-4">
                                                 <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
@@ -408,7 +425,8 @@
 
                                             <div class="col-sm-12">
                                                 <label class="form-label">Migrated Area</label>
-                                                <input class="form-control" type="text" placeholder="Migrated Area" formControlName="migratedArea">
+                                                <input class="form-control" type="text" [readOnly]="true" placeholder="Migrated Area" formControlName="migratedArea"
+                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedArea.errors }">
                                             </div>
                                         </ng-container>
                                     </div>
@@ -424,7 +442,8 @@
                                         </div>
                                         <div class="col-sm-9" *ngIf="postalVotingDivHide">
                                             <label class="form-label">Postal Voting Reason</label>
-                                            <input class="form-control" type="text" placeholder="Postal Voting Reason" formControlName="whyIsPostal">
+                                            <input class="form-control" type="text" placeholder="Postal Voting Reason" formControlName="whyIsPostal"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.whyIsPostal.errors }">
                                         </div>
                                     </div>
                                     <div class="row mb-2 align-items-end">
@@ -439,7 +458,8 @@
                                         </div>
                                         <div class="col-sm-9" *ngIf="needSupportDivHide">
                                             <label class="form-label">Support Details</label>
-                                            <input class="form-control" type="text" placeholder="Support Details" formControlName="needSupportText">
+                                            <input class="form-control" type="text" placeholder="Support Details" formControlName="needSupportText"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.needSupportText.errors }">
                                         </div>
                                     </div>
                                 </div>
@@ -548,11 +568,11 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-secondary">Cancel</button>
-                                        <button type="submit" class="btn btn-main" (click)="onSubmitVoterProfile()">Submit</button>
-                                    </div>
+                            </div> 
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-main" (click)="onSubmitVoterProfile()">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -880,9 +900,13 @@
             </div>
             <div class="modal-body mt-20">
             <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off" #search>
-                <agm-map [latitude]="latitude" [longitude]="longitude">
-                    <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)" [markerDraggable]="true"></agm-marker>
-                  </agm-map>
+                <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerDragEnd($event)">
+                    <div *ngIf="latitude">
+                        <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)"
+                            [markerDraggable]="true">
+                        </agm-marker>
+                    </div>
+                </agm-map>
             </div>
         </div>
     </div>

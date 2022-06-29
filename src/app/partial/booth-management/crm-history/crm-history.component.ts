@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapsAPILoader,MouseEvent } from '@agm/core';
 import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
+import { now } from '@amcharts/amcharts4/.internal/core/utils/Time';
 declare var google: any;
 
 @Component({
@@ -40,6 +41,7 @@ export class CrmHistoryComponent implements OnInit {
   submittedVP: boolean = false;
   nameCorrectionDivHide: boolean = false;
   disableDiv: boolean = true;
+  expiredDisableDiv: boolean = false;
   prominentleaderArray:any;  
   VoterCastListArray:any;
   religionListArray:any;
@@ -73,8 +75,8 @@ export class CrmHistoryComponent implements OnInit {
   @ViewChild('familyMemberModel') familyMemberModel: any;
   isNameCorrectionId:any;
 
-  latitude = 19.663280;
-  longitude = 75.300293;
+  latitude:any;
+  longitude:any;
   cityName: any;
   addressName:any;
   geocoder: any;
@@ -89,6 +91,9 @@ export class CrmHistoryComponent implements OnInit {
   padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   userFilter: any = { name: '' };
 
+  contactlistArray:any;
+  wrongMobileNumberArray: any[] = [];
+  checkWrongMobileNflag: boolean = true;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -108,7 +113,7 @@ export class CrmHistoryComponent implements OnInit {
 
     let getUrlData: any = this.route.snapshot.params.id;
     if (getUrlData) {
-      getUrlData = getUrlData.split('.');
+      getUrlData = getUrlData.split('.'); 
       this.voterListData = { 'AgentId': +getUrlData[0], 'ClientId': +getUrlData[1], 'VoterId': +getUrlData[2] 
       , 'ElectionId': +getUrlData[3], 'ConstituencyId': +getUrlData[4]}
     }
@@ -220,6 +225,7 @@ export class CrmHistoryComponent implements OnInit {
         this.voterProfileData = res.responseData;
         // this.voterProfileData?.head == 'yes' ? this.familyHeadName = this.voterProfileData?.marathiName : '';
         this.editVoterProfileData(this.voterProfileData);
+        this.getContactlist(this.voterProfileData);
       } else {
         this.spinner.hide();
       }
@@ -460,13 +466,31 @@ export class CrmHistoryComponent implements OnInit {
 
   isExpiredCheckBox(event: any) {
     let flag = event.target.checked;
-    flag == true ? this.disableDiv = true : this.disableDiv = false;
+    flag == true ? this.expiredDisableDiv = true : this.expiredDisableDiv = false;
   }
 
   nameCorrectionCheckBox(event: any , flag:any) {
     let checkflag = (flag == 'noEdit' ? event.target.checked : event );
     checkflag == true ? this.nameCorrectionDivHide = true : this.nameCorrectionDivHide = false;
     this.isNameCorrectionId = checkflag == true ? 1 : 0 ;
+    if (checkflag == true) {
+      this.voterProfileForm.controls["elName"].setValidators(Validators.pattern(/^\S*$/));
+      this.voterProfileForm.controls["elName"].updateValueAndValidity();
+      this.voterProfileForm.controls["efName"].setValidators([Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["efName"].updateValueAndValidity();
+      this.voterProfileForm.controls["emName"].setValidators([Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["emName"].updateValueAndValidity();
+    } else {
+      this.voterProfileForm.controls['elName'].setValue('');
+      this.voterProfileForm.controls['elName'].clearValidators();
+      this.voterProfileForm.controls['elName'].updateValueAndValidity();
+      this.voterProfileForm.controls['efName'].setValue('');
+      this.voterProfileForm.controls['efName'].clearValidators();
+      this.voterProfileForm.controls['efName'].updateValueAndValidity();
+      this.voterProfileForm.controls['emName'].setValue('');
+      this.voterProfileForm.controls['emName'].clearValidators();
+      this.voterProfileForm.controls['emName'].updateValueAndValidity();
+    }
   }
 
   familyHeadRadiobtn(){
@@ -485,18 +509,52 @@ export class CrmHistoryComponent implements OnInit {
       }
   }
 
-  migratedRadiobtn(){
+  migratedRadiobtn(){//migratedArea
     this.voterProfileForm.value.migrated == 'yes' ? this.migratedhideDiv = true : this.migratedhideDiv = false;
+    if (this.voterProfileForm.value.migrated == 'yes') {
+      this.voterProfileForm.controls["migratedCity"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["migratedCity"].updateValueAndValidity();
+      this.voterProfileForm.controls["migratedArea"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["migratedArea"].updateValueAndValidity();
+    } else {
+      this.voterProfileForm.controls['migratedCity'].setValue('');
+      this.voterProfileForm.controls['migratedCity'].clearValidators();
+      this.voterProfileForm.controls['migratedCity'].updateValueAndValidity();
+      this.voterProfileForm.controls['migratedArea'].setValue('');
+      this.voterProfileForm.controls['migratedArea'].clearValidators();
+      this.voterProfileForm.controls['migratedArea'].updateValueAndValidity();
+      this.searchAdd.setValue('');
+      this.latitude = '';
+      this.longitude = '';
+    }
   }
 
   postalVotingCheckBox(event: any , flag:any) {
     let checkflag = (flag == 'noEdit' ? event.target.checked : event );
     checkflag == true ? this.postalVotingDivHide = true : this.postalVotingDivHide = false;
+
+    if (checkflag == true) {
+      this.voterProfileForm.controls["whyIsPostal"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["whyIsPostal"].updateValueAndValidity();
+    } else {
+      this.voterProfileForm.controls['whyIsPostal'].setValue('');
+      this.voterProfileForm.controls['whyIsPostal'].clearValidators();
+      this.voterProfileForm.controls['whyIsPostal'].updateValueAndValidity();
+    }
   }
 
   needSupportCheckBox(event: any , flag:any) {
     let checkflag = (flag == 'noEdit' ? event.target.checked : event );
     checkflag == true ? this.needSupportDivHide = true : this.needSupportDivHide = false;
+
+    if (checkflag == true) {
+      this.voterProfileForm.controls["needSupportText"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["needSupportText"].updateValueAndValidity();
+    } else {
+      this.voterProfileForm.controls['needSupportText'].setValue('');
+      this.voterProfileForm.controls['needSupportText'].clearValidators();
+      this.voterProfileForm.controls['needSupportText'].updateValueAndValidity();
+    }
   }
 
 
@@ -548,7 +606,6 @@ export class CrmHistoryComponent implements OnInit {
       haveBusiness: [''],
       isYuvak: [''],
       financialCondition: [''],
-      isExpired: [''],
       prominentLeaderId: [''],
       needSupportFlag: [''],
       needSupportText: [''],
@@ -564,7 +621,7 @@ export class CrmHistoryComponent implements OnInit {
 
   editVoterProfileData(data:any) {
     this.voterProfileForm.patchValue({  
-      Id: this.voterProfileData.voterId,
+      Id: this.voterProfileData.serverId,
       mobileNo1: data?.mobileNo1,
       mobileNo2: data?.mobileNo2,
       email:data.email,
@@ -576,7 +633,7 @@ export class CrmHistoryComponent implements OnInit {
       leader: data.leader,
       migratedArea: data.migratedArea,
       head: data.head,
-      dateOfBirth: data.dateOfBirth,
+      dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : '',
       leaderImportance: data.leaderImportance,
       comment: data.comment,
       voterMarking: data.voterMarking,
@@ -586,13 +643,13 @@ export class CrmHistoryComponent implements OnInit {
       nickName: data.nickName,
       migrated: data.migrated,
       area: data.area,
-      // migratedLatitude: data.migratedLatitude,
-      // migratedLongitude: data.migratedLongitude,
+      // migratedLatitude: data.migratedLatitude,  
+      // migratedLongitude: data.migratedLongitude, 
       occupation: data.occupation,
-      isNameChange: data.isNameChange,
-      mfName: data?.mfName,
-      mmName: data?.mmName,
-      mlName: data?.mlName,
+      // isNameChange: data.isNameChange,
+      mfName: data?.firstName,
+      mmName: data?.middleName,
+      mlName: data?.lastName,
       efName: data.efName,
       emName: data.emName,
       elName: data.elName,
@@ -607,7 +664,6 @@ export class CrmHistoryComponent implements OnInit {
       haveBusiness: data.haveBusiness,
       isYuvak: data.isYuvak,
       financialCondition: data.financialCondition,
-      isExpired: data.isExpired,
       prominentLeaderId: data.prominentLeaderId,
       needSupportFlag: data.needSupportFlag,
       needSupportText: data.needSupportText,
@@ -615,7 +671,8 @@ export class CrmHistoryComponent implements OnInit {
       whyIsPostal: data.whyIsPostal,
       isPadvidhar: data.isPadvidhar,
     })
-    this.getVoterCastList(data.religionId);
+    this.isExpiredVoter.setValue(data.isExpired);
+    data.religionId ? this.getVoterCastList(data.religionId) : '';
     this.familyHeadRadiobtn();
     this.leaderRadiobtn();
     this.migratedRadiobtn();
@@ -670,11 +727,11 @@ export class CrmHistoryComponent implements OnInit {
         "longitude": this.longitude,
         "voterNo": this.voterProfileData.voterNo.toString(),
         "nickName":  formData.nickName || '',
-        "clientId": this.voterProfileData.clientId,
+        "clientId":  this.voterListData?.ClientId,
         "migrated": formData.migrated || '', 
         "area": formData.area, 
-        "migratedLatitude": this.latitude,
-        "migratedLongitude": this.longitude,
+        "migratedLatitude": this.latitude ? this.latitude : this.voterProfileData.migratedLatitude,
+        "migratedLongitude": this.longitude ? this.longitude : this.voterProfileData.migratedLongitude,
         "surveyDate": "2022-06-23T10:32:04.461Z",
         "buildingID": 0,
         "needSupportFlag": formData.needSupportFlag == true ? 1 : 0,
@@ -701,12 +758,13 @@ export class CrmHistoryComponent implements OnInit {
         "isYuvak": formData.isYuvak,
         "financialCondition": formData.financialCondition,
         "businnessDetails": "string",
-        "isExpired": formData.isExpired,
+        "isExpired": this.isExpiredVoter.value == true ? 1 : 0,   
         "prominentLeaderId": formData.prominentLeaderId || 0,
         "whyIsPostal": formData.whyIsPostal,
         "isWrongMobileNo": 0,
         "pollingAgent": 0,
-        "isPadvidhar": parseInt(formData.isPadvidhar)
+        "isPadvidhar": parseInt(formData.isPadvidhar),
+        "isVerified": 1
       }
 
       this.spinner.show();
@@ -721,6 +779,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
+          this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
           this.getVoterProfileData();
         } else {
@@ -731,7 +790,6 @@ export class CrmHistoryComponent implements OnInit {
         this.spinner.hide();
         this.router.navigate(['../500'], { relativeTo: this.route });
       });
-
     }
   }
 
@@ -789,5 +847,75 @@ findAddress(results:any) {
 }
 
 //.........................................Address to get Pincode Code End Here ....................................//
+
+//.........................................Please tick wrong mobile Start Here ....................................//
+
+ getContactlist(data:any) {  
+  this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterContactlist?ClientId=' + this.voterListData?.ClientId + '&AgentId='
+    + data?.agentId + '&VoterId=' + data?.voterId, false, false, false, 'electionMicroSerApp');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.responseData != null && res.statusCode == "200") {
+      this.contactlistArray = res.responseData;
+    } else {
+      this.contactlistArray = [];
+    }
+  }, (error: any) => {
+    this.router.navigate(['../500'], { relativeTo: this.route });
+  })
+}
+
+updateContactlist() {
+  if (this.wrongMobileNumberArray.length == 0){
+    this.toastrService.error('Please Select at Least One Record');
+     return;
+  }
+    this.callAPIService.setHttp('PUT', 'ClientMasterApp/VoterList/SetIsWrongMobile', false, this.wrongMobileNumberArray, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.toastrService.success(res.statusMessage);
+      } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  onCheckChangeChildVoterDetail1(event: any, mobileNum: any) {
+    let obj =  {
+      "voterId": this.voterProfileData.voterId,
+      "isWrongMobileNo": event.target.checked == true ? 1 : 0,
+      "mobileNo": mobileNum,
+      "clientId": this.voterListData.ClientId,
+      "userId": this.commonService.loggedInUserId()
+    }
+    if (event.target.checked == true) {
+      this.checkUniqueData(obj, mobileNum);
+    } else { //delete record when event False
+      this.wrongMobileNumberArray.splice(this.wrongMobileNumberArray.findIndex((ele: any) => ele.mobileNo === mobileNum), 1);
+    }
+    console.log(this.wrongMobileNumberArray)
+  }
+
+  checkUniqueData1(obj: any, voterId: any) { //Check Unique Data then Insert or Update
+    this.checkWrongMobileNflag = true;
+    if (this.wrongMobileNumberArray.length <= 0) {
+      this.wrongMobileNumberArray.push(obj);
+      this.checkWrongMobileNflag = false;
+    } else {
+      this.wrongMobileNumberArray.map((ele: any, index: any) => {
+        if (ele.mobileNo == voterId) {
+          this.wrongMobileNumberArray[index] = obj;
+          this.checkWrongMobileNflag = false;
+        }
+      })
+    }
+    this.checkWrongMobileNflag && this.wrongMobileNumberArray.length >= 1 ? this.wrongMobileNumberArray.push(obj) : '';
+  }
+
+
+//.........................................Please tick wrong mobile End Here ....................................// 
 
 }
