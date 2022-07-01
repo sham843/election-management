@@ -40,7 +40,7 @@ export class CrmHistoryComponent implements OnInit {
   voterProfileForm!: FormGroup | any;
   submittedVP: boolean = false;
   nameCorrectionDivHide: boolean = false;
-  disableDiv: boolean = true;
+  disableDiv: boolean = false;
   expiredDisableDiv: boolean = false;
   prominentleaderArray:any;  
   VoterCastListArray:any;
@@ -369,15 +369,7 @@ export class CrmHistoryComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
-          this.voterListforFamilyChildArray = res.responseData;
-
-//           res.responseData.map((ele:any)=>{
-//            return ele['checked'] = false;
-//           })
-//  console.log(this.voterListforFamilyChildArray)
-
-
-
+           this.voterListforFamilyChildArray = res.responseData;
         } else {
           this.spinner.hide();
           this.voterListforFamilyChildArray = [];
@@ -443,6 +435,17 @@ export class CrmHistoryComponent implements OnInit {
     } else { //delete record when event False
       this.childVoterDetailArray.splice(this.childVoterDetailArray.findIndex((ele: any) => ele.childVoterId === data.voterId), 1);
     }
+
+    this.voterListforFamilyChildArray.forEach((ele:any)=>{ //Add checked flag for Check Condition
+      if(ele.voterId == data.voterId && event.target.checked == true){
+      ele.checked = true; 
+      }else{
+        if(ele.voterId == data.voterId || ele.checked != true){
+          ele.checked = false;
+        }
+      }
+    })
+console.log(this.childVoterDetailArray);
   }
 
   checkUniqueData(obj: any, voterId: any) { //Check Unique Data then Insert or Update
@@ -875,7 +878,7 @@ findAddress(results:any) {
 
 updateContactlist() {
   if (this.wrongMobileNumberArray.length == 0){
-    this.toastrService.error('Please Select at Least One Record');
+    this.toastrService.error('Please Select at Least One');
      return;
   }
     this.callAPIService.setHttp('PUT', 'ClientMasterApp/VoterList/SetIsWrongMobile', false, this.wrongMobileNumberArray, false, 'electionMicroSerApp');

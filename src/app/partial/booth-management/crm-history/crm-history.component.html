@@ -135,7 +135,7 @@
                                             </div>
                                         </div>
                                         <div *ngIf="this.contactlistArray?.mobileNo1?.length > 9 || this.contactlistArray?.mobileNo2?.length > 9 ||  this.contactlistArray?.otherMobileNo?.length > 9">
-                                            <button type="submit" class="btn btn-main" (click)="updateContactlist()">Submit</button>
+                                            <button type="submit" class="btn btn-main float-end" (click)="updateContactlist()">Remove</button>
                                         </div>
                                     </div>
                                 </div>
@@ -297,7 +297,7 @@
                                                 <div><small>{{familyHeadName}}</small></div>
                                             </div> -->
                                         </div>
-                                            <div class="col-sm-auto" *ngIf="headhideDiv">
+                                            <div class="col-sm-auto" *ngIf="headhideDiv && voterProfileData?.head == 'yes'"> 
                                                 <label class="form-label">Add Family Member</label>
                                                 <div class="d-block">
                                                     <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
