@@ -47,7 +47,8 @@ export class CrmHistoryComponent implements OnInit {
   religionListArray:any;
   politicalPartyArray:any;
 
-  voterListforFamilyChildArray:any;
+  voterListforFamilyChildArray:any[]=[];
+  changedVoterListforFamilyChildArray:any[]=[];
   searchFamilyChield = new FormControl('');
   subjectSearchFamilyC: Subject<any> = new Subject();
 
@@ -68,6 +69,8 @@ export class CrmHistoryComponent implements OnInit {
   businessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   vehicleArray = [{ id: 1, name: 'Bike' }, { id: 2, name: 'Family Car' }, { id: 3, name: 'None' }];
   financialConditionArray = [{ id: 1, name: 'Low' }, { id: 2, name: 'Middle' }, { id: 3, name: 'High' }];
+  padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }]; //Is Graduate
+  Ispadvidhar:any;
   bloodGroupArray = [{ id: 0, name: 'A+' }, { id: 1, name: 'A-' }, { id: 2, name: 'B+' },{ id: 3, name: 'B-' },
      { id: 4, name: 'O+' }, { id: 5, name: 'O-' }, { id: 6, name: 'AB+' }, { id: 7, name: 'AB-' }];
   childVoterDetailArray: any[] = [];
@@ -87,8 +90,6 @@ export class CrmHistoryComponent implements OnInit {
   familyHeadName:any;
   HighlightRow: any;
   isExpiredVoter = new FormControl('');
-
-  padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }]; //Is Graduate
 
   contactlistArray:any;
   wrongMobileNumberArray: any[] = [];
@@ -213,12 +214,10 @@ export class CrmHistoryComponent implements OnInit {
 
   //........................ Get Voter Profile Data.....................//
 
-  getVoterProfileData(data?:any) {
-    let voterId;
-    data ? voterId = data?.voterId : voterId = this.voterListData.VoterId;
+  getVoterProfileData() {
     this.spinner.show();
     let obj = 'ClientId=' + this.voterListData.ClientId +
-      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + voterId ;
+      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId ;
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -362,6 +361,7 @@ export class CrmHistoryComponent implements OnInit {
      //.......... get Voter for Family Child List Code Start...............//
 
      getVoterListforFamilyChild() {  
+      if(this.voterListforFamilyChildArray?.length == 0){
       this.spinner.show();
       let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
       '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim();
@@ -369,7 +369,12 @@ export class CrmHistoryComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
-           this.voterListforFamilyChildArray = res.responseData;
+          //  this.voterListforFamilyChildArray = res.responseData;
+           res.responseData.forEach((ele:any)=>{ 
+            ele.checked = false; 
+            this.voterListforFamilyChildArray = res.responseData;
+            })
+            this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
         } else {
           this.spinner.hide();
           this.voterListforFamilyChildArray = [];
@@ -378,6 +383,9 @@ export class CrmHistoryComponent implements OnInit {
         this.spinner.hide();
         this.router.navigate(['../500'], { relativeTo: this.route });
       })
+    }else{
+      this.voterListforFamilyChildArray;
+    }
     }
 
     onKeyUpFilterFamilyChield() {
@@ -397,10 +405,18 @@ export class CrmHistoryComponent implements OnInit {
     }
 
     createFamilyTree() {
-      if (this.childVoterDetailArray.length == 0){
-        this.toastrService.error('Please Select at Least One Record');
-         return;
-      }
+
+      this.voterListforFamilyChildArray.map((ele:any)=>{ //get checked = true obj1
+        if(ele.checked == true){
+          let obj1 =  {
+            "childVoterId": ele.voterId,
+            "voter_uid": ele.voterId,
+            "voter_no": ele.voterNo
+          }
+          this.childVoterDetailArray.push(obj1);
+        }
+      })
+
       let obj = {
         "parentVoterId": this.familyHeadVoterId,
         "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
@@ -425,30 +441,42 @@ export class CrmHistoryComponent implements OnInit {
       }
       
   onCheckChangeChildVoterDetail(event: any, data: any) {
-    let obj =  {
-      "childVoterId": data.voterId,
-      "voter_uid": data.voterId,
-      "voter_no": data.voterNo
-    }
-    if (event.target.checked == true) {
-      this.checkUniqueData(obj, data.voterId);
-    } else { //delete record when event False
-      this.childVoterDetailArray.splice(this.childVoterDetailArray.findIndex((ele: any) => ele.childVoterId === data.voterId), 1);
-    }
-
-    this.voterListforFamilyChildArray.forEach((ele:any)=>{ //Add checked flag for Check Condition
-      if(ele.voterId == data.voterId && event.target.checked == true){
-      ele.checked = true; 
-      }else{
-        if(ele.voterId == data.voterId || ele.checked != true){
+  
+    this.changedVoterListforFamilyChildArray.forEach((ele: any) => { //Add checked flag for Check Condition
+      if (ele.voterId == data.voterId && event.target.checked == true) {
+        ele.checked = true;
+      } else {
+        if (ele.voterId == data.voterId) {
           ele.checked = false;
         }
       }
     })
-console.log(this.childVoterDetailArray);
+
+  }
+
+  submitFamilyTree(){
+    this.voterListforFamilyChildArray = [];
+    this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
+  }
+
+  clearFamilyTree(){
+    this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
   }
 
   checkUniqueData(obj: any, voterId: any) { //Check Unique Data then Insert or Update
+
+    // let obj =  {
+    //   "childVoterId": data.voterId,
+    //   "voter_uid": data.voterId,
+    //   "voter_no": data.voterNo
+    // }
+    // if (event.target.checked == true) {
+    //   this.checkUniqueData(obj, data.voterId);
+    // } else { 
+    //   this.childVoterDetailArray.splice(this.childVoterDetailArray.findIndex((ele: any) => ele.childVoterId === data.voterId), 1);
+    // }
+
+
     this.checkedchildVoterflag = true;
     if (this.childVoterDetailArray.length <= 0) {
       // obj['checked'] = true;
@@ -463,10 +491,6 @@ console.log(this.childVoterDetailArray);
       })
     }
     this.checkedchildVoterflag && this.childVoterDetailArray.length >= 1 ? this.childVoterDetailArray.push(obj) : '';
-  }
-
-  clearFamilyTree(){
-    this.childVoterDetailArray = [];
   }
 
 
@@ -486,12 +510,19 @@ console.log(this.childVoterDetailArray);
     checkflag == true ? this.nameCorrectionDivHide = true : this.nameCorrectionDivHide = false;
     this.isNameCorrectionId = checkflag == true ? 1 : 0 ;
     if (checkflag == true) {
-      this.voterProfileForm.controls["elName"].setValidators(Validators.pattern(/^\S*$/));
+      this.voterProfileForm.controls["elName"].setValidators([Validators.required,Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["elName"].updateValueAndValidity();
-      this.voterProfileForm.controls["efName"].setValidators([Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["efName"].setValidators([Validators.required,Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["efName"].updateValueAndValidity();
       this.voterProfileForm.controls["emName"].setValidators([Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["emName"].updateValueAndValidity();
+
+      this.voterProfileForm.controls["mlName"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["mlName"].updateValueAndValidity();
+      this.voterProfileForm.controls["mfName"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["mfName"].updateValueAndValidity();
+      this.voterProfileForm.controls["mmName"].setValidators();
+      this.voterProfileForm.controls["mmName"].updateValueAndValidity();
     } else {
       this.voterProfileForm.controls['elName'].setValue('');
       this.voterProfileForm.controls['elName'].clearValidators();
@@ -502,6 +533,13 @@ console.log(this.childVoterDetailArray);
       this.voterProfileForm.controls['emName'].setValue('');
       this.voterProfileForm.controls['emName'].clearValidators();
       this.voterProfileForm.controls['emName'].updateValueAndValidity();
+
+      this.voterProfileForm.controls['mlName'].clearValidators();
+      this.voterProfileForm.controls['mlName'].updateValueAndValidity();
+      this.voterProfileForm.controls['mfName'].clearValidators();
+      this.voterProfileForm.controls['mfName'].updateValueAndValidity();
+      this.voterProfileForm.controls['mmName'].clearValidators();
+      this.voterProfileForm.controls['mmName'].updateValueAndValidity();
     }
   }
 
@@ -627,8 +665,9 @@ console.log(this.childVoterDetailArray);
     })
   }
 
-  editFamilyMemberData(obj:any){
-   this.getVoterProfileData(obj);
+  editFamilyMemberData(obj: any) {  //open new tab family member details
+    this.HighlightRow = obj.voterId;
+    window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId);
   }
 
   editVoterProfileData(data:any) {
@@ -684,6 +723,7 @@ console.log(this.childVoterDetailArray);
       isPadvidhar: data.isPadvidhar,
     })
     this.isExpiredVoter.setValue(data.isExpired);
+    data.isExpired == 1 ? this.expiredDisableDiv = true : this.expiredDisableDiv = false ;
     data.religionId ? this.getVoterCastList(data.religionId) : '';
     this.familyHeadRadiobtn();
     this.leaderRadiobtn();
@@ -778,7 +818,7 @@ console.log(this.childVoterDetailArray);
         "isPadvidhar": parseInt(formData.isPadvidhar),
         "isVerified": 1
       }
-
+      // this.createFamilyTree();
       this.spinner.show();
       let urlType;
       let urlName;
@@ -790,6 +830,7 @@ console.log(this.childVoterDetailArray);
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
           this.submittedVP = false;
+          this.disableDiv = true;
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
@@ -878,7 +919,7 @@ findAddress(results:any) {
 
 updateContactlist() {
   if (this.wrongMobileNumberArray.length == 0){
-    this.toastrService.error('Please Select at Least One');
+    this.toastrService.error('Please Select at Least One Number');
      return;
   }
     this.callAPIService.setHttp('PUT', 'ClientMasterApp/VoterList/SetIsWrongMobile', false, this.wrongMobileNumberArray, false, 'electionMicroSerApp');

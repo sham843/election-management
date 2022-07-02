@@ -15,17 +15,9 @@
                                 <div class="card shadow-none border mb-3">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <span class="votername">{{voterProfileData?.marathiName}}</span>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" (change)="isExpiredCheckBox($event)" 
-                                           [formControl]="isExpiredVoter" [checked]="voterProfileData?.isExpired == 1 ? true : false">
-                                            <label class="form-check-label" for="flexCheckDefault">
-                                                Is Expired
-                                            </label>  
-                                        </div>
-                                            <button type="submit" [disabled]="this.isExpiredVoter.value == true" class="btn btn-light btn-sm text-main" (click)="disableDiv = false">
+                                            <button type="submit" class="btn btn-light btn-sm text-main" (click)="disableDiv = false">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                        
                                     </div>
                                     <div class="card-body pt-1">
                                         <div class="d-flex">
@@ -150,8 +142,7 @@
                             
                             <div [ngClass]="{'divDisabled':disableDiv}">
                                 <form [formGroup]="voterProfileForm">
-                                    <div [ngClass]="{'divDisabled1':expiredDisableDiv}">
-                                        <div class="card-header">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" formControlName="isNameChange"
                                                     (change)="nameCorrectionCheckBox($event , 'noEdit')" id="flexCheckDefault">
@@ -159,8 +150,16 @@
                                                     Name Correction
                                                 </label>
                                             </div>
+                                            <div class="form-check float-end">
+                                                <input class="form-check-input" type="checkbox" (change)="isExpiredCheckBox($event)" 
+                                               [formControl]="isExpiredVoter" [checked]="voterProfileData?.isExpired == 1 ? true : false">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    Is Expired
+                                                </label>  
+                                            </div>
                                         </div>
 
+                        <div [ngClass]="{'divDisabled1':expiredDisableDiv}">
                                 <div class="card-body" *ngIf="nameCorrectionDivHide">
                                     <div class="row mb-2">
                                         <div class="col-sm-1">
@@ -175,13 +174,16 @@
                                             <label class="form-label">मराठी</label>
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="आडनाव" formControlName="mlName">
+                                            <input class="form-control" type="text" placeholder="आडनाव" formControlName="mlName"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.mlName.errors }">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="नाव" formControlName="mfName">
+                                            <input class="form-control" type="text" placeholder="नाव" formControlName="mfName"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.mfName.errors }">
                                         </div>
                                         <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="मधले नाव" formControlName="mmName">
+                                            <input class="form-control" type="text" placeholder="मधले नाव" formControlName="mmName"
+                                            [ngClass]="{ 'is-invalid': submittedVP && v.mmName.errors }">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -307,7 +309,7 @@
                                                 </div>
                                             </div>
 
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12" *ngIf="voterProfileData?.head == 'yes'">
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -315,27 +317,27 @@
                                                         <th>Name</th>
                                                         <th>Mobile No</th>
                                                         <th>Migration</th>
-                                                        <th>Action</th>
+                                                        <!-- <th>Action</th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index">
+                                                    <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index" [class.active]="familyMember.voterId == HighlightRow" (click)="editFamilyMemberData(familyMember)">
                                                         <td>{{i+1}}</td>
                                                         <td>{{familyMember?.family}}</td>
                                                         <td>{{familyMember?.mobileNo1 ? familyMember?.mobileNo1 : '-'}}</td>
                                                         <td>{{familyMember?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                                         <!-- <td>
                                                             <button type="submit" class="btn btn-light btn-sm text-main"
-                                                                data-bs-toggle="modal"
+                                                                data-bs-toggle="modal" ;
                                                                 data-bs-target="#MigrationDetailsModal">
                                                                 <i class="fas fa-suitcase-rolling"></i>
                                                             </button>
                                                         </td> -->
-                                                        <td>
-                                                            <button type="button" class="btn btn-light btn-sm text-main" (click)="editFamilyMemberData(familyMember)">
+                                                        <!-- <td>
+                                                            <button type="button" class="btn btn-light btn-sm text-main">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        </td>
+                                                        </td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -361,7 +363,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let padvidhar of padvidharArray">
                                                     <input class="form-check-input" type="radio" formControlName="isPadvidhar" id="inlineRadio15"
-                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar" name="isPadvidhar" value="{{padvidhar.id}}">
+                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar" name="isPadvidhar" [value]="padvidhar?.id">
                                                     <label class="form-check-label" for="inlineRadio15" >{{padvidhar.name}}</label>
                                                 </div>
                                             </div>
@@ -484,7 +486,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let dairyFarmer of dairyFarmerArray">
                                                     <input class="form-check-input" type="radio" formControlName="isDairyFarmer" name="isDairyFarmer"
-                                                    [checked]="dairyFarmer?.id == voterProfileData?.isDairyFarmer" id="inlineRadio4" value="{{dairyFarmer?.id}}">
+                                                    [checked]="dairyFarmer?.id == voterProfileData?.isDairyFarmer" id="inlineRadio4" [value]="dairyFarmer?.id">
                                                     <label class="form-check-label" for="inlineRadio4" >{{dairyFarmer?.name}}</label>
                                                 </div>
                                             </div>
@@ -494,7 +496,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let goatSheepFarmer of goatSheepFarmerArray">
                                                     <input class="form-check-input" type="radio" formControlName="isGoatSheepFarmer" name="isGoatSheepFarmer"
-                                                    [checked]="goatSheepFarmer.id == voterProfileData?.isGoatSheepFarmer" id="inlineRadio5" value="{{goatSheepFarmer.id}}">
+                                                    [checked]="goatSheepFarmer.id == voterProfileData?.isGoatSheepFarmer" id="inlineRadio5" [value]="goatSheepFarmer.id">
                                                     <label class="form-check-label" for="inlineRadio5" >{{goatSheepFarmer.name}}</label>
                                                 </div>
                                             </div>
@@ -504,7 +506,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let sugarCaneCutter of sugarCaneCutterArray">
                                                     <input class="form-check-input" type="radio" formControlName="isSugarCaneCutter" name="isSugarCaneCutter"
-                                                    [checked]="sugarCaneCutter.id == voterProfileData?.isSugarCaneCutter" id="inlineRadio6" value="{{sugarCaneCutter.id}}">
+                                                    [checked]="sugarCaneCutter.id == voterProfileData?.isSugarCaneCutter" id="inlineRadio6" [value]="sugarCaneCutter.id">
                                                     <label class="form-check-label" for="inlineRadio6" >{{sugarCaneCutter.name}}</label>
                                                 </div>
                                             </div>
@@ -514,7 +516,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let farmer of farmerArray">
                                                     <input class="form-check-input" type="radio" formControlName="isFarmer" name="isFarmer"
-                                                    [checked]="farmer.id == voterProfileData?.isFarmer" id="inlineRadio7" value="{{farmer.id}}">
+                                                    [checked]="farmer.id == voterProfileData?.isFarmer" id="inlineRadio7" [value]="farmer.id">
                                                     <label class="form-check-label" for="inlineRadio7" >{{farmer.name}}</label>
                                                 </div>
                                             </div>
@@ -524,7 +526,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let business of businessArray">
                                                     <input class="form-check-input" type="radio" formControlName="haveBusiness" name="haveBusiness"
-                                                    [checked]="business.id == voterProfileData?.haveBusiness" id="inlineRadio8" value="{{business.id}}">
+                                                    [checked]="business.id == voterProfileData?.haveBusiness" id="inlineRadio8" [value]="business.id">
                                                     <label class="form-check-label" for="inlineRadio8" >{{business.name}}</label>
                                                 </div>
                                             </div>
@@ -534,7 +536,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let yuvak of yuvakArray">
                                                     <input class="form-check-input" type="radio" formControlName="isYuvak" name="isYuvak"
-                                                    [checked]="yuvak.id == voterProfileData?.isYuvak" id="inlineRadio9" value="{{yuvak.id}}">
+                                                    [checked]="yuvak.id == voterProfileData?.isYuvak" id="inlineRadio9" [value]="yuvak.id">
                                                     <label class="form-check-label" for="inlineRadio9" >{{yuvak.name}}</label>
                                                 </div>
                                             </div>
@@ -544,7 +546,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let vehicle of vehicleArray">
                                                     <input class="form-check-input" type="radio" formControlName="haveVehicle" id="inlineRadio10"
-                                                    [checked]="vehicle.id == voterProfileData?.haveVehicle" name="haveVehicle" value="{{vehicle.id}}">
+                                                    [checked]="vehicle.id == voterProfileData?.haveVehicle" name="haveVehicle" [value]="vehicle.id">
                                                     <label class="form-check-label" for="inlineRadio10" >{{vehicle.name}}</label>
                                                 </div>
                                             </div>
@@ -554,7 +556,7 @@
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let financialCon of financialConditionArray">
                                                     <input class="form-check-input" type="radio" formControlName="financialCondition" name="financialCondition" 
-                                                    [checked]="financialCon.id == voterProfileData?.financialCondition" id="inlineRadio11" value="{{financialCon.id}}">
+                                                    [checked]="financialCon.id == voterProfileData?.financialCondition" id="inlineRadio11" [value]="financialCon.id">
                                                     <label class="form-check-label" for="inlineRadio11" >{{financialCon.name}}</label>
                                                 </div>
                                             </div>
@@ -582,7 +584,7 @@
                             </div> 
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                    <button type="button" class="btn btn-secondary" (click)="getVoterProfileData()">Cancel</button>
                                     <button type="submit" class="btn btn-main" (click)="onSubmitVoterProfile()">Submit</button>
                                 </div>
                             </form>
@@ -734,7 +736,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <p class="modal-title" id="SelectFamilyModalLabel">Select Family Members</p>
-                <button type="button" class="btn-close" #familyMemberModel data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" #familyMemberModel data-bs-dismiss="modal"  aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-container">
@@ -768,8 +770,8 @@
                                 <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                        [checked]="familyChild.checked"
+                                        <input class="form-check-input" type="checkbox" id="flexCheckDefault"
+                                        [checked]="familyChild?.checked"
                                         (change)="onCheckChangeChildVoterDetail($event, familyChild)">
                                     </div>
                                 </td>
@@ -784,7 +786,7 @@
             </div>
             <div class="modal-footer d-flex w-100 justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearFamilyTree()">Cancel</button>
-                <button type="submit" class="btn btn-main" (click)="createFamilyTree()">Select</button>
+                <button type="submit" class="btn btn-main" (click)="submitFamilyTree()">Select</button>
             </div>
         </div>
     </div>
