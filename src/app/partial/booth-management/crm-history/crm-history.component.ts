@@ -371,11 +371,12 @@ export class CrmHistoryComponent implements OnInit {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
           //  this.voterListforFamilyChildArray = res.responseData;
-           res.responseData.forEach((ele:any)=>{ 
-            ele.checked = false; 
-            this.voterListforFamilyChildArray = res.responseData;
+          this.voterListforFamilyChildArray = res.responseData.map((ele:any)=>{ 
+            ele['checked'] = false; 
+            return ele;
+            // this.voterListforFamilyChildArray = res.responseData;
             })
-            this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
+            // this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
         } else {
           this.spinner.hide();
           this.voterListforFamilyChildArray = [];
