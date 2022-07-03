@@ -51,6 +51,8 @@ export class CrmHistoryComponent implements OnInit {
   changedVoterListforFamilyChildArray:any[]=[];
   searchFamilyChield = new FormControl('');
   subjectSearchFamilyC: Subject<any> = new Subject();
+  checkFamilyMemberClearFlag:boolean = false;
+  checkFamilyMemberClearFlag123:boolean = false;
 
   ratingStarArray = [{ id: 1, name: '1.0' }, { id: 2, name: '2.0' }, { id: 3, name: '3.0' }, { id: 4, name: '4.0' }, { id: 5, name: '5.0' }];
   headCheckArray = ['yes','no'];
@@ -75,7 +77,6 @@ export class CrmHistoryComponent implements OnInit {
      { id: 4, name: 'O+' }, { id: 5, name: 'O-' }, { id: 6, name: 'AB+' }, { id: 7, name: 'AB-' }];
   childVoterDetailArray: any[] = [];
   checkedchildVoterflag: boolean = true;
-  @ViewChild('familyMemberModel') familyMemberModel: any;
   isNameCorrectionId:any;
 
   latitude:any;
@@ -428,7 +429,6 @@ export class CrmHistoryComponent implements OnInit {
           if (res.responseData != null && res.statusCode == "200") {
             this.spinner.hide();
             this.toastrService.success(res.statusMessage);
-            this.familyMemberModel.nativeElement.click();
             this.getVoterprofileFamilyData();
             this.clearFamilyTree();
           } else {
@@ -441,7 +441,6 @@ export class CrmHistoryComponent implements OnInit {
       }
       
   onCheckChangeChildVoterDetail(event: any, data: any) {
-  
     this.changedVoterListforFamilyChildArray.forEach((ele: any) => { //Add checked flag for Check Condition
       if (ele.voterId == data.voterId && event.target.checked == true) {
         ele.checked = true;
@@ -451,15 +450,21 @@ export class CrmHistoryComponent implements OnInit {
         }
       }
     })
-
   }
 
-  submitFamilyTree(){
-    this.voterListforFamilyChildArray = [];
-    this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
+  submitFamilyTree() {
+    if (this.checkFamilyMemberClearFlag == true) {
+      this.changedVoterListforFamilyChildArray = [];
+      this.changedVoterListforFamilyChildArray = this.voterListforFamilyChildArray;
+      this.checkFamilyMemberClearFlag = false;
+    } else {
+      this.voterListforFamilyChildArray = [];
+      this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
+    }
   }
 
   clearFamilyTree(){
+    this.checkFamilyMemberClearFlag = true;
     this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
   }
 
