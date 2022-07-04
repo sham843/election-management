@@ -370,13 +370,11 @@ export class CrmHistoryComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
-          //  this.voterListforFamilyChildArray = res.responseData;
-          this.voterListforFamilyChildArray = res.responseData.map((ele:any)=>{ 
-            ele['checked'] = false; 
+          this.voterListforFamilyChildArray = res.responseData.map((ele: any) => {
+            ele['checked'] = false;
             return ele;
-            // this.voterListforFamilyChildArray = res.responseData;
-            })
-            // this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
+          })
+          this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
         } else {
           this.spinner.hide();
           this.voterListforFamilyChildArray = [];
@@ -405,41 +403,6 @@ export class CrmHistoryComponent implements OnInit {
       this.searchFamilyChield.setValue('');
       this.getVoterListforFamilyChild();
     }
-
-    createFamilyTree() {
-
-      this.voterListforFamilyChildArray.map((ele:any)=>{ //get checked = true obj1
-        if(ele.checked == true){
-          let obj1 =  {
-            "childVoterId": ele.voterId,
-            "voter_uid": ele.voterId,
-            "voter_no": ele.voterNo
-          }
-          this.childVoterDetailArray.push(obj1);
-        }
-      })
-
-      let obj = {
-        "parentVoterId": this.familyHeadVoterId,
-        "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
-        "clientId": this.voterListData.ClientId,
-        "childVoterDetails": this.childVoterDetailArray
-      }
-        this.callAPIService.setHttp('POST', 'ClientMasterWebApi/VoterCRM/CreateFamilyTree', false, obj, false, 'electionMicroSerApp');
-        this.callAPIService.getHttp().subscribe((res: any) => {
-          if (res.responseData != null && res.statusCode == "200") {
-            this.spinner.hide();
-            this.toastrService.success(res.statusMessage);
-            this.getVoterprofileFamilyData();
-            this.clearFamilyTree();
-          } else {
-            this.spinner.hide();
-          }
-        }, (error: any) => {
-          this.spinner.hide();
-          this.router.navigate(['../500'], { relativeTo: this.route });
-        })
-      }
       
   onCheckChangeChildVoterDetail(event: any, data: any) {
     this.changedVoterListforFamilyChildArray.forEach((ele: any) => { //Add checked flag for Check Condition
@@ -468,6 +431,40 @@ export class CrmHistoryComponent implements OnInit {
     this.checkFamilyMemberClearFlag = true;
     this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
   }
+
+  createFamilyTree() {
+    this.voterListforFamilyChildArray.map((ele:any)=>{ //get value in obj1 (checked = true) 
+      if(ele.checked == true){
+        let obj1 =  {
+          "childVoterId": ele.voterId,
+          "voter_uid": ele.voterId,
+          "voter_no": ele.voterNo
+        }
+        this.childVoterDetailArray.push(obj1);
+      }
+    })
+
+    let obj = {
+      "parentVoterId": this.familyHeadVoterId,
+      "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
+      "clientId": this.voterListData.ClientId,
+      "childVoterDetails": this.childVoterDetailArray
+    }
+      this.callAPIService.setHttp('POST', 'ClientMasterWebApi/VoterCRM/CreateFamilyTree', false, obj, false, 'electionMicroSerApp');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.responseData != null && res.statusCode == "200") {
+          this.spinner.hide();
+          this.toastrService.success(res.statusMessage);
+          this.getVoterprofileFamilyData();
+          this.clearFamilyTree();
+        } else {
+          this.spinner.hide();
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      })
+    }
 
   checkUniqueData(obj: any, voterId: any) { //Check Unique Data then Insert or Update
 
