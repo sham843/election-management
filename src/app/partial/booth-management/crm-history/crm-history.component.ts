@@ -356,19 +356,16 @@ export class CrmHistoryComponent implements OnInit {
 
      //.......... get Voter for Family Child List Code Start...............//
 
-     getVoterListforFamilyChild() {  
+     getVoterListforFamilyChild() {  // select family memember Model Api
       if(this.voterListforFamilyChildArray?.length == 0){
       this.spinner.show();
-      let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + this.commonService.loggedInUserId() +
+      let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&VoterId=' + this.voterListData.VoterId +
       '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim();
       this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj , false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
-          this.voterListforFamilyChildArray = res.responseData.map((ele: any) => {
-            ele['checked'] = false;
-            return ele;
-          })
+          this.voterListforFamilyChildArray = res.responseData;
           this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
         } else {
           this.spinner.hide();
@@ -386,10 +383,10 @@ export class CrmHistoryComponent implements OnInit {
   onCheckChangeChildVoterDetail(event: any, data: any) {
     this.changedVoterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
       if (ele.voterId == data.voterId && event.target.checked == true) {
-        ele.checked = true;
+        ele.isMember = 1;
       } else {
         if (ele.voterId == data.voterId) {
-          ele.checked = false;
+          ele.isMember = 0;
         }
       }
     })
@@ -408,7 +405,7 @@ export class CrmHistoryComponent implements OnInit {
 
   createFamilyTree() {
     this.voterListforFamilyChildArray.map((ele:any)=>{ //get value in obj1 (checked = true) 
-      if(ele.checked == true){
+      if(ele.isMember == 1){
         let obj1 =  {
           "childVoterId": ele.voterId,
           "voter_uid": ele.voterId,
@@ -428,8 +425,7 @@ export class CrmHistoryComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
-          this.toastrService.success(res.statusMessage);
-          this.getVoterprofileFamilyData();
+          // this.toastrService.success(res.statusMessage);
           this.clearFamilyTree();
         } else {
           this.spinner.hide();
@@ -439,37 +435,6 @@ export class CrmHistoryComponent implements OnInit {
         this.router.navigate(['../500'], { relativeTo: this.route });
       })
     }
-
-  checkUniqueData(obj: any, voterId: any) { //Check Unique Data then Insert or Update
-
-    // let obj =  {
-    //   "childVoterId": data.voterId,
-    //   "voter_uid": data.voterId,
-    //   "voter_no": data.voterNo
-    // }
-    // if (event.target.checked == true) {
-    //   this.checkUniqueData(obj, data.voterId);
-    // } else { 
-    //   this.childVoterDetailArray.splice(this.childVoterDetailArray.findIndex((ele: any) => ele.childVoterId === data.voterId), 1);
-    // }
-
-
-    this.checkedchildVoterflag = true;
-    if (this.childVoterDetailArray.length <= 0) {
-      // obj['checked'] = true;
-      this.childVoterDetailArray.push(obj);
-      this.checkedchildVoterflag = false;
-    } else {
-      this.childVoterDetailArray.map((ele: any, index: any) => {
-        if (ele.childVoterId == voterId) {
-          this.childVoterDetailArray[index] = obj;
-          this.checkedchildVoterflag = false;
-        }
-      })
-    }
-    this.checkedchildVoterflag && this.childVoterDetailArray.length >= 1 ? this.childVoterDetailArray.push(obj) : '';
-  }
-
 
     //.......... get Voter for Family Child List Code End...............//
     
@@ -644,7 +609,9 @@ export class CrmHistoryComponent implements OnInit {
 
   editFamilyMemberData(obj: any) {  //open new tab family member details
     this.HighlightRow = obj.voterId;
+    if(obj.voterId != this.voterListData.VoterId){
     window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId);
+    }
   }
 
   editVoterProfileData(data:any) {
@@ -719,6 +686,7 @@ export class CrmHistoryComponent implements OnInit {
       this.spinner.hide();
       return;
     } else {
+      let isDeleteFamilyMember = (this.voterProfileData?.head == 'yes' && formData.head == 'no') ? 1 : 0 ;
 
       let obj = {
         "serverId": this.voterProfileData.serverId,
@@ -793,7 +761,8 @@ export class CrmHistoryComponent implements OnInit {
         "isWrongMobileNo": 0,
         "pollingAgent": 0,
         "isPadvidhar": parseInt(formData.isPadvidhar),
-        "isVerified": 1
+        "isVerified": 1,
+        "isDeleteFamilyMember": isDeleteFamilyMember
       }
       this.spinner.show();
       let urlType;
@@ -808,6 +777,7 @@ export class CrmHistoryComponent implements OnInit {
           this.submittedVP = false;
           this.disableDiv = true;
           this.voterProfileData?.head == "yes" ? this.createFamilyTree() : '';
+          this.getVoterprofileFamilyData();
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);

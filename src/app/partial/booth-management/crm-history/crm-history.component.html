@@ -145,7 +145,7 @@
                                         <div class="card-header d-flex justify-content-between align-items-center">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" formControlName="isNameChange"
-                                                 [disabled]="true" (change)="nameCorrectionCheckBox($event , 'noEdit')" id="flexCheckDefault">
+                                                  (change)="nameCorrectionCheckBox($event ,'noEdit')" id="flexCheckDefault">
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     Name Correction
                                                 </label>
@@ -309,7 +309,7 @@
                                                 </div>
                                             </div>
 
-                                        <div class="col-sm-12" *ngIf="voterProfileData?.head == 'yes'">
+                                        <div class="col-sm-12">
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -317,13 +317,13 @@
                                                         <th>Name</th>
                                                         <th>Mobile No</th>
                                                         <th>Migration</th>
-                                                        <!-- <th>Action</th> -->
+                                                        <!-- <th>Action</th>   -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index" [class.active]="familyMember.voterId == HighlightRow" (click)="editFamilyMemberData(familyMember)">
                                                         <td>{{i+1}}</td>
-                                                        <td>{{familyMember?.family}}</td>
+                                                        <td>{{familyMember?.englishName}}</td>
                                                         <td>{{familyMember?.mobileNo1 ? familyMember?.mobileNo1 : '-'}}</td>
                                                         <td>{{familyMember?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                                         <!-- <td>
@@ -751,7 +751,7 @@
                             <tr>
                                 <th>Voter No.</th>
                                 <th>Voter Name (Age)</th>
-                                <th>House No.</th>
+                                <th>Migrated</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -759,11 +759,11 @@
                             <tr *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
                                 <td>{{familyChild?.voterNo}}</td>
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
-                                <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
+                                <td>{{familyChild?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault"
-                                        [checked]="familyChild?.checked"
+                                        [checked]="familyChild?.isMember == 1"
                                         (change)="onCheckChangeChildVoterDetail($event, familyChild)">
                                     </div>
                                 </td>
@@ -779,7 +779,7 @@
             <div class="modal-footer"> 
                 <!-- d-flex w-100 justify-content-between -->
                 <!-- <button type="button" class="btn btn-secondary" (click)="clearFamilyTree()">Cancel</button> -->
-                <button type="submit" class="btn btn-main float-end" (click)="submitFamilyTree()">Add Member</button>
+                <button type="submit" class="btn btn-main float-end" data-bs-dismiss="modal" (click)="submitFamilyTree()">Add Member</button>
             </div>
         </div>
     </div>
