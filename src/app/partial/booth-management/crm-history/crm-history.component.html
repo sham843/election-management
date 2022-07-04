@@ -286,7 +286,7 @@
                                             optionValueField="castId" optionTextField="castName" placeholder="Select Caste">
                                         </ngx-select>
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3" *ngIf="voterListData.AgentId != 0 && voterProfileData?.head != 'no'">
                                             <label class="form-label">Family Head</label>
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let head of headCheckArray">
@@ -309,7 +309,7 @@
                                                 </div>
                                             </div>
 
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12" *ngIf="voterProfileFamilyData?.length != 1">
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
