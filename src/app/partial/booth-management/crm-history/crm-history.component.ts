@@ -405,13 +405,11 @@ export class CrmHistoryComponent implements OnInit {
     }
       
   onCheckChangeChildVoterDetail(event: any, data: any) {
-    this.changedVoterListforFamilyChildArray.forEach((ele: any) => { //Add checked flag for Check Condition
+    this.changedVoterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
       if (ele.voterId == data.voterId && event.target.checked == true) {
         ele.checked = true;
       } else {
-        if (ele.voterId == data.voterId) {
-          ele.checked = false;
-        }
+        if (ele.voterId == data.voterId) { ele.checked = false; }
       }
     })
   }
