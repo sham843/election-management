@@ -15,14 +15,16 @@
                                 <div class="card shadow-none border mb-3">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <span class="votername">{{voterProfileData?.marathiName}}</span>
-                                            <button type="submit" class="btn btn-light btn-sm text-main" (click)="disableDiv = false">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
+                                        <button type="submit" class="btn btn-light btn-sm text-main"
+                                            (click)="disableDiv = false">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                     </div>
                                     <div class="card-body pt-1">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0" *ngIf="voterProfileData?.voterPhoto">
-                                                <img src="{{voterProfileData?.voterPhoto}}" alt="Profile" class="profile-pic">
+                                                <img src="{{voterProfileData?.voterPhoto}}" alt="Profile"
+                                                    class="profile-pic">
                                             </div>
                                             <div class="flex-shrink-0" *ngIf="!voterProfileData?.voterPhoto">
                                                 <img src="assets/images/user.png" alt="Profile" class="profile-pic">
@@ -31,15 +33,18 @@
                                                 <div class="row mb-2 g-2">
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Age</label>
-                                                        <div class="form-data">{{voterProfileData?.age ? voterProfileData?.age : '-'}}</div>
+                                                        <div class="form-data">{{voterProfileData?.age ?
+                                                            voterProfileData?.age : '-'}}</div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Gender</label>
-                                                        <div class="form-data">{{voterProfileData?.gender == 'M' ? 'Male' : 'Female'}}</div>
+                                                        <div class="form-data">{{voterProfileData?.gender == 'M' ?
+                                                            'Male' : 'Female'}}</div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">House No.</label>
-                                                        <div class="form-data">{{voterProfileData?.houseNo ? voterProfileData?.houseNo : '-'}}</div>
+                                                        <div class="form-data">{{voterProfileData?.houseNo ?
+                                                            voterProfileData?.houseNo : '-'}}</div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Booth Name</label>
@@ -51,7 +56,9 @@
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <label class="form-label">Family Head</label>
-                                                        <div class="form-data"> {{voterProfileData?.head == 'yes' ? 'Yes' : 'No'}} ({{voterProfileData?.familySize}} Members)</div>
+                                                        <div class="form-data"> {{voterProfileData?.head == 'yes' ?
+                                                            'Yes' : 'No'}} ({{voterProfileData?.familySize}} Members)
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Area</label>
@@ -61,14 +68,18 @@
                                                         <label class="form-label">Party Supported</label>
                                                         <div class="form-data">
                                                             <!-- {{voterProfileData?.partyShortCode}} -->
-                                                            <img src="assets/images/logos/ncp.png" class="party-logo me-2">
-                                                            ({{voterProfileData?.leaderImportance}} <i class="fas fa-star"></i>)
+                                                            <img src="assets/images/logos/ncp.png"
+                                                                class="party-logo me-2">
+                                                            ({{voterProfileData?.leaderImportance}} <i
+                                                                class="fas fa-star"></i>)
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Migrated</label>
                                                         <div class="form-data">
-                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}} ({{voterProfileData?.migratedArea ? voterProfileData?.migratedArea : ''}})
+                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
+                                                            ({{voterProfileData?.migratedArea ?
+                                                            voterProfileData?.migratedArea : ''}})
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
@@ -77,14 +88,18 @@
                                                     </div>
                                                     <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Favouring</label>
-                                                        <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                                            <span *ngIf="posNegInf.supportToid == 1">{{posNegInf.support}}</span>
+                                                        <div class="form-data"
+                                                            *ngFor="let posNegInf of posNegativeInfData">
+                                                            <span
+                                                                *ngIf="posNegInf.supportToid == 1">{{posNegInf.support}}</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Opposing</label>
-                                                        <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
-                                                            <span *ngIf="posNegInf.supportToid == 4">{{posNegInf.support}}</span>
+                                                        <div class="form-data"
+                                                            *ngFor="let posNegInf of posNegativeInfData">
+                                                            <span
+                                                                *ngIf="posNegInf.supportToid == 4">{{posNegInf.support}}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -108,26 +123,37 @@
                                                 Entered no.</span>
                                         </span>
                                         <div class="d-flex">
-                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo1?.length > 9">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo1)"
+                                            <div class="form-check form-check-inline"
+                                                *ngIf="contactlistArray?.mobileNo1?.length > 9">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                                    (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo1)"
                                                     value="option1">
-                                                <label class="form-check-label text-success" for="inlineCheckbox1">{{contactlistArray?.mobileNo1}}</label>
+                                                <label class="form-check-label text-success"
+                                                    for="inlineCheckbox1">{{contactlistArray?.mobileNo1}}</label>
                                             </div>
-                                            <div class="form-check form-check-inline" *ngIf="contactlistArray?.mobileNo2?.length > 9">
+                                            <div class="form-check form-check-inline"
+                                                *ngIf="contactlistArray?.mobileNo2?.length > 9">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
-                                                (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo2)" value="option2">
-                                                <label class="form-check-label text-success" for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
+                                                    (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo2)"
+                                                    value="option2">
+                                                <label class="form-check-label text-success"
+                                                    for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
                                             </div>
-                                            <div class="form-check form-check-inline" *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
+                                            <div class="form-check form-check-inline"
+                                                *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
                                                 <div *ngIf="contactlistArray?.otherMobileNo">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
-                                                (change)="onCheckWrongContactNumber($event,contactlist)" value="option3">
-                                                <label class="form-check-label text-danger" for="inlineCheckbox3">{{contactlist}}</label>
-                                            </div>
+                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
+                                                        (change)="onCheckWrongContactNumber($event,contactlist)"
+                                                        value="option3">
+                                                    <label class="form-check-label text-danger"
+                                                        for="inlineCheckbox3">{{contactlist}}</label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="this.contactlistArray?.mobileNo1?.length > 9 || this.contactlistArray?.mobileNo2?.length > 9 ||  this.contactlistArray?.otherMobileNo?.length > 9">
-                                            <button type="submit" class="btn btn-main float-end" (click)="updateContactlist()">Remove</button>
+                                        <div
+                                            *ngIf="this.contactlistArray?.mobileNo1?.length > 9 || this.contactlistArray?.mobileNo2?.length > 9 ||  this.contactlistArray?.otherMobileNo?.length > 9">
+                                            <button type="submit" class="btn btn-main float-end"
+                                                (click)="updateContactlist()">Remove</button>
                                         </div>
                                     </div>
                                 </div>
@@ -138,457 +164,568 @@
                         <div class="form-container">
                             <div class="card shadow-none border">
 
-                                          <!-- ...................... voterProfileForm code start here ...............    -->
-                            
-                            <div [ngClass]="{'divDisabled':disableDiv}">
-                                <form [formGroup]="voterProfileForm">
+                                <!-- ...................... voterProfileForm code start here ...............    -->
+
+                                <div [ngClass]="{'divDisabled':disableDiv}">
+                                    <form [formGroup]="voterProfileForm">
                                         <div class="card-header d-flex justify-content-between align-items-center">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" formControlName="isNameChange"
-                                                    (change)="nameCorrectionCheckBox($event , 'noEdit')" id="flexCheckDefault">
+                                                <input class="form-check-input" type="checkbox"
+                                                    formControlName="isNameChange"
+                                                    (change)="nameCorrectionCheckBox($event , 'noEdit')"
+                                                    id="flexCheckDefault">
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     Name Correction
                                                 </label>
                                             </div>
                                             <div class="form-check float-end">
-                                                <input class="form-check-input" type="checkbox" (change)="isExpiredCheckBox($event)" 
-                                               [formControl]="isExpiredVoter" [checked]="voterProfileData?.isExpired == 1 ? true : false">
+                                                <input class="form-check-input" type="checkbox"
+                                                    (change)="isExpiredCheckBox($event)" [formControl]="isExpiredVoter"
+                                                    [checked]="voterProfileData?.isExpired == 1 ? true : false">
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     Is Expired
-                                                </label>  
+                                                </label>
                                             </div>
                                         </div>
 
-                        <div [ngClass]="{'divDisabled1':expiredDisableDiv}">
-                                <div class="card-body" *ngIf="nameCorrectionDivHide">
-                                    <div class="row mb-2">
-                                        <div class="col-sm-1">
-                                            <label class="form-label">English Name:</label>
-                                        </div>
-                                        <div class="col-sm">
-                                            <p>{{voterProfileData?.englishName}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col-sm-1">
-                                            <label class="form-label">मराठी</label>
-                                        </div>
-                                        <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="आडनाव" formControlName="mlName"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.mlName.errors }">
-                                        </div>
-                                        <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="नाव" formControlName="mfName"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.mfName.errors }">
-                                        </div>
-                                        <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="मधले नाव" formControlName="mmName"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.mmName.errors }">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-1">
-                                            <label class="form-label">English</label>
-                                        </div>
-                                        <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="Last Name" formControlName="elName"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.elName.errors }">
-                                        </div>
-                                        <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="First Name" formControlName="efName"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.efName.errors }">
-                                        </div>
-                                        <div class="col-sm">
-                                            <input class="form-control" type="text" placeholder="Middle Name" formControlName="emName"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.emName.errors }"> 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-header">
-                                    Contact Information
-                                </div>
-                                <div class="card-body pt-1">
-                                    <div class="row align-items-end g-2">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Mobile No. 1</label>
-                                            <input class="form-control" type="text" placeholder="Mobile No. 1" 
-                                            formControlName="mobileNo1" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo1.errors }">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-check" *ngIf="voterProfileForm.value.mobileNo1?.length > 9">
-                                                <input class="form-check-input" type="checkbox" value="" formControlName="watsApp1"
-                                                    id="flexCheckDefault2">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    WhatsApp
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Mobile No. 2</label>
-                                            <input class="form-control" type="text" placeholder="Mobile No. 2" 
-                                            formControlName="mobileNo2" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo2.errors }">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-check" *ngIf="voterProfileForm.value.mobileNo2?.length > 9">
-                                                <input class="form-check-input" type="checkbox" value="" formControlName="watsApp2"
-                                                    id="flexCheckDefault1">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    WhatsApp
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-end g-2">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Nick Name</label>
-                                            <input class="form-control" type="text" placeholder="Nick Name" formControlName="nickName">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Email</label>
-                                            <input class="form-control" type="text" placeholder="Email" formControlName="email"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.email.errors }">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Date of birth</label>
-                                                <input [owlDateTime]="dt2" formControlName="dateOfBirth"
-                                                    [max]="max"
-                                                    class="form-control" [owlDateTimeTrigger]="dt2"
-                                                    placeholder="dd/mm/yyyy">
-                                            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                                         </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" formControlName="isNotCall"
-                                                    id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Do Not Call
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-header">
-                                    General Information
-                                </div>
-                                <div class="card-body pt-1">
-                                    <div class="row align-items-end mb-2 g-2">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Select Religion</label>
-                                            <ngx-select [allowClear]="true" [items]="religionListArray" formControlName="religionId" (remove)="this.voterProfileForm.controls['castId'].setValue('')"
-                                              (select)="getVoterCastList(this.voterProfileForm.value.religionId)" optionValueField="reliogionId" optionTextField="religionName" placeholder="Select Religion">
-                                            </ngx-select>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Select Caste</label>
-                                            <ngx-select [allowClear]="true" [items]="VoterCastListArray" formControlName="castId" [disabled]="!voterProfileForm.value.religionId"
-                                            optionValueField="castId" optionTextField="castName" placeholder="Select Caste">
-                                        </ngx-select>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Family Head</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let head of headCheckArray">
-                                                    <input class="form-check-input" type="radio" formControlName="head" (change)="familyHeadRadiobtn()"
-                                                    [checked]="head == voterProfileData?.head" name="head" id="inlineRadio1" value="{{head}}">
-                                                    <label class="form-check-label" for="inlineRadio1" >{{head}}</label>
+                                        <div [ngClass]="{'divDisabled1':expiredDisableDiv}">
+                                            <div class="card-body" *ngIf="nameCorrectionDivHide">
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-1">
+                                                        <label class="form-label">English Name:</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <p>{{voterProfileData?.englishName}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-1">
+                                                        <label class="form-label">मराठी</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="आडनाव"
+                                                            formControlName="mlName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mlName.errors }">
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="नाव"
+                                                            formControlName="mfName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mfName.errors }">
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="मधले नाव"
+                                                            formControlName="mmName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mmName.errors }">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                        <label class="form-label">English</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="Last Name"
+                                                            formControlName="elName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.elName.errors }">
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="First Name"
+                                                            formControlName="efName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.efName.errors }">
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Middle Name" formControlName="emName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.emName.errors }">
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <!-- <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
+                                            <div class="card-header">
+                                                Contact Information
+                                            </div>
+                                            <div class="card-body pt-1">
+                                                <div class="row align-items-end g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Mobile No. 1</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Mobile No. 1" formControlName="mobileNo1"
+                                                            (keypress)="commonService.acceptedOnlyNumbers($event)"
+                                                            maxlength="10"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo1.errors }">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check"
+                                                            *ngIf="voterProfileForm.value.mobileNo1?.length > 9">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="watsApp1" id="flexCheckDefault2">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                WhatsApp
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Mobile No. 2</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Mobile No. 2" formControlName="mobileNo2"
+                                                            (keypress)="commonService.acceptedOnlyNumbers($event)"
+                                                            maxlength="10"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo2.errors }">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check"
+                                                            *ngIf="voterProfileForm.value.mobileNo2?.length > 9">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="watsApp2" id="flexCheckDefault1">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                WhatsApp
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-end g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Nick Name</label>
+                                                        <input class="form-control" type="text" placeholder="Nick Name"
+                                                            formControlName="nickName">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input class="form-control" type="text" placeholder="Email"
+                                                            formControlName="email"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.email.errors }">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Date of birth</label>
+                                                        <input [owlDateTime]="dt2" formControlName="dateOfBirth"
+                                                            [max]="max" class="form-control" [owlDateTimeTrigger]="dt2"
+                                                            placeholder="dd/mm/yyyy">
+                                                        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="isNotCall" id="flexCheckDefault">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Do Not Call
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-header">
+                                                General Information
+                                            </div>
+                                            <div class="card-body pt-1">
+                                                <div class="row align-items-end mb-2 g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Select Religion</label>
+                                                        <ngx-select [allowClear]="true" [items]="religionListArray"
+                                                            formControlName="religionId"
+                                                            (remove)="this.voterProfileForm.controls['castId'].setValue('')"
+                                                            (select)="getVoterCastList(this.voterProfileForm.value.religionId)"
+                                                            optionValueField="reliogionId"
+                                                            optionTextField="religionName"
+                                                            placeholder="Select Religion">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Select Caste</label>
+                                                        <ngx-select [allowClear]="true" [items]="VoterCastListArray"
+                                                            formControlName="castId"
+                                                            [disabled]="!voterProfileForm.value.religionId"
+                                                            optionValueField="castId" optionTextField="castName"
+                                                            placeholder="Select Caste">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Family Head</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let head of headCheckArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="head"
+                                                                    (change)="familyHeadRadiobtn()"
+                                                                    [checked]="head == voterProfileData?.head"
+                                                                    name="head" id="inlineRadio1" value="{{head}}">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio1">{{head}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
                                                 <div><small>{{familyHeadName}}</small></div>
                                             </div> -->
-                                        </div>
-                                            <div class="col-sm-auto" *ngIf="headhideDiv && voterProfileData?.head == 'yes'"> 
-                                                <label class="form-label">Add Family Member</label>
-                                                <div class="d-block">
-                                                    <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
-                                                        data-bs-target="#SelectFamilyModal" (click)="getVoterListforFamilyChild()">
-                                                        <i class="fas fa-user-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                                    </div>
+                                                    <div class="col-sm-auto"
+                                                        *ngIf="headhideDiv && voterProfileData?.head == 'yes'">
+                                                        <label class="form-label">Add Family Member</label>
+                                                        <div class="d-block">
+                                                            <button type="submit" class="btn btn-light btn-sm text-main"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#SelectFamilyModal"
+                                                                (click)="getVoterListforFamilyChild()">
+                                                                <i class="fas fa-user-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
-                                        <div class="col-sm-12" *ngIf="voterProfileData?.head == 'yes'">
-                                            <table class="table table-hover mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No.</th>
-                                                        <th>Name</th>
-                                                        <th>Mobile No</th>
-                                                        <th>Migration</th>
-                                                        <!-- <th>Action</th> -->
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index" [class.active]="familyMember.voterId == HighlightRow" (click)="editFamilyMemberData(familyMember)">
-                                                        <td>{{i+1}}</td>
-                                                        <td>{{familyMember?.family}}</td>
-                                                        <td>{{familyMember?.mobileNo1 ? familyMember?.mobileNo1 : '-'}}</td>
-                                                        <td>{{familyMember?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
-                                                        <!-- <td>
+                                                    <div class="col-sm-12" *ngIf="voterProfileData?.head == 'yes'">
+                                                        <table class="table table-hover mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>Name</th>
+                                                                    <th>Mobile No</th>
+                                                                    <th>Migration</th>
+                                                                    <!-- <th>Action</th> -->
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index"
+                                                                    [class.active]="familyMember.voterId == HighlightRow"
+                                                                    (click)="editFamilyMemberData(familyMember)">
+                                                                    <td>{{i+1}}</td>
+                                                                    <td>{{familyMember?.family}}</td>
+                                                                    <td>{{familyMember?.mobileNo1 ?
+                                                                        familyMember?.mobileNo1 : '-'}}</td>
+                                                                    <td>{{familyMember?.migrated == 'yes' ? 'Yes' :
+                                                                        'No'}}</td>
+                                                                    <!-- <td>
                                                             <button type="submit" class="btn btn-light btn-sm text-main"
                                                                 data-bs-toggle="modal" ;
                                                                 data-bs-target="#MigrationDetailsModal">
                                                                 <i class="fas fa-suitcase-rolling"></i>
                                                             </button>
                                                         </td> -->
-                                                        <!-- <td>
+                                                                    <!-- <td>
                                                             <button type="button" class="btn btn-light btn-sm text-main">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                         </td> -->
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center g-2">
-                                         <div class="col-sm-3">
-                                            <label class="form-label">Select Blood Group</label>
-                                            <ngx-select [allowClear]="true" [items]="bloodGroupArray" formControlName="bloodgroup" optionValueField="name"
-                                                optionTextField="name" placeholder="Select Blood Group">
-                                            </ngx-select>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Qualification</label>
-                                            <input class="form-control" type="text" placeholder="Qualification" formControlName="qualification">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Occupation</label>
-                                            <input class="form-control" type="text" placeholder="Occupation" formControlName="occupation">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Is Graduate</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let padvidhar of padvidharArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isPadvidhar" id="inlineRadio15"
-                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar" name="isPadvidhar" [value]="padvidhar?.id">
-                                                    <label class="form-check-label" for="inlineRadio15" >{{padvidhar.name}}</label>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Select Blood Group</label>
+                                                        <ngx-select [allowClear]="true" [items]="bloodGroupArray"
+                                                            formControlName="bloodgroup" optionValueField="name"
+                                                            optionTextField="name" placeholder="Select Blood Group">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Qualification</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Qualification" formControlName="qualification">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Occupation</label>
+                                                        <input class="form-control" type="text" placeholder="Occupation"
+                                                            formControlName="occupation">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Is Graduate</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let padvidhar of padvidharArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isPadvidhar" id="inlineRadio15"
+                                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar"
+                                                                    name="isPadvidhar" [value]="padvidhar?.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio15">{{padvidhar.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-header">
-                                    Political Information
-                                </div>
-                                <div class="card-body pt-1">
-                                    <div class="row align-items-center g-2">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Select Party</label>
-                                            <ngx-select [allowClear]="true" [items]="politicalPartyArray" formControlName="partyId"
-                                             optionValueField="partyId" optionTextField="partyName" placeholder="Select Party">
-                                        </ngx-select>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Leader</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let leader of leaderCheckArray">
-                                                    <input class="form-check-input" type="radio" formControlName="leader" (change)="leaderRadiobtn()"
-                                                    [checked]="leader == voterProfileData?.leader" name="leader" id="inlineRadio2" value="{{leader}}">
-                                                    <label class="form-check-label" for="inlineRadio2" >{{leader}}</label>
+                                            <div class="card-header">
+                                                Political Information
+                                            </div>
+                                            <div class="card-body pt-1">
+                                                <div class="row align-items-center g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Select Party</label>
+                                                        <ngx-select [allowClear]="true" [items]="politicalPartyArray"
+                                                            formControlName="partyId" optionValueField="partyId"
+                                                            optionTextField="partyName" placeholder="Select Party">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Leader</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let leader of leaderCheckArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="leader" (change)="leaderRadiobtn()"
+                                                                    [checked]="leader == voterProfileData?.leader"
+                                                                    name="leader" id="inlineRadio2" value="{{leader}}">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio2">{{leader}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm" *ngIf="leaderhideDiv">
+                                                        <label class="form-label">Select Rating</label>
+                                                        <ngx-select [allowClear]="true" [items]="ratingStarArray"
+                                                            formControlName="leaderImportance" optionValueField="name"
+                                                            optionTextField="name" placeholder="Select Rating"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.leaderImportance.errors }">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <label class="form-label">Associate Local Leader</label>
+                                                        <ngx-select [allowClear]="true" [items]="prominentleaderArray"
+                                                            formControlName="prominentLeaderId"
+                                                            optionValueField="prominentleaderId"
+                                                            optionTextField="leaderName"
+                                                            placeholder="Select Local leader">
+                                                        </ngx-select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm" *ngIf="leaderhideDiv">
-                                            <label class="form-label">Select Rating</label>
-                                            <ngx-select [allowClear]="true" [items]="ratingStarArray" formControlName="leaderImportance"
-                                            optionValueField="name" optionTextField="name" placeholder="Select Rating"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.leaderImportance.errors }">
-                                        </ngx-select>
-                                        </div>
-                                        <div class="col-sm">
-                                            <label class="form-label">Associate Local Leader</label>
-                                            <ngx-select [allowClear]="true" [items]="prominentleaderArray" formControlName="prominentLeaderId"
-                                            optionValueField="prominentleaderId" optionTextField="leaderName"
-                                            placeholder="Select Local leader">
-                                        </ngx-select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-header">
-                                    Migration Information
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-2">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Migrated</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let migrated of migratedCheckArray">
-                                                    <input class="form-check-input" type="radio" formControlName="migrated" (change)="migratedRadiobtn()"
-                                                    [checked]="migrated == voterProfileData?.migrated" name="migrated" id="inlineRadio3" value="{{migrated}}">
-                                                    <label class="form-check-label" for="inlineRadio3" >{{migrated == 'yes' ? 'Yes' : 'No'}}</label>
-                                                </div>
+                                            <div class="card-header">
+                                                Migration Information
                                             </div>
-                                        </div>
-                                        <ng-container *ngIf="migratedhideDiv">
-                                            
-                                            <div class="col-sm-7">
-                                                <label class="form-label">Migrated City</label>
-                                                <input class="form-control" type="text" [readOnly]="true" autocapitalize="off" placeholder="Migrated City" spellcheck="off"
-                                                 formControlName="migratedCity" [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
-                                            </div>
-                                            <div class="col-sm-2 mt-4">
-                                                <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
-                                                    data-bs-target="#MapSelectModal">
-                                                    <i class="fas fa-map"></i>
-                                                </button>
-                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Migrated</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let migrated of migratedCheckArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="migrated"
+                                                                    (change)="migratedRadiobtn()"
+                                                                    [checked]="migrated == voterProfileData?.migrated"
+                                                                    name="migrated" id="inlineRadio3"
+                                                                    value="{{migrated}}">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio3">{{migrated == 'yes' ? 'Yes' :
+                                                                    'No'}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <ng-container *ngIf="migratedhideDiv">
 
-                                            <div class="col-sm-12">
-                                                <label class="form-label">Migrated Area</label>
-                                                <input class="form-control" type="text" [readOnly]="true" placeholder="Migrated Area" formControlName="migratedArea"
-                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedArea.errors }">
+                                                        <div class="col-sm-7">
+                                                            <label class="form-label">Migrated City</label>
+                                                            <input class="form-control" type="text" [readOnly]="true"
+                                                                autocapitalize="off" placeholder="Migrated City"
+                                                                spellcheck="off" formControlName="migratedCity"
+                                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
+                                                        </div>
+                                                        <div class="col-sm-2 mt-4">
+                                                            <button type="submit" class="btn btn-light btn-sm text-main"
+                                                                data-bs-toggle="modal" data-bs-target="#MapSelectModal">
+                                                                <i class="fas fa-map"></i>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="col-sm-12">
+                                                            <label class="form-label">Migrated Area</label>
+                                                            <input class="form-control" type="text" [readOnly]="true"
+                                                                placeholder="Migrated Area"
+                                                                formControlName="migratedArea"
+                                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedArea.errors }">
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="row mb-2 align-items-end">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                formControlName="postalFlag"
+                                                                [checked]="voterProfileData?.postalFlag == 1 ? true : false"
+                                                                (click)="postalVotingCheckBox($event , 'noEdit')">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Postal Voting
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-9" *ngIf="postalVotingDivHide">
+                                                        <label class="form-label">Postal Voting Reason</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Postal Voting Reason"
+                                                            formControlName="whyIsPostal"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.whyIsPostal.errors }">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2 align-items-end">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="needSupportFlag"
+                                                                [checked]="voterProfileData?.needSupportFlag == 1 ? true : false"
+                                                                (click)="needSupportCheckBox($event, 'noEdit')">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Need Support?
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-9" *ngIf="needSupportDivHide">
+                                                        <label class="form-label">Support Details</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Support Details"
+                                                            formControlName="needSupportText"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.needSupportText.errors }">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </ng-container>
-                                    </div>
-                                    <div class="row mb-2 align-items-end">
-                                        <div class="col-sm-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" formControlName="postalFlag"
-                                                 [checked]="voterProfileData?.postalFlag == 1 ? true : false" (click)="postalVotingCheckBox($event , 'noEdit')">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Postal Voting
-                                                </label>
+                                            <div class="card-header">
+                                                Other Information
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-2 gx-1">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Daily Farmer</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let dairyFarmer of dairyFarmerArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isDairyFarmer" name="isDairyFarmer"
+                                                                    [checked]="dairyFarmer?.id == voterProfileData?.isDairyFarmer"
+                                                                    id="inlineRadio4" [value]="dairyFarmer?.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio4">{{dairyFarmer?.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Goat/Sheep Farmer</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let goatSheepFarmer of goatSheepFarmerArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isGoatSheepFarmer"
+                                                                    name="isGoatSheepFarmer"
+                                                                    [checked]="goatSheepFarmer.id == voterProfileData?.isGoatSheepFarmer"
+                                                                    id="inlineRadio5" [value]="goatSheepFarmer.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio5">{{goatSheepFarmer.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Sugarcane Cutter Worker</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let sugarCaneCutter of sugarCaneCutterArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isSugarCaneCutter"
+                                                                    name="isSugarCaneCutter"
+                                                                    [checked]="sugarCaneCutter.id == voterProfileData?.isSugarCaneCutter"
+                                                                    id="inlineRadio6" [value]="sugarCaneCutter.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio6">{{sugarCaneCutter.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Farmer</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let farmer of farmerArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isFarmer" name="isFarmer"
+                                                                    [checked]="farmer.id == voterProfileData?.isFarmer"
+                                                                    id="inlineRadio7" [value]="farmer.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio7">{{farmer.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Business</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let business of businessArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="haveBusiness" name="haveBusiness"
+                                                                    [checked]="business.id == voterProfileData?.haveBusiness"
+                                                                    id="inlineRadio8" [value]="business.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio8">{{business.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Yuvak</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let yuvak of yuvakArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isYuvak" name="isYuvak"
+                                                                    [checked]="yuvak.id == voterProfileData?.isYuvak"
+                                                                    id="inlineRadio9" [value]="yuvak.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio9">{{yuvak.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Vehicle</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let vehicle of vehicleArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="haveVehicle" id="inlineRadio10"
+                                                                    [checked]="vehicle.id == voterProfileData?.haveVehicle"
+                                                                    name="haveVehicle" [value]="vehicle.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio10">{{vehicle.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Income Group</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let financialCon of financialConditionArray">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="financialCondition"
+                                                                    name="financialCondition"
+                                                                    [checked]="financialCon.id == voterProfileData?.financialCondition"
+                                                                    id="inlineRadio11" [value]="financialCon.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio11">{{financialCon.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2 gx-1">
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Previous Comments</label>
+                                                        <div class="form-data">
+                                                            <ul *ngFor="let VPComments of VPCommentData"
+                                                                class="list-group list-group-flush mb-0">
+                                                                <li class="list-group-item ps-0 mb-0 py-0"
+                                                                    *ngIf="VPComments?.commentDetails">
+                                                                    <i class="fas fa-check me-2"></i>
+                                                                    {{VPComments?.commentDetails}}
+                                                                </li>
+                                                            </ul>
+                                                            <span class="text-danger"
+                                                                *ngIf="VPCommentData?.length == 0">No Comments</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Comment</label>
+                                                        <textarea class="form-control" rows="3"
+                                                            formControlName="comment"
+                                                            placeholder="Comment (If Any)"></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-9" *ngIf="postalVotingDivHide">
-                                            <label class="form-label">Postal Voting Reason</label>
-                                            <input class="form-control" type="text" placeholder="Postal Voting Reason" formControlName="whyIsPostal"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.whyIsPostal.errors }">
+                                        <div class="d-flex justify-content-between p-3">
+                                            <button type="button" class="btn btn-secondary"
+                                                (click)="getVoterProfileData()">Cancel</button>
+                                            <button type="submit" class="btn btn-main"
+                                                (click)="onSubmitVoterProfile()">Submit</button>
                                         </div>
-                                    </div>
-                                    <div class="row mb-2 align-items-end">
-                                        <div class="col-sm-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" formControlName="needSupportFlag"
-                                                [checked]="voterProfileData?.needSupportFlag == 1 ? true : false" (click)="needSupportCheckBox($event, 'noEdit')">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Need Support?
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-9" *ngIf="needSupportDivHide">
-                                            <label class="form-label">Support Details</label>
-                                            <input class="form-control" type="text" placeholder="Support Details" formControlName="needSupportText"
-                                            [ngClass]="{ 'is-invalid': submittedVP && v.needSupportText.errors }">
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                                <div class="card-header">
-                                    Other Information
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-2 gx-1">
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Daily Farmer</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let dairyFarmer of dairyFarmerArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isDairyFarmer" name="isDairyFarmer"
-                                                    [checked]="dairyFarmer?.id == voterProfileData?.isDairyFarmer" id="inlineRadio4" [value]="dairyFarmer?.id">
-                                                    <label class="form-check-label" for="inlineRadio4" >{{dairyFarmer?.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Goat/Sheep Farmer</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let goatSheepFarmer of goatSheepFarmerArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isGoatSheepFarmer" name="isGoatSheepFarmer"
-                                                    [checked]="goatSheepFarmer.id == voterProfileData?.isGoatSheepFarmer" id="inlineRadio5" [value]="goatSheepFarmer.id">
-                                                    <label class="form-check-label" for="inlineRadio5" >{{goatSheepFarmer.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Sugarcane Cutter Worker</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let sugarCaneCutter of sugarCaneCutterArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isSugarCaneCutter" name="isSugarCaneCutter"
-                                                    [checked]="sugarCaneCutter.id == voterProfileData?.isSugarCaneCutter" id="inlineRadio6" [value]="sugarCaneCutter.id">
-                                                    <label class="form-check-label" for="inlineRadio6" >{{sugarCaneCutter.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Farmer</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let farmer of farmerArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isFarmer" name="isFarmer"
-                                                    [checked]="farmer.id == voterProfileData?.isFarmer" id="inlineRadio7" [value]="farmer.id">
-                                                    <label class="form-check-label" for="inlineRadio7" >{{farmer.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Business</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let business of businessArray">
-                                                    <input class="form-check-input" type="radio" formControlName="haveBusiness" name="haveBusiness"
-                                                    [checked]="business.id == voterProfileData?.haveBusiness" id="inlineRadio8" [value]="business.id">
-                                                    <label class="form-check-label" for="inlineRadio8" >{{business.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Yuvak</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let yuvak of yuvakArray">
-                                                    <input class="form-check-input" type="radio" formControlName="isYuvak" name="isYuvak"
-                                                    [checked]="yuvak.id == voterProfileData?.isYuvak" id="inlineRadio9" [value]="yuvak.id">
-                                                    <label class="form-check-label" for="inlineRadio9" >{{yuvak.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Vehicle</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let vehicle of vehicleArray">
-                                                    <input class="form-check-input" type="radio" formControlName="haveVehicle" id="inlineRadio10"
-                                                    [checked]="vehicle.id == voterProfileData?.haveVehicle" name="haveVehicle" [value]="vehicle.id">
-                                                    <label class="form-check-label" for="inlineRadio10" >{{vehicle.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label class="form-label">Income Group</label>
-                                            <div class="d-block">
-                                                <div class="form-check form-check-inline" *ngFor="let financialCon of financialConditionArray">
-                                                    <input class="form-check-input" type="radio" formControlName="financialCondition" name="financialCondition" 
-                                                    [checked]="financialCon.id == voterProfileData?.financialCondition" id="inlineRadio11" [value]="financialCon.id">
-                                                    <label class="form-check-label" for="inlineRadio11" >{{financialCon.name}}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2 gx-1">
-                                    <div class="col-sm-6">
-                                        <label class="form-label">Comment</label>
-                                        <textarea class="form-control" rows="3" formControlName="comment" 
-                                            placeholder="Comment (If Any)"></textarea>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label">Privious Comments</label>
-                                        <div class="form-data">
-                                            <ul *ngFor="let VPComments of VPCommentData" class="list-group list-group-flush mb-0">
-                                                <li class="list-group-item ps-0" *ngIf="VPComments?.commentDetails">
-                                                    <i class="fas fa-check me-2"></i>
-                                                    {{VPComments?.commentDetails}}
-                                                </li>
-                                            </ul>
-                                            <span class="text-danger" *ngIf="VPCommentData?.length == 0">No Comments</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-secondary" (click)="getVoterProfileData()">Cancel</button>
-                                    <button type="submit" class="btn btn-main" (click)="onSubmitVoterProfile()">Submit</button>
-                                </div>
-                            </form>
-                        </div>
                             </div>
 
                         </div>
@@ -730,18 +867,20 @@
 
 
 <!-- Modal to select voters for family  -->
-<div class="modal fade" id="SelectFamilyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="SelectFamilyModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="SelectFamilyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="SelectFamilyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <p class="modal-title" id="SelectFamilyModalLabel">Select Family Members</p>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearFamilyTree()" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearFamilyTree()"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-container">
                     <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Search Member" [(ngModel)]="familyMembersFilter.englishName">
+                        <input class="form-control" type="text" placeholder="Search Member"
+                            [(ngModel)]="familyMembersFilter.englishName">
                         <button type="button" class="btn btn-light">
                             <i class="fas fa-search"></i>
                         </button>
@@ -764,15 +903,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
+                            <tr
+                                *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
                                 <td>{{familyChild?.voterNo}}</td>
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
                                 <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault"
-                                        [checked]="familyChild?.checked"
-                                        (change)="onCheckChangeChildVoterDetail($event, familyChild)">
+                                            [checked]="familyChild?.checked"
+                                            (change)="onCheckChangeChildVoterDetail($event, familyChild)">
                                     </div>
                                 </td>
                             </tr>
@@ -784,7 +924,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer"> 
+            <div class="modal-footer">
                 <!-- d-flex w-100 justify-content-between -->
                 <!-- <button type="button" class="btn btn-secondary" (click)="clearFamilyTree()">Cancel</button> -->
                 <button type="submit" class="btn btn-main float-end" (click)="submitFamilyTree()">Add Member</button>
@@ -904,8 +1044,7 @@
 
 
 <!-- Modal to select Map Address   -->
-<div class="modal fade" id="MapSelectModal" tabindex="-1" aria-labelledby="MapSelectModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="MapSelectModal" tabindex="-1" aria-labelledby="MapSelectModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -913,7 +1052,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mt-20">
-            <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off" #search>
+                <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
+                    #search>
                 <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerDragEnd($event)">
                     <div *ngIf="latitude">
                         <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)"
