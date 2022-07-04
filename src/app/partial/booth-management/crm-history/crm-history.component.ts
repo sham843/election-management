@@ -131,9 +131,7 @@ export class CrmHistoryComponent implements OnInit {
     this.getVoterprofileFamilyData();
     this.getProminentleader();
     this.getReligionList();
-    // this.getVoterCastList();
     this.getPoliticalPartyList();
-    this.searchFamilyChieldFilters('false');
     this.searchAddress();
   }
 
@@ -296,9 +294,6 @@ export class CrmHistoryComponent implements OnInit {
     this.feedbacksList();
   }
 
-  voterDateRangeSelect(asd: any) {
-  }
-
     //.......... get Political Party List ...............//
     getPoliticalPartyList() {
       this.callAPIService.setHttp('get', 'Filter/GetPartyDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
@@ -388,22 +383,6 @@ export class CrmHistoryComponent implements OnInit {
     }
     }
 
-    onKeyUpFilterFamilyChield() {
-      this.subjectSearchFamilyC.next();
-    }
-  
-    searchFamilyChieldFilters(flag: any) {
-      this.subjectSearchFamilyC.pipe(debounceTime(700)).subscribe(() => {
-        this.searchFamilyChield.value;
-        this.getVoterListforFamilyChild();
-      });
-    }
-
-    clearFilterFamilyChield(){
-      this.searchFamilyChield.setValue('');
-      this.getVoterListforFamilyChild();
-    }
-      
   onCheckChangeChildVoterDetail(event: any, data: any) {
     this.changedVoterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
       if (ele.voterId == data.voterId && event.target.checked == true) {
@@ -415,19 +394,14 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   submitFamilyTree() {
-    if (this.checkFamilyMemberClearFlag == true) {
-      this.changedVoterListforFamilyChildArray = [];
-      this.changedVoterListforFamilyChildArray = this.voterListforFamilyChildArray;
-      this.checkFamilyMemberClearFlag = false;
-    } else {
       this.voterListforFamilyChildArray = [];
       this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
-    }
   }
 
   clearFamilyTree(){
-    this.checkFamilyMemberClearFlag = true;
     this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
+    this.changedVoterListforFamilyChildArray = [];
+    this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
   }
 
   createFamilyTree() {
