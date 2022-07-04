@@ -234,34 +234,7 @@ export class CrmHistoryComponent implements OnInit {
     })
   }
 
-  //............. get get Voterprofile Family Data ...............//    
-
-  getVoterprofileFamilyData() {
-    this.spinner.show();
-    let obj = 'ClientId=' + this.voterListData.ClientId + 
-    '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
-    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFamilyMemberCRM?' + obj, false, false, false, 'electionMicroSerApp');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        this.spinner.hide();
-        this.voterProfileFamilyData = res.responseData;
-        this.voterProfileFamilyData.map((ele:any)=>{ //get FamilyHead Name & VoterId 
-          if(ele.familyHead == 1){
-            this.familyHeadName = ele.family;   
-            this.familyHeadVoterId = ele.voterId;
-          }
-        })
-      } else {
-        this.voterProfileFamilyData = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      this.router.navigate(['../500'], { relativeTo: this.route });
-    })
-  }
-
-  // data1: get ostive Negative Influence & data2: get Comment Data  //
+  // data1: get Postive Negative Influence & data2: get Comment Data  //
 
   getVPPoliticalInfluenceData() {
     this.spinner.show();
@@ -354,6 +327,33 @@ export class CrmHistoryComponent implements OnInit {
     })
   }
 
+    //............. get get Voterprofile Family Data ...............//    
+
+    getVoterprofileFamilyData() {
+      this.spinner.show();
+      let obj = 'ClientId=' + this.voterListData.ClientId + 
+      '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
+      this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFamilyMemberCRM?' + obj, false, false, false, 'electionMicroSerApp');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.responseData != null && res.statusCode == "200") {
+          this.spinner.hide();
+          this.voterProfileFamilyData = res.responseData;
+          this.voterProfileFamilyData.find((ele:any)=>{ //get FamilyHead Name & VoterId 
+            if(ele.familyHead == 1){
+              this.familyHeadName = ele.family;   
+              this.familyHeadVoterId = ele.voterId;
+            }
+          })
+        } else {
+          this.voterProfileFamilyData = [];
+          this.spinner.hide();
+        }
+      }, (error: any) => {
+        this.spinner.hide();
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      })
+    }
+
      //.......... get Voter for Family Child List Code Start...............//
 
      getVoterListforFamilyChild() {  
@@ -388,7 +388,9 @@ export class CrmHistoryComponent implements OnInit {
       if (ele.voterId == data.voterId && event.target.checked == true) {
         ele.checked = true;
       } else {
-        if (ele.voterId == data.voterId) { ele.checked = false; }
+        if (ele.voterId == data.voterId) {
+          ele.checked = false;
+        }
       }
     })
   }
@@ -417,7 +419,7 @@ export class CrmHistoryComponent implements OnInit {
     })
 
     let obj = {
-      "parentVoterId": this.familyHeadVoterId,
+      "parentVoterId": 40315,
       "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
       "clientId": this.voterListData.ClientId,
       "childVoterDetails": this.childVoterDetailArray
@@ -793,7 +795,6 @@ export class CrmHistoryComponent implements OnInit {
         "isPadvidhar": parseInt(formData.isPadvidhar),
         "isVerified": 1
       }
-      // this.createFamilyTree();
       this.spinner.show();
       let urlType;
       let urlName;
@@ -806,6 +807,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
+          this.createFamilyTree();
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
