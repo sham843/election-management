@@ -419,7 +419,7 @@ export class CrmHistoryComponent implements OnInit {
     })
 
     let obj = {
-      "parentVoterId": 40315,
+      "parentVoterId": this.familyHeadVoterId ? this.familyHeadVoterId : this.voterProfileData?.voterId,
       "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
       "clientId": this.voterListData.ClientId,
       "childVoterDetails": this.childVoterDetailArray
@@ -807,7 +807,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
-          this.createFamilyTree();
+          this.voterProfileData?.head == "yes" ? this.createFamilyTree() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
