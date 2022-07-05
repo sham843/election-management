@@ -868,7 +868,7 @@
                             </div>
                         </div>
 
-                        <div class="card shadow-none border">
+                        <div class="card shadow-none border" *ngIf="isConflictCheckFlag == 1">
                             <div class="card-header">Conflicted Data</div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
@@ -876,73 +876,50 @@
                                         <thead>
                                             <tr>
                                                 <th>Parameter</th>
-                                                <th>Agent Name</th>
-                                                <th>Agent Name</th>
-                                                <th>Agent Name</th>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.agentName}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <th>Mobile No. 1</th>
-                                                <td>9876543210</td>
-                                                <td>9876543210</td>
-                                                <td>9876543210</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.mobileNo1}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Mobile No. 2</th>
-                                                <td>9876543210</td>
-                                                <td>9876543210</td>
-                                                <td>9876543210</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.mobileNo2}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Religion</th>
-                                                <td>Hindu</td>
-                                                <td>Hindu</td>
-                                                <td>Hindu</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.religionName}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Caste</th>
-                                                <td>Dhangar</td>
-                                                <td>Maratha</td>
-                                                <td>Koshti</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.castname}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Family Head</th>
-                                                <td>Yes</td>
-                                                <td>No</td>
-                                                <td>Yes</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.head == 'yes' ? 'Yes' : 'No'}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Family Size</th>
-                                                <td>4</td>
-                                                <td>2</td>
-                                                <td>3</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.familysize}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Migrated</th>
-                                                <td>Yes</td>
-                                                <td>No</td>
-                                                <td>No</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.migrated == 'yes' ? 'Yes' : 'No'}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Leader</th>
-                                                <td>Yes (NCP)</td>
-                                                <td>Yes (NCP)</td>
-                                                <td>Yes (NCP)</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.leader == 'yes' ? 'Yes' : 'No'}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Expired</th>
-                                                <td>Yes</td>
-                                                <td>No</td>
-                                                <td>No</td>
+                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.isexpired == 1 ? 'Yes' : 'No'}}</th>
                                             </tr>
                                             <tr>
                                                 <th></th>
-                                                <td>
-                                                    <button class="btn btn-main btn-sm">Delete</button>
-                                                </td>
-                                                <td><button class="btn btn-main btn-sm">Delete</button></td>
-                                                <td><button class="btn btn-main btn-sm">Delete</button></td>
+                                                <td *ngFor="let conflictData of conflictDataArray"><button class="btn btn-main btn-sm"
+                                                    (click)="deleteConfirmModel(conflictData)">Delete</button></td>
                                             </tr>
                                         </tbody>
                                     </table>

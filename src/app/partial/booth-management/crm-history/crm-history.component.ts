@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs/operators';
 import { MapsAPILoader,MouseEvent } from '@agm/core';
 import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
 import { now } from '@amcharts/amcharts4/.internal/core/utils/Time';
+import { DeleteComponent } from '../../dialogs/delete/delete.component';
 declare var google: any;
 
 @Component({
@@ -98,6 +99,9 @@ export class CrmHistoryComponent implements OnInit {
   checkWrongMobileNflag: boolean = true;
 
   familyMembersFilter: any = { englishName: '' };
+  isConflictCheckFlag:any;
+  conflictDataArray:any;
+  conflictRecordDelObj:any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -131,6 +135,7 @@ export class CrmHistoryComponent implements OnInit {
     this.getVPPoliticalInfluenceData();
     this.getVoterprofileFamilyData();
     this.getProminentleader();
+    this.getIsConflictDataFlag();
     this.getReligionList();
     this.getPoliticalPartyList();
     this.searchAddress();
@@ -204,6 +209,7 @@ export class CrmHistoryComponent implements OnInit {
           this.submitted = false;
         } else {
           this.spinner.hide();
+          // this.toastrService.error(res.statusMessage);
         }
       }, (error: any) => {
         this.spinner.hide();
@@ -939,7 +945,58 @@ updateContactlist() {
 
 //.........................................Conflicted Data Code Start Here ....................................// 
 
+getIsConflictDataFlag() {  
+  this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetIsConflictData?ClientId=' + this.voterListData?.ClientId + '&AgentId='
+    + this.voterListData?.AgentId + '&VoterId=' + this.voterListData?.VoterId, false, false, false, 'electionMicroSerApp');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.responseData != null && res.statusCode == "200") {
+      this.isConflictCheckFlag = res.responseData.isConflict;
+      this.isConflictCheckFlag == 1 ?  this.getConflictData() : '';
+    } else {
+      this.isConflictCheckFlag = '';
+    }
+  }, (error: any) => {
+    this.router.navigate(['../../500'], { relativeTo: this.route });
+  })
+}
 
+getConflictData() {  
+  this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetConflictData?ClientId=' + this.voterListData?.ClientId + '&VoterId=' + this.voterListData?.VoterId, false, false, false, 'electionMicroSerApp');
+  this.callAPIService.getHttp().subscribe((res: any) => {
+    if (res.responseData != null && res.statusCode == "200") {
+      this.conflictDataArray = res.responseData;
+    } else {
+      this.conflictDataArray = [];
+    }
+  }, (error: any) => {
+    this.router.navigate(['../../500'], { relativeTo: this.route });
+  })
+}
+
+
+deleteConfirmModel(obj:any) {
+  this.conflictRecordDelObj = obj;
+  const dialogRef = this.dialog.open(DeleteComponent);
+  dialogRef.afterClosed().subscribe(result => {
+    if (result == 'Yes') {
+      this.deleteNotifications();
+    }
+  });
+} 
+
+deleteNotifications() {
+    this.callAPIService.setHttp('DELETE', 'ClientMasterWebApi/VoterCRM/DeleteConflictRecord?ClientId=' + this.conflictRecordDelObj?.clientId + '&VoterId=' + this.conflictRecordDelObj?.voterId
+    + '&Deletedby=' + this.commonService.loggedInUserId() + '&AgentId=' + this.conflictRecordDelObj?.agentId, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.toastrService.success(res.statusMessage);
+        this.getConflictData();
+      } else { 
+      }
+    }, (error: any) => {
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
 
 //.........................................Conflicted Data Code End Here ....................................// 
 
