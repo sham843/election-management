@@ -60,6 +60,7 @@ export class CrmHistoryComponent implements OnInit {
   migratedCheckArray = ['yes','no'];
   headhideDiv:boolean = false;  
   leaderhideDiv:boolean = false;
+  businessDethideDiv:boolean = false;
   migratedhideDiv:boolean = false;
   postalVotingDivHide:boolean = false;
   needSupportDivHide:boolean = false;
@@ -165,7 +166,7 @@ export class CrmHistoryComponent implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -206,7 +207,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       }, (error: any) => {
         this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+        this.router.navigate(['../../500'], { relativeTo: this.route });
       })
     }
   }
@@ -230,7 +231,7 @@ export class CrmHistoryComponent implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -253,7 +254,7 @@ export class CrmHistoryComponent implements OnInit {
       }
     }, (error: any) => {
       this.spinner.hide();
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -278,7 +279,7 @@ export class CrmHistoryComponent implements OnInit {
           this.politicalPartyArray = [];
         }
       }, (error: any) => {
-        this.router.navigate(['../500'], { relativeTo: this.route });
+        this.router.navigate(['../../500'], { relativeTo: this.route });
       })
     }
 
@@ -293,7 +294,7 @@ export class CrmHistoryComponent implements OnInit {
         this.religionListArray = [];
       }
     }, (error: any) => {
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -308,7 +309,7 @@ export class CrmHistoryComponent implements OnInit {
         this.VoterCastListArray = [];
       }
     }, (error: any) => {
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -323,7 +324,7 @@ export class CrmHistoryComponent implements OnInit {
         this.prominentleaderArray = [];
       }
     }, (error: any) => {
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -350,7 +351,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       }, (error: any) => {
         this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+        this.router.navigate(['../../500'], { relativeTo: this.route });
       })
     }
 
@@ -373,7 +374,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       }, (error: any) => {
         this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+        this.router.navigate(['../../500'], { relativeTo: this.route });
       })
     }else{
       this.voterListforFamilyChildArray;
@@ -409,7 +410,9 @@ export class CrmHistoryComponent implements OnInit {
         let obj1 =  {
           "childVoterId": ele.voterId,
           "voter_uid": ele.voterId,
-          "voter_no": ele.voterNo
+          "voter_no": ele.voterNo,
+          "assemblyId": ele.assemblyId,
+          "boothId": ele.boothId
         }
         this.childVoterDetailArray.push(obj1);
       }
@@ -434,7 +437,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       }, (error: any) => {
         this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+        this.router.navigate(['../../500'], { relativeTo: this.route });
       })
     }
 
@@ -500,6 +503,18 @@ export class CrmHistoryComponent implements OnInit {
         this.voterProfileForm.controls['leaderImportance'].setValue('');
         this.voterProfileForm.controls['leaderImportance'].clearValidators();
         this.voterProfileForm.controls['leaderImportance'].updateValueAndValidity();
+      }
+  }
+
+  businesDetRadiobtn(){
+    this.voterProfileForm.value.haveBusiness == 1 ? this.businessDethideDiv = true : this.businessDethideDiv = false;
+      if (this.voterProfileForm.value.haveBusiness == 1) {
+        this.voterProfileForm.controls["businnessDetails"].setValidators([Validators.required]);
+        this.voterProfileForm.controls["businnessDetails"].updateValueAndValidity();
+      } else {
+        this.voterProfileForm.controls['businnessDetails'].setValue('');
+        this.voterProfileForm.controls['businnessDetails'].clearValidators();
+        this.voterProfileForm.controls['businnessDetails'].updateValueAndValidity();
       }
   }
 
@@ -606,6 +621,7 @@ export class CrmHistoryComponent implements OnInit {
       postalFlag: [''],
       whyIsPostal: [''],
       isPadvidhar: [''],
+      businnessDetails: [''],
     })
   }
 
@@ -667,6 +683,7 @@ export class CrmHistoryComponent implements OnInit {
       postalFlag: data.postalFlag,
       whyIsPostal: data.whyIsPostal,
       isPadvidhar: data.isPadvidhar,
+      businnessDetails: data.businnessDetails,
     })
     this.isExpiredVoter.setValue(data.isExpired);
     data.isExpired == 1 ? this.expiredDisableDiv = true : this.expiredDisableDiv = false ;
@@ -674,6 +691,7 @@ export class CrmHistoryComponent implements OnInit {
     this.familyHeadRadiobtn();
     this.leaderRadiobtn();
     this.migratedRadiobtn();
+    this.businesDetRadiobtn();
     this.postalVotingCheckBox(data.postalFlag == 1 ? true : false , 'edit');
     this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false ,'edit');
     this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false ,'edit');
@@ -756,7 +774,7 @@ export class CrmHistoryComponent implements OnInit {
         "haveBusiness": formData.haveBusiness,
         "isYuvak": formData.isYuvak,
         "financialCondition": formData.financialCondition,
-        "businnessDetails": "string",
+        "businnessDetails": formData.businnessDetails,
         "isExpired": this.isExpiredVoter.value == true ? 1 : 0,   
         "prominentLeaderId": formData.prominentLeaderId || 0,
         "whyIsPostal": formData.whyIsPostal,
@@ -789,7 +807,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       }, (error: any) => {
         this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
+        this.router.navigate(['../../500'], { relativeTo: this.route });
       });
     }
   }
@@ -861,7 +879,7 @@ findAddress(results:any) {
       this.contactlistArray = [];
     }
   }, (error: any) => {
-    this.router.navigate(['../500'], { relativeTo: this.route });
+    this.router.navigate(['../../500'], { relativeTo: this.route });
   })
 }
 
@@ -881,7 +899,7 @@ updateContactlist() {
       }
     }, (error: any) => {
       this.spinner.hide();
-      this.router.navigate(['../500'], { relativeTo: this.route });
+      this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
@@ -898,7 +916,6 @@ updateContactlist() {
     } else { //delete record when event False
       this.wrongMobileNumberArray.splice(this.wrongMobileNumberArray.findIndex((ele: any) => ele.mobileNo === mobileNum), 1);
     }
-    console.log(this.wrongMobileNumberArray)
   }
 
   checkUniqueDataContact(obj: any, voterId: any) { //Check Unique Data then Insert or Update
@@ -919,5 +936,12 @@ updateContactlist() {
 
 
 //.........................................Please tick wrong mobile End Here ....................................// 
+
+//.........................................Conflicted Data Code Start Here ....................................// 
+
+
+
+//.........................................Conflicted Data Code End Here ....................................// 
+
 
 }

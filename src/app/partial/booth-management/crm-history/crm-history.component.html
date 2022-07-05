@@ -647,7 +647,7 @@
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
                                                                 *ngFor="let business of businessArray">
-                                                                <input class="form-check-input" type="radio"
+                                                                <input class="form-check-input" type="radio" (change)="businesDetRadiobtn()"
                                                                     formControlName="haveBusiness" name="haveBusiness"
                                                                     [checked]="business.id == voterProfileData?.haveBusiness"
                                                                     id="inlineRadio8" [value]="business.id">
@@ -655,8 +655,11 @@
                                                                     for="inlineRadio8">{{business.name}}</label>
                                                             </div>
                                                         </div>
+                                                        <span *ngIf="businessDethideDiv">
                                                         <label class="form-label">Business Details</label>
-                                                        <input class="form-control" type="text" placeholder="Business Details">
+                                                        <input class="form-control" type="text" placeholder="Business Details" formControlName="businnessDetails"
+                                                        [ngClass]="{ 'is-invalid': submittedVP && v.businnessDetails.errors }">
+                                                    </span>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label class="form-label">Yuvak</label>
