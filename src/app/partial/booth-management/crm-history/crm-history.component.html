@@ -122,7 +122,7 @@
                                             <span class="text-danger"><i class="fas fa-square-full me-2"></i> Other
                                                 Entered no.</span>
                                         </span>
-                                        <div class="d-flex">
+                                        <div class="d-flex flex-wrap">
                                             <div class="form-check form-check-inline"
                                                 *ngIf="contactlistArray?.mobileNo1?.length > 9">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
@@ -707,13 +707,7 @@
                                                 </div>
                                                 <div class="row gx-1">
                                                     <div class="col-sm-6">
-                                                        <label class="form-label">Comment</label>
-                                                        <textarea class="form-control" rows="3"
-                                                            formControlName="comment"
-                                                            placeholder="Comment (If Any)"></textarea>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label class="form-label">Privious Comments</label>
+                                                        <label class="form-label">Previous Comments</label>
                                                         <div class="form-data">
                                                             <ul *ngFor="let VPComments of VPCommentData"
                                                                 class="list-group list-group-flush mb-0">
@@ -726,6 +720,12 @@
                                                             <span class="text-danger"
                                                                 *ngIf="VPCommentData?.length == 0">No Comments</span>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Comment</label>
+                                                        <textarea class="form-control" rows="3"
+                                                            formControlName="comment"
+                                                            placeholder="Comment (If Any)"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
