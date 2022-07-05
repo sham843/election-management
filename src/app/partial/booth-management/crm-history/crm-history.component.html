@@ -469,7 +469,7 @@
                                                                     [checked]="leader == voterProfileData?.leader"
                                                                     name="leader" id="inlineRadio2" value="{{leader}}">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio2">{{leader}}</label>
+                                                                    for="inlineRadio2">{{leader == 'yes' ? 'Yes' : 'No'}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -882,39 +882,39 @@
                                         <tbody>
                                             <tr>
                                                 <th>Mobile No. 1</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.mobileNo1}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.mobileNo1}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Mobile No. 2</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.mobileNo2}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.mobileNo2}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Religion</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.religionName}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.religionName}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Caste</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.castname}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.castname}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Family Head</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.head == 'yes' ? 'Yes' : 'No'}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.head == 'yes' ? 'Yes' : 'No'}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Family Size</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.familysize}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.familysize}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Migrated</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.migrated == 'yes' ? 'Yes' : 'No'}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Leader</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.leader == 'yes' ? 'Yes' : 'No'}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.leader == 'yes' ? 'Yes' : 'No'}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Expired</th>
-                                                <th *ngFor="let conflictData of conflictDataArray">{{conflictData?.isexpired == 1 ? 'Yes' : 'No'}}</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.isexpired == 1 ? 'Yes' : 'No'}}</td>
                                             </tr>
                                             <tr>
                                                 <th></th>
