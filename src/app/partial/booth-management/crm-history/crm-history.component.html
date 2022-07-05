@@ -518,18 +518,17 @@
 
                                                         <div class="col-sm-7">
                                                             <label class="form-label">Migrated City</label>
-                                                            <input class="form-control" type="text" [readOnly]="true"
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text" [readOnly]="true"
                                                                 autocapitalize="off" placeholder="Migrated City"
                                                                 spellcheck="off" formControlName="migratedCity"
                                                                 [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
-                                                        </div>
-                                                        <div class="col-sm-2 mt-4">
-                                                            <button type="submit" class="btn btn-light btn-sm text-main"
+                                                                <button type="submit" class="btn btn-light btn-sm text-main"
                                                                 data-bs-toggle="modal" data-bs-target="#MapSelectModal">
                                                                 <i class="fas fa-map"></i>
                                                             </button>
+                                                            </div>
                                                         </div>
-
                                                         <div class="col-sm-12">
                                                             <label class="form-label">Migrated Area</label>
                                                             <input class="form-control" type="text" [readOnly]="true"
@@ -656,6 +655,8 @@
                                                                     for="inlineRadio8">{{business.name}}</label>
                                                             </div>
                                                         </div>
+                                                        <label class="form-label">Business Details</label>
+                                                        <input class="form-control" type="text" placeholder="Business Details">
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label class="form-label">Yuvak</label>
@@ -867,85 +868,81 @@
                         <div class="card shadow-none border">
                             <div class="card-header">Conflicted Data</div>
                             <div class="card-body p-0">
-                                <div class="list-group list-group-flush">
-                                    <div class="list-group-item list-group-item-action" aria-current="true">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1 text-main">Agent Name</h6>
-                                            <small class="text-success fw-bold">Not Expired</small>
-                                        </div>
-                                        <p class="mb-1">+9876543102. +9874563210</p>
-                                        <div class="row mb-0">
-                                            <div class="col-sm-auto form-label mb-1">Caste :</div>
-                                            <div class="col-sm form-data">Hindu</div>
-                                            <div class="col-sm-auto form-label mb-1">Religion :</div>
-                                            <div class="col-sm form-data">Dhangar</div>
-                                        </div>
-                                        <div class="row mb-0">
-                                            <div class="col-sm-auto form-label mb-1">Family Head :</div>
-                                            <div class="col-sm form-data">Yes</div>
-                                            <div class="col-sm-auto form-label mb-1">Family Size :</div>
-                                            <div class="col-sm form-data">5</div>
-                                        </div>
-                                        <p class="mb-1">Migrated : Yes (Bangaore)</p>
-                                        <p class="mb-1">Is Leader : Yes (NCP 5.0)</p>
-                                        <div class="text-end">
-                                            <button class="btn btn-main btn-sm">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-action" aria-current="true">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1 text-main">Agent Name</h6>
-                                            <small class="text-danger fw-bold">Expired</small>
-                                        </div>
-                                        <p class="mb-1">+9876543102. +9874563210</p>
-                                        <div class="row mb-0">
-                                            <div class="col-sm-auto form-label mb-1">Caste :</div>
-                                            <div class="col-sm form-data">Hindu</div>
-                                            <div class="col-sm-auto form-label mb-1">Religion :</div>
-                                            <div class="col-sm form-data">Dhangar</div>
-                                        </div>
-                                        <div class="row mb-0">
-                                            <div class="col-sm-auto form-label mb-1">Family Head :</div>
-                                            <div class="col-sm form-data">Yes</div>
-                                            <div class="col-sm-auto form-label mb-1">Family Size :</div>
-                                            <div class="col-sm form-data">5</div>
-                                        </div>
-                                        <p class="mb-1">Migrated : Yes (Bangaore)</p>
-                                        <p class="mb-1">Is Leader : Yes (NCP 5.0)</p>
-                                        <div class="text-end">
-                                            <button class="btn btn-main btn-sm">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-action" aria-current="true">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1 text-main">Agent Name</h6>
-                                            <small class="text-success fw-bold">Not Expired</small>
-                                        </div>
-                                        <p class="mb-1">+9876543102. +9874563210</p>
-                                        <div class="row mb-0">
-                                            <div class="col-sm-auto form-label mb-1">Caste :</div>
-                                            <div class="col-sm form-data">Hindu</div>
-                                            <div class="col-sm-auto form-label mb-1">Religion :</div>
-                                            <div class="col-sm form-data">Dhangar</div>
-                                        </div>
-                                        <div class="row mb-0">
-                                            <div class="col-sm-auto form-label mb-1">Family Head :</div>
-                                            <div class="col-sm form-data">Yes</div>
-                                            <div class="col-sm-auto form-label mb-1">Family Size :</div>
-                                            <div class="col-sm form-data">5</div>
-                                        </div>
-                                        <p class="mb-1">Migrated : Yes (Bangaore)</p>
-                                        <p class="mb-1">Is Leader : Yes (NCP 5.0)</p>
-                                        <div class="text-end">
-                                            <button class="btn btn-main btn-sm">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dashboard-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Agent Name</th>
+                                                <th>Agent Name</th>
+                                                <th>Agent Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>Mobile No. 1</th>
+                                                <td>9876543210</td>
+                                                <td>9876543210</td>
+                                                <td>9876543210</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Mobile No. 2</th>
+                                                <td>9876543210</td>
+                                                <td>9876543210</td>
+                                                <td>9876543210</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Religion</th>
+                                                <td>Hindu</td>
+                                                <td>Hindu</td>
+                                                <td>Hindu</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Caste</th>
+                                                <td>Dhangar</td>
+                                                <td>Maratha</td>
+                                                <td>Koshti</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Family Head</th>
+                                                <td>Yes</td>
+                                                <td>No</td>
+                                                <td>Yes</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Family Size</th>
+                                                <td>4</td>
+                                                <td>2</td>
+                                                <td>3</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Migrated</th>
+                                                <td>Yes</td>
+                                                <td>No</td>
+                                                <td>No</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Leader</th>
+                                                <td>Yes (NCP)</td>
+                                                <td>Yes (NCP)</td>
+                                                <td>Yes (NCP)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Expired</th>
+                                                <td>Yes</td>
+                                                <td>No</td>
+                                                <td>No</td>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <td>
+                                                    <button class="btn btn-main btn-sm">Delete</button>
+                                                </td>
+                                                <td><button class="btn btn-main btn-sm">Delete</button></td>
+                                                <td><button class="btn btn-main btn-sm">Delete</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
