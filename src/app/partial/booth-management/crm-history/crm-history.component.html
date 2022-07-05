@@ -286,7 +286,7 @@
                                             optionValueField="castId" optionTextField="castName" placeholder="Select Caste">
                                         </ngx-select>
                                         </div>
-                                        <div class="col-sm-3" *ngIf="voterListData.AgentId != 0 && voterProfileData?.head != 'no'">
+                                        <div class="col-sm-3" *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes'">
                                             <label class="form-label">Family Head</label>
                                             <div class="d-block">
                                                 <div class="form-check form-check-inline" *ngFor="let head of headCheckArray">
@@ -299,7 +299,7 @@
                                                 <div><small>{{familyHeadName}}</small></div>
                                             </div> -->
                                         </div>
-                                            <div class="col-sm-auto" *ngIf="headhideDiv && voterProfileData?.head == 'yes'"> 
+                                            <div class="col-sm-auto" *ngIf="headhideDiv"> 
                                                 <label class="form-label">Add Family Member</label>
                                                 <div class="d-block">
                                                     <button type="submit" class="btn btn-light btn-sm text-main" data-bs-toggle="modal"
@@ -313,18 +313,22 @@
                                             <table class="table table-hover mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>No.</th>
+                                                        <th>Voter No</th>
                                                         <th>Name</th>
                                                         <th>Mobile No</th>
+                                                        <th>Occupation</th>
+                                                        <th>House No</th>
                                                         <th>Migration</th>
                                                         <!-- <th>Action</th>   -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index" [class.active]="familyMember.voterId == HighlightRow" (click)="editFamilyMemberData(familyMember)">
-                                                        <td>{{i+1}}</td>
-                                                        <td>{{familyMember?.englishName}}</td>
+                                                        <td>{{familyMember?.voterNo}}</td>
+                                                        <td>{{familyMember?.englishName}} <span *ngIf="familyMember?.familyHead == 1">(Head)</span></td>
                                                         <td>{{familyMember?.mobileNo1 ? familyMember?.mobileNo1 : '-'}}</td>
+                                                        <td>{{familyMember?.occupation ? familyMember?.occupation : '-'}}</td>
+                                                        <td>{{familyMember?.houseNo ? familyMember?.houseNo : '-'}}</td>
                                                         <td>{{familyMember?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                                         <!-- <td>
                                                             <button type="submit" class="btn btn-light btn-sm text-main"

@@ -152,7 +152,7 @@ export class CrmHistoryComponent implements OnInit {
   feedbacksList() {
     this.spinner.show();    
     let obj = 'ClientId=' + this.voterListData.ClientId + '&VoterId=' + this.voterListData.VoterId 
-    + '&UserId=' + this.commonService.loggedInUserId() + '&pageno=' + this.feedbacksPaginationNo + '&pagesize=' + this.feedBackPageSize
+    + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&pageno=' + this.feedbacksPaginationNo + '&pagesize=' + this.feedBackPageSize
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFeedbackCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -270,7 +270,7 @@ export class CrmHistoryComponent implements OnInit {
     //.......... get Political Party List ...............//
     getPoliticalPartyList() {
       this.callAPIService.setHttp('get', 'Filter/GetPartyDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
-        + this.commonService.loggedInUserId(), false, false, false, 'electionMicroServiceForWeb');
+        + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           this.politicalPartyArray = res.responseData;   
@@ -285,7 +285,7 @@ export class CrmHistoryComponent implements OnInit {
     //.......... get Religion List ...............//
   getReligionList() {
     this.callAPIService.setHttp('get', 'Filter/GetReligionDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
-      + this.commonService.loggedInUserId(), false, false, false, 'electionMicroServiceForWeb');
+      + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.religionListArray = res.responseData;  
@@ -300,7 +300,7 @@ export class CrmHistoryComponent implements OnInit {
   //.......... get Voter Cast List ...............//
   getVoterCastList(religionId:any) {
     this.callAPIService.setHttp('get', 'Filter/GetCastDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
-      + this.commonService.loggedInUserId() + '&ReligionId=' + religionId, false, false, false, 'electionMicroServiceForWeb');
+      + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&ReligionId=' + religionId, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.VoterCastListArray = res.responseData;
@@ -315,7 +315,7 @@ export class CrmHistoryComponent implements OnInit {
    //.......... get Voter Prominentleader List ...............//
    getProminentleader() {
     this.callAPIService.setHttp('get', 'Filter/GetProminentleaderDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
-      + this.commonService.loggedInUserId(), false, false, false, 'electionMicroServiceForWeb');
+      + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.prominentleaderArray = res.responseData;
@@ -359,7 +359,7 @@ export class CrmHistoryComponent implements OnInit {
      getVoterListforFamilyChild() {  // select family memember Model Api
       if(this.voterListforFamilyChildArray?.length == 0){
       this.spinner.show();
-      let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&VoterId=' + this.voterListData.VoterId +
+      let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&VoterId=' + this.voterListData.VoterId +
       '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim();
       this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj , false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
@@ -426,7 +426,9 @@ export class CrmHistoryComponent implements OnInit {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
           // this.toastrService.success(res.statusMessage);
+          this.getVoterprofileFamilyData();
           this.clearFamilyTree();
+          this.childVoterDetailArray = [];
         } else {
           this.spinner.hide();
         }
@@ -776,8 +778,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
-          this.voterProfileData?.head == "yes" ? this.createFamilyTree() : '';
-          this.getVoterprofileFamilyData();
+          (this.voterProfileData?.head == "yes" || this.voterListData.AgentId == 0) ? this.createFamilyTree() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
@@ -890,7 +891,7 @@ updateContactlist() {
       "isWrongMobileNo": event.target.checked == true ? 1 : 0,
       "mobileNo": mobileNum,
       "clientId": this.voterListData.ClientId,
-      "userId": this.commonService.loggedInUserId()
+      "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()
     }
     if (event.target.checked == true) {
       this.checkUniqueDataContact(obj, mobileNum);
