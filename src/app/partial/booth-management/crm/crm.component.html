@@ -306,6 +306,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Voter No.</th>
+                                                            <th></th>
                                                             <th>Voters Name</th>
                                                             <th>Gender</th>
                                                             <th>Age</th>
@@ -323,6 +324,12 @@
                                                         <tr
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.voterNo}}</td>
+                                                            <td>
+                                                                <span class="fa-stack">
+                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                  </span>
+                                                            </td>
                                                             <td>
                                                                 <p class="mb-0">
                                                                     <a (click)="redirectToVoterPrfile(boothVoterList)"

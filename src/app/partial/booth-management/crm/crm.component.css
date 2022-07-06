@@ -86,4 +86,6 @@
     font-size: 8px;
     background-color: transparent !important;
 }
-
+.fa-stack {
+    font-size: 0.5rem;
+}
