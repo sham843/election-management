@@ -740,7 +740,7 @@ export class CrmHistoryComponent implements OnInit {
         "villageId": this.voterProfileData.villageId,
         "boothId": this.voterProfileData.boothId,
         "assemblyId": this.voterProfileData.assemblyId,
-        "dateOfBirth": this.commonService.setDate(formData.dateOfBirth),
+        "dateOfBirth": formData.dateOfBirth ? this.commonService.setDate(formData.dateOfBirth) : '',
         "comment": formData.comment || "",
         "voterMarking": "",
         "oppCandidateId": 0,
