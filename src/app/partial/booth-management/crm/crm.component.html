@@ -325,10 +325,11 @@
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.voterNo}}</td>
                                                             <td>
-                                                                <span class="fa-stack">
+                                                                <span class="fa-stack" *ngIf="boothVoterList?.isVerified == 1">
                                                                     <i class="fas fa-certificate fa-stack-2x text-info"></i>
                                                                     <i class="fas fa-check fa-stack-1x fa-inverse"></i>
-                                                                  </span>
+                                                                </span>
+                                                                <span *ngIf="boothVoterList?.isVerified == 0"></span>
                                                             </td>
                                                             <td>
                                                                 <p class="mb-0">
@@ -705,6 +706,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Voter No.</th>
+                                                            <th></th>
                                                             <th>Voter Name</th>
                                                             <th>Contact No</th>
                                                             <th>Gender</th>
@@ -717,6 +719,13 @@
                                                     <tbody>
                                                         <tr *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
                                                             <td >{{crmTableList.voterNo}}</td>
+                                                            <td>
+                                                                <span class="fa-stack" *ngIf="crmTableList?.isVerified == 1">
+                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                </span>
+                                                                <span *ngIf="crmTableList?.isVerified == 0"></span>
+                                                            </td>
                                                             <td [ngClass]="{'text-main' : crmTableList.followupstatus == 'Todays Followup','text-success' : crmTableList.followupstatus == 'Upcomming Followup','text-danger' : crmTableList.followupstatus == 'Not To Call','text-info' : crmTableList.followupstatus == 'New', 'text-dark' : crmTableList.followupstatus == 'Missed Followup'}">{{crmTableList.englishName}}</td>
                                                             <td>{{crmTableList.mobileNo1}}</td>
                                                             <td>{{crmTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
