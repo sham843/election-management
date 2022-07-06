@@ -91,7 +91,6 @@ export class CrmHistoryComponent implements OnInit {
   searchAdd = new FormControl('');
 
   familyHeadVoterId:any;
-  familyHeadName:any;
   HighlightRow: any;
   isExpiredVoter = new FormControl('');
 
@@ -230,7 +229,6 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileData = res.responseData;
-        // this.voterProfileData?.head == 'yes' ? this.familyHeadName = this.voterProfileData?.marathiName : '';
         this.editVoterProfileData(this.voterProfileData);
         this.getContactlist(this.voterProfileData);
       } else {
@@ -347,8 +345,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.voterProfileFamilyData = res.responseData;
           this.voterProfileFamilyData.find((ele:any)=>{ //get FamilyHead Name & VoterId 
-            if(ele.familyHead == 1){
-              this.familyHeadName = ele.family;   
+            if(ele.familyHead == 1){  
               this.familyHeadVoterId = ele.voterId;
             }
           })

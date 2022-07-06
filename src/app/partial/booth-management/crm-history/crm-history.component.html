@@ -971,8 +971,8 @@
                                 *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
                                 <td>{{familyChild?.voterNo}}</td>
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
-                                <td>{{familyChild?.houseNo}}</td>
-                                <td>{{familyChild?.boothName ? familyChild?.boothName : ''}}</td>
+                                <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
+                                <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
                                 <td>{{familyChild?.occupation ? familyChild?.occupation : ''}}</td>
                                 <td>
                                     <div class="form-check">
