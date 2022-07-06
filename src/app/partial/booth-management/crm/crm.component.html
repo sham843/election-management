@@ -306,7 +306,6 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Voter No.</th>
-                                                            <th></th>
                                                             <th>Voters Name</th>
                                                             <th>Gender</th>
                                                             <th>Age</th>
@@ -325,24 +324,22 @@
                                                             *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
                                                             <td>{{boothVoterList?.voterNo}}</td>
                                                             <td>
-                                                                <span class="fa-stack" *ngIf="boothVoterList?.isVerified == 1">
-                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
-                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
-                                                                </span>
-                                                                <span *ngIf="boothVoterList?.isVerified == 0"></span>
-                                                            </td>
-                                                            <td>
                                                                 <p class="mb-0">
-                                                                    <a (click)="redirectToVoterPrfile(boothVoterList)"
-                                                                        class="text-main">{{boothVoterList?.englishName}}</a>
+                                                                    <a (click)="redirectToVoterPrfile(boothVoterList)" class="text-main">{{boothVoterList?.englishName}}</a>
                                                                     <small *ngIf="boothVoterList?.familyHead == 'yes'">
                                                                         (Head) </small>
                                                                 </p>
                                                                 <small class="text-muted" *ngIf="!boothVoterList?.localLeader">{{boothVoterList?.partyShortCode}}</small>
-                                                                <small class="text-muted" *ngIf="boothVoterList?.partyShortCode && boothVoterList?.localLeader">{{boothVoterList?.localLeader}}</small>
                                                                 <small class="text-muted"
-                                                                    *ngIf="boothVoterList?.leader == 'yes'">
+                                                                    *ngIf="boothVoterList?.partyShortCode && boothVoterList?.localLeader">{{boothVoterList?.localLeader}}</small>
+                                                                <small class="text-muted" *ngIf="boothVoterList?.leader == 'yes'">
                                                                     {{boothVoterList?.leaderImportance}} <i class='fa fa-star' style='color: #f3da35'></i></small>
+                                                            
+                                                                <span class="fa-stack mr-1" *ngIf="boothVoterList?.isVerified == 1">
+                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                </span>
+                                                                <span *ngIf="boothVoterList?.isVerified == 0"></span>
                                                             </td>
                                                             <td>
                                                                 <div *ngIf="boothVoterList?.gender == 'F'">Female</div>
@@ -444,6 +441,11 @@
                                                                     <div class="col-sm-2">
                                                                         <a (click)="redirectToVoterPrfile(boothFamilyList)"
                                                                             class="text-main">{{boothFamilyList?.englishName}}({{boothFamilyList?.familySize}})</a>
+                                                                        <span class="fa-stack mr-1" *ngIf="boothFamilyList?.isVerified == 1">
+                                                                            <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                            <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                        </span>
+                                                                        <span *ngIf="boothFamilyList?.isVerified == 0"></span>
                                                                     </div>
                                                                     <div class="col-sm-1">
                                                                         <div *ngIf="boothFamilyList?.gender == 'F'">
@@ -706,7 +708,6 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Voter No.</th>
-                                                            <th></th>
                                                             <th>Voter Name</th>
                                                             <th>Contact No</th>
                                                             <th>Gender</th>
@@ -719,14 +720,13 @@
                                                     <tbody>
                                                         <tr *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
                                                             <td >{{crmTableList.voterNo}}</td>
-                                                            <td>
-                                                                <span class="fa-stack" *ngIf="crmTableList?.isVerified == 1">
+                                                            <td><span [ngClass]="{'text-main' : crmTableList.followupstatus == 'Todays Followup','text-success' : crmTableList.followupstatus == 'Upcomming Followup','text-danger' : crmTableList.followupstatus == 'Not To Call','text-info' : crmTableList.followupstatus == 'New', 'text-dark' : crmTableList.followupstatus == 'Missed Followup'}">{{crmTableList.englishName}}</span>
+                                                                <span class="fa-stack mr-1" *ngIf="crmTableList?.isVerified == 1">
                                                                     <i class="fas fa-certificate fa-stack-2x text-info"></i>
                                                                     <i class="fas fa-check fa-stack-1x fa-inverse"></i>
                                                                 </span>
                                                                 <span *ngIf="crmTableList?.isVerified == 0"></span>
                                                             </td>
-                                                            <td [ngClass]="{'text-main' : crmTableList.followupstatus == 'Todays Followup','text-success' : crmTableList.followupstatus == 'Upcomming Followup','text-danger' : crmTableList.followupstatus == 'Not To Call','text-info' : crmTableList.followupstatus == 'New', 'text-dark' : crmTableList.followupstatus == 'Missed Followup'}">{{crmTableList.englishName}}</td>
                                                             <td>{{crmTableList.mobileNo1}}</td>
                                                             <td>{{crmTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
                                                             <td>{{crmTableList.areaName}}</td>
