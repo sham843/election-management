@@ -83,6 +83,7 @@ export class CrmHistoryComponent implements OnInit {
 
   latitude:any;
   longitude:any;
+  previous:any;
   cityName: any;
   addressName:any;
   geocoder: any;
@@ -497,7 +498,7 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   familyHeadRadiobtn(){
-    this.voterProfileForm.value.head == 'yes' ? this.headhideDiv = true : this.headhideDiv = false;
+    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true , this.voterListforFamilyChildArray = [] ): this.headhideDiv = false;
   }
 
   leaderRadiobtn(){
@@ -701,6 +702,7 @@ export class CrmHistoryComponent implements OnInit {
     this.postalVotingCheckBox(data.postalFlag == 1 ? true : false , 'edit');
     this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false ,'edit');
     this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false ,'edit');
+    this.searchAdd.setValue(data.migratedArea);
     this.latitude = data.migratedLatitude;
     this.longitude = data.migratedLongitude;
   }
@@ -870,6 +872,14 @@ findAddress(results:any) {
           this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
         });
   }
+}
+
+
+clickedMarker(infowindow:any) {
+  if (this.previous) {
+      this.previous.close();
+  }
+  this.previous = infowindow;
 }
 
 //.........................................Address to get Pincode Code End Here ....................................//

@@ -961,7 +961,8 @@
                                 <th>Voter No.</th>
                                 <th>Voter Name (Age)</th>
                                 <th>House No</th>
-                                <th>Migrated</th>
+                                <th>Booth Name</th>
+                                <th>Occupation</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -971,7 +972,8 @@
                                 <td>{{familyChild?.voterNo}}</td>
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
                                 <td>{{familyChild?.houseNo}}</td>
-                                <td>{{familyChild?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
+                                <td>{{familyChild?.boothName ? familyChild?.boothName : ''}}</td>
+                                <td>{{familyChild?.occupation ? familyChild?.occupation : ''}}</td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault"
@@ -1122,7 +1124,10 @@
                 <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerDragEnd($event)">
                     <div *ngIf="latitude">
                         <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)"
-                            [markerDraggable]="true">
+                            [markerDraggable]="true" (markerClick)="clickedMarker(infowindow)">
+                            <agm-info-window #infowindow>
+                                <strong>Address -  {{searchAdd.value}}</strong>
+                            </agm-info-window>
                         </agm-marker>
                     </div>
                 </agm-map>
