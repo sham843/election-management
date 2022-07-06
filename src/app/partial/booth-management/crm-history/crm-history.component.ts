@@ -140,6 +140,7 @@ export class CrmHistoryComponent implements OnInit {
     this.getPoliticalPartyList();
     this.searchAddress();
   }
+  
 
   defaultFeedbackForm() {
     this.enterNewFeedbackForm = this.fb.group({
