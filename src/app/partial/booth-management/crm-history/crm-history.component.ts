@@ -381,7 +381,7 @@ export class CrmHistoryComponent implements OnInit {
         this.router.navigate(['../../500'], { relativeTo: this.route });
       })
     }else{
-      this.voterListforFamilyChildArray;
+      this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
     }
     }
 
@@ -389,23 +389,32 @@ export class CrmHistoryComponent implements OnInit {
     this.changedVoterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
       if (ele.voterId == data.voterId && event.target.checked == true) {
         ele.isMember = 1;
-      } else {
-        if (ele.voterId == data.voterId) {
-          ele.isMember = 0;
-        }
-      }
+      } else { if (ele.voterId == data.voterId) { ele.isMember = 0; } }
     })
   }
 
   submitFamilyTree() {
-      this.voterListforFamilyChildArray = [];
-      this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
+    this.voterListforFamilyChildArray = [];
+    this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
+    this.addSelectedFamilyMember();
   }
 
   clearFamilyTree(){
     this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
     this.changedVoterListforFamilyChildArray = [];
     this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
+  }
+
+  addSelectedFamilyMember(){ // Add Selected Family Member in Table Local-Side Code
+    let familyHeadObj: any;
+    this.voterProfileFamilyData.find((ele: any) => { // Get Family Head Obj
+      if (ele.familyHead == 1) { familyHeadObj = ele; }
+    })
+    this.voterProfileFamilyData = [];
+    this.voterProfileFamilyData.push(familyHeadObj); // Push Family Head Obj
+    this.voterListforFamilyChildArray.find((ele: any) => { // Push selected Family Member Obj
+      if (ele.isMember == 1) { this.voterProfileFamilyData.push(ele) }
+    })
   }
 
   createFamilyTree() {
@@ -801,7 +810,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
-          this.voterProfileForm.value.head == 'yes' ? this.createFamilyTree() : '';
+          (this.voterProfileForm.value.head == 'yes' && this.voterListforFamilyChildArray?.length > 0) ? this.createFamilyTree() : '';
           (this.voterProfileData?.head == "yes" && this.voterProfileForm.value.head == 'no') ? this.getVoterprofileFamilyData() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
