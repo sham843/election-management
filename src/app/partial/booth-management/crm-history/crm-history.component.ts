@@ -83,6 +83,7 @@ export class CrmHistoryComponent implements OnInit {
 
   latitude:any;
   longitude:any;
+  previous:any;
   cityName: any;
   addressName:any;
   geocoder: any;
@@ -90,7 +91,6 @@ export class CrmHistoryComponent implements OnInit {
   searchAdd = new FormControl('');
 
   familyHeadVoterId:any;
-  familyHeadName:any;
   HighlightRow: any;
   isExpiredVoter = new FormControl('');
 
@@ -229,7 +229,6 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileData = res.responseData;
-        // this.voterProfileData?.head == 'yes' ? this.familyHeadName = this.voterProfileData?.marathiName : '';
         this.editVoterProfileData(this.voterProfileData);
         this.getContactlist(this.voterProfileData);
       } else {
@@ -346,8 +345,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.voterProfileFamilyData = res.responseData;
           this.voterProfileFamilyData.find((ele:any)=>{ //get FamilyHead Name & VoterId 
-            if(ele.familyHead == 1){
-              this.familyHeadName = ele.family;   
+            if(ele.familyHead == 1){  
               this.familyHeadVoterId = ele.voterId;
             }
           })
@@ -497,7 +495,7 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   familyHeadRadiobtn(){
-    this.voterProfileForm.value.head == 'yes' ? this.headhideDiv = true : this.headhideDiv = false;
+    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true , this.voterListforFamilyChildArray = [] ): this.headhideDiv = false;
   }
 
   leaderRadiobtn(){
@@ -701,6 +699,7 @@ export class CrmHistoryComponent implements OnInit {
     this.postalVotingCheckBox(data.postalFlag == 1 ? true : false , 'edit');
     this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false ,'edit');
     this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false ,'edit');
+    this.searchAdd.setValue(data.migratedArea);
     this.latitude = data.migratedLatitude;
     this.longitude = data.migratedLongitude;
   }
@@ -802,7 +801,8 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
-          (this.voterProfileData?.head == "yes" || this.voterListData.AgentId == 0) ? this.createFamilyTree() : '';
+          this.voterProfileForm.value.head == 'yes' ? this.createFamilyTree() : '';
+          (this.voterProfileData?.head == "yes" && this.voterProfileForm.value.head == 'no') ? this.getVoterprofileFamilyData() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
@@ -869,6 +869,14 @@ findAddress(results:any) {
           this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
         });
   }
+}
+
+
+clickedMarker(infowindow:any) {
+  if (this.previous) {
+      this.previous.close();
+  }
+  this.previous = infowindow;
 }
 
 //.........................................Address to get Pincode Code End Here ....................................//
