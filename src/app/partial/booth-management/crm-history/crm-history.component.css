@@ -60,3 +60,9 @@
 agm-map {
   height: 300px;
 }
+.fa-stack{
+  font-size: 0.5rem;
+}
+.bg-light-success{
+  background-color:#e0fff1!important ;
+}
