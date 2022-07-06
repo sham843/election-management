@@ -802,7 +802,8 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
-          (this.voterProfileData?.head == "yes" || this.voterListData.AgentId == 0) ? this.createFamilyTree() : '';
+          this.voterProfileForm.value.head == 'yes' ? this.createFamilyTree() : '';
+          (this.voterProfileData?.head == "yes" && this.voterProfileForm.value.head == 'no') ? this.getVoterprofileFamilyData() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);

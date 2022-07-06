@@ -960,6 +960,7 @@
                             <tr>
                                 <th>Voter No.</th>
                                 <th>Voter Name (Age)</th>
+                                <th>House No</th>
                                 <th>Migrated</th>
                                 <th></th>
                             </tr>
@@ -969,6 +970,7 @@
                                 *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
                                 <td>{{familyChild?.voterNo}}</td>
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
+                                <td>{{familyChild?.houseNo}}</td>
                                 <td>{{familyChild?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
                                 <td>
                                     <div class="form-check">
