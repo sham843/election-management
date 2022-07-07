@@ -977,7 +977,7 @@
                 <div class="form-container">
                     <div class="input-group mb-3">
                         <input class="form-control" type="text" placeholder="Select By Voter Name"
-                            [(ngModel)]="familyMembersFilter.englishName">
+                            [(ngModel)]="familyMembersFilter.englishName" (keyup)="commonService.removeSpaceAtBegining($event)">
                         <button type="button" class="btn btn-light">
                             <i class="fas fa-search"></i>
                         </button>

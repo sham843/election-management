@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild,NgZone, ElementRef} from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { MapsAPILoader,MouseEvent } from '@agm/core';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
 import { now } from '@amcharts/amcharts4/.internal/core/utils/Time';
 import { DeleteComponent } from '../../dialogs/delete/delete.component';
@@ -43,28 +43,28 @@ export class CrmHistoryComponent implements OnInit {
   nameCorrectionDivHide: boolean = false;
   disableDiv: boolean = true;
   expiredDisableDiv: boolean = false;
-  prominentleaderArray:any;  
-  VoterCastListArray:any;
-  religionListArray:any;
-  politicalPartyArray:any;
+  prominentleaderArray: any;
+  VoterCastListArray: any;
+  religionListArray: any;
+  politicalPartyArray: any;
 
-  voterListforFamilyChildArray:any[]=[];
-  changedVoterListforFamilyChildArray:any[]=[];
+  voterListforFamilyChildArray: any[] = [];
+  changedVoterListforFamilyChildArray: any[] = [];
   searchFamilyChield = new FormControl('');
   subjectSearchFamilyC: Subject<any> = new Subject();
-  checkFamilyMemberClearFlag:boolean = false;
-  checkFamilyMemberClearFlag123:boolean = false;
+  checkFamilyMemberClearFlag: boolean = false;
+  checkFamilyMemberClearFlag123: boolean = false;
 
   ratingStarArray = [{ id: 1, name: '1.0' }, { id: 2, name: '2.0' }, { id: 3, name: '3.0' }, { id: 4, name: '4.0' }, { id: 5, name: '5.0' }];
-  headCheckArray = ['yes','no'];
-  leaderCheckArray = ['yes','no'];
-  migratedCheckArray = ['yes','no'];
-  headhideDiv:boolean = false;  
-  leaderhideDiv:boolean = false;
-  businessDethideDiv:boolean = false;
-  migratedhideDiv:boolean = false;
-  postalVotingDivHide:boolean = false;
-  needSupportDivHide:boolean = false;
+  headCheckArray = ['yes', 'no'];
+  leaderCheckArray = ['yes', 'no'];
+  migratedCheckArray = ['yes', 'no'];
+  headhideDiv: boolean = false;
+  leaderhideDiv: boolean = false;
+  businessDethideDiv: boolean = false;
+  migratedhideDiv: boolean = false;
+  postalVotingDivHide: boolean = false;
+  needSupportDivHide: boolean = false;
   dairyFarmerArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   goatSheepFarmerArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   sugarCaneCutterArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
@@ -74,34 +74,34 @@ export class CrmHistoryComponent implements OnInit {
   vehicleArray = [{ id: 1, name: 'Bike' }, { id: 2, name: 'Family Car' }, { id: 3, name: 'None' }];
   financialConditionArray = [{ id: 1, name: 'Low' }, { id: 2, name: 'Middle' }, { id: 3, name: 'High' }];
   padvidharArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }]; //Is Graduate
-  Ispadvidhar:any;
-  bloodGroupArray = [{ id: 0, name: 'A+' }, { id: 1, name: 'A-' }, { id: 2, name: 'B+' },{ id: 3, name: 'B-' },
-     { id: 4, name: 'O+' }, { id: 5, name: 'O-' }, { id: 6, name: 'AB+' }, { id: 7, name: 'AB-' }];
+  Ispadvidhar: any;
+  bloodGroupArray = [{ id: 0, name: 'A+' }, { id: 1, name: 'A-' }, { id: 2, name: 'B+' }, { id: 3, name: 'B-' },
+  { id: 4, name: 'O+' }, { id: 5, name: 'O-' }, { id: 6, name: 'AB+' }, { id: 7, name: 'AB-' }];
   childVoterDetailArray: any[] = [];
   checkedchildVoterflag: boolean = true;
-  isNameCorrectionId:any;
+  isNameCorrectionId: any;
 
-  latitude:any;
-  longitude:any;
-  previous:any;
+  latitude: any;
+  longitude: any;
+  previous: any;
   cityName: any;
-  addressName:any;
+  addressName: any;
   geocoder: any;
   @ViewChild('search') public searchElementRef!: ElementRef;
   searchAdd = new FormControl('');
 
-  familyHeadVoterId:any;
+  familyHeadVoterId: any;
   HighlightRow: any;
   isExpiredVoter = new FormControl('');
 
-  contactlistArray:any;
+  contactlistArray: any;
   wrongMobileNumberArray: any[] = [];
   checkWrongMobileNflag: boolean = true;
 
   familyMembersFilter: any = { englishName: '' };
-  isConflictCheckFlag:any;
-  conflictDataArray:any;
-  conflictRecordDelObj:any;
+  isConflictCheckFlag: any;
+  conflictDataArray: any;
+  conflictRecordDelObj: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -121,9 +121,11 @@ export class CrmHistoryComponent implements OnInit {
 
     let getUrlData: any = this.route.snapshot.params.id;
     if (getUrlData) {
-      getUrlData = getUrlData.split('.'); 
-      this.voterListData = { 'AgentId': +getUrlData[0], 'ClientId': +getUrlData[1], 'VoterId': +getUrlData[2] 
-      , 'ElectionId': +getUrlData[3], 'ConstituencyId': +getUrlData[4]}
+      getUrlData = getUrlData.split('.');
+      this.voterListData = {
+        'AgentId': +getUrlData[0], 'ClientId': +getUrlData[1], 'VoterId': +getUrlData[2]
+        , 'ElectionId': +getUrlData[3], 'ConstituencyId': +getUrlData[4]
+      }
     }
   }
 
@@ -140,7 +142,6 @@ export class CrmHistoryComponent implements OnInit {
     this.getPoliticalPartyList();
     this.searchAddress();
   }
-  
 
   defaultFeedbackForm() {
     this.enterNewFeedbackForm = this.fb.group({
@@ -157,9 +158,9 @@ export class CrmHistoryComponent implements OnInit {
   //............................. Get Feedbacks List................................//
 
   feedbacksList() {
-    this.spinner.show();    
-    let obj = 'ClientId=' + this.voterListData.ClientId + '&VoterId=' + this.voterListData.VoterId 
-    + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&pageno=' + this.feedbacksPaginationNo + '&pagesize=' + this.feedBackPageSize
+    this.spinner.show();
+    let obj = 'ClientId=' + this.voterListData.ClientId + '&VoterId=' + this.voterListData.VoterId
+      + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&pageno=' + this.feedbacksPaginationNo + '&pagesize=' + this.feedBackPageSize
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFeedbackCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -188,9 +189,9 @@ export class CrmHistoryComponent implements OnInit {
       let data = this.enterNewFeedbackForm.value;
       data.NotToCall == true ? data.NotToCall = 1 : data.NotToCall = 0;
 
-    let obj = {
+      let obj = {
         "id": data.Id,
-        "voterId": this.voterListData.VoterId ,
+        "voterId": this.voterListData.VoterId,
         "feedBackDate": new Date(),
         "feedBackType": data.FeedBackType,
         "description": data.Description,
@@ -224,7 +225,7 @@ export class CrmHistoryComponent implements OnInit {
   getVoterProfileData() {
     this.spinner.show();
     let obj = 'ClientId=' + this.voterListData.ClientId +
-      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId ;
+      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId;
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRM?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -245,8 +246,8 @@ export class CrmHistoryComponent implements OnInit {
 
   getVPPoliticalInfluenceData() {
     this.spinner.show();
-    let obj = 'ClientId=' + this.voterListData.ClientId + 
-    '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
+    let obj = 'ClientId=' + this.voterListData.ClientId +
+      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterProfileCRMVoterComments?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -274,28 +275,28 @@ export class CrmHistoryComponent implements OnInit {
     this.feedbacksList();
   }
 
-    //.......... get Political Party List ...............//
-    getPoliticalPartyList() {
-      this.callAPIService.setHttp('get', 'Filter/GetPartyDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
-        + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.politicalPartyArray = res.responseData;   
-        } else {
-          this.politicalPartyArray = [];
-        }
-      }, (error: any) => {
-        this.router.navigate(['../../500'], { relativeTo: this.route });
-      })
-    }
+  //.......... get Political Party List ...............//
+  getPoliticalPartyList() {
+    this.callAPIService.setHttp('get', 'Filter/GetPartyDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
+      + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.politicalPartyArray = res.responseData;
+      } else {
+        this.politicalPartyArray = [];
+      }
+    }, (error: any) => {
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
 
-    //.......... get Religion List ...............//
+  //.......... get Religion List ...............//
   getReligionList() {
     this.callAPIService.setHttp('get', 'Filter/GetReligionDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
       + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
-        this.religionListArray = res.responseData;  
+        this.religionListArray = res.responseData;
       } else {
         this.religionListArray = [];
       }
@@ -305,7 +306,7 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   //.......... get Voter Cast List ...............//
-  getVoterCastList(religionId:any) {
+  getVoterCastList(religionId: any) {
     this.callAPIService.setHttp('get', 'Filter/GetCastDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
       + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&ReligionId=' + religionId, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -319,8 +320,8 @@ export class CrmHistoryComponent implements OnInit {
     })
   }
 
-   //.......... get Voter Prominentleader List ...............//
-   getProminentleader() {
+  //.......... get Voter Prominentleader List ...............//
+  getProminentleader() {
     this.callAPIService.setHttp('get', 'Filter/GetProminentleaderDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
       + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -334,42 +335,42 @@ export class CrmHistoryComponent implements OnInit {
     })
   }
 
-    //............. get get Voterprofile Family Data ...............//    
+  //............. get get Voterprofile Family Data ...............//    
 
-    getVoterprofileFamilyData() {
-      this.spinner.show();
-      let obj = 'ClientId=' + this.voterListData.ClientId + 
-      '&AgentId='+ this.voterListData.AgentId + '&VoterId='+ this.voterListData.VoterId 
-      this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFamilyMemberCRM?' + obj, false, false, false, 'electionMicroSerApp');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.spinner.hide();
-          this.voterProfileFamilyData = res.responseData;
-          this.voterProfileFamilyData.find((ele:any)=>{ //get FamilyHead Name & VoterId 
-            if(ele.familyHead == 1){  
-              this.familyHeadVoterId = ele.voterId;
-            }
-          })
-        } else {
-          this.voterProfileFamilyData = [];
-          this.spinner.hide();
-        }
-      }, (error: any) => {
+  getVoterprofileFamilyData() {
+    this.spinner.show();
+    let obj = 'ClientId=' + this.voterListData.ClientId +
+      '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterFamilyMemberCRM?' + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.router.navigate(['../../500'], { relativeTo: this.route });
-      })
-    }
+        this.voterProfileFamilyData = res.responseData;
+        this.voterProfileFamilyData.find((ele: any) => { //get FamilyHead Name & VoterId 
+          if (ele.familyHead == 1) {
+            this.familyHeadVoterId = ele.voterId;
+          }
+        })
+      } else {
+        this.voterProfileFamilyData = [];
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
 
-     //.......... get Voter for Family Child List Code Start...............//
+  //.......... get Voter for Family Child List Code Start...............//
 
-     getVoterListforFamilyChild() {  // select family memember Model Api
-      if(this.voterListforFamilyChildArray?.length == 0){
+  getVoterListforFamilyChild() {  // select family memember Model Api
+    if (this.voterListforFamilyChildArray?.length == 0) {
       this.spinner.show();
       let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&VoterId=' + this.voterListData.VoterId +
-      '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId  + '&Search=' +  this.searchFamilyChield.value.trim();
-      this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj , false, false, false, 'electionMicroServiceForWeb');
+        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId + '&Search=' + this.searchFamilyChield.value.trim();
+      this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj, false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {  
+        if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
           this.voterListforFamilyChildArray = res.responseData;
           this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
@@ -381,10 +382,10 @@ export class CrmHistoryComponent implements OnInit {
         this.spinner.hide();
         this.router.navigate(['../../500'], { relativeTo: this.route });
       })
-    }else{
+    } else {
       this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
     }
-    }
+  }
 
   onCheckChangeChildVoterDetail(event: any, data: any) {
     this.changedVoterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
@@ -397,16 +398,18 @@ export class CrmHistoryComponent implements OnInit {
   submitFamilyTree() {
     this.voterListforFamilyChildArray = [];
     this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
+    this.familyMembersFilter.englishName = '';
     this.addSelectedFamilyMember();
   }
 
-  clearFamilyTree(){
+  clearFamilyTree() {
     this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
     this.changedVoterListforFamilyChildArray = [];
     this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
+    this.familyMembersFilter.englishName = '';
   }
 
-  addSelectedFamilyMember(){ // Add Selected Family Member in Table Local-Side Code
+  addSelectedFamilyMember() { // Add Selected Family Member in Table Local-Side Code
     let familyHeadObj: any;
     this.voterProfileFamilyData.find((ele: any) => { // Get Family Head Obj
       if (ele.familyHead == 1) { familyHeadObj = ele; }
@@ -419,9 +422,9 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   createFamilyTree() {
-    this.voterListforFamilyChildArray.map((ele:any)=>{ //get value in obj1 (checked = true) 
-      if(ele.isMember == 1){
-        let obj1 =  {
+    this.voterListforFamilyChildArray.map((ele: any) => { //get value in obj1 (checked = true) 
+      if (ele.isMember == 1) {
+        let obj1 = {
           "childVoterId": ele.voterId,
           "voter_uid": ele.voterId,
           "voter_no": ele.voterNo,
@@ -438,42 +441,40 @@ export class CrmHistoryComponent implements OnInit {
       "clientId": this.voterListData.ClientId,
       "childVoterDetails": this.childVoterDetailArray
     }
-      this.callAPIService.setHttp('POST', 'ClientMasterWebApi/VoterCRM/CreateFamilyTree', false, obj, false, 'electionMicroSerApp');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.spinner.hide();
-          // this.toastrService.success(res.statusMessage);
-          this.getVoterprofileFamilyData();
-          this.clearFamilyTree();
-          this.childVoterDetailArray = [];
-        } else {
-          this.spinner.hide();
-        }
-      }, (error: any) => {
+    this.callAPIService.setHttp('POST', 'ClientMasterWebApi/VoterCRM/CreateFamilyTree', false, obj, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.router.navigate(['../../500'], { relativeTo: this.route });
-      })
-    }
+        // this.toastrService.success(res.statusMessage);
+        this.getVoterprofileFamilyData();
+        this.clearFamilyTree();
+        this.childVoterDetailArray = [];
+      } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
 
-    //.......... get Voter for Family Child List Code End...............//
-    
+  //.......... get Voter for Family Child List Code End...............//
 
-                              //....... Voter Profile form code Start Here........//
-
+  //....... Voter Profile form code Start Here........//
 
   isExpiredCheckBox(event: any) {
     let flag = event.target.checked;
     flag == true ? this.expiredDisableDiv = true : this.expiredDisableDiv = false;
   }
 
-  nameCorrectionCheckBox(event: any , flag:any) {
-    let checkflag = (flag == 'noEdit' ? event.target.checked : event );
+  nameCorrectionCheckBox(event: any, flag: any) {
+    let checkflag = (flag == 'noEdit' ? event.target.checked : event);
     checkflag == true ? this.nameCorrectionDivHide = true : this.nameCorrectionDivHide = false;
-    this.isNameCorrectionId = checkflag == true ? 1 : 0 ;
+    this.isNameCorrectionId = checkflag == true ? 1 : 0;
     if (checkflag == true) {
-      this.voterProfileForm.controls["elName"].setValidators([Validators.required,Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["elName"].setValidators([Validators.required, Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["elName"].updateValueAndValidity();
-      this.voterProfileForm.controls["efName"].setValidators([Validators.required,Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["efName"].setValidators([Validators.required, Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["efName"].updateValueAndValidity();
       this.voterProfileForm.controls["emName"].setValidators([Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["emName"].updateValueAndValidity();
@@ -504,35 +505,35 @@ export class CrmHistoryComponent implements OnInit {
     }
   }
 
-  familyHeadRadiobtn(){
-    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true , this.voterListforFamilyChildArray = [] ): this.headhideDiv = false;
+  familyHeadRadiobtn() {
+    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true, this.voterListforFamilyChildArray = []) : this.headhideDiv = false;
   }
 
-  leaderRadiobtn(){
+  leaderRadiobtn() {
     this.voterProfileForm.value.leader == 'yes' ? this.leaderhideDiv = true : this.leaderhideDiv = false;
-      if (this.voterProfileForm.value.leader == 'yes') {
-        this.voterProfileForm.controls["leaderImportance"].setValidators([Validators.required]);
-        this.voterProfileForm.controls["leaderImportance"].updateValueAndValidity();
-      } else {
-        this.voterProfileForm.controls['leaderImportance'].setValue('');
-        this.voterProfileForm.controls['leaderImportance'].clearValidators();
-        this.voterProfileForm.controls['leaderImportance'].updateValueAndValidity();
-      }
+    if (this.voterProfileForm.value.leader == 'yes') {
+      this.voterProfileForm.controls["leaderImportance"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["leaderImportance"].updateValueAndValidity();
+    } else {
+      this.voterProfileForm.controls['leaderImportance'].setValue('');
+      this.voterProfileForm.controls['leaderImportance'].clearValidators();
+      this.voterProfileForm.controls['leaderImportance'].updateValueAndValidity();
+    }
   }
 
-  businesDetRadiobtn(){
+  businesDetRadiobtn() {
     this.voterProfileForm.value.haveBusiness == 1 ? this.businessDethideDiv = true : this.businessDethideDiv = false;
-      if (this.voterProfileForm.value.haveBusiness == 1) {
-        this.voterProfileForm.controls["businnessDetails"].setValidators([Validators.required]);
-        this.voterProfileForm.controls["businnessDetails"].updateValueAndValidity();
-      } else {
-        this.voterProfileForm.controls['businnessDetails'].setValue('');
-        this.voterProfileForm.controls['businnessDetails'].clearValidators();
-        this.voterProfileForm.controls['businnessDetails'].updateValueAndValidity();
-      }
+    if (this.voterProfileForm.value.haveBusiness == 1) {
+      this.voterProfileForm.controls["businnessDetails"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["businnessDetails"].updateValueAndValidity();
+    } else {
+      this.voterProfileForm.controls['businnessDetails'].setValue('');
+      this.voterProfileForm.controls['businnessDetails'].clearValidators();
+      this.voterProfileForm.controls['businnessDetails'].updateValueAndValidity();
+    }
   }
 
-  migratedRadiobtn(){//migratedArea
+  migratedRadiobtn() {//migratedArea
     this.voterProfileForm.value.migrated == 'yes' ? this.migratedhideDiv = true : this.migratedhideDiv = false;
     if (this.voterProfileForm.value.migrated == 'yes') {
       this.voterProfileForm.controls["migratedCity"].setValidators([Validators.required]);
@@ -552,8 +553,8 @@ export class CrmHistoryComponent implements OnInit {
     }
   }
 
-  postalVotingCheckBox(event: any , flag:any) {
-    let checkflag = (flag == 'noEdit' ? event.target.checked : event );
+  postalVotingCheckBox(event: any, flag: any) {
+    let checkflag = (flag == 'noEdit' ? event.target.checked : event);
     checkflag == true ? this.postalVotingDivHide = true : this.postalVotingDivHide = false;
 
     if (checkflag == true) {
@@ -566,8 +567,8 @@ export class CrmHistoryComponent implements OnInit {
     }
   }
 
-  needSupportCheckBox(event: any , flag:any) {
-    let checkflag = (flag == 'noEdit' ? event.target.checked : event );
+  needSupportCheckBox(event: any, flag: any) {
+    let checkflag = (flag == 'noEdit' ? event.target.checked : event);
     checkflag == true ? this.needSupportDivHide = true : this.needSupportDivHide = false;
 
     if (checkflag == true) {
@@ -580,16 +581,14 @@ export class CrmHistoryComponent implements OnInit {
     }
   }
 
-
   get v() { return this.voterProfileForm.controls };
 
   defaultvoterProfileForm() {
     this.voterProfileForm = this.fb.group({
-
       Id: [''],
-      mobileNo1: ['',[Validators.pattern('[6-9]\\d{9}')]],
-      mobileNo2: ['',[Validators.pattern('[6-9]\\d{9}')]],
-      email: ['',[Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]],
+      mobileNo1: ['', [Validators.pattern('[6-9]\\d{9}')]],
+      mobileNo2: ['', [Validators.pattern('[6-9]\\d{9}')]],
+      email: ['', [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]],
       castId: [''],
       partyId: [''],
       religionId: [''],
@@ -641,17 +640,17 @@ export class CrmHistoryComponent implements OnInit {
 
   editFamilyMemberData(obj: any) {  //open new tab family member details
     this.HighlightRow = obj.voterId;
-    if(obj.voterId != this.voterListData.VoterId){
-    window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId);
+    if (obj.voterId != this.voterListData.VoterId) {
+      window.open('crm-history/' + obj.agentId + '.' + obj.clientId + '.' + obj.voterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId);
     }
   }
 
-  editVoterProfileData(data:any) {
-    this.voterProfileForm.patchValue({  
+  editVoterProfileData(data: any) {
+    this.voterProfileForm.patchValue({
       Id: this.voterProfileData.serverId,
       mobileNo1: data?.mobileNo1,
       mobileNo2: data?.mobileNo2,
-      email:data.email,
+      email: data.email,
       castId: data.castId,
       partyId: data.partyId,
       religionId: data.religionId,
@@ -700,15 +699,15 @@ export class CrmHistoryComponent implements OnInit {
       businnessDetails: data.businnessDetails,
     })
     this.isExpiredVoter.setValue(data.isExpired);
-    data.isExpired == 1 ? this.expiredDisableDiv = true : this.expiredDisableDiv = false ;
+    data.isExpired == 1 ? this.expiredDisableDiv = true : this.expiredDisableDiv = false;
     data.religionId ? this.getVoterCastList(data.religionId) : '';
     this.familyHeadRadiobtn();
     this.leaderRadiobtn();
     this.migratedRadiobtn();
     this.businesDetRadiobtn();
-    this.postalVotingCheckBox(data.postalFlag == 1 ? true : false , 'edit');
-    this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false ,'edit');
-    this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false ,'edit');
+    this.postalVotingCheckBox(data.postalFlag == 1 ? true : false, 'edit');
+    this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false, 'edit');
+    this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false, 'edit');
     this.searchAdd.setValue(data.migratedArea);
     this.latitude = data.migratedLatitude;
     this.longitude = data.migratedLongitude;
@@ -721,7 +720,7 @@ export class CrmHistoryComponent implements OnInit {
       this.spinner.hide();
       return;
     } else {
-      let isDeleteFamilyMember = (this.voterProfileData?.head == 'yes' && formData.head == 'no') ? 1 : 0 ;
+      let isDeleteFamilyMember = (this.voterProfileData?.head == 'yes' && formData.head == 'no') ? 1 : 0;
 
       let obj = {
         "serverId": this.voterProfileData.serverId,
@@ -732,7 +731,7 @@ export class CrmHistoryComponent implements OnInit {
         "email": formData.email || '',
         "followers": "",
         "castId": formData.castId || 0,
-        "partyId": formData.partyId || 0, 
+        "partyId": formData.partyId || 0,
         "familysize": this.voterProfileData.familySize.toString(),
         "religionId": formData.religionId || 0,
         "partyAffection": "",
@@ -758,10 +757,10 @@ export class CrmHistoryComponent implements OnInit {
         "latitude": this.latitude || 0,
         "longitude": this.longitude || 0,
         "voterNo": this.voterProfileData.voterNo.toString(),
-        "nickName":  formData.nickName || '',
-        "clientId":  this.voterListData?.ClientId,
-        "migrated": formData.migrated || '', 
-        "area": formData.migratedArea ? formData.migratedArea : formData.area, 
+        "nickName": formData.nickName || '',
+        "clientId": this.voterListData?.ClientId,
+        "migrated": formData.migrated || '',
+        "area": formData.migratedArea ? formData.migratedArea : formData.area,
         "migratedLatitude": this.latitude ? this.latitude : this.voterProfileData.migratedLatitude || 0,
         "migratedLongitude": this.longitude ? this.longitude : this.voterProfileData.migratedLongitude || 0,
         "surveyDate": new Date(),
@@ -790,7 +789,7 @@ export class CrmHistoryComponent implements OnInit {
         "isYuvak": formData.isYuvak,
         "financialCondition": formData.financialCondition,
         "businnessDetails": formData.businnessDetails,
-        "isExpired": this.isExpiredVoter.value == true ? 1 : 0,   
+        "isExpired": this.isExpiredVoter.value == true ? 1 : 0,
         "prominentLeaderId": formData.prominentLeaderId || 0,
         "whyIsPostal": formData.whyIsPostal,
         "isWrongMobileNo": 0,
@@ -828,90 +827,89 @@ export class CrmHistoryComponent implements OnInit {
     }
   }
 
- //.........................................Address to get Pincode Code Start Here ..................................................//
+  //.........................................Address to get Pincode Code Start Here ..................................................//
 
- searchAddress() {
-  this.mapsAPILoader.load().then(() => {
-    this.geocoder = new google.maps.Geocoder();
-    let autocomplete = new google.maps.places.Autocomplete(
-      this.searchElementRef.nativeElement
-    );
-    autocomplete.addListener('place_changed', () => {
-      this.ngZone.run(() => {
-        let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-        if (place.geometry === undefined || place.geometry === null) {
-          return;
-        }
-        this.latitude = place.geometry.location.lat();
-        this.longitude = place.geometry.location.lng();
-        this.findAddressByCoordinates();
+  searchAddress() {
+    this.mapsAPILoader.load().then(() => {
+      this.geocoder = new google.maps.Geocoder();
+      let autocomplete = new google.maps.places.Autocomplete(
+        this.searchElementRef.nativeElement
+      );
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.findAddressByCoordinates();
+        });
       });
     });
-  });
-}
-
-markerDragEnd($event: MouseEvent) {
-  this.latitude = $event.coords.lat;
-  this.longitude = $event.coords.lng;
-  this.findAddressByCoordinates();
-}
-
-findAddressByCoordinates() {
-  this.geocoder.geocode({
-    'location': {
-      lat: this.latitude,
-      lng: this.longitude
-    }
-  }, (results:any) => {
-    this.findAddress(results[0]);
-  });
-}
-
-findAddress(results:any) {
-  if(results){
-    this.addressName = results.formatted_address;
-        results.address_components.forEach((element: any) => {
-           if (element.types[0] == "locality") {
-            this.cityName = element.long_name;
-          }
-          this.searchAdd.setValue(this.addressName);
-          this.voterProfileForm.controls['migratedCity'].setValue(this.cityName);
-          this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
-        });
   }
-}
 
+  markerDragEnd($event: MouseEvent) {
+    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lng;
+    this.findAddressByCoordinates();
+  }
 
-clickedMarker(infowindow:any) {
-  if (this.previous) {
+  findAddressByCoordinates() {
+    this.geocoder.geocode({
+      'location': {
+        lat: this.latitude,
+        lng: this.longitude
+      }
+    }, (results: any) => {
+      this.findAddress(results[0]);
+    });
+  }
+
+  findAddress(results: any) {
+    if (results) {
+      this.addressName = results.formatted_address;
+      results.address_components.forEach((element: any) => {
+        if (element.types[0] == "locality") {
+          this.cityName = element.long_name;
+        }
+        this.searchAdd.setValue(this.addressName);
+        this.voterProfileForm.controls['migratedCity'].setValue(this.cityName);
+        this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
+      });
+    }
+  }
+
+  clickedMarker(infowindow: any) {
+    if (this.previous) {
       this.previous.close();
-  }
-  this.previous = infowindow;
-}
-
-//.........................................Address to get Pincode Code End Here ....................................//
-
-//.........................................Please tick wrong mobile Start Here ....................................//
-
- getContactlist(data:any) {  
-  this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterContactlist?ClientId=' + this.voterListData?.ClientId + '&AgentId='
-    + data?.agentId + '&VoterId=' + data?.voterId, false, false, false, 'electionMicroSerApp');
-  this.callAPIService.getHttp().subscribe((res: any) => {
-    if (res.responseData != null && res.statusCode == "200") {
-      this.contactlistArray = res.responseData;
-    } else {
-      this.contactlistArray = [];
     }
-  }, (error: any) => {
-    this.router.navigate(['../../500'], { relativeTo: this.route });
-  })
-}
-
-updateContactlist() {
-  if (this.wrongMobileNumberArray.length == 0){
-    this.toastrService.error('Please Select at Least One Number');
-     return;
+    this.previous = infowindow;
   }
+
+  //.........................................Address to get Pincode Code End Here ....................................//
+
+  //.........................................Please tick wrong mobile Start Here ....................................//
+
+  getContactlist(data: any) {
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetVoterContactlist?ClientId=' + this.voterListData?.ClientId + '&AgentId='
+      + data?.agentId + '&VoterId=' + data?.voterId, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.contactlistArray = res.responseData;
+      } else {
+        this.contactlistArray = [];
+      }
+    }, (error: any) => {
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
+
+  updateContactlist() {
+    if (this.wrongMobileNumberArray.length == 0) {
+      this.toastrService.error('Please Select at Least One Number');
+      return;
+    }
     this.callAPIService.setHttp('PUT', 'ClientMasterApp/VoterList/SetIsWrongMobile', false, this.wrongMobileNumberArray, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -928,7 +926,7 @@ updateContactlist() {
   }
 
   onCheckWrongContactNumber(event: any, mobileNum: any) {
-    let obj =  {
+    let obj = {
       "voterId": this.voterProfileData.voterId,
       "isWrongMobileNo": event.target.checked == true ? 1 : 0,
       "mobileNo": mobileNum,
@@ -958,65 +956,62 @@ updateContactlist() {
     this.checkWrongMobileNflag && this.wrongMobileNumberArray.length >= 1 ? this.wrongMobileNumberArray.push(obj) : '';
   }
 
+  //.........................................Please tick wrong mobile End Here ....................................// 
 
-//.........................................Please tick wrong mobile End Here ....................................// 
+  //.........................................Conflicted Data Code Start Here ....................................// 
 
-//.........................................Conflicted Data Code Start Here ....................................// 
-
-getIsConflictDataFlag() {  
-  this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetIsConflictData?ClientId=' + this.voterListData?.ClientId + '&AgentId='
-    + this.voterListData?.AgentId + '&VoterId=' + this.voterListData?.VoterId, false, false, false, 'electionMicroSerApp');
-  this.callAPIService.getHttp().subscribe((res: any) => {
-    if (res.responseData != null && res.statusCode == "200") {
-      this.isConflictCheckFlag = res.responseData.isConflict;
-      this.isConflictCheckFlag == 1 ?  this.getConflictData() : '';
-    } else {
-      this.isConflictCheckFlag = '';
-    }
-  }, (error: any) => {
-    this.router.navigate(['../../500'], { relativeTo: this.route });
-  })
-}
-
-getConflictData() {  
-  this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetConflictData?ClientId=' + this.voterListData?.ClientId + '&VoterId=' + this.voterListData?.VoterId, false, false, false, 'electionMicroSerApp');
-  this.callAPIService.getHttp().subscribe((res: any) => {
-    if (res.responseData != null && res.statusCode == "200") {
-      this.conflictDataArray = res.responseData;
-    } else {
-      this.conflictDataArray = [];
-    }
-  }, (error: any) => {
-    this.router.navigate(['../../500'], { relativeTo: this.route });
-  })
-}
-
-
-deleteConfirmModel(obj:any) {
-  this.conflictRecordDelObj = obj;
-  const dialogRef = this.dialog.open(DeleteComponent);
-  dialogRef.afterClosed().subscribe(result => {
-    if (result == 'Yes') {
-      this.deleteNotifications();
-    }
-  });
-} 
-
-deleteNotifications() {
-    this.callAPIService.setHttp('DELETE', 'ClientMasterWebApi/VoterCRM/DeleteConflictRecord?ClientId=' + this.conflictRecordDelObj?.clientId + '&VoterId=' + this.conflictRecordDelObj?.voterId
-    + '&Deletedby=' + this.commonService.loggedInUserId() + '&AgentId=' + this.conflictRecordDelObj?.agentId, false, false, false, 'electionMicroSerApp');
+  getIsConflictDataFlag() {
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetIsConflictData?ClientId=' + this.voterListData?.ClientId + '&AgentId='
+      + this.voterListData?.AgentId + '&VoterId=' + this.voterListData?.VoterId, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
-        this.toastrService.success(res.statusMessage);
-        this.getConflictData();
-      } else { 
+        this.isConflictCheckFlag = res.responseData.isConflict;
+        this.isConflictCheckFlag == 1 ? this.getConflictData() : '';
+      } else {
+        this.isConflictCheckFlag = '';
       }
     }, (error: any) => {
       this.router.navigate(['../../500'], { relativeTo: this.route });
     })
   }
 
-//.........................................Conflicted Data Code End Here ....................................// 
+  getConflictData() {
+    this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetConflictData?ClientId=' + this.voterListData?.ClientId + '&VoterId=' + this.voterListData?.VoterId, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.conflictDataArray = res.responseData;
+      } else {
+        this.conflictDataArray = [];
+      }
+    }, (error: any) => {
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
 
+  deleteConfirmModel(obj: any) {
+    this.conflictRecordDelObj = obj;
+    const dialogRef = this.dialog.open(DeleteComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'Yes') {
+        this.deleteNotifications();
+      }
+    });
+  }
+
+  deleteNotifications() {
+    this.callAPIService.setHttp('DELETE', 'ClientMasterWebApi/VoterCRM/DeleteConflictRecord?ClientId=' + this.conflictRecordDelObj?.clientId + '&VoterId=' + this.conflictRecordDelObj?.voterId
+      + '&Deletedby=' + this.commonService.loggedInUserId() + '&AgentId=' + this.conflictRecordDelObj?.agentId, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.toastrService.success(res.statusMessage);
+        this.getConflictData();
+      } else {
+      }
+    }, (error: any) => {
+      this.router.navigate(['../../500'], { relativeTo: this.route });
+    })
+  }
+
+  //.........................................Conflicted Data Code End Here ....................................// 
 
 }

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ImageItem } from '@ngx-gallery/core';
 import * as CryptoJS from 'crypto-js';
@@ -230,5 +230,19 @@ export class CommonService {
         d.setMinutes(d.getMinutes() + 30);
         return new Date(d)
       }
+
+      removeSpaceAtBegining(event: any) {
+        let temp = true;
+        try {
+            if (!event.target.value[0].trim()) {
+                event.target.value = event.target.value.substring(1).trim();
+                temp = false;
+            }
+        }
+        catch (e) {
+            temp = false;
+        }
+        return temp
+    }
 
 }
