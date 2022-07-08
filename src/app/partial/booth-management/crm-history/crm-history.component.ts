@@ -53,9 +53,6 @@ export class CrmHistoryComponent implements OnInit {
   searchFamilyChield = new FormControl('');
   subjectSearchFamilyC: Subject<any> = new Subject();
   checkFamilyMemberClearFlag: boolean = false;
-  checkFamilyMemberClearFlag123: boolean = false;
-
-  // ratingStarArray = [{ id: 1, name: '1.0' }, { id: 2, name: '2.0' }, { id: 3, name: '3.0' }, { id: 4, name: '4.0' }, { id: 5, name: '5.0' }];
   headCheckArray = ['yes', 'no'];
   leaderCheckArray = ['yes', 'no'];
   migratedCheckArray = ['yes', 'no'];
@@ -653,8 +650,8 @@ export class CrmHistoryComponent implements OnInit {
   editVoterProfileData(data: any) {
     this.voterProfileForm.patchValue({
       Id: this.voterProfileData.serverId,
-      mobileNo1: data?.mobileNo1,
-      mobileNo2: data?.mobileNo2,
+      mobileNo1: data?.mobileNo1 == '0' ? '' : data?.mobileNo1 ,
+      mobileNo2: data?.mobileNo2 == '0' ? '' : data?.mobileNo2 ,
       email: data.email,
       castId: data.castId,
       partyId: data.partyId,
@@ -665,8 +662,7 @@ export class CrmHistoryComponent implements OnInit {
       migratedArea: data.migratedArea,
       head: data.head,
       dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : '',
-      leaderImportance: data.leaderImportance == '1.0' ? 1 : data.leaderImportance == '2.0' ? 2 : data.leaderImportance == '3.0' 
-      ? 3 : data.leaderImportance == '4.0' ? 4 : data.leaderImportance == '5.0' ? 5 : 0,
+      leaderImportance: data.leaderImportance ? Math.round(data.leaderImportance) : 0,
       comment: data.comment,
       voterMarking: data.voterMarking,
       migratedCity: data.migratedCity,
