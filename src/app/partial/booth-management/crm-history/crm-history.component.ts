@@ -603,7 +603,7 @@ export class CrmHistoryComponent implements OnInit {
       migratedCity: [''],
       latitude: [''],
       longitude: [''],
-      nickName: [''],
+      nickName: ['',Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z.\\s]+$')],
       migrated: [''],
       area: [''],
       leaderImportance: [''],
@@ -717,8 +717,7 @@ export class CrmHistoryComponent implements OnInit {
     let formData = this.voterProfileForm.value;
     this.submittedVP = true;
     if (this.voterProfileForm.invalid) {
-      this.spinner.hide();
-      return;
+      window.scroll({  top: 400, behavior: 'smooth' }); return;
     } else {
       let isDeleteFamilyMember = (this.voterProfileData?.head == 'yes' && formData.head == 'no') ? 1 : 0;
 
