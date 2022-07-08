@@ -416,7 +416,7 @@ export class CrmHistoryComponent implements OnInit {
       if (ele.familyHead == 1) { familyHeadObj = ele; }
     })
     this.voterProfileFamilyData = [];
-    this.voterProfileFamilyData.push(familyHeadObj); // Push Family Head Obj
+    familyHeadObj ? this.voterProfileFamilyData.push(familyHeadObj) : ''; // Push Family Head Obj
     this.voterListforFamilyChildArray.find((ele: any) => { // Push selected Family Member Obj
       if (ele.isMember == 1) { this.voterProfileFamilyData.push(ele) }
     })
@@ -581,6 +581,11 @@ export class CrmHistoryComponent implements OnInit {
       this.voterProfileForm.controls['needSupportText'].clearValidators();
       this.voterProfileForm.controls['needSupportText'].updateValueAndValidity();
     }
+  }
+
+  onRate(event: any) {
+    this.gold = 'gold'
+    this.voterProfileForm.get('leaderImportance')?.setValue(event.newValue);
   }
 
   get v() { return this.voterProfileForm.controls };
@@ -819,6 +824,7 @@ export class CrmHistoryComponent implements OnInit {
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
           this.getVoterProfileData();
+          // this.refreshUrlTab();
         } else {
           this.toastrService.error(res.statusMessage);
           this.spinner.hide();
@@ -827,6 +833,16 @@ export class CrmHistoryComponent implements OnInit {
         this.spinner.hide();
         this.router.navigate(['../../500'], { relativeTo: this.route });
       });
+    }
+  }
+
+  refreshUrlTab() {  // RefreshTab when Agent Id == 0 ..Pass Agent Id Updated
+    if (this.voterListData.AgentId == 0) {
+      setTimeout(() => {
+        let id = this.voterProfileData?.agentId + '.' + this.voterListData.ClientId + '.' + this.voterListData.VoterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId
+        this.router.navigate(['crm-history/' + id]);
+      }, 200);
+      setTimeout(() => { window.location.reload(); }, 300);
     }
   }
 
@@ -1016,11 +1032,5 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   //.........................................Conflicted Data Code End Here ....................................// 
-
-
-  onRate(event: any) {
-    this.gold = 'gold'
-    this.voterProfileForm.get('leaderImportance')?.setValue(event.newValue);
-  }
 
 }
