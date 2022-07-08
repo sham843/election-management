@@ -9,6 +9,8 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { OwlNativeDateTimeModule, OwlDateTimeModule } from 'ng-pick-datetime';
 import { AgmCoreModule } from '@agm/core';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { RatingModule } from 'ng-starrating';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     NgxSelectModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
+    RatingModule,
     FilterPipeModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',

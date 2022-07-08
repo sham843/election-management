@@ -24,6 +24,7 @@ import { NameCorrectionDialogComponent } from './partial/dialogs/name-correction
 import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/voter-call-entries.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ExcelService } from '../../src/app/services/excel.service';
+import { RatingModule } from 'ng-starrating';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ExcelService } from '../../src/app/services/excel.service';
     MatDialogModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
+    RatingModule,
     NgxPaginationModule,
     ToastrModule.forRoot({
       timeOut: 3000,

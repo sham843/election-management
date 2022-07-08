@@ -55,7 +55,7 @@ export class CrmHistoryComponent implements OnInit {
   checkFamilyMemberClearFlag: boolean = false;
   checkFamilyMemberClearFlag123: boolean = false;
 
-  ratingStarArray = [{ id: 1, name: '1.0' }, { id: 2, name: '2.0' }, { id: 3, name: '3.0' }, { id: 4, name: '4.0' }, { id: 5, name: '5.0' }];
+  // ratingStarArray = [{ id: 1, name: '1.0' }, { id: 2, name: '2.0' }, { id: 3, name: '3.0' }, { id: 4, name: '4.0' }, { id: 5, name: '5.0' }];
   headCheckArray = ['yes', 'no'];
   leaderCheckArray = ['yes', 'no'];
   migratedCheckArray = ['yes', 'no'];
@@ -102,6 +102,10 @@ export class CrmHistoryComponent implements OnInit {
   isConflictCheckFlag: any;
   conflictDataArray: any;
   conflictRecordDelObj: any;
+
+  totalstar: number = 5;
+  starvalue: number = 0;
+  gold: string = 'gold'
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -516,6 +520,7 @@ export class CrmHistoryComponent implements OnInit {
       this.voterProfileForm.controls["leaderImportance"].updateValueAndValidity();
     } else {
       this.voterProfileForm.controls['leaderImportance'].setValue('');
+      this.starvalue = 0;
       this.voterProfileForm.controls['leaderImportance'].clearValidators();
       this.voterProfileForm.controls['leaderImportance'].updateValueAndValidity();
     }
@@ -660,7 +665,8 @@ export class CrmHistoryComponent implements OnInit {
       migratedArea: data.migratedArea,
       head: data.head,
       dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : '',
-      leaderImportance: data.leaderImportance,
+      leaderImportance: data.leaderImportance == '1.0' ? 1 : data.leaderImportance == '2.0' ? 2 : data.leaderImportance == '3.0' 
+      ? 3 : data.leaderImportance == '4.0' ? 4 : data.leaderImportance == '5.0' ? 5 : 0,
       comment: data.comment,
       voterMarking: data.voterMarking,
       migratedCity: data.migratedCity,
@@ -711,6 +717,7 @@ export class CrmHistoryComponent implements OnInit {
     this.searchAdd.setValue(data.migratedArea);
     this.latitude = data.migratedLatitude;
     this.longitude = data.migratedLongitude;
+    this.starvalue = this.voterProfileForm.value.leaderImportance;
   }
 
   onSubmitVoterProfile() {
@@ -734,7 +741,8 @@ export class CrmHistoryComponent implements OnInit {
         "familysize": this.voterProfileData.familySize.toString(),
         "religionId": formData.religionId || 0,
         "partyAffection": "",
-        "leaderImportance": formData.leaderImportance || '',
+        "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
+        formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '',
         "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : (this.voterProfileData.watsApp1 && formData.watsApp1 == true ? this.voterProfileData.watsApp1 : ''),
         "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : (this.voterProfileData.watsApp2 && formData.watsApp2 == true ? this.voterProfileData.watsApp2 : ''),
         "facebookId": "",
@@ -1012,5 +1020,11 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   //.........................................Conflicted Data Code End Here ....................................// 
+
+
+  onRate(event: any) {
+    this.gold = 'gold'
+    this.voterProfileForm.get('leaderImportance')?.setValue(event.newValue);
+  }
 
 }

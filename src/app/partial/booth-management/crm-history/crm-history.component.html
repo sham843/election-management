@@ -487,11 +487,16 @@
                                                     </div>
                                                     <div class="col-sm" *ngIf="leaderhideDiv">
                                                         <label class="form-label">Select Rating</label>
-                                                        <ngx-select [allowClear]="true" [items]="ratingStarArray"
+                                                        <!-- <ngx-select [allowClear]="true" [items]="ratingStarArray"
                                                             formControlName="leaderImportance" optionValueField="name"
                                                             optionTextField="name" placeholder="Select Rating"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.leaderImportance.errors }">
-                                                        </ngx-select>
+                                                        </ngx-select> -->
+
+                                                        <star-rating name="leaderImportance" [value]="starvalue"
+                                                        [totalstars]="totalstar" size="25px" [checkedcolor]="gold"
+                                                        uncheckedcolor="gray" (rate)="onRate($event)"></star-rating>
+                                                        <div *ngIf="submittedVP && v.leaderImportance.errors" class="invalid-feedback">Select Rating is required</div>
                                                     </div>
                                                     <div class="col-sm">
                                                         <label class="form-label">Associate Local Leader</label>
