@@ -138,16 +138,14 @@
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
                                                     (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo1)"
                                                     value="option1">
-                                                <label class="form-check-label text-success"
-                                                    for="inlineCheckbox1">{{contactlistArray?.mobileNo1}}</label>
+                                                <label class="form-check-label text-success">{{contactlistArray?.mobileNo1}}</label>
                                             </div>
                                             <div class="form-check form-check-inline"
                                                 *ngIf="contactlistArray?.mobileNo2?.length > 9">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
                                                     (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo2)"
                                                     value="option2">
-                                                <label class="form-check-label text-success"
-                                                    for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
+                                                <label class="form-check-label text-success">{{contactlistArray?.mobileNo2}}</label>
                                             </div>
                                             <div class="form-check form-check-inline"
                                                 *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
@@ -155,8 +153,7 @@
                                                     <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
                                                         (change)="onCheckWrongContactNumber($event,contactlist)"
                                                         value="option3">
-                                                    <label class="form-check-label text-danger"
-                                                        for="inlineCheckbox3">{{contactlist}}</label>
+                                                    <label class="form-check-label text-danger">{{contactlist}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,18 +180,14 @@
                                                 <input class="form-check-input" type="checkbox"
                                                     formControlName="isNameChange"
                                                     (change)="nameCorrectionCheckBox($event ,'noEdit')"
-                                                    id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Name Correction
-                                                </label>
+                                                    id="flexCheckDefault4">
+                                                <label class="form-check-label">Name Correction</label>
                                             </div>
                                             <div class="form-check float-end">
                                                 <input class="form-check-input" type="checkbox"
                                                     (change)="isExpiredCheckBox($event)" [formControl]="isExpiredVoter"
                                                     [checked]="voterProfileData?.isExpired == 1 ? true : false">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Is Expired
-                                                </label>
+                                                <label class="form-check-label">Is Expired</label>
                                             </div>
                                         </div>
 
@@ -266,10 +259,8 @@
                                                         <div class="form-check"
                                                             *ngIf="voterProfileForm.value.mobileNo1?.length > 9">
                                                             <input class="form-check-input" type="checkbox" value=""
-                                                                formControlName="watsApp1" id="flexCheckDefault2">
-                                                            <label class="form-check-label" for="flexCheckDefault">
-                                                                WhatsApp
-                                                            </label>
+                                                                formControlName="watsApp1" id="flexCheckDefault6">
+                                                            <label class="form-check-label">WhatsApp</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -284,10 +275,8 @@
                                                         <div class="form-check"
                                                             *ngIf="voterProfileForm.value.mobileNo2?.length > 9">
                                                             <input class="form-check-input" type="checkbox" value=""
-                                                                formControlName="watsApp2" id="flexCheckDefault1">
-                                                            <label class="form-check-label" for="flexCheckDefault">
-                                                                WhatsApp
-                                                            </label>
+                                                                formControlName="watsApp2" id="flexCheckDefault7">
+                                                            <label class="form-check-label"> WhatsApp</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -313,10 +302,8 @@
                                                     <div class="col-sm-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" value=""
-                                                                formControlName="isNotCall" id="flexCheckDefault">
-                                                            <label class="form-check-label" for="flexCheckDefault">
-                                                                Do Not Call
-                                                            </label>
+                                                                formControlName="isNotCall" id="flexCheckDefault8">
+                                                            <label class="form-check-label">Do Not Call</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -558,9 +545,7 @@
                                                                 formControlName="postalFlag"
                                                                 [checked]="voterProfileData?.postalFlag == 1 ? true : false"
                                                                 (click)="postalVotingCheckBox($event , 'noEdit')">
-                                                            <label class="form-check-label" for="flexCheckDefault">
-                                                                Postal Voting
-                                                            </label>
+                                                            <label class="form-check-label">Postal Voting</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-9" *ngIf="postalVotingDivHide">
@@ -578,9 +563,7 @@
                                                                 formControlName="needSupportFlag"
                                                                 [checked]="voterProfileData?.needSupportFlag == 1 ? true : false"
                                                                 (click)="needSupportCheckBox($event, 'noEdit')">
-                                                            <label class="form-check-label" for="flexCheckDefault">
-                                                                Need Support?
-                                                            </label>
+                                                            <label class="form-check-label"> Need Support?</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-9" *ngIf="needSupportDivHide">
@@ -785,10 +768,8 @@
                                                 <label class="form-label">Do Not Call</label>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value=""
-                                                        id="chkDoNotCall" formControlName="NotToCall">
-                                                    <label class="form-check-label" for="chkDoNotCall">
-                                                        Do Not Call
-                                                    </label>
+                                                        id="chkDoNotCall11" formControlName="NotToCall">
+                                                    <label class="form-check-label">Do Not Call</label>
                                                 </div>
                                             </div>
 
@@ -1002,7 +983,7 @@
                                 <td>{{familyChild?.occupation ? familyChild?.occupation : '-'}}</td>
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="flexCheckDefault"
+                                        <input class="form-check-input" type="checkbox" id="flexCheckDefault12"
                                             [checked]="familyChild?.isMember == 1"
                                             (change)="onCheckChangeChildVoterDetail($event, familyChild)">
                                     </div>
@@ -1054,10 +1035,8 @@
                     </div>
                     <div class="mb-2">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Is Expired
-                            </label>
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault13">
+                            <label class="form-check-label"> Is Expired </label>
                         </div>
                     </div>
                     <p class="fw-bold mb-2">Migration Information</p>
@@ -1088,10 +1067,8 @@
                     </div>
                     <div class="mb-2">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Postal Voting
-                            </label>
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault14">
+                            <label class="form-check-label"> Postal Voting </label>
                         </div>
                     </div>
                     <div class="mb-2">
