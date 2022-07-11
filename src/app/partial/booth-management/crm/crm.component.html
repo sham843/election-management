@@ -351,7 +351,7 @@
                                                                 <div *ngIf="boothVoterList?.isWrongMobileNo == 0 && boothVoterList?.mobileNo1"><a class="text-main"
                                                                         href="tel:{{boothVoterList?.mobileNo1}}">{{boothVoterList?.mobileNo1}}</a>
                                                                 </div>
-                                                                <div *ngIf="boothVoterList?.isWrongMobileNo == 1 && boothVoterList?.isWrongMobileNo2 == 0 && boothVoterList?.mobileNo2">
+                                                                <div *ngIf="(boothVoterList?.isWrongMobileNo == 1 || (!boothVoterList?.mobileNo1 && boothVoterList?.isWrongMobileNo == 0)) && boothVoterList?.isWrongMobileNo2 == 0 && boothVoterList?.mobileNo2">
                                                                     <a class="text-main" href="tel:{{boothVoterList?.mobileNo2}}">{{boothVoterList?.mobileNo2}}</a>
                                                                 </div>
                                                             <div
@@ -360,7 +360,7 @@
                                                                     <li><a class="text-main" href="tel:{{extraConts}}">{{extraConts}} </a></li>
                                                                 </ul>
                                                             </div>
-                                                            <div *ngIf="!boothVoterList?.mobileNo1 && !boothVoterList?.mobileNo2 && !boothVoterList?.extraContcts">-</div>
+                                                            <div *ngIf="(!boothVoterList?.mobileNo1 || boothVoterList?.isWrongMobileNo == 1) && (!boothVoterList?.mobileNo2 || boothVoterList?.isWrongMobileNo2 == 1) && !boothVoterList?.extraContcts">-</div>
                                                             </td>
                                                             <td>{{boothVoterList?.qualification ?
                                                                 boothVoterList?.qualification : '-'}}</td>
@@ -735,7 +735,21 @@
                                                                 </span>
                                                                 <span *ngIf="crmTableList?.isVerified == 0"></span>
                                                             </td>
-                                                            <td>{{crmTableList.mobileNo1}}</td>
+                                                            <td>
+                                                                <div *ngIf="crmTableList?.isWrongMobileNo == 0 && crmTableList?.mobileNo1"><a class="text-main"
+                                                                        href="tel:{{crmTableList?.mobileNo1}}">{{crmTableList?.mobileNo1}}</a>
+                                                                </div>
+                                                                <div *ngIf="(crmTableList?.isWrongMobileNo == 1 || (!crmTableList?.mobileNo1 && crmTableList?.isWrongMobileNo == 0)) && crmTableList?.isWrongMobileNo2 == 0 && crmTableList?.mobileNo2">
+                                                                    <a class="text-main" href="tel:{{crmTableList?.mobileNo2}}">{{crmTableList?.mobileNo2}}</a>
+                                                                </div>
+                                                            <div
+                                                                *ngIf="crmTableList?.isWrongMobileNo == 1 && crmTableList?.isWrongMobileNo2 == 1 && crmTableList?.extraContcts">
+                                                                <ul style="list-style: none;" *ngFor="let extraConts of crmTableList?.extraContcts.split(',')">
+                                                                    <li><a class="text-main" href="tel:{{extraConts}}">{{extraConts}} </a></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div *ngIf="(!crmTableList?.mobileNo1 || crmTableList?.isWrongMobileNo == 1) && (!crmTableList?.mobileNo2 || crmTableList?.isWrongMobileNo2 == 1) && !crmTableList?.extraContcts">-</div>
+                                                            </td>
                                                             <td>{{crmTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
                                                             <td>{{crmTableList.areaName}}</td>
                                                             <td>{{crmTableList.followupDate ? crmTableList.followupDate : '-'}}</td>
@@ -836,7 +850,21 @@
                                           <tr *ngFor="let CrmHistoryTableList of getCrmHistoryTableList | paginate: {id: 'crmHistoryPagination', itemsPerPage: 10, currentPage: crmHistoryPaginationNo, totalItems:getCrmHistoryTableListrTotal};">
                                               <td>{{CrmHistoryTableList.voterNo}}</td>
                                               <td [ngClass]="{'text-main' : CrmHistoryTableList.followupstatus == 'Todays Followup','text-success' : CrmHistoryTableList.followupstatus == 'Upcomming Followup','text-danger' : CrmHistoryTableList.followupstatus == 'Not To Call','text-info' : CrmHistoryTableList.followupstatus == 'New', 'text-dark' : CrmHistoryTableList.followupstatus == 'Missed Followup'}">{{CrmHistoryTableList.englishName}}</td>
-                                              <td>{{CrmHistoryTableList.mobileNo1}}</td>
+                                              <td>
+                                                <div *ngIf="CrmHistoryTableList?.isWrongMobileNo == 0 && CrmHistoryTableList?.mobileNo1"><a class="text-main"
+                                                        href="tel:{{CrmHistoryTableList?.mobileNo1}}">{{CrmHistoryTableList?.mobileNo1}}</a>
+                                                </div>
+                                                <div *ngIf="(CrmHistoryTableList?.isWrongMobileNo == 1 || (!CrmHistoryTableList?.mobileNo1 && CrmHistoryTableList?.isWrongMobileNo == 0)) && CrmHistoryTableList?.isWrongMobileNo2 == 0 && CrmHistoryTableList?.mobileNo2">
+                                                    <a class="text-main" href="tel:{{CrmHistoryTableList?.mobileNo2}}">{{CrmHistoryTableList?.mobileNo2}}</a>
+                                                </div>
+                                            <div
+                                                *ngIf="CrmHistoryTableList?.isWrongMobileNo == 1 && CrmHistoryTableList?.isWrongMobileNo2 == 1 && CrmHistoryTableList?.extraContcts">
+                                                <ul style="list-style: none;" *ngFor="let extraConts of CrmHistoryTableList?.extraContcts.split(',')">
+                                                    <li><a class="text-main" href="tel:{{extraConts}}">{{extraConts}} </a></li>
+                                                </ul>
+                                            </div>
+                                            <div *ngIf="(!CrmHistoryTableList?.mobileNo1 || CrmHistoryTableList?.isWrongMobileNo == 1) && (!CrmHistoryTableList?.mobileNo2 || CrmHistoryTableList?.isWrongMobileNo2 == 1) && !CrmHistoryTableList?.extraContcts">-</div>
+                                            </td>
                                               <td>{{CrmHistoryTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
                                               <td>{{CrmHistoryTableList.followupDate? CrmHistoryTableList.followupDate : '-'}}</td>
                                               <td>{{CrmHistoryTableList.lastFeedback? CrmHistoryTableList.lastFeedback : '-'}}</td>
