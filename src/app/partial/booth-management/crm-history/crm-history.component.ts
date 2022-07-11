@@ -741,7 +741,7 @@ export class CrmHistoryComponent implements OnInit {
         "followers": "",
         "castId": formData.castId || 0,
         "partyId": formData.partyId || 0,
-        "familysize": this.voterProfileData.familySize.toString(),
+        "familysize": isDeleteFamilyMember == 1 ? '0' : this.voterProfileFamilyData?.length == 1 ? '0' : this.voterProfileFamilyData?.length.toString(),
         "religionId": formData.religionId || 0,
         "partyAffection": "",
         "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
