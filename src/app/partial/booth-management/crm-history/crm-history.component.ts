@@ -131,6 +131,7 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.voterListData.AgentId == 0 ? this.disableDiv = false : '';
     this.defaultFeedbackForm();
     this.defaultvoterProfileForm();
     this.feedbacksList();
@@ -223,7 +224,7 @@ export class CrmHistoryComponent implements OnInit {
 
   //........................ Get Voter Profile Data.....................//
 
-  getVoterProfileData() {
+  getVoterProfileData(flag?:any) {
     this.spinner.show();
     let obj = 'ClientId=' + this.voterListData.ClientId +
       '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId;
@@ -232,6 +233,7 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileData = res.responseData;
+       flag == 'refreshFlag' ? this.refreshUrlTab() : '';
         this.editVoterProfileData(this.voterProfileData);
         this.getContactlist(this.voterProfileData);
       } else {
@@ -823,8 +825,7 @@ export class CrmHistoryComponent implements OnInit {
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
-          this.getVoterProfileData();
-          // this.refreshUrlTab();
+          this.getVoterProfileData('refreshFlag');
         } else {
           this.toastrService.error(res.statusMessage);
           this.spinner.hide();
@@ -838,11 +839,11 @@ export class CrmHistoryComponent implements OnInit {
 
   refreshUrlTab() {  // RefreshTab when Agent Id == 0 ..Pass Agent Id Updated
     if (this.voterListData.AgentId == 0) {
-      setTimeout(() => {
         let id = this.voterProfileData?.agentId + '.' + this.voterListData.ClientId + '.' + this.voterListData.VoterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId
         this.router.navigate(['crm-history/' + id]);
-      }, 200);
-      setTimeout(() => { window.location.reload(); }, 300);
+      setTimeout(() => {
+         window.location.reload();
+         }, 100);
     }
   }
 
@@ -934,7 +935,8 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.toastrService.success(res.statusMessage);
-        this.getContactlist(this.voterProfileData)
+        // this.getContactlist(this.voterProfileData);
+        this.getVoterProfileData();
       } else {
         this.spinner.hide();
       }
