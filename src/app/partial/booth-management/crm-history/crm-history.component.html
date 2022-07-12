@@ -350,7 +350,7 @@
                                                                     [checked]="head == voterProfileData?.head"
                                                                     name="head" id="inlineRadio1" value="{{head}}">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio1">{{head}}</label>
+                                                                    for="inlineRadio1">{{head == 'yes' ? 'Yes' : 'No'}}</label>
                                                             </div>
                                                         </div>
                                                         <!-- <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
