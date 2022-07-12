@@ -778,8 +778,8 @@
                                                 <div class="input-group">
 
                                                     <input [owlDateTime]="dt3" formControlName="FollowupDate"
-                                                        [max]="max" class="form-control" [owlDateTimeTrigger]="dt3"
-                                                        placeholder="dd/mM/yyyy hh:mm:ss">
+                                                        [min]="max" class="form-control" [owlDateTimeTrigger]="dt3"
+                                                        placeholder="dd/mm/yyyy hh:mm:ss">
                                                 </div>
                                                 <owl-date-time #dt3></owl-date-time>
                                                 <div *ngIf="submitted && f.FollowupDate.errors"

@@ -224,7 +224,7 @@ export class CrmHistoryComponent implements OnInit {
 
   //........................ Get Voter Profile Data.....................//
 
-  getVoterProfileData(flag?:any) {
+  getVoterProfileData(flag?: any) {
     this.spinner.show();
     let obj = 'ClientId=' + this.voterListData.ClientId +
       '&AgentId=' + this.voterListData.AgentId + '&VoterId=' + this.voterListData.VoterId;
@@ -233,7 +233,7 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileData = res.responseData;
-       flag == 'refreshFlag' ? this.refreshUrlTab() : '';
+        flag == 'refreshFlag' ? this.refreshUrlTab() : '';
         this.editVoterProfileData(this.voterProfileData);
         this.getContactlist(this.voterProfileData);
       } else {
@@ -612,7 +612,7 @@ export class CrmHistoryComponent implements OnInit {
       migratedCity: [''],
       latitude: [''],
       longitude: [''],
-      nickName: ['',Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z.\\s]+$')],
+      nickName: ['', Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z.\\s]+$')],
       migrated: [''],
       area: [''],
       leaderImportance: [''],
@@ -657,8 +657,8 @@ export class CrmHistoryComponent implements OnInit {
   editVoterProfileData(data: any) {
     this.voterProfileForm.patchValue({
       Id: this.voterProfileData.serverId,
-      mobileNo1: data?.mobileNo1 == '0' ? '' : data?.mobileNo1 ,
-      mobileNo2: data?.mobileNo2 == '0' ? '' : data?.mobileNo2 ,
+      mobileNo1: data?.mobileNo1 == '0' ? '' : data?.mobileNo1,
+      mobileNo2: data?.mobileNo2 == '0' ? '' : data?.mobileNo2,
       email: data.email,
       castId: data.castId,
       partyId: data.partyId,
@@ -727,7 +727,7 @@ export class CrmHistoryComponent implements OnInit {
     let formData = this.voterProfileForm.value;
     this.submittedVP = true;
     if (this.voterProfileForm.invalid) {
-      window.scroll({  top: 400, behavior: 'smooth' }); return;
+      window.scroll({ top: 400, behavior: 'smooth' }); return;
     } else {
       let isDeleteFamilyMember = (this.voterProfileData?.head == 'yes' && formData.head == 'no') ? 1 : 0;
 
@@ -745,7 +745,7 @@ export class CrmHistoryComponent implements OnInit {
         "religionId": formData.religionId || 0,
         "partyAffection": "",
         "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
-        formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '',
+          formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '',
         "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : (this.voterProfileData.watsApp1 && formData.watsApp1 == true ? this.voterProfileData.watsApp1 : ''),
         "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : (this.voterProfileData.watsApp2 && formData.watsApp2 == true ? this.voterProfileData.watsApp2 : ''),
         "facebookId": "",
@@ -839,11 +839,11 @@ export class CrmHistoryComponent implements OnInit {
 
   refreshUrlTab() {  // RefreshTab when Agent Id == 0 ..Pass Agent Id Updated
     if (this.voterListData.AgentId == 0) {
-        let id = this.voterProfileData?.agentId + '.' + this.voterListData.ClientId + '.' + this.voterListData.VoterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId
-        this.router.navigate(['crm-history/' + id]);
+      let id = this.voterProfileData?.agentId + '.' + this.voterListData.ClientId + '.' + this.voterListData.VoterId + '.' + this.voterListData.ElectionId + '.' + this.voterListData.ConstituencyId
+      this.router.navigate(['crm-history/' + id]);
       setTimeout(() => {
-         window.location.reload();
-         }, 100);
+        window.location.reload();
+      }, 100);
     }
   }
 
