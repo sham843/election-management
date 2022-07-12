@@ -158,6 +158,14 @@ a.text-main:hover {
     background-color: #eed3ee;
     color: #510051
 }
+#dash-stats .bg-olive {
+    background-color: #f5ffe2;
+    color: #568500
+}
+#dash-stats .bg-pink {
+    background-color: #ffd1e2;
+    color: #850033
+}
 #pageheader {
     background-color: #fff;
     border-radius: 5px;
