@@ -308,8 +308,17 @@ export class CrmHistoryComponent implements OnInit {
     })
   }
 
+  clearReligion() {
+    this.voterProfileForm.controls['castId'].setValue('');
+    this.voterProfileForm.controls['castId'].clearValidators();
+    this.voterProfileForm.controls['castId'].updateValueAndValidity();
+  }
+
   //.......... get Voter Cast List ...............//
   getVoterCastList(religionId: any) {
+    this.voterProfileForm.controls["castId"].setValidators(Validators.required);
+    this.voterProfileForm.controls["castId"].updateValueAndValidity();
+
     this.callAPIService.setHttp('get', 'Filter/GetCastDetails?ClientId=' + this.voterListData.ClientId + '&UserId='
       + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&ReligionId=' + religionId, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -528,7 +537,7 @@ export class CrmHistoryComponent implements OnInit {
   businesDetRadiobtn() {
     this.voterProfileForm.value.haveBusiness == 1 ? this.businessDethideDiv = true : this.businessDethideDiv = false;
     if (this.voterProfileForm.value.haveBusiness == 1) {
-      this.voterProfileForm.controls["businnessDetails"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["businnessDetails"].setValidators([Validators.required,Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]);
       this.voterProfileForm.controls["businnessDetails"].updateValueAndValidity();
     } else {
       this.voterProfileForm.controls['businnessDetails'].setValue('');
@@ -562,7 +571,7 @@ export class CrmHistoryComponent implements OnInit {
     checkflag == true ? this.postalVotingDivHide = true : this.postalVotingDivHide = false;
 
     if (checkflag == true) {
-      this.voterProfileForm.controls["whyIsPostal"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["whyIsPostal"].setValidators([Validators.required,Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]);
       this.voterProfileForm.controls["whyIsPostal"].updateValueAndValidity();
     } else {
       this.voterProfileForm.controls['whyIsPostal'].setValue('');
@@ -576,7 +585,7 @@ export class CrmHistoryComponent implements OnInit {
     checkflag == true ? this.needSupportDivHide = true : this.needSupportDivHide = false;
 
     if (checkflag == true) {
-      this.voterProfileForm.controls["needSupportText"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["needSupportText"].setValidators([Validators.required,Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]);
       this.voterProfileForm.controls["needSupportText"].updateValueAndValidity();
     } else {
       this.voterProfileForm.controls['needSupportText'].setValue('');
@@ -660,8 +669,8 @@ export class CrmHistoryComponent implements OnInit {
       mobileNo1: data?.mobileNo1 == '0' ? '' : data?.mobileNo1,
       mobileNo2: data?.mobileNo2 == '0' ? '' : data?.mobileNo2,
       email: data.email,
-      castId: data.castId,
-      partyId: data.partyId,
+      castId: data.castId == 0 ? '' : data.castId,
+      partyId: data.partyId, 
       religionId: data.religionId,
       watsApp1: data.watsApp1 ? true : false,
       watsApp2: data.watsApp2 ? true : false,

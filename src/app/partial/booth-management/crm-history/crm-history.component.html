@@ -77,8 +77,7 @@
                                                     <div class="col-sm-4">
                                                         <label class="form-label">Party Supported</label>
                                                         <div class="form-data">
-                                                            <!-- {{voterProfileData?.partyShortCode}} -->
-                                                            <img src="assets/images/logos/ncp.png"
+                                                            <img [src]="voterProfileData?.partyIconImage"
                                                                 class="party-logo me-2">
                                                             ({{voterProfileData?.leaderImportance}} <i
                                                                 class="fas fa-star"></i>)
@@ -254,6 +253,7 @@
                                                             (keypress)="commonService.acceptedOnlyNumbers($event)"
                                                             maxlength="10"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo1.errors }">
+                                                            <div *ngIf="submittedVP && v.mobileNo1.errors" class="invalid-feedback">Please Enter Valid Mobile No.</div>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <div class="form-check"
@@ -270,6 +270,7 @@
                                                             (keypress)="commonService.acceptedOnlyNumbers($event)"
                                                             maxlength="10"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo2.errors }">
+                                                            <div *ngIf="submittedVP && v.mobileNo2.errors" class="invalid-feedback">Please Enter Valid Mobile No.</div>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <div class="form-check"
@@ -280,7 +281,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row align-items-end g-2">
+                                                <div class="row align-items-end g-2 mt-1">
                                                     <div class="col-sm-3">
                                                         <label class="form-label">Nick Name</label>
                                                         <input class="form-control" type="text" placeholder="Nick Name" formControlName="nickName"
@@ -291,6 +292,7 @@
                                                         <input class="form-control" type="text" placeholder="Email"
                                                             formControlName="email"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.email.errors }">
+                                                            <div *ngIf="submittedVP && v.email.errors" class="invalid-feedback">Please Enter Valid Email</div>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label class="form-label">Date of birth</label>
@@ -317,7 +319,7 @@
                                                         <label class="form-label">Select Religion</label>
                                                         <ngx-select [allowClear]="true" [items]="religionListArray"
                                                             formControlName="religionId"
-                                                            (remove)="this.voterProfileForm.controls['castId'].setValue('')"
+                                                            (remove)="clearReligion()"
                                                             (select)="getVoterCastList(this.voterProfileForm.value.religionId)"
                                                             optionValueField="reliogionId"
                                                             optionTextField="religionName"
@@ -330,8 +332,10 @@
                                                             formControlName="castId"
                                                             [disabled]="!voterProfileForm.value.religionId"
                                                             optionValueField="castId" optionTextField="castName"
-                                                            placeholder="Select Caste">
+                                                            placeholder="Select Caste"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.castId.errors }">
                                                         </ngx-select>
+                                                        <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Select Caste is required</div>
                                                     </div>
                                                     <div class="col-sm-3"
                                                         *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes' 
@@ -366,7 +370,7 @@
                                                     </div>
 
                                                     <div class="col-sm-12" *ngIf="voterProfileFamilyData?.length != 1">
-                                                        <table class="table table-hover mb-0">
+                                                        <table class="table table-hover mb-0 mt-2">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Voter No</th>
@@ -513,28 +517,35 @@
                                                     </div>
                                                     <ng-container *ngIf="migratedhideDiv">
 
-                                                        <div class="col-sm-7">
+                                                        <div class="col-sm-9">
                                                             <label class="form-label">Migrated City</label>
-                                                            <div class="input-group">
+                                                            <div class="row gx-1">
+                                                               <div class="col-sm">
                                                                 <input class="form-control" type="text"
-                                                                    [readOnly]="true" autocapitalize="off"
-                                                                    placeholder="Migrated City" spellcheck="off"
-                                                                    formControlName="migratedCity"
-                                                                    [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
-                                                                <button type="submit"
-                                                                    class="btn btn-light btn-sm text-main"
+                                                                [readOnly]="true" autocapitalize="off"
+                                                                placeholder="Migrated City" spellcheck="off"
+                                                                formControlName="migratedCity"
+                                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
+                                                                <div *ngIf="submittedVP && v.migratedCity.errors" class="invalid-feedback">Migrated City is required</div>
+                                                               </div>
+                                                                <div class="col-sm-auto">
+                                                                    <button type="submit"
+                                                                    class="btn btn-light text-main"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#MapSelectModal">
                                                                     <i class="fas fa-map"></i>
                                                                 </button>
+                                                                </div>
+                                                            
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-12">
+                                                        <div class="col-sm-12 mb-2">
                                                             <label class="form-label">Migrated Area</label>
                                                             <input class="form-control" type="text" [readOnly]="true"
                                                                 placeholder="Migrated Area"
                                                                 formControlName="migratedArea"
                                                                 [ngClass]="{ 'is-invalid': submittedVP && v.migratedArea.errors }">
+                                                                <div *ngIf="submittedVP && v.migratedArea.errors" class="invalid-feedback">Migrated Area is required</div>
                                                         </div>
                                                     </ng-container>
                                                 </div>
@@ -554,6 +565,8 @@
                                                             placeholder="Postal Voting Reason"
                                                             formControlName="whyIsPostal"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.whyIsPostal.errors }">
+                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors.required" class="invalid-feedback">Postal Voting Reason is required</div>
+                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors.pattern" class="invalid-feedback">Please Enter Valid Postal Voting Reason</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2 align-items-end">
@@ -572,6 +585,8 @@
                                                             placeholder="Support Details"
                                                             formControlName="needSupportText"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.needSupportText.errors }">
+                                                            <div *ngIf="submittedVP && v.needSupportText.errors.required" class="invalid-feedback">Support Details is required</div>
+                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors.pattern" class="invalid-feedback">Please Enter Valid Support Details</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -658,6 +673,8 @@
                                                                 placeholder="Business Details"
                                                                 formControlName="businnessDetails"
                                                                 [ngClass]="{ 'is-invalid': submittedVP && v.businnessDetails.errors }">
+                                                                <div *ngIf="submittedVP && v.businnessDetails.errors.required" class="invalid-feedback">Business Details is required</div>
+                                                                <div *ngIf="submittedVP && v.businnessDetails.errors.pattern" class="invalid-feedback">Please Enter Valid Business Details</div>
                                                         </span>
                                                     </div>
                                                     <div class="col-sm-3">
