@@ -182,7 +182,9 @@ export class CrmHistoryComponent implements OnInit {
   //............................. Insert Feedbacks Election Data................................//
 
   onSubmitFeedbackForm() {
-    this.submitted = true;
+
+alert(this.enterNewFeedbackForm.value.FollowupDate)    
+     this.submitted = true;
     if (this.enterNewFeedbackForm.invalid) {
       this.spinner.hide();
       return;
@@ -197,7 +199,7 @@ export class CrmHistoryComponent implements OnInit {
         "feedBackDate": new Date(),
         "feedBackType": data.FeedBackType,
         "description": data.Description,
-        "followupDate": data.FollowupDate,
+        "followupDate": this.commonService.setDate(data.FollowupDate),
         "notToCall": data.NotToCall,
         "createdBy": this.commonService.loggedInUserId(),
         "clientId": this.voterListData.ClientId
