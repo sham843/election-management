@@ -74,13 +74,13 @@
                                                         <label class="form-label">Area</label>
                                                         <div class="form-data"> {{voterProfileData?.area}} </div>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-4" *ngIf="voterProfileData?.partyIconImage || voterProfileData?.leaderImportance">
                                                         <label class="form-label">Party Supported</label>
                                                         <div class="form-data">
                                                             <img [src]="voterProfileData?.partyIconImage"
                                                                 class="party-logo me-2">
-                                                            ({{voterProfileData?.leaderImportance}} <i
-                                                                class="fas fa-star"></i>)
+                                                            <span *ngIf="voterProfileData?.leaderImportance">({{voterProfileData?.leaderImportance}} 
+                                                            <i class='fa fa-star' style='color: #f3da35'></i>)</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
