@@ -181,9 +181,7 @@ export class CrmHistoryComponent implements OnInit {
 
   //............................. Insert Feedbacks Election Data................................//
 
-  onSubmitFeedbackForm() {
-
-alert(this.enterNewFeedbackForm.value.FollowupDate)    
+  onSubmitFeedbackForm() { 
      this.submitted = true;
     if (this.enterNewFeedbackForm.invalid) {
       this.spinner.hide();
