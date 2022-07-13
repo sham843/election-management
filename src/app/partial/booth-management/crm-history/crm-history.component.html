@@ -338,8 +338,9 @@
                                                         <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Caste is required</div>
                                                     </div>
                                                     <div class="col-sm-3"
-                                                        *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes' 
+                                                        *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes'
                                                         || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && voterProfileFamilyData?.length <= 1)">
+                                                        <!-- || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && getLengthVoterProfileFamilyData <= 1) -->
                                                         <label class="form-label">Family Head</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"

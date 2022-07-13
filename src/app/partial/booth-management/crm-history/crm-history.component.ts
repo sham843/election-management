@@ -34,6 +34,7 @@ export class CrmHistoryComponent implements OnInit {
   voterListData: any;
   voterProfileData: any;
   voterProfileFamilyData: any;
+  getLengthVoterProfileFamilyData:any;
   VPCommentData: any;
   posNegativeInfData: any;
   max = new Date();
@@ -358,6 +359,7 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileFamilyData = res.responseData;
+        this.getLengthVoterProfileFamilyData = this.voterProfileFamilyData?.length;
         this.voterProfileFamilyData.find((ele: any) => { //get FamilyHead Name & VoterId 
           if (ele.familyHead == 1) {
             this.familyHeadVoterId = ele.voterId;
