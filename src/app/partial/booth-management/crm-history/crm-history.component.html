@@ -335,7 +335,7 @@
                                                             placeholder="Select Caste"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.castId.errors }">
                                                         </ngx-select>
-                                                        <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Select Caste is required</div>
+                                                        <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Caste is required</div>
                                                     </div>
                                                     <div class="col-sm-3"
                                                         *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes' 
