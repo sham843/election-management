@@ -416,10 +416,7 @@ export class CrmComponent implements OnInit {
         this.filteredValueNameArray1.forEach((element: any) => {
           if (element.flag == ele) { 
             checkArray.push(ele);
-
-            checkArray.filter((selval: any) =>{ // Patch Submited Array value in globalFilterForm Form
-              this.globalFilterForm.controls[selval].setValue(element.id)
-            });
+              this.globalFilterForm.controls[ele].setValue(element.id);
           }
         })
       })
@@ -444,7 +441,7 @@ export class CrmComponent implements OnInit {
     this.getVoterAreaList();
     this.getPoliticalPartyList();
     this.getReligionList();
-    this.getVoterCastList();
+    // this.getVoterCastList();
     this.getInFavourofList();
     this.getInOpposeOfList();
     this.getProminentleader();
@@ -671,6 +668,7 @@ export class CrmComponent implements OnInit {
       this.globalFilterForm.controls['FamilySize'].setValue(0);
     } else if (obj.flag == 'ReligionId') {
       this.globalFilterForm.controls['ReligionId'].setValue(0);
+      this.globalFilterForm.controls['CastId'].setValue(0);
     } else if (obj.flag == 'CastId') {
       this.globalFilterForm.controls['CastId'].setValue(0);
     } else if (obj.flag == 'InFavourofId') {
@@ -708,7 +706,8 @@ export class CrmComponent implements OnInit {
     this.clearGlobalFilterForm(this.indexNo, obj, 'formFlag');
   }
 
-  globalFilterShowData() {
+  globalFilterSubmitData() {  //Submit filter fun
+    this.filteredValueNameArray1 = [];
     this.filteredValueNameArray1 = [...this.filteredValueNameArray];
     console.log(this.filteredValueNameArray1)
     if (this.filterSidebarFlag == 'VotersFlag') {

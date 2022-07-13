@@ -1021,14 +1021,14 @@
                 <div class="row mb-3 g-2">
                     <div class="col-sm-6">
                         <ngx-select [allowClear]="true" [items]="religionListArray" formControlName="ReligionId"
-                            (remove)="FiltereDataRemove('ReligionId')"
+                            (remove)="FiltereDataRemove('ReligionId');FiltereDataRemove('CastId')" (select)="getVoterCastList()"
                             (selectionChanges)="changedFilterData($event ,'ReligionId')" optionValueField="reliogionId"
                             optionTextField="religionName" placeholder="Select Religion">
                         </ngx-select>
                     </div>
                     <div class="col-sm-6">
                         <ngx-select [allowClear]="true" [items]="VoterCastListArray" formControlName="CastId"
-                            (remove)="FiltereDataRemove('CastId')"
+                            (remove)="FiltereDataRemove('CastId')" [disabled]="!globalFilterForm.value.ReligionId"
                             (selectionChanges)="changedFilterData($event ,'CastId')" optionValueField="castId"
                             optionTextField="castName" placeholder="Select Caste">
                         </ngx-select>
@@ -1042,7 +1042,7 @@
                     </div>
                     <div class="col-sm-6 text-end">
                         <button type="button" class="btn btn-main btn-sm" data-bs-dismiss="offcanvas"
-                            (click)="globalFilterShowData(); offCanvasSidebarCheck = true">Apply</button>
+                            (click)="globalFilterSubmitData(); offCanvasSidebarCheck = true">Apply</button>
                     </div>
                 </div>
             </div>
