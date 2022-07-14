@@ -20,7 +20,8 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </div>
-                                    <div class="card-body pt-1">
+                                    <div class="card-body pt-1 position-relative bg-transparent" style="z-index:0">
+                                        <img src="assets/images/do-not-call.jpg" class="donotcall">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0" *ngIf="voterProfileData?.voterPhoto">
                                                 <img src="{{voterProfileData?.voterPhoto}}" alt="Profile"
