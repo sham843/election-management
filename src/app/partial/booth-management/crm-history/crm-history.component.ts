@@ -208,7 +208,7 @@ export class CrmHistoryComponent implements OnInit {
       let obj = {
         "id": data.Id,
         "voterId": this.voterListData.VoterId,
-        "feedBackDate": new Date(),
+        "feedBackDate": this.commonService.setDate(new Date()),
         "feedBackType": data.FeedBackType,
         "description": data.Description,
         "followupDate": data.FollowupDate ? this.commonService.setDate(data.FollowupDate) : '',
@@ -395,7 +395,7 @@ export class CrmHistoryComponent implements OnInit {
     if (this.voterListforFamilyChildArray?.length == 0) {
       this.spinner.show();
       let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&VoterId=' + this.voterListData.VoterId +
-        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + this.voterProfileData.boothId + '&Search=' + this.searchFamilyChield.value.trim();
+        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + 0 + '&Search=' + this.searchFamilyChield.value.trim();
       this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj, false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
@@ -456,6 +456,7 @@ export class CrmHistoryComponent implements OnInit {
           "childVoterId": ele.voterId,
           "voter_uid": ele.voterId,
           "voter_no": ele.voterNo,
+          "modifiedBy": this.commonService.loggedInUserId(),
           "assemblyId": ele.assemblyId,
           "boothId": ele.boothId
         }
@@ -750,10 +751,16 @@ export class CrmHistoryComponent implements OnInit {
 
   onSubmitVoterProfile() {
     let formData = this.voterProfileForm.value;
+    let x = formData.dateOfBirth ? this.datePipe.transform(this.commonService.setDate(formData.dateOfBirth), 'dd/MM/yyyy') : '';
+    let y = this.datePipe.transform(this.commonService.setDate(new Date()), 'dd/MM/yyyy') ;
+
     this.submittedVP = true;
     if (this.voterProfileForm.invalid) {
       window.scroll({ top: 400, behavior: 'smooth' }); return;
-    } else {
+    } else if(x == y){
+      this.toastrService.error('It should not be accepted Current date as the date of Birth');
+      window.scroll({ top: 400, behavior: 'smooth' }); return;
+    } else{
       let isDeleteFamilyMember = (this.voterProfileData?.head == 'yes' && formData.head == 'no') ? 1 : 0;
 
       let obj = {
@@ -763,14 +770,14 @@ export class CrmHistoryComponent implements OnInit {
         "mobileNo2": formData?.mobileNo2 || '',
         "landline": "",
         "email": formData.email || '',
-        "followers": "",
+        "followers": '0',
         "castId": formData.castId || 0,
         "partyId": formData.partyId || 0,
         "familysize": isDeleteFamilyMember == 1 ? '0' : this.voterProfileFamilyData?.length == 1 ? '0' : this.voterProfileFamilyData?.length.toString(),
         "religionId": formData.religionId || 0,
-        "partyAffection": "",
+        "partyAffection": '0.0',
         "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
-          formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '',
+          formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '0.0',
         "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : (this.voterProfileData.watsApp1 && formData.watsApp1 == true ? this.voterProfileData.watsApp1 : ''),
         "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : (this.voterProfileData.watsApp2 && formData.watsApp2 == true ? this.voterProfileData.watsApp2 : ''),
         "facebookId": "",
@@ -831,7 +838,8 @@ export class CrmHistoryComponent implements OnInit {
         "pollingAgent": 0,
         "isPadvidhar": parseInt(formData.isPadvidhar),
         "isVerified": 1,
-        "isDeleteFamilyMember": isDeleteFamilyMember
+        "isDeleteFamilyMember": isDeleteFamilyMember,
+        "modifiedBy": this.commonService.loggedInUserId(),
       }
       this.spinner.show();
       let urlType;

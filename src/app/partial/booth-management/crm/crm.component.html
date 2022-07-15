@@ -133,6 +133,7 @@
                                                             (click)="globalFilterOnInitData()"
                                                             aria-controls="offcanvasRight"><i class="fas fa-filter"></i>
                                                         </button>
+                                                        <!-- [ngClass]="{'bg-info' : filteredValueNameArray1?.length > 0}" -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,9 +146,9 @@
                                                 <span class="alert alert-secondary alert-dismissible fade show"
                                                     role="alert"
                                                     *ngFor="let filteredValueName of filteredValueNameArray1; let i=index">
-                                                   <span *ngIf="filteredValueName.flag == 'HaveMobileNo'">{{filteredValueName?.name == 'Yes' ? 'HaveMobileNo : Yes' : filteredValueName?.name == 'No' ? 'HaveMobileNo : No' : '-'}}</span>
-                                                   <span *ngIf="filteredValueName.flag == 'HaveBussiness'">{{filteredValueName?.name == 'Yes' ? 'HaveBussiness : Yes' : filteredValueName?.name == 'No' ? 'HaveBussiness : No' : '-'}}</span>
-                                                   <span *ngIf="filteredValueName.flag == 'IsYuvak'">{{filteredValueName?.name == 'Yes' ? 'IsYuvak : Yes' : filteredValueName?.name == 'No' ? 'IsYuvak : No' : '-'}}</span>
+                                                   <span *ngIf="filteredValueName.flag == 'HaveMobileNo'">{{filteredValueName?.name == 'Yes' ? 'Mobile Number : Yes' : filteredValueName?.name == 'No' ? 'Mobile Number : No' : '-'}}</span>
+                                                   <span *ngIf="filteredValueName.flag == 'HaveBussiness'">{{filteredValueName?.name == 'Yes' ? 'Business : Yes' : filteredValueName?.name == 'No' ? 'Business : No' : '-'}}</span>
+                                                   <span *ngIf="filteredValueName.flag == 'IsYuvak'">{{filteredValueName?.name == 'Yes' ? 'Yuvak : Yes' : filteredValueName?.name == 'No' ? 'Yuvak : No' : '-'}}</span>
                                                    <span *ngIf="filteredValueName.flag != 'HaveMobileNo' && filteredValueName.flag != 'HaveBussiness' && filteredValueName.flag != 'IsYuvak'">{{filteredValueName.name}}</span>
                                                    <button type="button" class="btn-close"
                                                         (click)="clearGlobalFilterForm(i,filteredValueName,'chipFlag')"
@@ -256,7 +257,7 @@
                                             <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
                                                 data-bs-target="#pills-crm" type="button" role="tab"
                                                 aria-controls="pills-crm" aria-selected="false">
-                                                <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalCRM}}/{{boothWiseSummaryCountArray?.totalCRMVoters}}</h5> 
+                                                <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalCRMVoters}}</h5> 
                                                 CRM
                                             </button>
                                         </li>

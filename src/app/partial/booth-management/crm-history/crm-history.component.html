@@ -844,7 +844,7 @@
                                         <td>
                                             <div class="row align-items-center">
                                                 <div class="col-sm-6">
-                                                    <small class="text-muted">{{feedbacksList?.feedBackDate}}</small>
+                                                    <small class="text-muted">{{feedbacksList?.feedBackDate | date:"dd/MM/yyyy hh:mm"}}</small>
                                                 </div>
                                                 <div class="col-sm-6 text-end">
                                                     <span class="badge rounded-pill bg-success fw-normal"
@@ -867,7 +867,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{feedbacksList?.followupDate ? (feedbacksList?.followupDate | date:"dd/mm/yy hh:mm") : '-'}}
+                                            {{feedbacksList?.followupDate ? (feedbacksList?.followupDate | date:"dd/MM/yyyy hh:mm") : '-'}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -972,7 +972,7 @@
             <div class="modal-body">
                 <div class="form-container">
                     <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Select By Voter Name"
+                        <input class="form-control" type="text" placeholder="Search By Voter Name"
                             [(ngModel)]="familyMembersFilter.englishName" (keyup)="commonService.removeSpaceAtBegining($event)">
                         <button type="button" class="btn btn-light">
                             <i class="fas fa-search"></i>
