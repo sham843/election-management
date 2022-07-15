@@ -694,12 +694,13 @@ export class CreateConstituenyComponent implements OnInit {
     }
 
     if (this.data.newRecord.geofenceType == 1) {
-      this.removeShape();
+      // this.removeShape();
       //this.pointList.drawnPolytext = this.data.drawnPolytext;
       var OBJ_fitBounds = new google.maps.LatLngBounds();
       const path = this.data.newRecord.polygonText.split(',').map((x: any) => { let obj = { lng: Number(x.split(' ')[0]), lat: Number(x.split(' ')[1]) }; OBJ_fitBounds.extend(obj); return obj });
       const existingShape = new google.maps.Polygon({ paths: path, strokeColor: "#00FF00", strokeOpacity: 0.8, strokeWeight: 2, fillColor: "#00FF00", fillOpacity: 0.35, editable: true, draggable: true });
       existingShape.setMap(map);
+      
       map.setCenter(this.FN_CN_poly2latLang(existingShape));
       map.fitBounds(OBJ_fitBounds);
       //this.setSelection(existingShape, "polygon");
@@ -726,7 +727,7 @@ export class CreateConstituenyComponent implements OnInit {
     }
 
     if (this.data.newRecord.geofenceType == 2) {
-      this.removeShape();
+      // this.removeShape();
       let latlng = new google.maps.LatLng(this.data.newRecord.latLng.split(",")[1], this.data.newRecord.latLng.split(",")[0]);
       let circle = new google.maps.Circle({
         strokeColor: '#00FF00',
