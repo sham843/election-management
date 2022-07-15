@@ -21,7 +21,7 @@
                                         </button>
                                     </div>
                                     <div class="card-body pt-1 position-relative bg-transparent" style="z-index:0">
-                                        <img src="assets/images/do-not-call.jpg" class="donotcall">
+                                        <img *ngIf="voterProfileData?.doNotCall == 1" src="assets/images/do-not-call.jpg" class="donotcall">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0" *ngIf="voterProfileData?.voterPhoto">
                                                 <img src="{{voterProfileData?.voterPhoto}}" alt="Profile"
@@ -784,13 +784,13 @@
                                             <div class="col-sm-auto">
                                                 <label class="form-label">Do Not Call</label>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
+                                                    <input class="form-check-input" type="checkbox" value="" (change)="doNotCallCheckBox($event)"
                                                         id="chkDoNotCall11" formControlName="NotToCall">
                                                     <label class="form-check-label" for="chkDoNotCall11">Do Not Call</label>
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-12" *ngIf="!doNotCallHideDiv">
                                                 <label class="form-label required-field">Followup Date-Time</label>
                                                 <div class="input-group">
 
@@ -867,7 +867,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{feedbacksList?.followupDate}}
+                                            {{feedbacksList?.followupDate ? feedbacksList?.followupDate : '-'}}
                                         </td>
                                     </tr>
                                 </tbody>

@@ -27,6 +27,7 @@ export class CrmHistoryComponent implements OnInit {
   getFeedbacksListTotal: any;
   feedbacksPaginationNo: number = 1;
   feedBackPageSize: number = 10;
+  doNotCallHideDiv:boolean = false;
 
   feedbackTypeArray = [{ id: 1, name: 'Positive' }, { id: 2, name: 'Negitive' }, { id: 3, name: 'Neutral' }]
   enterNewFeedbackForm!: FormGroup;
@@ -151,7 +152,7 @@ export class CrmHistoryComponent implements OnInit {
       Id: [0],
       FeedBackType: ['', Validators.required],
       Description: [''],
-      FollowupDate: ['', Validators.required],
+      FollowupDate: ['',Validators.required],
       NotToCall: [0],
     })
   }
@@ -182,6 +183,18 @@ export class CrmHistoryComponent implements OnInit {
 
   //............................. Insert Feedbacks Election Data................................//
 
+  doNotCallCheckBox(event:any){ 
+    this.doNotCallHideDiv = event.target.checked;
+    if (event.target.checked == false) {
+      this.enterNewFeedbackForm.controls["FollowupDate"].setValidators([Validators.required]);
+      this.enterNewFeedbackForm.controls["FollowupDate"].updateValueAndValidity();
+    } else {
+      this.enterNewFeedbackForm.controls['FollowupDate'].setValue('');
+      this.enterNewFeedbackForm.controls['FollowupDate'].clearValidators();
+      this.enterNewFeedbackForm.controls['FollowupDate'].updateValueAndValidity();
+    }
+  }
+
   onSubmitFeedbackForm() { 
      this.submitted = true;
     if (this.enterNewFeedbackForm.invalid) {
@@ -198,7 +211,7 @@ export class CrmHistoryComponent implements OnInit {
         "feedBackDate": new Date(),
         "feedBackType": data.FeedBackType,
         "description": data.Description,
-        "followupDate": this.commonService.setDate(data.FollowupDate),
+        "followupDate": data.FollowupDate ? this.commonService.setDate(data.FollowupDate) : '',
         "notToCall": data.NotToCall,
         "createdBy": this.commonService.loggedInUserId(),
         "clientId": this.voterListData.ClientId
@@ -272,6 +285,7 @@ export class CrmHistoryComponent implements OnInit {
   clearForm() {
     this.defaultFeedbackForm();
     this.submitted = false;
+    this.doNotCallHideDiv = false;
   }
 
   onClickPagintion(pageNo: number) {
