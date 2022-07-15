@@ -642,6 +642,7 @@ export class CrmComponent implements OnInit {
         this.insertUpdateFilterData(obj1, flagName);
         // this.votersPaginationNo = 1
       }
+      // this.votersPaginationNo = 1;
     }
   }
 
