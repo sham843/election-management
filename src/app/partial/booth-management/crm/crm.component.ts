@@ -61,7 +61,7 @@ export class CrmComponent implements OnInit {
   VoterCastListArray: any;
   favourofListArray: any;
   opposeOfListArray: any;
-  professionArray = [{ id: 1, name: 'Dairy Farm' }, { id: 2, name: 'Goat/Sheep Herd	' }, { id: 3, name: 'Sugar Cane Cutter	' }, { id: 4, name: 'Farmer' }, { id: 5, name: 'Business' },]
+  professionArray = [{ id: 1, name: 'Dairy Farm' }, { id: 2, name: 'Goat/Sheep Herd	' }, { id: 3, name: 'Sugarcane Cutter/Worker ' }, { id: 4, name: 'Farmer' }, { id: 5, name: 'Business' },]
   genderArray = [{ id: 1, name: 'Male' }, { id: 2, name: 'Female' }, { id: 3, name: 'Other' }];
   mobileNoAvailableArray = [{ id: 1, name: 'Yes' }, { id: 2, name: 'No' }];
   bussinessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
@@ -642,6 +642,7 @@ export class CrmComponent implements OnInit {
         this.insertUpdateFilterData(obj1, flagName);
         // this.votersPaginationNo = 1
       }
+      // this.votersPaginationNo = 1;
     }
   }
 
@@ -709,7 +710,6 @@ export class CrmComponent implements OnInit {
   globalFilterSubmitData() {  //Submit filter fun
     this.filteredValueNameArray1 = [];
     this.filteredValueNameArray1 = [...this.filteredValueNameArray];
-    console.log(this.filteredValueNameArray1)
     if (this.filterSidebarFlag == 'VotersFlag') {
       this.boothVoterList();
     }

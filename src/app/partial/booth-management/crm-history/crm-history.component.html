@@ -20,7 +20,8 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </div>
-                                    <div class="card-body pt-1">
+                                    <div class="card-body pt-1 position-relative bg-transparent" style="z-index:0">
+                                        <img *ngIf="voterProfileData?.doNotCall == 1" src="assets/images/do-not-call.jpg" class="donotcall">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0" *ngIf="voterProfileData?.voterPhoto">
                                                 <img src="{{voterProfileData?.voterPhoto}}" alt="Profile"
@@ -137,14 +138,14 @@
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
                                                     (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo1)"
                                                     value="option1">
-                                                <label class="form-check-label text-success">{{contactlistArray?.mobileNo1}}</label>
+                                                <label class="form-check-label text-success" for="inlineCheckbox1">{{contactlistArray?.mobileNo1}}</label>
                                             </div>
                                             <div class="form-check form-check-inline"
                                                 *ngIf="contactlistArray?.mobileNo2?.length > 9">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
                                                     (change)="onCheckWrongContactNumber($event,contactlistArray?.mobileNo2)"
                                                     value="option2">
-                                                <label class="form-check-label text-success">{{contactlistArray?.mobileNo2}}</label>
+                                                <label class="form-check-label text-success" for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
                                             </div>
                                             <div class="form-check form-check-inline"
                                                 *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
@@ -152,7 +153,7 @@
                                                     <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
                                                         (change)="onCheckWrongContactNumber($event,contactlist)"
                                                         value="option3">
-                                                    <label class="form-check-label text-danger">{{contactlist}}</label>
+                                                    <label class="form-check-label text-danger" for="inlineCheckbox3">{{contactlist}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,13 +181,13 @@
                                                     formControlName="isNameChange"
                                                     (change)="nameCorrectionCheckBox($event ,'noEdit')"
                                                     id="flexCheckDefault4">
-                                                <label class="form-check-label">Name Correction</label>
+                                                <label class="form-check-label" for="flexCheckDefault4">Name Correction</label>
                                             </div>
                                             <div class="form-check float-end">
-                                                <input class="form-check-input" type="checkbox"
+                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault01"
                                                     (change)="isExpiredCheckBox($event)" [formControl]="isExpiredVoter"
                                                     [checked]="voterProfileData?.isExpired == 1 ? true : false">
-                                                <label class="form-check-label">Is Expired</label>
+                                                <label class="form-check-label" for="flexCheckDefault01">Is Expired</label>
                                             </div>
                                         </div>
 
@@ -260,7 +261,7 @@
                                                             *ngIf="voterProfileForm.value.mobileNo1?.length > 9">
                                                             <input class="form-check-input" type="checkbox" value=""
                                                                 formControlName="watsApp1" id="flexCheckDefault6">
-                                                            <label class="form-check-label">WhatsApp</label>
+                                                            <label class="form-check-label" for="flexCheckDefault6">WhatsApp</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -277,7 +278,7 @@
                                                             *ngIf="voterProfileForm.value.mobileNo2?.length > 9">
                                                             <input class="form-check-input" type="checkbox" value=""
                                                                 formControlName="watsApp2" id="flexCheckDefault7">
-                                                            <label class="form-check-label"> WhatsApp</label>
+                                                            <label class="form-check-label" for="flexCheckDefault7"> WhatsApp</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -305,7 +306,7 @@
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" value=""
                                                                 formControlName="isNotCall" id="flexCheckDefault8">
-                                                            <label class="form-check-label">Do Not Call</label>
+                                                            <label class="form-check-label" for="flexCheckDefault8">Do Not Call</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -344,14 +345,14 @@
                                                         <label class="form-label">Family Head</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let head of headCheckArray">
+                                                                *ngFor="let head of headCheckArray ; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="head"
                                                                     (change)="familyHeadRadiobtn()"
                                                                     [checked]="head == voterProfileData?.head"
-                                                                    name="head" id="inlineRadio1" value="{{head}}">
+                                                                    name="head" id="inlineRadio1{{i}}" value="{{head}}">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio1">{{head == 'yes' ? 'Yes' : 'No'}}</label>
+                                                                    for="inlineRadio1{{i}}">{{head == 'yes' ? 'Yes' : 'No'}}</label>
                                                             </div>
                                                         </div>
                                                         <!-- <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
@@ -438,13 +439,13 @@
                                                         <label class="form-label">Graduate</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let padvidhar of padvidharArray">
+                                                                *ngFor="let padvidhar of padvidharArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
-                                                                    formControlName="isPadvidhar" id="inlineRadio15"
+                                                                    formControlName="isPadvidhar" id="inlineRadio15{{i}}"
                                                                     [checked]="padvidhar.id == voterProfileData?.isPadvidhar"
                                                                     name="isPadvidhar" [value]="padvidhar?.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio15">{{padvidhar.name}}</label>
+                                                                    for="inlineRadio15{{i}}">{{padvidhar.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -466,13 +467,13 @@
                                                         <label class="form-label">Leader</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let leader of leaderCheckArray">
+                                                                *ngFor="let leader of leaderCheckArray; let i= index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="leader" (change)="leaderRadiobtn()"
                                                                     [checked]="leader == voterProfileData?.leader"
-                                                                    name="leader" id="inlineRadio2" value="{{leader}}">
+                                                                    name="leader" id="inlineRadio2{{i}}" value="{{leader}}">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio2">{{leader == 'yes' ? 'Yes' :
+                                                                    for="inlineRadio2{{i}}">{{leader == 'yes' ? 'Yes' :
                                                                     'No'}}</label>
                                                             </div>
                                                         </div>
@@ -503,15 +504,15 @@
                                                         <label class="form-label">Migrated</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let migrated of migratedCheckArray">
+                                                                *ngFor="let migrated of migratedCheckArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="migrated"
                                                                     (change)="migratedRadiobtn()"
                                                                     [checked]="migrated == voterProfileData?.migrated"
-                                                                    name="migrated" id="inlineRadio3"
+                                                                    name="migrated" id="inlineRadio3{{i}}"
                                                                     value="{{migrated}}">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio3">{{migrated == 'yes' ? 'Yes' :
+                                                                    for="inlineRadio3{{i}}">{{migrated == 'yes' ? 'Yes' :
                                                                     'No'}}</label>
                                                             </div>
                                                         </div>
@@ -554,10 +555,10 @@
                                                     <div class="col-sm-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
-                                                                formControlName="postalFlag"
+                                                                formControlName="postalFlag" id="flexCheckDefault08"
                                                                 [checked]="voterProfileData?.postalFlag == 1 ? true : false"
                                                                 (click)="postalVotingCheckBox($event , 'noEdit')">
-                                                            <label class="form-check-label">Postal Voting</label>
+                                                            <label class="form-check-label" for="flexCheckDefault08">Postal Voting</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-9" *ngIf="postalVotingDivHide">
@@ -574,10 +575,10 @@
                                                     <div class="col-sm-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" value=""
-                                                                formControlName="needSupportFlag"
+                                                                formControlName="needSupportFlag" id="flexCheckDefault02"
                                                                 [checked]="voterProfileData?.needSupportFlag == 1 ? true : false"
                                                                 (click)="needSupportCheckBox($event, 'noEdit')">
-                                                            <label class="form-check-label"> Need Support?</label>
+                                                            <label class="form-check-label" for="flexCheckDefault02"> Need Support?</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-9" *ngIf="needSupportDivHide">
@@ -600,13 +601,13 @@
                                                         <label class="form-label">Daily Farmer</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let dairyFarmer of dairyFarmerArray">
+                                                                *ngFor="let dairyFarmer of dairyFarmerArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="isDairyFarmer" name="isDairyFarmer"
                                                                     [checked]="dairyFarmer?.id == voterProfileData?.isDairyFarmer"
-                                                                    id="inlineRadio4" [value]="dairyFarmer?.id">
+                                                                    id="inlineRadio4{{i}}" [value]="dairyFarmer?.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio4">{{dairyFarmer?.name}}</label>
+                                                                    for="inlineRadio4{{i}}">{{dairyFarmer?.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -614,14 +615,14 @@
                                                         <label class="form-label">Goat/Sheep Farmer</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let goatSheepFarmer of goatSheepFarmerArray">
+                                                                *ngFor="let goatSheepFarmer of goatSheepFarmerArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="isGoatSheepFarmer"
                                                                     name="isGoatSheepFarmer"
                                                                     [checked]="goatSheepFarmer.id == voterProfileData?.isGoatSheepFarmer"
-                                                                    id="inlineRadio5" [value]="goatSheepFarmer.id">
+                                                                    id="inlineRadio5{{i}}" [value]="goatSheepFarmer.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio5">{{goatSheepFarmer.name}}</label>
+                                                                    for="inlineRadio5{{i}}">{{goatSheepFarmer.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -629,14 +630,14 @@
                                                         <label class="form-label">Sugarcane Cutter Worker</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let sugarCaneCutter of sugarCaneCutterArray">
+                                                                *ngFor="let sugarCaneCutter of sugarCaneCutterArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="isSugarCaneCutter"
                                                                     name="isSugarCaneCutter"
                                                                     [checked]="sugarCaneCutter.id == voterProfileData?.isSugarCaneCutter"
-                                                                    id="inlineRadio6" [value]="sugarCaneCutter.id">
+                                                                    id="inlineRadio6{{i}}" [value]="sugarCaneCutter.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio6">{{sugarCaneCutter.name}}</label>
+                                                                    for="inlineRadio6{{i}}">{{sugarCaneCutter.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -644,13 +645,13 @@
                                                         <label class="form-label">Farmer</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let farmer of farmerArray">
+                                                                *ngFor="let farmer of farmerArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="isFarmer" name="isFarmer"
                                                                     [checked]="farmer.id == voterProfileData?.isFarmer"
-                                                                    id="inlineRadio7" [value]="farmer.id">
+                                                                    id="inlineRadio7{{i}}" [value]="farmer.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio7">{{farmer.name}}</label>
+                                                                    for="inlineRadio7{{i}}">{{farmer.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -658,14 +659,14 @@
                                                         <label class="form-label">Business</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let business of businessArray">
+                                                                *ngFor="let business of businessArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     (change)="businesDetRadiobtn()"
                                                                     formControlName="haveBusiness" name="haveBusiness"
                                                                     [checked]="business.id == voterProfileData?.haveBusiness"
-                                                                    id="inlineRadio8" [value]="business.id">
+                                                                    id="inlineRadio8{{i}}" [value]="business.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio8">{{business.name}}</label>
+                                                                    for="inlineRadio8{{i}}">{{business.name}}</label>
                                                             </div>
                                                         </div>
                                                         <span *ngIf="businessDethideDiv">
@@ -682,13 +683,13 @@
                                                         <label class="form-label">Yuvak</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let yuvak of yuvakArray">
+                                                                *ngFor="let yuvak of yuvakArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
                                                                     formControlName="isYuvak" name="isYuvak"
                                                                     [checked]="yuvak.id == voterProfileData?.isYuvak"
-                                                                    id="inlineRadio9" [value]="yuvak.id">
+                                                                    id="inlineRadio9{{i}}" [value]="yuvak.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio9">{{yuvak.name}}</label>
+                                                                    for="inlineRadio9{{i}}">{{yuvak.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -696,13 +697,13 @@
                                                         <label class="form-label">Vehicle</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let vehicle of vehicleArray">
+                                                                *ngFor="let vehicle of vehicleArray; let i=index">
                                                                 <input class="form-check-input" type="radio"
-                                                                    formControlName="haveVehicle" id="inlineRadio10"
+                                                                    formControlName="haveVehicle" id="inlineRadio10{{i}}"
                                                                     [checked]="vehicle.id == voterProfileData?.haveVehicle"
                                                                     name="haveVehicle" [value]="vehicle.id">
                                                                 <label class="form-check-label"
-                                                                    for="inlineRadio10">{{vehicle.name}}</label>
+                                                                    for="inlineRadio10{{i}}">{{vehicle.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -710,14 +711,12 @@
                                                         <label class="form-label">Income Group</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
-                                                                *ngFor="let financialCon of financialConditionArray">
+                                                                *ngFor="let financialCon of financialConditionArray ; let i = index">
                                                                 <input class="form-check-input" type="radio"
-                                                                    formControlName="financialCondition"
-                                                                    name="financialCondition"
+                                                                    formControlName="financialCondition" name="financialCondition"
                                                                     [checked]="financialCon.id == voterProfileData?.financialCondition"
-                                                                    id="inlineRadio11" [value]="financialCon.id">
-                                                                <label class="form-check-label"
-                                                                    for="inlineRadio11">{{financialCon.name}}</label>
+                                                                    id="inlineRadio11{{i}}" [value]="financialCon.id">
+                                                                <label class="form-check-label" for="inlineRadio11{{i}}">{{financialCon.name}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -769,11 +768,11 @@
                                             <div class="col-sm-auto">
                                                 <label class="form-label required-field">Feedback Type</label><br>
                                                 <div class="form-check form-check-inline"
-                                                    *ngFor="let feedbackTy of feedbackTypeArray">
+                                                    *ngFor="let feedbackTy of feedbackTypeArray; let i=index">
                                                     <input class="form-check-input" formControlName="FeedBackType"
-                                                        type="radio" [value]="feedbackTy?.id">
+                                                       id="chkIsMultipleYes{{i}}" type="radio" [value]="feedbackTy?.id">
                                                     <label class="form-check-label"
-                                                        for="chkIsMultipleYes">{{feedbackTy?.name}}</label>
+                                                        for="chkIsMultipleYes{{i}}">{{feedbackTy?.name}}</label>
                                                 </div>
                                                 <div *ngIf="submitted && f.FeedBackType.errors"
                                                     class="invalid-feedback">
@@ -785,13 +784,13 @@
                                             <div class="col-sm-auto">
                                                 <label class="form-label">Do Not Call</label>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
+                                                    <input class="form-check-input" type="checkbox" value="" (change)="doNotCallCheckBox($event)"
                                                         id="chkDoNotCall11" formControlName="NotToCall">
-                                                    <label class="form-check-label">Do Not Call</label>
+                                                    <label class="form-check-label" for="chkDoNotCall11">Do Not Call</label>
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-12" *ngIf="!doNotCallHideDiv">
                                                 <label class="form-label required-field">Followup Date-Time</label>
                                                 <div class="input-group">
 
@@ -845,7 +844,7 @@
                                         <td>
                                             <div class="row align-items-center">
                                                 <div class="col-sm-6">
-                                                    <small class="text-muted">{{feedbacksList?.feedBackDate}}</small>
+                                                    <small class="text-muted">{{feedbacksList?.feedBackDate | date:"dd/MM/yyyy hh:mm"}}</small>
                                                 </div>
                                                 <div class="col-sm-6 text-end">
                                                     <span class="badge rounded-pill bg-success fw-normal"
@@ -868,7 +867,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{feedbacksList?.followupDate}}
+                                            {{feedbacksList?.followupDate ? (feedbacksList?.followupDate | date:"dd/MM/yyyy hh:mm") : '-'}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -973,7 +972,7 @@
             <div class="modal-body">
                 <div class="form-container">
                     <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Select By Voter Name"
+                        <input class="form-control" type="text" placeholder="Search By Voter Name"
                             [(ngModel)]="familyMembersFilter.englishName" (keyup)="commonService.removeSpaceAtBegining($event)">
                         <button type="button" class="btn btn-light">
                             <i class="fas fa-search"></i>
@@ -1054,7 +1053,7 @@
                     <div class="mb-2">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault13">
-                            <label class="form-check-label"> Is Expired </label>
+                            <label class="form-check-label" for="flexCheckDefault13"> Is Expired </label>
                         </div>
                     </div>
                     <p class="fw-bold mb-2">Migration Information</p>
@@ -1086,7 +1085,7 @@
                     <div class="mb-2">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault14">
-                            <label class="form-check-label"> Postal Voting </label>
+                            <label class="form-check-label" for="flexCheckDefault14"> Postal Voting </label>
                         </div>
                     </div>
                     <div class="mb-2">
