@@ -25,6 +25,8 @@ import { VoterCallEntriesComponent } from './partial/dialogs/voter-call-entries/
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ExcelService } from '../../src/app/services/excel.service';
 import { RatingModule } from 'ng-starrating';
+import { AgmDrawingModule } from '@agm/drawing';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,12 @@ import { RatingModule } from 'ng-starrating';
     OwlDateTimeModule,
     RatingModule,
     NgxPaginationModule,
+    AgmDrawingModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
+      language: 'en',
+      libraries: ['places', 'drawing', 'geometry'],
+    }),
     ToastrModule.forRoot({
       timeOut: 3000,
       closeButton: true,

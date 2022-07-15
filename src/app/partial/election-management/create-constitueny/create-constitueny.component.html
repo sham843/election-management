@@ -131,10 +131,10 @@
                                     </table>
                                 </div>
                             </div>
-                            <!-- <div class="mb-2 text-end">
+                            <div class="mb-2 text-end">
                                 <a  class="btn btn-link btn-sm shadow-none" data-bs-toggle="modal"
-                                    data-bs-target="#CreateGeoFenceModal" (click)="hideDrawcircleShape()">Generate Geofence</a>
-                            </div> -->
+                                    data-bs-target="#CreateGeoFenceModal">Generate Geofence</a>
+                            </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <button type="button" class="btn btn-secondary  float-lg-start"
@@ -239,66 +239,11 @@
                 <h5 class="modal-title" id="CreateGeoFenceModalLabel">Create Geofence</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form [formGroup]="createGeofence" (ngSubmit)="onSubmitCreGeofence()">
+            <form [formGroup]="createGeofence" (ngSubmit)="insertElectionCreateGeofence()">
             <div class="modal-body p-0">
                 <!-- <input class="form-control" type="text" placeholder="Search Location"  (keydown.enter)="$event.preventDefault()"
                 placeholder="Search Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
                 #search> -->
-                <div class="card card-body border shadow-none m-2 p-2 pb-3">
-                    <div class="row form-container">
-                        <div class="col-sm-4 border-end">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="checkradio"    (change)="selGeofenceType('Enter Lat-Long','1')">
-                                <label class="form-check-label" for="rbLatLong">
-                                    Enter Lat-Long
-                                </label>
-                            </div>
-                            <!-- <label for="txtLatLong" class="form-label">Enter Lat-Long</label> -->
-                            <div class="input-group"  [ngClass]="{'disable': disabledLatLong}" >
-                                <input type="text" id="txtLatLong" class="form-control"  formControlName="rbLatLong"  placeholder="Enter Lat-Long"  />
-                                <button type="button" title="Draw Geo-Fence"
-                                    class="btn btn-light border text-primary" (click)="selectMarker(this.createGeofence.value.rbLatLong)"><i
-                                        class="fas fa-draw-polygon"></i></button>
-                            </div>
-                            <div *ngIf="submittedCreGeofence && g.rbLatLong.errors" class="invalid-feedback">
-                                <div *ngIf="g.rbLatLong.errors.required">Lat-Long is required</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 border-end">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="checkradio"   (change)="selGeofenceType('KML File','2')">
-                                <label class="form-check-label" for="rblCreateGeoFence">
-                                    Upload KML File
-                                </label>
-                            </div>
-                            <!-- <label for="txtKMLUpload" class="form-label">Upload KML File</label> -->
-                            <div class="input-group"  [ngClass]="{'disable': disabledKml}" >
-                                <input type="file" id="txtKMLUpload" class="form-control"  formControlName="rbKMLUpload" />
-                                <button type="button" title="Draw Geo-Fence"
-                                    class="btn btn-light border text-primary"><i
-                                        class="fas fa-draw-polygon"></i></button>
-                            </div>
-                            <div *ngIf="submittedCreGeofence && g.rbKMLUpload.errors" class="invalid-feedback">
-                                <div *ngIf="g.rbKMLUpload.errors.required">KML File is required</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="checkradio"   (change)="selGeofenceType('Lat-Long (Manual)','3')">
-                                <label class="form-check-label" for="rbManualDraw">
-                                    Geo-Fence Lat-Long (Manual)
-                                </label>
-                            </div>
-                            <!-- <label class="form-label">Geo-Fence Lat-Long (Manual)</label> -->
-                            <div class="input-group"  [ngClass]="{'disable': disabledKml}" >
-                                <input type="text" id="txtKMLUpload" class="form-control" formControlName="rbManualDraw" readonly />
-                            </div>
-                            <div *ngIf="submittedCreGeofence && g.rbManualDraw.errors" class="invalid-feedback">
-                                <div *ngIf="g.rbManualDraw.errors.required"> Geo-Fence Lat-Long  is required</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="mapouter">
                     <div class="mapsearch">
                         <input class="form-control" type="text" placeholder="Search Location"  (keydown.enter)="$event.preventDefault()"
@@ -306,6 +251,7 @@
                         #search>
                     </div>
                     <div class="gmap_canvas">
+                        
                         <!-- <agm-map id="googlemaps" [zoom]="zoom" [latitude]='lat' [longitude]='long' style="height: 500px;">
                             <agm-marker [latitude]="lat" [longitude]="long">
                             </agm-marker>
@@ -322,12 +268,20 @@
                             <!-- <agm-kml-layer url="./assets/GermanyDivisions1.kml"></agm-kml-layer> -->
 
                         <!-- <agm-drawing-manager #drawing="agmDrawingManager"></agm-drawing-manager> -->
+                        <a (click)="removeShape()" *ngIf="isShapeDrawn" aria-label="Remove Shape" close="closeShape">Closed</a>
+                        <agm-map [streetViewControl]="false" [latitude]="lat" *ngIf="constituencyDetailsArray"
+                        [longitude]="lng" [scrollwheel]="false" [zoom]="zoom"
+                        [fullscreenControl]='true'
+                        [mapTypeControl]='true' (mapReady)="onMapReady($event)">
+                        </agm-map>
+
+                        
 
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-main btn-sm" (click)="insertElectionCreateGeofence()">Submit Geo-Fence Data</button>
+                <button type="submit" class="btn btn-main btn-sm" >Submit Geo-Fence Data</button>
             </div>
         </form>
         </div>
