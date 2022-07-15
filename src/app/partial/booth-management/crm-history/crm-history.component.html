@@ -867,7 +867,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{feedbacksList?.followupDate ? feedbacksList?.followupDate : '-'}}
+                                            {{feedbacksList?.followupDate ? (feedbacksList?.followupDate | date:"dd/mm/yy hh:mm") : '-'}}
                                         </td>
                                     </tr>
                                 </tbody>
