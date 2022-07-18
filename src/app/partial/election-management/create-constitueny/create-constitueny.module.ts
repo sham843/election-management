@@ -21,15 +21,6 @@ import { AgmDrawingManager, AgmDrawingModule } from '@agm/drawing';
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
-
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
-      language: 'en',
-      libraries: ['places', 'drawing', 'geometry'],
-    }),
-    AgmDrawingModule,
-    
-  
   ]
 })
 export class CreateConstituenyModule { }

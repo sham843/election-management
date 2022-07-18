@@ -27,6 +27,7 @@ import { ExcelService } from '../../src/app/services/excel.service';
 import { RatingModule } from 'ng-starrating';
 import { AgmDrawingModule } from '@agm/drawing';
 import { AgmCoreModule } from '@agm/core';
+import { GeoFanceComponent } from './partial/dialogs/geo-fance/geo-fance.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,8 @@ import { AgmCoreModule } from '@agm/core';
     DeleteComponent,
     VoterCallEntriesComponent,
     NameCorrectionDialogComponent,
+
+    GeoFanceComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,12 +55,12 @@ import { AgmCoreModule } from '@agm/core';
     OwlDateTimeModule,
     RatingModule,
     NgxPaginationModule,
-    AgmDrawingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
       language: 'en',
       libraries: ['places', 'drawing', 'geometry'],
     }),
+    AgmDrawingModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       closeButton: true,

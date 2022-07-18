@@ -1,0 +1,9 @@
+agm-map {
+    height: 400px !important;
+}
+
+.closeShape {
+    top: 95px;
+    position: absolute;
+    z-index: 9;
+}

@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DeleteComponent } from '../../dialogs/delete/delete.component';
+import { GeoFanceComponent } from '../../dialogs/geo-fance/geo-fance.component';
 import { debounceTime } from 'rxjs/operators';
 import { MapsAPILoader } from '@agm/core';
 // import { MapsAPILoader } from '@agm/core';
@@ -53,10 +54,7 @@ export class CreateConstituenyComponent implements OnInit {
   highlightedRow: any;
   prevArrayData: any;
   SubElectionName: any;
-  lat: any = 19.0898177;
-  lng: any = 76.5240298;
-  zoom = 12;
-  @ViewChild('search') searchElementRef: any;
+  data:any;
   geoCoder: any;
   createGeofence!: FormGroup;
   ploygonGeofecneArr: any[] = [];
@@ -74,7 +72,7 @@ export class CreateConstituenyComponent implements OnInit {
   geoFanceConstituencyId: any;
   getGeofenceTypeId: any;
   ElectionId: any;
-  data:any;
+  geoFanceselData:any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -103,8 +101,6 @@ export class CreateConstituenyComponent implements OnInit {
     this.mapsAPILoader.load().then(() => {
       this.geoCoder = new google.maps.Geocoder;
     });
-    // this.searchAutoComplete();
-    this.defaultcreateGeofenceForm();
   }
 
   defaultConstituencyForm() {
@@ -235,6 +231,15 @@ export class CreateConstituenyComponent implements OnInit {
     this.callAPIService.setHttp('get', 'Web_Insert_ElectionConstituency?Id=' + obj, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
+
+        if (res.data1[0].Id != 0) {// call geoface 
+          if (this.geoFanceselData.latitude != "" && this.geoFanceselData.longitude != "") {
+            this.geoFanceselData['constituencyId'] = res.data1[0].Id;
+            this.geoFanceselData
+            this.insElectionCreateGeofence();
+          }
+        }
+
         this.spinner.hide();
         if (res.data1[0].Msg == "Constituency Name already Registerd") {
           this.toastrService.error("Constituency Name already Registerd");
@@ -532,447 +537,41 @@ export class CreateConstituenyComponent implements OnInit {
       );
   }
 
-  // create geo fance modal 
-  defaultcreateGeofenceForm() {
-    this.createGeofence = this.fb.group({
-      id: [''],
-      constituencyId: [''],
-      latitude: [''],
-      longitude: [''],
-      polygonText: [''],
-      geofenceTypeId: [''],
-      createdBy: [this.commonService.loggedInUserId()],
-      distance: [],
-    })
-  }
 
-  get g() { return this.createGeofence?.controls };
 
 
   // ----------------------------------agm map start  coading here ----------------------------------------------//
-  google: any;
-  pointList: any;
-  selectedArea = 0;
-  centerMarker:any;
-  centerMarkerLatLng: string = "";
-  isShapeDrawn: boolean = false;
-  isHide: boolean = false;
-  newRecord: any = {
-    dataObj: undefined,
-    geofenceType: "",
-    polygon: undefined,
-    circle: undefined,
-    quarryPhotos: [],
-    polygontext: '',
-    radius: undefined
-  };
-  selectedRecord = {
-    dataObj: undefined,
-    geofenceData: undefined,
-    polygon: undefined,
-    circle: undefined,
-    quarryPhotos: []
-  };
-  
-
-  centerMarkerRadius = "";
-
-
-  onMapReady(map: any) {
-    this.isHide = this.data.isHide || false;
-    this.map = map;
-    this.drawingManager = new google.maps.drawing.DrawingManager({
-      drawingControl: true,
-      drawingControlOptions: {
-        drawingModes: [google.maps.drawing.OverlayType.POLYGON, google.maps.drawing.OverlayType.CIRCLE],
-      },
-      circleOptions: {
-        fillColor: "#00FF00",
-        strokeColor: "#00FF00",
-        clickable: false,
-        editable: true,
-        zIndex: 1,
-      },
-      polygonOptions: {
-        fillColor: "#00FF00",
-        strokeColor: "#00FF00",
-        draggable: true,
-        editable: true,
-        
-      },
-      map: map
-      //drawingMode: google.maps.drawing.OverlayType.POLYGON
+  openGeoFence() {
+    let fromData = this.createConstituencyForm.value;
+    if(fromData.ElectionId == "" || fromData.ConstituencyName == ""){
+      this.toastrService.error("Election and Constituency / Name is required");
+      return
+    }
+    
+    this.btnText == "Create Constituency" ? this.data = "" :this.data['constituencyDetailsArray'] = this.constituencyDetailsArray;
+    const dialogRef = this.dialog.open(GeoFanceComponent,{
+      width: '950px',
+      data: this.data
     });
 
-
-
-    this.mapsAPILoader.load().then(() => {
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef?.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          map.setZoom(16);
-          map.setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() })
-          if (this.centerMarker == undefined) {
-            this.centerMarker = new google.maps.Marker({
-              map: map,
-              draggable: true
-            })
-            this.centerMarker.addListener('dragend', (evt: any) => {
-              this.centerMarkerLatLng = "Long, Lat:" + evt.latLng.lng().toFixed(6) + ", " + evt.latLng.lat().toFixed(6);
-              this.centerMarker.panTo(evt.latLng);
-            });
-          }
-          this.centerMarker.setPosition({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
-          this.centerMarkerLatLng = "Long, Lat:" + place.geometry.location.lng().toFixed(6) + ", " + place.geometry.location.lat().toFixed(6);
-        });
-      });
-    })
-
-    //self.updatePointList(this.data.selectedRecord.polygonText);
-
-    if (this.data.selectedRecord && this.data.selectedRecord.geofenceType == 1) {
-      try {
-        var OBJ_fitBounds = new google.maps.LatLngBounds();
-        const path = this.data.selectedRecord.polygonText.split(',').map((x: any) => { let obj = { lng: Number(x.split(' ')[0]), lat: Number(x.split(' ')[1]) }; OBJ_fitBounds.extend(obj); return obj });
-        const existingShape = new google.maps.Polygon({ paths: path, map: map, strokeColor: "#FF0000", strokeOpacity: 0.8, strokeWeight: 2, fillColor: "#FF0000", fillOpacity: 0.35, editable: false });
-        debugger
-        let latLng = this.FN_CN_poly2latLang(existingShape);
-        map.setCenter(latLng); map.fitBounds(OBJ_fitBounds);
-        const existingMarker = new google.maps.Marker({ map: map, draggable: false, position: latLng });
-
-        let hc = "<table><tbody>";
-        hc += '<tr><td colspan="2"><h4>Selected Constituency details</h4></td></tr>';
-        hc += '<tr><td>Constituency Name</td><td>: ' + (this.constituencyDetailsArray.ConstituencyName || "-") + '</td></tr>';
-        hc += '<tr><td>No Of Members </td><td>: ' + (this.constituencyDetailsArray.NoofMembers || "-") + '</td></tr>';
-        hc += "</tbody></table>";
-        const info = new google.maps.InfoWindow({
-          content: hc
-        })
-        existingMarker.addListener('click', () => {
-          info.open(this.map, existingMarker);
-        })
-
-      } catch (e) { }
-    }
-    if (this.data.selectedRecord && this.data.selectedRecord.geofenceType == 2) {
-    
-      try {
-        let latlng = new google.maps.LatLng(this.data.selectedRecord.polygonText.split(" ")[1], this.data.selectedRecord.polygonText.split(" ")[0]);
-        const existingMarker = new google.maps.Marker({ map: map, draggable: false, position: latlng });
-        let circle = new google.maps.Circle({
-          strokeColor: '#FF0000',
-          fillColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillOpacity: 0.35,
-          map: map,
-          //position: latlng,
-          center: latlng,
-          radius: this.data.selectedRecord.distance,
-        });
-        map.panTo(latlng);
-        this.setZoomLevel(this.data.selectedRecord.distance);
-
-        let hc = "<table><tbody>";
-        hc += '<tr><td colspan="2"><h4>Selected Thana details</h4></td></tr>';
-        hc += '<tr><td>Thana Name</td><td>: ' + (this.data.selectedRecord.thanaName || "-") + '</td></tr>';
-        hc += '<tr><td>Zone Name</td><td>: ' + (this.data.selectedRecord.zoneName || "-") + '</td></tr>';
-        hc += "</tbody></table>";
-
-        const info = new google.maps.InfoWindow({
-          content: hc
-        })
-        existingMarker.addListener('click', () => {
-          info.open(this.map, existingMarker);
-        })
-
-      } catch (e) { }
-    }
-
-    if (this.data.newRecord.geofenceType == 1) {
-      // this.removeShape();
-      //this.pointList.drawnPolytext = this.data.drawnPolytext;
-      var OBJ_fitBounds = new google.maps.LatLngBounds();
-      const path = this.data.newRecord.polygonText.split(',').map((x: any) => { let obj = { lng: Number(x.split(' ')[0]), lat: Number(x.split(' ')[1]) }; OBJ_fitBounds.extend(obj); return obj });
-      const existingShape = new google.maps.Polygon({ paths: path, strokeColor: "#00FF00", strokeOpacity: 0.8, strokeWeight: 2, fillColor: "#00FF00", fillOpacity: 0.35, editable: true, draggable: true });
-      existingShape.setMap(map);
-      
-      map.setCenter(this.FN_CN_poly2latLang(existingShape));
-      map.fitBounds(OBJ_fitBounds);
-      //this.setSelection(existingShape, "polygon");
-      google.maps.event.addListener(existingShape, 'dragend', (e:any) => {
-        this.ngZone.run(() => {
-          this.setSelection(existingShape, "polygon")
-        })
-      });
-      google.maps.event.addListener(existingShape.getPath(), 'set_at', (e:any) => {
-        this.ngZone.run(() => {
-          this.setSelection(existingShape, "polygon")
-        })
-      })
-      google.maps.event.addListener(existingShape.getPath(), 'insert_at', (e:any) => {
-        this.ngZone.run(() => {
-          this.setSelection(existingShape, "polygon")
-        })
-      })
-      google.maps.event.addListener(existingShape.getPath(), 'remove_at', (e:any) => {
-        this.ngZone.run(() => {
-          this.setSelection(existingShape, "polygon")
-        })
-      })
-    }
-
-    if (this.data.newRecord.geofenceType == 2) {
-      // this.removeShape();
-      let latlng = new google.maps.LatLng(this.data.newRecord.latLng.split(",")[1], this.data.newRecord.latLng.split(",")[0]);
-      let circle = new google.maps.Circle({
-        strokeColor: '#00FF00',
-        fillColor: '#00FF00',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillOpacity: 0.35,
-        map: map,
-        //position: latlng,
-        center: latlng,
-        radius: this.data.newRecord.radius,
-        draggable: true,
-        editable: true
-      });
-      this.setZoomLevel(this.data.newRecord.radius)
-      map.panTo(latlng);
-      google.maps.event.addListener(circle, 'radius_changed', () => {
-        this.ngZone.run(() => {
-          this.setSelection(circle, "circle");
-        })
-      });
-      google.maps.event.addListener(circle, 'dragend', (e:any) => {
-        this.ngZone.run(() => {
-          this.setSelection(circle, "circle");
-        })
-      });
-      google.maps.event.addListener(circle, 'center_changed', (e:any) => {
-        this.ngZone.run(() => {
-          this.setSelection(circle, "circle");
-        })
-      });
-
-    }
-
-    if (this.data.alreadyExistMapAryObj.length > 0) {
-      var OBJ_fitBounds = new google.maps.LatLngBounds();
-      this.data.alreadyExistMapAryObj.forEach((obj: any) => {
-        let hc = "<table><tbody>";
-        hc += '<tr><td colspan="2"><h4>Selected Constituency details</h4></td></tr>';
-        hc += '<tr><td>Constituency Name</td><td>: ' + (this.constituencyDetailsArray.ConstituencyName || "-") + '</td></tr>';
-        hc += '<tr><td>No Of Members </td><td>: ' + (this.constituencyDetailsArray.NoofMembers || "-") + '</td></tr>';
-        hc += "</tbody></table>";
-
-        const info = new google.maps.InfoWindow({
-          content: hc
-        })
-
-        if (obj.geofenceType == 1) {
-          const path = obj.polygonText.split(',').map((x: any) => { let obj = { lng: Number(x.split(' ')[0]), lat: Number(x.split(' ')[1]) }; OBJ_fitBounds.extend(obj); return obj });
-          const poly = new google.maps.Polygon({ paths: path, map: map, strokeColor: "#0000FF", strokeOpacity: 0.8, strokeWeight: 2, fillColor: "#0000FF", fillOpacity: 0.35, editable: false, draggable: false });
-          let latLng = this.FN_CN_poly2latLang(poly);
-          const marker = new google.maps.Marker({ map: map, draggable: false, position: latLng });
-          OBJ_fitBounds.extend(latLng);
-          marker.addListener('click', () => {
-            info.open(map, marker);
-          })
-        }
-
-        if (obj.geofenceType == 2) {
-          let latlng = new google.maps.LatLng(obj.polygonText.split(" ")[1], obj.polygonText.split(" ")[0]);
-          let circle: any = new google.maps.Circle({
-            strokeColor: '#0000FF',
-            fillColor: '#0000FF',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillOpacity: 0.35,
-            map: map,
-            //position: latlng,
-            center: latlng,
-            radius: obj.distance,
-            draggable: false,
-            editable: false
-          });
-          OBJ_fitBounds.extend(latlng);
-          const marker = new google.maps.Marker({ map: map, draggable: false, position: latlng });
-          OBJ_fitBounds.extend(latlng);
-          marker.addListener('click', () => {
-            info.open(map, marker);
-          })
-        }
-      });
-      map.fitBounds(OBJ_fitBounds);
-    }
-
-    this.isHide && this.drawingManager.setDrawingMode(null);
-    google.maps.event.addListener(
-      this.drawingManager,
-      'overlaycomplete',
-      (e:any) => {
-        this.isShapeDrawn = true;
-        var newShape = e.overlay;
-
-        if (e.type == 'polygon' || e.type == 'circle') { this.drawingManager.setDrawingMode(null); }
-
-        google.maps.event.addListener(newShape, 'radius_changed', () => {
-          this.ngZone.run(() => {
-            this.setSelection(newShape, "circle");
-          })
-        });
-        google.maps.event.addListener(newShape, 'dragend', (e:any) => {
-          this.ngZone.run(() => {
-            this.setSelection(newShape, this.newRecord.geofenceType);
-          })
-        });
-
-        this.setSelection(newShape, e.type);
-
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+       this.geoFanceselData = result;
+        // this.editConstituency(this.geoFanceConstituencyId)
       }
-    );
+    });
   }
 
-
-
-  setSelection(shape: any, type: string) {
-    this.clearSelection(false);
-    type == 'circle' && (this.newRecord.circle = shape, this.newRecord.circle.setMap(this.map), this.newRecord.circle.setEditable(true), this.newRecord.centerMarkerLatLng = this.getLanLongFromCircle(shape), this.newRecord.radius = +shape.getRadius().toFixed(2))
-    type == 'polygon' && (this.newRecord.polygon = shape, this.newRecord.polygon.setMap(this.map), this.newRecord.polygon.setEditable(true), this.newRecord.centerMarkerLatLng = this.getCenterLanLongFromPolygon(shape), this.newRecord.radius = 0, this.centerMarkerRadius = '')
-    try {
-      var ll = new google.maps.LatLng(+this.centerMarkerLatLng.split(',')[1], +this.centerMarkerLatLng.split(',')[0]);
-      this.map.panTo(ll);
-    }
-    catch (e) { }
-  }
-  clearSelection(isAllClear: any) {
-    
-    this.newRecord.polygon && (this.newRecord.polygon.setEditable(false), this.newRecord.polygon.setMap(null), this.newRecord.polygon = undefined);
-    this.newRecord.circle && (this.newRecord.circle.setEditable(false), this.newRecord.circle.setMap(null), this.newRecord.circle = undefined);
-    //$('#Latlng, #geofenceRadius').val("");
-    this.centerMarkerLatLng = "";
-    this.centerMarkerRadius = "";
-    this.newRecord.geofenceType = "";
-    this.newRecord.polygontext = "";
-    this.newRecord.radius = 0;
-    if (this.selectedRecord && !isAllClear) {
-      if (this.selectedRecord.geofenceData) {
-
-      }
-    }
-  }
-
-  deleteSelectedShape() {
-    this.clearSelection(false);
-  }
-
-
-  getLanLongFromCircle(circle: any) {
-    
-    var lat = circle.getCenter().lat().toFixed(8);
-    var long = circle.getCenter().lng().toFixed(8);
-    this.newRecord.polygontext = long + ' ' + lat;
-    this.createGeofence.controls['geofenceTypeId'].setValue(2);
-    this.createGeofence.controls['longitude'].setValue(long);
-    this.createGeofence.controls['latitude'].setValue(lat);
-    return long + ',' + lat;
-  }
-  getCenterLanLongFromPolygon(polygon: any) {
-    let bounds = new google.maps.LatLngBounds();
-    var paths = polygon.getPaths();
-    this.newRecord.polygontext = "";
-    var tempPolygonText: any[] = [];
-    paths.forEach(function (path: any) {
-      var ar = path.getArray();
-      for (var i = 0, l = ar.length; i < l; i++) {
-        tempPolygonText[tempPolygonText.length] = ar[i].lng().toFixed(8) + ' ' + ar[i].lat().toFixed(8);
-        bounds.extend(ar[i]);
-      }
-    })
-    tempPolygonText[tempPolygonText.length] = tempPolygonText[0];
-    this.newRecord.polygontext = tempPolygonText.join();
-    this.createGeofence.controls['geofenceTypeId'].setValue(1);
-    this.createGeofence.controls['longitude'].setValue(bounds.getCenter().lng().toFixed(8));
-    this.createGeofence.controls['latitude'].setValue(bounds.getCenter().lat().toFixed(8));
-    return bounds.getCenter().lng().toFixed(8) + ',' + bounds.getCenter().lat().toFixed(8);
-  }
-  FN_CN_poly2latLang(poly: any) {
-    var lowx,
-      highx,
-      lowy,
-      highy,
-      lats = [],
-      lngs = [],
-      vertices = poly.getPath();
-    for (var i = 0; i < vertices.length; i++) {
-      lngs.push(vertices.getAt(i).lng());
-      lats.push(vertices.getAt(i).lat());
-    }
-    lats.sort();
-    lngs.sort();
-    lowx = lats[0];
-    highx = lats[vertices.length - 1];
-    lowy = lngs[0];
-    highy = lngs[vertices.length - 1];
-    const center_x = lowx + ((highx - lowx) / 2);
-    const center_y = lowy + ((highy - lowy) / 2);
-    return (new google.maps.LatLng(center_x, center_y));
-    //return center_x + ' ' + center_y
-  }
-  removeShape() {
-    this.isShapeDrawn = false;
-    this.clearSelection(false);
-  }
-  setZoomLevel(radius: number) {
-    let zoom = 8;
-    if (radius < 500) {
-      zoom = 16;
-    }
-    else if (radius < 1000) {
-      zoom = 14;
-    }
-    else if (radius < 2000) {
-      zoom = 14;
-    }
-    else if (radius < 3000) {
-      zoom = 12;
-    }
-    else if (radius < 5000) {
-      zoom = 10;
-    }
-    else if (radius < 15000) {
-      zoom = 10;
-    }
-    this.map.setZoom(zoom)
-  }
-
-
-  insertElectionCreateGeofence() {
-
-    let geofenFormData = this.createGeofence.value;
-
-    this.createGeofence.controls['constituencyId'].setValue(this.constituencyDetailsArray?.Id);
-    this.createGeofence.controls['id'].setValue(this.constituencyDetailsArray?.GeofenceId ? this.constituencyDetailsArray?.GeofenceId :0);
-    this.createGeofence.controls['latitude'].setValue(+geofenFormData?.latitude)
-    this.createGeofence.controls['longitude'].setValue(+geofenFormData?.longitude)
-    this.createGeofence.controls['distance'].setValue(this.newRecord?.radius)
-    this.createGeofence.controls['polygonText'].setValue(this.newRecord?.polygontext)
- 
-    this.callAPIService.setHttp('post', 'ClientMasterWebApi/ConstituencyGeofence/Create', false, this.createGeofence.value, false, 'electionMicroSerApp');
+  insElectionCreateGeofence(){
+    this.callAPIService.setHttp('post', 'ClientMasterWebApi/ConstituencyGeofence/Create', false,  this.geoFanceselData, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
+      if (res.statusCode == '200') {
         this.spinner.hide();
-        this.toastrService.success(res.data1[0].Msg);
+        // this.toastrService.success(res.statusMessage);
+        this.geoFanceselData="";
       } else {
         this.toastrService.error(res.statusMessage);
         this.spinner.hide();
-        //this.toastrService.error("Data is not available");
       }
     }, (error: any) => {
       if (error.status == 500) {
@@ -981,3 +580,4 @@ export class CreateConstituenyComponent implements OnInit {
     })
   }
 }
+

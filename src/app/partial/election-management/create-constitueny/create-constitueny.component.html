@@ -132,8 +132,7 @@
                                 </div>
                             </div>
                             <div class="mb-2 text-end">
-                                <a  class="btn btn-link btn-sm shadow-none" data-bs-toggle="modal"
-                                    data-bs-target="#CreateGeoFenceModal">Generate Geofence</a>
+                                <a  class="btn btn-link btn-sm shadow-none"  (click)="openGeoFence()">Generate Geofence</a>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -226,68 +225,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- modal for geofence -->
-<div class="modal fade" id="CreateGeoFenceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="CreateGeoFenceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="CreateGeoFenceModalLabel">Create Geofence</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form [formGroup]="createGeofence" (ngSubmit)="insertElectionCreateGeofence()">
-            <div class="modal-body p-0">
-                <!-- <input class="form-control" type="text" placeholder="Search Location"  (keydown.enter)="$event.preventDefault()"
-                placeholder="Search Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-                #search> -->
-                <div class="mapouter">
-                    <div class="mapsearch">
-                        <input class="form-control" type="text" placeholder="Search Location"  (keydown.enter)="$event.preventDefault()"
-                        placeholder="Search Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-                        #search>
-                    </div>
-                    <div class="gmap_canvas">
-                        
-                        <!-- <agm-map id="googlemaps" [zoom]="zoom" [latitude]='lat' [longitude]='long' style="height: 500px;">
-                            <agm-marker [latitude]="lat" [longitude]="long">
-                            </agm-marker>
-                        </agm-map>    -->
-
-                        <!-- <agm-map [streetViewControl]="false" [latitude]="lat"
-                        [longitude]="lng" [scrollwheel]="false" [zoom]="zoom" [streetViewControl]="true"
-                         [fullscreenControl]='true' [mapTypeControl]='true' (mapReady)="onMapReady($event)"> -->
-                         
-                         <!-- <agm-marker [latitude]="lat" [longitude]="lng">
-                        </agm-marker> -->
-
-                        <!-- </agm-map> -->
-                            <!-- <agm-kml-layer url="./assets/GermanyDivisions1.kml"></agm-kml-layer> -->
-
-                        <!-- <agm-drawing-manager #drawing="agmDrawingManager"></agm-drawing-manager> -->
-                        <a (click)="removeShape()" *ngIf="isShapeDrawn" aria-label="Remove Shape" close="closeShape">Closed</a>
-                        <!-- <agm-map [streetViewControl]="false" [latitude]="23.7541318" [zoom]="6" [longitude]="80.3681253" *ngIf="constituencyDetailsArray"
-                        [scrollwheel]="false" [zoom]="6"
-                        [fullscreenControl]='true'
-                        [mapTypeControl]='true' (mapReady)="onMapReady($event)">
-                        </agm-map> -->
-
-                        
-                        <agm-map [latitude]="23.7541318" [zoom]="6" [longitude]="80.3681253" (mapReady)="onMapReady($event)" *ngIf="constituencyDetailsArray">
-                        </agm-map>
-
-                        
-
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-main btn-sm" >Submit Geo-Fence Data</button>
-            </div>
-        </form>
         </div>
     </div>
 </div>
