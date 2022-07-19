@@ -246,6 +246,10 @@ export class CrmHistoryComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
+        this.commonService.checkDataType(res.responseData?.leader) == false ? (res.responseData.leader = 'no') : res.responseData?.leader ;
+        this.commonService.checkDataType(res.responseData?.migrated) == false ? (res.responseData.migrated = 'no') : res.responseData?.migrated ;
+        res.responseData?.haveVehicle == 0 ? (res.responseData.haveVehicle = 3) : res.responseData?.haveVehicle ; 
+        res.responseData?.financialCondition == 0 ? (res.responseData.financialCondition = 2) : res.responseData?.financialCondition ; 
         this.voterProfileData = res.responseData;
         flag == 'refreshFlag' ? this.refreshUrlTab() : '';
         this.editVoterProfileData(this.voterProfileData);
@@ -395,7 +399,7 @@ export class CrmHistoryComponent implements OnInit {
     if (this.voterListforFamilyChildArray?.length == 0) {
       this.spinner.show();
       let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&VoterId=' + this.voterListData.VoterId +
-        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + 0 + '&Search=' + this.searchFamilyChield.value.trim();
+        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + 0 + '&Search=' + this.searchFamilyChield.value.trim() + '&LastName=' + this.voterProfileData?.lastName ;
       this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj, false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
