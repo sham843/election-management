@@ -298,7 +298,7 @@
                                                     <div class="col-sm-3">
                                                         <label class="form-label">Date of birth</label>
                                                         <input [owlDateTime]="dt2" formControlName="dateOfBirth" [readOnly]="true"
-                                                            [max]="max" class="form-control" [owlDateTimeTrigger]="dt2"
+                                                        [min]="min"  [max]="max" class="form-control" [owlDateTimeTrigger]="dt2"
                                                             placeholder="dd/mm/yyyy">
                                                         <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
                                                     </div>

@@ -39,6 +39,7 @@ export class CrmHistoryComponent implements OnInit {
   VPCommentData: any;
   posNegativeInfData: any;
   max = new Date();
+  min = new Date('01-01-1901');
 
   voterProfileForm!: FormGroup | any;
   submittedVP: boolean = false;
