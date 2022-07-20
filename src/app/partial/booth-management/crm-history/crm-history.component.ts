@@ -782,7 +782,7 @@ export class CrmHistoryComponent implements OnInit {
         "followers": '0',
         "castId": formData.castId || 0,
         "partyId": formData.partyId || 0,
-        "familysize": isDeleteFamilyMember == 1 ? '0' : this.voterProfileFamilyData?.length == 1 ? '0' : this.voterProfileFamilyData?.length.toString(),
+        "familysize": isDeleteFamilyMember == 1 ? '0' : this.voterProfileFamilyData?.length == 1 ? '0' : (formData.head == 'yes') ? this.voterProfileFamilyData?.length.toString() : '0',
         "religionId": formData.religionId || 0,
         "partyAffection": '0.0',
         "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
@@ -795,7 +795,7 @@ export class CrmHistoryComponent implements OnInit {
         "regionalLang1": "",
         "regionalLang2": "",
         "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
-        "head": formData.head || '',
+        "head": (this.voterListData?.AgentId == 0 && this.commonService.checkDataType(formData.head) == false) ? 'no' : formData.head,
         "villageId": this.voterProfileData.villageId,
         "boothId": this.voterProfileData.boothId,
         "assemblyId": this.voterProfileData.assemblyId,
