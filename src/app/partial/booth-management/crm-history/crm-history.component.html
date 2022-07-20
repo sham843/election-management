@@ -340,7 +340,7 @@
                                                     </div>
                                                     <div class="col-sm-3"
                                                         *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes'
-                                                        || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && voterProfileFamilyData?.length <= 1)">
+                                                        || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && getLengthVoterProfileFamilyData <= 1)">
                                                         <!-- || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && getLengthVoterProfileFamilyData <= 1) -->
                                                         <label class="form-label">Family Head</label>
                                                         <div class="d-block">
@@ -371,7 +371,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-sm-12" *ngIf="voterProfileFamilyData?.length != 1">
+                                                    <div class="col-sm-12" *ngIf="voterProfileForm.value.head == 'yes' || (getLengthVoterProfileFamilyData > 1 && voterProfileData?.head == 'no')">
                                                         <table class="table table-hover mb-0 mt-2">
                                                             <thead>
                                                                 <tr>

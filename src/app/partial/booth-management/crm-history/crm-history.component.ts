@@ -104,7 +104,9 @@ export class CrmHistoryComponent implements OnInit {
 
   totalstar: number = 5;
   starvalue: number = 0;
-  gold: string = 'gold'
+  gold: string = 'gold';
+
+  copyVoterProfileFamilyData: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -377,6 +379,7 @@ export class CrmHistoryComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.voterProfileFamilyData = res.responseData;
+        this.copyVoterProfileFamilyData = JSON.parse(JSON.stringify(this.voterProfileFamilyData));
         this.getLengthVoterProfileFamilyData = this.voterProfileFamilyData?.length;
         this.voterProfileFamilyData.find((ele: any) => { //get FamilyHead Name & VoterId 
           if (ele.familyHead == 1) {
@@ -460,7 +463,6 @@ export class CrmHistoryComponent implements OnInit {
           "childVoterId": ele.voterId,
           "voter_uid": ele.voterId,
           "voter_no": ele.voterNo,
-          "modifiedBy": this.commonService.loggedInUserId(),
           "assemblyId": ele.assemblyId,
           "boothId": ele.boothId
         }
@@ -471,6 +473,7 @@ export class CrmHistoryComponent implements OnInit {
     let obj = {
       "parentVoterId": this.familyHeadVoterId ? this.familyHeadVoterId : this.voterProfileData?.voterId,
       "userId": this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId(),
+      "modifiedBy": this.commonService.loggedInUserId(),
       "clientId": this.voterListData.ClientId,
       "childVoterDetails": this.childVoterDetailArray
     }
@@ -539,7 +542,8 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   familyHeadRadiobtn() {
-    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true, this.voterListforFamilyChildArray = []) : this.headhideDiv = false;
+    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true, this.voterListforFamilyChildArray = []
+      ,this.voterProfileFamilyData = this.copyVoterProfileFamilyData) : this.headhideDiv = false;
   }
 
   leaderRadiobtn() {
