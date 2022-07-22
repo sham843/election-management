@@ -38,7 +38,7 @@ const routes: Routes = [
       { path: 'view-boothwise-voters-list1', loadChildren: () => import('./partial/booth-management/view-boothwise-voters-list1/view-boothwise-voters-list1.module').then(m => m.ViewBoothwiseVotersList1Module),data:{ title:'View Booth Wise Voters List1',allowedRoles:['1','2'] } },
       { path: 'add-supervisor', loadChildren: () => import('./partial/booth-management/add-supervisor/add-supervisor.module').then(m => m.AddSupervisorModule),data:{ title:'Add Supervisor',allowedRoles:['1','2'] } },
       { path: 'crm', loadChildren: () => import('./partial/booth-management/crm/crm.module').then(m => m.CrmModule) ,data:{ title:'CRM',allowedRoles:['1','2','6'] }},
-      { path: 'crm-history/:id', loadChildren: () => import('./partial/booth-management/crm-history/crm-history.module').then(m => m.CrmHistoryModule) ,data:{ title:'CRMHistory',allowedRoles:['1','2','6'] }},
+      { path: 'crm-history/:id', loadChildren: () => import('./partial/booth-management/crm-history/crm-history.module').then(m => m.CrmHistoryModule) ,data:{ title:'CRM History',allowedRoles:['1','2','6'] }},
   
       { path: 'voters-profile/:id', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2'] } },
       { path: 'restricted-mobile', loadChildren: () => import('./partial/settings/restricted-mobile/restricted-mobile.module').then(m => m.RestrictedMobileModule),data:{ title:'Restricted Mobile',allowedRoles:['1','2'] } },
@@ -48,9 +48,11 @@ const routes: Routes = [
       { path: 'name-correction', loadChildren: () => import('./partial/booth-management/name-correction/name-correction.module').then(m => m.NameCorrectionModule), data: { title: 'Voter Name Correction', allowedRoles: ['1','2'] } },
       { path: 'agent-setting', loadChildren: () => import('./partial/settings/agent-setting/agent-setting.module').then(m => m.AgentSettingModule), data: { title: 'Agent Setting', allowedRoles: ['1','2'] }  },
       { path: 'prominent-leader', loadChildren: () => import('./partial/settings/prominent-leader/prominent-leader.module').then(m => m.ProminentLeaderModule), data: { title: 'Prominent Leader', allowedRoles: ['1','2'] }   },
-      ]
+      { path: 'election-geofence-report', loadChildren: () => import('./partial/election-management/election-geofence-report/election-geofence-report.module').then(m => m.ElectionGeofenceReportModule), data: { title: 'Election Geofence Report', allowedRoles: ['1','2'] }},
+    ]
   },
   { path: '500', component: ServerErrorComponent },
+
   { path: '**', component: PageNotFoundComponent },
 ];
 

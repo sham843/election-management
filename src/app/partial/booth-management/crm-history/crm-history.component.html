@@ -28,7 +28,7 @@
                                                     class="profile-pic">
                                             </div>
                                             <div class="flex-shrink-0" *ngIf="!voterProfileData?.voterPhoto">
-                                                <img src="assets/images/user.png" alt="Profile" class="profile-pic">
+                                                <img src="assets/images/Profile-Photo.jpg" alt="Profile" class="profile-pic">
 
                                                 <div class="d-block mt-3" *ngIf="voterProfileData?.isVerified == 1">
                                                     <div class="small bg-light-success d-flex align-items-center text-success px-2 py-1 rounded">
@@ -75,7 +75,7 @@
                                                         <label class="form-label">Area</label>
                                                         <div class="form-data"> {{voterProfileData?.area}} </div>
                                                     </div>
-                                                    <div class="col-sm-4" *ngIf="voterProfileData?.partyIconImage || voterProfileData?.leaderImportance">
+                                                    <div class="col-sm-2" *ngIf="voterProfileData?.partyIconImage || voterProfileData?.leaderImportance">
                                                         <label class="form-label">Party Supported</label>
                                                         <div class="form-data">
                                                             <img [src]="voterProfileData?.partyIconImage"
@@ -84,15 +84,7 @@
                                                             <i class='fa fa-star' style='color: #f3da35'></i>)</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <label class="form-label">Migrated</label>
-                                                        <div class="form-data">
-                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
-                                                            <span *ngIf="voterProfileData?.migratedArea">({{voterProfileData?.migratedArea ?
-                                                            voterProfileData?.migratedArea : ''}})</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
+                                                    <div class="col-sm-3" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Favouring</label>
                                                         <div class="form-data"
                                                             *ngFor="let posNegInf of posNegativeInfData">
@@ -100,7 +92,7 @@
                                                                 *ngIf="posNegInf.supportToid == 1">{{posNegInf.support}}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
+                                                    <div class="col-sm-3" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Opposing</label>
                                                         <div class="form-data"
                                                             *ngFor="let posNegInf of posNegativeInfData">
@@ -108,9 +100,17 @@
                                                                 *ngIf="posNegInf.supportToid == 4">{{posNegInf.support}}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12">
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Agent Name</label>
                                                         <div class="form-data"> {{voterProfileData?.agentName}} </div>
+                                                    </div>
+                                                    <div class="col-sm-8">
+                                                        <label class="form-label">Migrated</label>
+                                                        <div class="form-data">
+                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
+                                                            <span *ngIf="voterProfileData?.migratedArea">({{voterProfileData?.migratedArea ?
+                                                            voterProfileData?.migratedArea : ''}})</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -317,23 +317,23 @@
                                             <div class="card-body pt-1">
                                                 <div class="row align-items-end mb-2 g-2">
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Religion</label>
+                                                        <label class="form-label">Religion</label>
                                                         <ngx-select [allowClear]="true" [items]="religionListArray"
                                                             formControlName="religionId"
                                                             (remove)="clearReligion()"
                                                             (select)="getVoterCastList(this.voterProfileForm.value.religionId)"
                                                             optionValueField="reliogionId"
                                                             optionTextField="religionName"
-                                                            placeholder="Select Religion">
+                                                            placeholder="Religion">
                                                         </ngx-select>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Caste</label>
+                                                        <label class="form-label">Caste</label>
                                                         <ngx-select [allowClear]="true" [items]="VoterCastListArray"
                                                             formControlName="castId"
                                                             [disabled]="!voterProfileForm.value.religionId"
                                                             optionValueField="castId" optionTextField="castName"
-                                                            placeholder="Select Caste"
+                                                            placeholder="Caste"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.castId.errors }">
                                                         </ngx-select>
                                                         <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Caste is required</div>
@@ -419,10 +419,10 @@
                                                 </div>
                                                 <div class="row align-items-center g-2">
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Blood Group</label>
+                                                        <label class="form-label">Blood Group</label>
                                                         <ngx-select [allowClear]="true" [items]="bloodGroupArray"
                                                             formControlName="bloodgroup" optionValueField="name"
-                                                            optionTextField="name" placeholder="Select Blood Group">
+                                                            optionTextField="name" placeholder="Blood Group">
                                                         </ngx-select>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -457,10 +457,10 @@
                                             <div class="card-body pt-1">
                                                 <div class="row align-items-center g-2">
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Party</label>
+                                                        <label class="form-label">Party</label>
                                                         <ngx-select [allowClear]="true" [items]="politicalPartyArray"
                                                             formControlName="partyId" optionValueField="partyId"
-                                                            optionTextField="partyName" placeholder="Select Party">
+                                                            optionTextField="partyName" placeholder="Party">
                                                         </ngx-select>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -479,7 +479,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-auto" *ngIf="leaderhideDiv">
-                                                        <label class="form-label">Select Rating</label>
+                                                        <label class="form-label">Rating</label>
                                                         <star-rating name="leaderImportance" [value]="starvalue" [totalstars]="totalstar" size="25px" [checkedcolor]="gold"
                                                             uncheckedcolor="gray" (rate)="onRate($event)"></star-rating>
                                                         <div *ngIf="submittedVP && v.leaderImportance.errors" class="invalid-feedback">Select Rating is required</div>
@@ -490,7 +490,7 @@
                                                             formControlName="prominentLeaderId"
                                                             optionValueField="prominentleaderId"
                                                             optionTextField="leaderName"
-                                                            placeholder="Select Local leader">
+                                                            placeholder="Local leader">
                                                         </ngx-select>
                                                     </div>
                                                 </div>
@@ -601,7 +601,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row mb-2 gx-1">
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-2">
                                                         <label class="form-label">Daily Farmer</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -630,7 +630,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Sugarcane Cutter Worker</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -659,7 +659,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-2">
                                                         <label class="form-label">Business</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -700,7 +700,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Vehicle</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -1118,7 +1118,7 @@
                         <div class="col-sm-6">
                             <label class="form-label">Leader Rating</label>
                             <select class="form-select">
-                                <option value="">Select Rating</option>
+                                <option value="">Rating</option>
                             </select>
                         </div>
                     </div>
@@ -1146,8 +1146,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mt-20">
-                <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
+                <div class="form-container mb-2">
+                    <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
                     #search>
+                </div>
                 <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerDragEnd($event)">
                     <div *ngIf="latitude">
                         <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)"
