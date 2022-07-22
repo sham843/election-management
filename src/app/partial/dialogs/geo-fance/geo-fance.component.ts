@@ -348,7 +348,6 @@ export class GeoFanceComponent implements OnInit {
   insertElectionCreateGeofence() {
 
     let geofenFormData = this.createGeofence.value;
-    debugger;
     this.createGeofence.controls['constituencyId'].setValue(this.data.constituencyDetailsArray?.Id);
     this.createGeofence.controls['id'].setValue(this.data.constituencyDetailsArray?.GeofenceId ? this.data.constituencyDetailsArray?.GeofenceId :0);
     this.createGeofence.controls['latitude'].setValue(+geofenFormData?.latitude)

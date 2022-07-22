@@ -48,9 +48,11 @@ const routes: Routes = [
       { path: 'name-correction', loadChildren: () => import('./partial/booth-management/name-correction/name-correction.module').then(m => m.NameCorrectionModule), data: { title: 'Voter Name Correction', allowedRoles: ['1','2'] } },
       { path: 'agent-setting', loadChildren: () => import('./partial/settings/agent-setting/agent-setting.module').then(m => m.AgentSettingModule), data: { title: 'Agent Setting', allowedRoles: ['1','2'] }  },
       { path: 'prominent-leader', loadChildren: () => import('./partial/settings/prominent-leader/prominent-leader.module').then(m => m.ProminentLeaderModule), data: { title: 'Prominent Leader', allowedRoles: ['1','2'] }   },
-      ]
+      { path: 'election-geofence-report', loadChildren: () => import('./partial/election-management/election-geofence-report/election-geofence-report.module').then(m => m.ElectionGeofenceReportModule), data: { title: 'Election Geofence Report', allowedRoles: ['1','2'] }},
+    ]
   },
   { path: '500', component: ServerErrorComponent },
+
   { path: '**', component: PageNotFoundComponent },
 ];
 
