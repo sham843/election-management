@@ -148,12 +148,12 @@
                                                 <label class="form-check-label text-success" for="inlineCheckbox2">{{contactlistArray?.mobileNo2}}</label>
                                             </div>
                                             <div class="form-check form-check-inline"
-                                                *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(',')">
+                                                *ngFor="let contactlist of contactlistArray?.otherMobileNo.split(','); let i = index">
                                                 <div *ngIf="contactlistArray?.otherMobileNo">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
+                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3{{i}}"
                                                         (change)="onCheckWrongContactNumber($event,contactlist)"
                                                         value="option3">
-                                                    <label class="form-check-label text-danger" for="inlineCheckbox3">{{contactlist}}</label>
+                                                    <label class="form-check-label text-danger" for="inlineCheckbox3{{i}}">{{contactlist}}</label>
                                                 </div>
                                             </div>
                                         </div>
