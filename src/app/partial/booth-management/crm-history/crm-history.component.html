@@ -28,7 +28,7 @@
                                                     class="profile-pic">
                                             </div>
                                             <div class="flex-shrink-0" *ngIf="!voterProfileData?.voterPhoto">
-                                                <img src="assets/images/user.png" alt="Profile" class="profile-pic">
+                                                <img src="assets/images/Profile-Photo.jpg" alt="Profile" class="profile-pic">
 
                                                 <div class="d-block mt-3" *ngIf="voterProfileData?.isVerified == 1">
                                                     <div class="small bg-light-success d-flex align-items-center text-success px-2 py-1 rounded">
@@ -75,7 +75,7 @@
                                                         <label class="form-label">Area</label>
                                                         <div class="form-data"> {{voterProfileData?.area}} </div>
                                                     </div>
-                                                    <div class="col-sm-4" *ngIf="voterProfileData?.partyIconImage || voterProfileData?.leaderImportance">
+                                                    <div class="col-sm-2" *ngIf="voterProfileData?.partyIconImage || voterProfileData?.leaderImportance">
                                                         <label class="form-label">Party Supported</label>
                                                         <div class="form-data">
                                                             <img [src]="voterProfileData?.partyIconImage"
@@ -84,15 +84,7 @@
                                                             <i class='fa fa-star' style='color: #f3da35'></i>)</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <label class="form-label">Migrated</label>
-                                                        <div class="form-data">
-                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
-                                                            <span *ngIf="voterProfileData?.migratedArea">({{voterProfileData?.migratedArea ?
-                                                            voterProfileData?.migratedArea : ''}})</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
+                                                    <div class="col-sm-3" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Favouring</label>
                                                         <div class="form-data"
                                                             *ngFor="let posNegInf of posNegativeInfData">
@@ -100,7 +92,7 @@
                                                                 *ngIf="posNegInf.supportToid == 1">{{posNegInf.support}}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
+                                                    <div class="col-sm-3" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Opposing</label>
                                                         <div class="form-data"
                                                             *ngFor="let posNegInf of posNegativeInfData">
@@ -108,9 +100,17 @@
                                                                 *ngIf="posNegInf.supportToid == 4">{{posNegInf.support}}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12">
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Agent Name</label>
                                                         <div class="form-data"> {{voterProfileData?.agentName}} </div>
+                                                    </div>
+                                                    <div class="col-sm-8">
+                                                        <label class="form-label">Migrated</label>
+                                                        <div class="form-data">
+                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
+                                                            <span *ngIf="voterProfileData?.migratedArea">({{voterProfileData?.migratedArea ?
+                                                            voterProfileData?.migratedArea : ''}})</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
