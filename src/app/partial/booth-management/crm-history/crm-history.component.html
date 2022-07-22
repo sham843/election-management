@@ -567,9 +567,11 @@
                                                             placeholder="Postal Voting Reason"
                                                             formControlName="whyIsPostal"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.whyIsPostal.errors }">
-                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors.required" class="invalid-feedback">Postal Voting Reason is required</div>
-                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors.pattern" class="invalid-feedback">Please Enter Valid Postal Voting Reason</div>
-                                                    </div>
+                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors" class="invalid-feedback">
+                                                                <span *ngIf="submittedVP && v.whyIsPostal.errors.required">Postal Voting Reason is required</span>
+                                                                <span *ngIf="submittedVP && v.whyIsPostal.errors.pattern">Please Enter Valid Postal Voting Reason</span>
+                                                            </div>
+                                                        </div>
                                                 </div>
                                                 <div class="row mb-2 align-items-end">
                                                     <div class="col-sm-3">
@@ -587,8 +589,10 @@
                                                             placeholder="Support Details"
                                                             formControlName="needSupportText"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.needSupportText.errors }">
-                                                            <div *ngIf="submittedVP && v.needSupportText.errors.required" class="invalid-feedback">Support Details is required</div>
-                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors.pattern" class="invalid-feedback">Please Enter Valid Support Details</div>
+                                                            <div *ngIf="submittedVP && v.needSupportText.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.whyIsPostal.errors.required">Support Details is required</span>
+                                                                <span *ngIf="v.whyIsPostal.errors.pattern">Please Enter Valid Support Details</span>
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -675,8 +679,11 @@
                                                                 placeholder="Business Details"
                                                                 formControlName="businnessDetails"
                                                                 [ngClass]="{ 'is-invalid': submittedVP && v.businnessDetails.errors }">
-                                                                <div *ngIf="submittedVP && v.businnessDetails.errors.required" class="invalid-feedback">Business Details is required</div>
-                                                                <div *ngIf="submittedVP && v.businnessDetails.errors.pattern" class="invalid-feedback">Please Enter Valid Business Details</div>
+                                                                <div *ngIf="submittedVP && v.businnessDetails.errors" class="invalid-feedback">
+                                                                    <span *ngIf="submittedVP && v.businnessDetails.errors.required">Business Details is required </span>
+                                                                    <span *ngIf="submittedVP && v.businnessDetails.errors.pattern">Please Enter Valid Business
+                                                                        Details</span>
+                                                                </div>
                                                         </span>
                                                     </div>
                                                     <div class="col-sm-3">
