@@ -680,7 +680,9 @@ export class AssignAgentsToBoothComponent implements OnInit {
       if (res.data == 0) {
         this.spinner.hide();
         this.filterClientNameArray = res.data1;
-        this.filterClientNameArray?.length == 1  ?  this.fillterElectionName() :  '';
+        this.filterClientNameArray.length == 1 ? (this.filterForm.patchValue({ ClientId: this.filterClientNameArray[0].id }),
+         this.fillterElectionName()) : '';
+        // this.filterClientNameArray?.length == 1  ?  this.fillterElectionName() :  '';
 
       } else {
         this.spinner.hide();
