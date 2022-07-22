@@ -317,23 +317,23 @@
                                             <div class="card-body pt-1">
                                                 <div class="row align-items-end mb-2 g-2">
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Religion</label>
+                                                        <label class="form-label">Religion</label>
                                                         <ngx-select [allowClear]="true" [items]="religionListArray"
                                                             formControlName="religionId"
                                                             (remove)="clearReligion()"
                                                             (select)="getVoterCastList(this.voterProfileForm.value.religionId)"
                                                             optionValueField="reliogionId"
                                                             optionTextField="religionName"
-                                                            placeholder="Select Religion">
+                                                            placeholder="Religion">
                                                         </ngx-select>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Caste</label>
+                                                        <label class="form-label">Caste</label>
                                                         <ngx-select [allowClear]="true" [items]="VoterCastListArray"
                                                             formControlName="castId"
                                                             [disabled]="!voterProfileForm.value.religionId"
                                                             optionValueField="castId" optionTextField="castName"
-                                                            placeholder="Select Caste"
+                                                            placeholder="Caste"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.castId.errors }">
                                                         </ngx-select>
                                                         <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Caste is required</div>
@@ -419,10 +419,10 @@
                                                 </div>
                                                 <div class="row align-items-center g-2">
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Blood Group</label>
+                                                        <label class="form-label">Blood Group</label>
                                                         <ngx-select [allowClear]="true" [items]="bloodGroupArray"
                                                             formControlName="bloodgroup" optionValueField="name"
-                                                            optionTextField="name" placeholder="Select Blood Group">
+                                                            optionTextField="name" placeholder="Blood Group">
                                                         </ngx-select>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -457,10 +457,10 @@
                                             <div class="card-body pt-1">
                                                 <div class="row align-items-center g-2">
                                                     <div class="col-sm-3">
-                                                        <label class="form-label">Select Party</label>
+                                                        <label class="form-label">Party</label>
                                                         <ngx-select [allowClear]="true" [items]="politicalPartyArray"
                                                             formControlName="partyId" optionValueField="partyId"
-                                                            optionTextField="partyName" placeholder="Select Party">
+                                                            optionTextField="partyName" placeholder="Party">
                                                         </ngx-select>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -479,7 +479,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-auto" *ngIf="leaderhideDiv">
-                                                        <label class="form-label">Select Rating</label>
+                                                        <label class="form-label">Rating</label>
                                                         <star-rating name="leaderImportance" [value]="starvalue" [totalstars]="totalstar" size="25px" [checkedcolor]="gold"
                                                             uncheckedcolor="gray" (rate)="onRate($event)"></star-rating>
                                                         <div *ngIf="submittedVP && v.leaderImportance.errors" class="invalid-feedback">Select Rating is required</div>
@@ -490,7 +490,7 @@
                                                             formControlName="prominentLeaderId"
                                                             optionValueField="prominentleaderId"
                                                             optionTextField="leaderName"
-                                                            placeholder="Select Local leader">
+                                                            placeholder="Local leader">
                                                         </ngx-select>
                                                     </div>
                                                 </div>
@@ -601,7 +601,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row mb-2 gx-1">
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-2">
                                                         <label class="form-label">Daily Farmer</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -630,7 +630,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Sugarcane Cutter Worker</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -659,7 +659,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-2">
                                                         <label class="form-label">Business</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -700,7 +700,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Vehicle</label>
                                                         <div class="d-block">
                                                             <div class="form-check form-check-inline"
@@ -1118,7 +1118,7 @@
                         <div class="col-sm-6">
                             <label class="form-label">Leader Rating</label>
                             <select class="form-select">
-                                <option value="">Select Rating</option>
+                                <option value="">Rating</option>
                             </select>
                         </div>
                     </div>
