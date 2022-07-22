@@ -92,10 +92,6 @@
                                                             voterProfileData?.migratedArea : ''}})</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12">
-                                                        <label class="form-label">Agent Name</label>
-                                                        <div class="form-data"> {{voterProfileData?.agentName}} </div>
-                                                    </div>
                                                     <div class="col-sm-4" *ngIf="posNegativeInfData?.length != 0">
                                                         <label class="form-label">Party/Person Favouring</label>
                                                         <div class="form-data"
@@ -111,6 +107,10 @@
                                                             <span
                                                                 *ngIf="posNegInf.supportToid == 4">{{posNegInf.support}}</span>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <label class="form-label">Agent Name</label>
+                                                        <div class="form-data"> {{voterProfileData?.agentName}} </div>
                                                     </div>
                                                 </div>
                                             </div>
