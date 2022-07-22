@@ -9,104 +9,252 @@
     </div>
 
     <div class="row chartbox">
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="card">
                 <div class="card-header">Add New Supervisor</div>
                 <div class="card-body pt-0">
                     <div class="form-container">
-                        <div class="mb-2">
-                            <label class="form-label required-field">Supervisor Name</label>
-                            <input type="text" class="form-control" placeholder="Supervisor Name" />
+                        <form [formGroup]="callCenterUserForm">
+                        <div class="row mb-2 g-2">
+                            <div class="col-sm">
+                                <label class="form-label required-field">First Name</label>
+                                <input class="form-control" type="text" placeholder="First Name" formControlName="fName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.fName.errors }">
+                                <div *ngIf="submitted && f.fName.errors" class="invalid-feedback">
+                                    <span *ngIf="f.fName.errors.required">First Name is Required</span>
+                                    <span *ngIf="f.fName.errors.pattern">Enter Valid First Name</span>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label class="form-label">Middle Name</label>
+                                <input class="form-control" type="text" placeholder="Middle Name" formControlName="mName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.mName.errors }">
+                                    <div *ngIf="submitted && f.mName.errors" class="invalid-feedback">
+                                        Enter Valid Middle Name
+                                    </div>
+                            </div>
+                            <div class="col-sm">
+                                <label class="form-label required-field">Last Name</label>
+                                <input class="form-control" type="text" placeholder="Last Name" formControlName="lName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.lName.errors }">
+                                    <div *ngIf="submitted && f.lName.errors" class="invalid-feedback">
+                                        <span *ngIf="f.lName.errors.required">Last Name is Required</span>
+                                        <span *ngIf="f.lName.errors.pattern">Enter Valid Last Name</span>
+                                    </div>
+                            </div>
                         </div>
-                        <div class="mb-2">
-                            <label class="form-label required-field">Mobile No.</label>
-                            <input type="text" class="form-control" placeholder="Mobile No." />
+                        <div class="row mb-3">
+                            <div class="col-sm">
+                                <label class="form-label required-field">Mobile No.</label>
+                                <input type="text" class="form-control" placeholder="Mobile No." formControlName="mobileNo"
+                                (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
+                                [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }">
+                                <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
+                                    <span *ngIf="f.mobileNo.errors.required">Mobile No. is Required</span>
+                                    <span *ngIf="f.mobileNo.errors.pattern">Please Enter Valid Mobile No.</span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm">
+                            <label class="form-label required-field">Gender</label>
+                            <div class="d-block">
+                                <!-- [checked]="selGender == genderObj.id" -->
+                                <div class="form-check form-check-inline" *ngFor="let genderObj of GenderArray">
+                                    <input class="form-check-input" type="radio" formControlName="gender" [value]="genderObj.id" 
+                                     name="gender" [ngClass]="{ 'is-invalid': submitted && f.gender.errors }">
+                                    <label class="form-check-label" for="rgender">{{genderObj.name}}</label>
+                                </div>
+                                <div *ngIf="submitted && f.gender.errors" class="invalid-feedback"> Gender is Required </div>
+                            </div>
+                            </div>
                         </div>
-                        <div class="mb-2">
+                        <div class="card p-2">
+                            <div class="row mb-2 g-2">
+                            <div class="col-sm">
                             <label class="form-label required-field">Select Client</label>
-                            <select class="form-select">
-                                <option value="">Select Client</option>
-                            </select>
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="clientId"
+                            optionValueField="clientId" optionTextField="clientName" (selectionChanges)="getNameByObj($event,'client')"
+                            (select)="clearDropdownData('clientId');getElectionName()" (remove)="clearDropdownData('clientId')"
+                            placeholder="Select Client" [ngClass]="{ 'is-invalid': submitted && f.clientId.errors }">
+                        </ngx-select>
+                            <div *ngIf="submitted && f.clientId.errors" class="invalid-feedback"> Client is Required </div>
+                        </div>
+                        <div class="col-sm">
+                            <label class="form-label required-field">Select Election</label>
+                            <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="electionId" 
+                                optionValueField="electionId" optionTextField="electionName" (select)="clearDropdownData('electionId');getConstituencyName()"
+                                (remove)="clearDropdownData('electionId')" (selectionChanges)="getNameByObj($event,'election')"
+                                [ngClass]="{ 'is-invalid': submitted && f.electionId.errors }"
+                                [disabled]="!callCenterUserForm.value.clientId || electionNameArray?.length == 0" placeholder="Select Election">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.electionId.errors" class="invalid-feedback"> Election is Required </div>
+                        </div>
                         </div>
                         <div class="mb-2">
-                            <label class="form-label required-field">Select Election</label>
-                            <select class="form-select">
-                                <option value="">Select Election</option>
-                            </select>
+                            <label class="form-label required-field">Select Constituency</label>
+                       <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="constituencyId"
+                            (select)="clearDropdownData('constituencyId');ClientWiseBoothList()" optionValueField="constituencyId" optionTextField="constituencyName"
+                             (remove)="clearDropdownData('constituencyId')" placeholder="Select Constituency" (selectionChanges)="getNameByObj($event,'constituency')"
+                            [disabled]="!callCenterUserForm.value.electionId" [ngClass]="{ 'is-invalid': submitted && f.constituencyId.errors }">
+                        </ngx-select>
+                            <div *ngIf="submitted && f.constituencyId.errors" class="invalid-feedback"> Election is Required </div>
                         </div>
+                       
                         <div class="mb-2">
                             <label class="form-label required-field">Select Booth(s)</label>
                             <div class="card border shadow-none">
                                 <div class="card-header border-bottom p-0 py-1">
-                                    <input class="form-control form-control-sm border-0" placeholder="Search Booths"
-                                        type="text">
+                                    <input type="text" formControlName="boothId"
+                                        [(ngModel)]="searchBoothListData"
+                                        placeholder="Search Booths"
+                                        class="form-control form-control-sm border-0">
                                 </div>
-                                <div class="card-body py-2 ChekBox">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <div class="card-body py-2 form-height ChekBox"
+                                    *ngIf="( clientWiseBoothListArray | filter:searchBoothListData ) as boothResult">
+                                    <div class="form-check"
+                                        *ngFor="let boothObj of boothResult">
+                                        <input class="form-check-input" type="checkbox"
+                                            [checked]="boothObj.checked"
+                                            (change)="onCheckedBoothChanges($event, boothObj)">
                                         <label class="form-check-label" for="flexCheckDefault">
-                                            Booth Name 1
+                                            {{boothObj.boothNickName}}
                                         </label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
-                                            checked>
-                                        <label class="form-check-label" for="flexCheckChecked">
-                                            Booth Name 2
-                                        </label>
+                                    <div *ngIf="boothResult.length === 0">
+                                        <div class="alert alert-danger text-center py-2">No Data Found..!
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-2 text-end">
+                            <button type="button" class="btn btn-main" (click)="addBoothsData()">Add</button>
+                        </div>
+
+                        <div class="mb-2">
+                            <table class="table table-hover mb-0" *ngIf="this.submitedBoothSelectedArray.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Election Name</th>
+                                        <th>Constituency Name</th>
+                                        <th>Booths Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let boothSelected of submitedBoothSelectedArray ; let i = index">
+                                      <td>{{i+1}}</td>
+                                      <td>{{boothSelected?.myObject?.electionName}}</td>
+                                      <td>{{boothSelected?.myObject?.constituencyName}}</td>
+                                      <td>{{boothSelected?.myObject?.boothsName}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <!-- <button type="button" title="Edit Supervisor" class="btn btn-sm btn-light text-edit me-1 rounded">
+                                                    <i class="far fa-edit"></i>
+                                                </button> -->
+                                                <button type="button" title="Delete Supervisor" (click)="deleteBooth(i)" class="btn btn-sm btn-light text-danger rounded">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                         <hr />
                         <div class="row mb-0">
                             <div class="col-sm-6 col-6">
-                                <button type="button" class="btn btn-secondary">Clear</button>
+                                <button type="button" class="btn btn-secondary" (click)="clearForm()">Clear</button>
                             </div>
                             <div class="col-sm-6 col-6 text-end">
-                                <button type="button" class="btn btn-main">Submit</button>
+                                <button type="submit" class="btn btn-main" (click)="onSubmitForm()">{{btnText}}</button>
                             </div>
                         </div>
+                       </form>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-7">
             <div class="card">
-                <!-- <div class="card-header">
-                    asdf
-                </div> -->
+
+
+                <div class="card-header">
+                    <form [formGroup]="filterForm">
+                        <div class="row g-2">
+                            <div class="col-sm">
+                                <ngx-select [allowClear]="true" [items]="clientNameArray" (select)="getElectionName()"
+                                    (remove)="clearFilter('client')" formControlName="ClientId" optionValueField="clientId"
+                                    optionTextField="clientName" placeholder="select Client">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm">
+                                <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" 
+                                optionValueField="electionId" optionTextField="electionName" (select)="getConstituencyName()"
+                                (remove)="clearFilter('election')" placeholder="Select Election"
+                                [disabled]="!filterForm.value.ClientId || electionNameArray?.length == 0">
+                            </ngx-select>
+                            </div>
+                            <div class="col-sm">
+                                <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
+                                (select)="ClientWiseBoothList()" optionValueField="constituencyId" optionTextField="constituencyName"
+                                 (remove)="clearFilter('constituency')" placeholder="Select Constituency" 
+                                [disabled]="!filterForm.value.ElectionId">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm">
+                                <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" formControlName="BoothId"
+                            optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
+                            [disabled]="!this.filterForm.value.ConstituencyId" (remove)="clearFilter('booth')">
+                        </ngx-select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="card-body">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Supervisor Details</th>
-                                <th>Client Name</th>
-                                <th>Election</th>
-                                <th>Booth Names</th>
+                                <!-- <th>Gender</th> -->
+                                <th>Booth Name(Election Name / Constituency Name)</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Anil Jadhav
-                                    <p class="text-muted small mb-0">(9876543210)</p>
+                            <tr *ngFor="let callCenterUser of callCenterUserArray  | paginate: {itemsPerPage: pageSize, 
+                                currentPage: paginationNo, totalItems:getTotal}; let i = index " [class.active]="callCenterUser.userId == HighlightRow">
+                                <td>{{((paginationNo + 1) * 10 + i + 1)-20}}</td>
+                                <td>{{callCenterUser?.fullName}}
+                                    <p class="text-muted small mb-0">({{callCenterUser?.mobileNo}})</p>
                                 </td>
-                                <td>Vijay Jagtap</td>
-                                <td>Satara ZP Election 2021</td>
+                                <!-- <td>{{callCenterUser?.gender == 1 ? 'Male' : 'Female'}}</td> -->
                                 <td>
-                                    <ul class="ps-3 mb-0">
-                                        <li>Booth No 1</li>
-                                        <li>Booth No 2</li>
-                                        <li>Booth No 3</li>
-                                        <li>Booth No 4</li>
+                                    <ul class="ps-3 mb-0" *ngFor="let assignedBooth of callCenterUser?.assignedBoothlist">
+                                        <li>{{assignedBooth?.boothName}}({{assignedBooth?.electionName}} / {{assignedBooth?.constituencyName}})</li>
                                     </ul>
                                 </td>
                                 <td>
+                                    <!-- , 'disabled' : callCenterUser.UserId == null -->
                                     <div class="btn-group">
-                                        <button type="button" title="Edit Supervisor" class="btn btn-sm btn-light text-edit me-1 rounded">
+                                        <button type="button" 
+                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
+                                            [ngClass]="{'text-danger':callCenterUser?.IsUserblock == 1 , 'text-primary' :callCenterUser?.IsUserblock == 0}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                            (click)="callCenterUserObj = callCenterUser; callCenterUser?.IsUserblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
+                                            {{callCenterUser?.IsUserblock == 1 ? 'Blocked' : 'Active'}}
+                                        </button>
+                                        <!-- <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
+                                            [ngClass]="{'text-danger':callCenterUser?.IsUserBlock == 1 , 'text-main' :callCenterUser?.IsUserBlock == 0}"
+                                            (click)="blockUser(callCenterUser.UserId, callCenterUser.ClientId, callCenterUser.IsUserBlock)">
+                                            {{callCenterUser?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
+                                        </button> -->
+                                        <button type="button" title="Edit Supervisor" (click)="editCallCenterUserData(callCenterUser)" class="btn btn-sm btn-light text-edit me-1 rounded">
                                             <i class="far fa-edit"></i>
                                         </button>
                                         <button type="button" title="Delete Supervisor" class="btn btn-sm btn-light text-danger rounded">
@@ -117,8 +265,36 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="callCenterUserArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!
+                        </div>
+                    </div>
+                    <pagination-controls *ngIf="callCenterUserArray?.length != 0" previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintion($event)">
+                    </pagination-controls>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+    <!-- Modal for Agent block -->
+    <div class="modal fade" id="agentBlock" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="agentBlockLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agentBlockLabel">User Block</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body chartbox text-center">
+                    <i class="far fa-question-circle fa-5x text-success mb-3"></i>
+                    <h5 class="mb-3">Do you really want to {{modalTextChange}} this user?</h5>
+                    <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
+                        aria-label="Close">No</button>
+                    <button (click)="blockUser(callCenterUserObj)" type="button"
+                        class="btn btn-sm btn-main px-4" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
