@@ -80,22 +80,32 @@
                             <span class="voter-data" *ngIf="voterProfileData?.Gender == 'F'">Female</span>
                             <span class="voter-data" *ngIf="voterProfileData?.Gender == 'M'">Male</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngIf="voterProfileData?.IsWrongMobileNo == 0 && commonService.checkDataType(voterProfileData?.MobileNo1) == true">
                             <span class="voter-label">Mobile 1 :</span>
                             <span class="voter-data">
-                                <a *ngIf="voterProfileData?.WatsApp1" target="_blank" href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo1}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
+                                <a *ngIf="commonService.checkDataType(voterProfileData?.WatsApp1) == true" target="_blank" href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo1}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
                                     <i class="fab fa-whatsapp me-1 text-primary"></i></a>
-                                {{voterProfileData?.MobileNo1 ? voterProfileData?.MobileNo1 : '-'}}
+                                {{voterProfileData?.MobileNo1}}
                             </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngIf="(voterProfileData?.IsWrongMobileNo == 1 || (commonService.checkDataType(voterProfileData?.MobileNo1) != true && voterProfileData?.IsWrongMobileNo == 0)) && voterProfileData?.IsWrongMobileNo2 == 0 && commonService.checkDataType(voterProfileData?.MobileNo2) == true">
                             <span class="voter-label">Mobile 2 :</span>
                             <span class="voter-data">
-                                <a *ngIf="voterProfileData?.WatsApp2" target="_blank" href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo2}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
+                                <a *ngIf="commonService.checkDataType(voterProfileData?.WatsApp2) == true" target="_blank" href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo2}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
                                     <i class="fab fa-whatsapp me-1 text-primary"></i></a>
-                                {{voterProfileData?.MobileNo2 ? voterProfileData?.MobileNo2 :
-                                '-'}}</span>
+                                {{voterProfileData?.MobileNo2}}</span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngIf="commonService.checkDataType(voterProfileData?.MobileNo1) == false && commonService.checkDataType(voterProfileData?.MobileNo2) == false && voterProfileData?.ExtraContcts">
+                            <span class="voter-label">Extra Contacts :</span>
+                            <span class="voter-data">
+                                {{voterProfileData?.ExtraContcts.split(',')[0]}}</span>
+                        </li>
+
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Email :</span>
                             <span class="voter-data">{{voterProfileData?.Email ? voterProfileData?.Email : '-'}}</span>

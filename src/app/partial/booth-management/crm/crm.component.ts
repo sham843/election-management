@@ -111,7 +111,7 @@ export class CrmComponent implements OnInit {
     private callAPIService: CallAPIService,
     private toastrService: ToastrService,
     private fb: FormBuilder,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,

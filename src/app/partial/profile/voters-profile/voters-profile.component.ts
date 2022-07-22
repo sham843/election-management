@@ -48,7 +48,7 @@ export class VotersProfileComponent implements OnInit, OnDestroy {
     private callAPIService: CallAPIService,
     private toastrService: ToastrService,
     private fb: FormBuilder,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
     public gallery: Gallery,
