@@ -129,9 +129,9 @@
                             <span class="voter-data">{{voterProfileData?.PostalFlag == 0 ? 'No' :
                                 voterProfileData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="voterProfileData?.PostalFlag == 1">
-                            <span class="voter-label">Postal Voting Reason :</span>
-                            <span class="voter-data">{{voterProfileData?.WhyIsPostal}}</span>
+                        <li class="list-group-item" *ngIf="voterProfileData?.PostalFlag == 1">
+                            <div class="voter-label">Postal Voting Reason :</div>
+                            <div class="voter-data">{{voterProfileData?.WhyIsPostal}}</div>
                         </li>
                         <li class="list-group-item">
                             <div class="voter-label">Address :</div>
@@ -383,9 +383,9 @@
                             <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
                                 VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="VPMemberDetailsData?.PostalFlag == 1">
-                            <span class="voter-label">Postal Voting Reason:</span>
-                            <span class="voter-data">{{VPMemberDetailsData?.WhyIsPostal}}</span>
+                        <li class="list-group-item" *ngIf="VPMemberDetailsData?.PostalFlag == 1">
+                            <div class="voter-label">Postal Voting Reason:</div>
+                            <div class="voter-data">{{VPMemberDetailsData?.WhyIsPostal}}</div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Leader:</span>
