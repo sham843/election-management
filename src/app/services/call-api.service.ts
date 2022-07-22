@@ -16,20 +16,20 @@ export class CallAPIService {
     switch (url) {
     
   // Live server base url 
-    case 'electionServiceForWeb': return 'http://electionwservice.erpguru.in/service.asmx/'; 
+    // case 'electionServiceForWeb': return 'http://electionwservice.erpguru.in/service.asmx/'; 
 
   // live server base url  MicroServices
-      case 'electionMicroServiceForWeb': return 'http://electionclientapp.erpguru.in/ClientMasterWebApi/'; break;
-      case 'electionMicroSerApp': return 'http://electionclientapp.erpguru.in/'; break;
-      default: return ''; break;
+      // case 'electionMicroServiceForWeb': return 'http://electionclientapp.erpguru.in/ClientMasterWebApi/'; break;
+      // case 'electionMicroSerApp': return 'http://electionclientapp.erpguru.in/'; break;
+      // default: return ''; break;
 
   // development server base url 
-      //  case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
+       case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
 
   // development server base url MicroServices
-      // case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
-      // case 'electionMicroSerApp': return 'http://demoelectionclientapp.eanifarm.com/'; break;
-      // default: return ''; break;
+      case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
+      case 'electionMicroSerApp': return 'http://demoelectionclientapp.eanifarm.com/'; break;
+      default: return ''; break;
 
     }
   }
