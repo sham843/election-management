@@ -99,11 +99,11 @@
                                     <i class="fab fa-whatsapp me-1 text-primary"></i></a>
                                 {{voterProfileData?.MobileNo2}}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                        <li class="list-group-item"
                         *ngIf="commonService.checkDataType(voterProfileData?.MobileNo1) == false && commonService.checkDataType(voterProfileData?.MobileNo2) == false && voterProfileData?.ExtraContcts">
-                            <span class="voter-label">Extra Contacts :</span>
-                            <span class="voter-data">
-                                {{voterProfileData?.ExtraContcts.split(',')[0]}}</span>
+                            <div class="voter-label">Extra Contacts :</div>
+                            <div class="voter-data">
+                                {{voterProfileData?.ExtraContcts.split(',')[0]}}</div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="voter-label">Email :</span>
