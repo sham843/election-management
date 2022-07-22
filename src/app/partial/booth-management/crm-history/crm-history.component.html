@@ -1146,8 +1146,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mt-20">
-                <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
+                <div class="form-container mb-2">
+                    <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
                     #search>
+                </div>
                 <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerDragEnd($event)">
                     <div *ngIf="latitude">
                         <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)"
