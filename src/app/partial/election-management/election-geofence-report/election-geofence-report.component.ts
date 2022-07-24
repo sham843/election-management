@@ -9,20 +9,12 @@ import { CallAPIService } from 'src/app/services/call-api.service';
   styleUrls: ['./election-geofence-report.component.css']
 })
 export class ElectionGeofenceReportComponent implements OnInit {
-  frmFilter: any;
-  zonesFilter: any[] = [];
-  divisionsFilter: any[] = [];
-  thanaFilter: any[] = [];
-  subscribeCls!: Subscription;
-  zoneid: any;
   map: any;
-  user: any;
   geofenceArray: any[] = [];
 
   constructor(private spinner: NgxSpinnerService, private callAPIService: CallAPIService) { }
 
   ngOnInit(): void {
-
   }
 
   onFilter() {
@@ -32,19 +24,21 @@ export class ElectionGeofenceReportComponent implements OnInit {
      this.callAPIService.setHttp('get', 'ConstituencyGeofence/GetConstituencyGeofence?ElectionId=63&ConstituencyId=0&UserId=0&ClientId=0', false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe({
       next: (data: any) => {
-   
         this.spinner.hide();
-        var OBJ_fitBounds:any = new google.maps.LatLngBounds();
+        var OBJ_fitBounds = new google.maps.LatLngBounds();
         data?.responseData?.map((x: any) => {
-          // var infoWindow = new google.maps.InfoWindow({
-          //   content: "<table><tr><td>Thana Name</td><td><strong>&nbsp;:&nbsp;" + (x.thanaName || "-") + '</strong></td></tr>' +
-          //     "<tr><td>Zone</td><td><strong>&nbsp;:&nbsp;" + (x.zoneName || "-") + '</strong></td></tr>' +
-          //     "<tr><td>Division</td><td><strong>&nbsp;:&nbsp;" + (x.division || "-") + '</strong></td></tr>' +
-          //     "<tr><td>Contact No.</td><td><strong>&nbsp;:&nbsp;" + (x.contactNo || "-") + '</strong></td></tr>' +
-          //     "<tr><td>Email Id</td><td><strong>&nbsp;:&nbsp;" + (x.emailId || "-") + '</strong></td></tr>' +
-          //     "<tr><td>Incharge Name</td><td><strong>&nbsp;:&nbsp;" + (x.inchargeName || "-") + '(' + (x.inchargeContactNo || "-") + ")" + '</strong></td></tr>' +
-          //     "<tr><td>Long, Lat</td><td><strong>&nbsp;:&nbsp;" + (x.longitude || "-") + ' , ' + x.latitude + '</strong></td></tr></table>'
-          // });
+          var infoWindow = new google.maps.InfoWindow({
+            content: "<table><tr><td>Election Name</td><td><strong>&nbsp;:&nbsp;" + (x.electionName || "-") + '</strong></td></tr>' +
+            "<tr><td>Distance</td><td><strong>&nbsp;:&nbsp;" + (x.distance || "-") + '</strong></td></tr>' +
+              "<tr><td>Constituency Name</td><td><strong>&nbsp;:&nbsp;" + (x.constituencyName || "-") + '</strong></td></tr></table>'
+               
+              // + "<tr><td>Division</td><td><strong>&nbsp;:&nbsp;" + (x.division || "-") + '</strong></td></tr>' +
+              // "<tr><td>Contact No.</td><td><strong>&nbsp;:&nbsp;" + (x.contactNo || "-") + '</strong></td></tr>' +
+              // "<tr><td>Email Id</td><td><strong>&nbsp;:&nbsp;" + (x.emailId || "-") + '</strong></td></tr>' +
+              // "<tr><td>Incharge Name</td><td><strong>&nbsp;:&nbsp;" + (x.inchargeName || "-") + '(' + (x.inchargeContactNo || "-") + ")" + '</strong></td></tr>' +
+              // "<tr><td>Long, Lat</td><td><strong>&nbsp;:&nbsp;" + (x.longitude || "-") + ' , ' + x.latitude + '</strong></td></tr>
+              
+            }); 
 
           let poly: any;
           let latlng: any;
@@ -52,7 +46,7 @@ export class ElectionGeofenceReportComponent implements OnInit {
             try {
               const path = x.polygonText.split(',').map((x: any) => {
                 let obj = { lng: Number(x.split(' ')[0]), lat: Number(x.split(' ')[1]) };
-                (this.frmFilter.value.ThanaId != 0 || data.responseData.length == 1) && (OBJ_fitBounds.extend(obj))
+                (data.responseData?.length == 1) && (OBJ_fitBounds.extend(obj))
                 return obj
               });
               poly = new google.maps.Polygon({ paths: path, map: this.map, strokeColor: "#00FF00", strokeOpacity: 0.8, strokeWeight: 2, fillColor: "#00FF00", fillOpacity: 0.35, editable: false });
@@ -82,9 +76,9 @@ export class ElectionGeofenceReportComponent implements OnInit {
             // this.map.panTo(latlng);
             // this.map.setCenter(latlng);
 
-            this.geofenceArray[this.geofenceArray.length] = {
+            this.geofenceArray[this.geofenceArray?.length] = {
               marker: poly,
-              // info: infoWindow,
+              info: infoWindow,
               type: x.geofenceTypeId,
               radius: x.geofenceTypeId == 2 ? x.distance : 0,
               centerMarker: new google.maps.Marker({
