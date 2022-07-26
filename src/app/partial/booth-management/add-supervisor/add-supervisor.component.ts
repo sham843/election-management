@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DeleteComponent } from '../../dialogs/delete/delete.component';
@@ -44,6 +46,8 @@ export class AddSupervisorComponent implements OnInit {
   callCenterUserObj: any;
   sendUserCredentialObj:any;
 
+  subject: Subject<any> = new Subject();
+
   constructor(
     private spinner: NgxSpinnerService,
     private callAPIService: CallAPIService,
@@ -60,6 +64,7 @@ export class AddSupervisorComponent implements OnInit {
     this.defaultFilterForm();
     this.getClientName();
     this.getCallCenterUser();
+    this.searchUserSuperData('false');
   }
 
   //............................................ Filter Code Start Here...................................//
@@ -70,6 +75,7 @@ export class AddSupervisorComponent implements OnInit {
       electionId: [0],
       constituencyId: [0],
       boothId: [0],
+      search: ['']
     })
   }
 
@@ -89,7 +95,8 @@ export class AddSupervisorComponent implements OnInit {
     } else if (flag == 'constituency') {
       this.filterForm.controls['boothId'].setValue(0);
       this.clientWiseBoothListArrayForFilter = [];
-    } else if (flag == 'booth') {
+    } else if (flag == 'search') {
+      this.filterForm.controls['search'].setValue('');
     }
     this.getCallCenterUser();
     this.paginationNo = 1;
@@ -105,7 +112,7 @@ export class AddSupervisorComponent implements OnInit {
       fName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
       mName: ['', Validators.pattern(/^\S*$/)],
       lName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
-      gender: ['', Validators.required],
+      gender: [1, Validators.required],
       clientId: ['', Validators.required],
       electionId: [''],
       constituencyId: [''],
@@ -212,7 +219,7 @@ export class AddSupervisorComponent implements OnInit {
     let obj = 'ClientId=' + (this.commonService.checkDataType(formData.clientId) == true ? formData.clientId : 0) + '&UserId=' + this.commonService.loggedInUserId()
       + '&ElectionId=' + (this.commonService.checkDataType(formData.electionId) == true ? formData.electionId : 0)
       + '&ConstituencyId=' + (this.commonService.checkDataType(formData.constituencyId) == true ? formData.constituencyId : 0) + '&BoothId=' + (this.commonService.checkDataType(formData.boothId) == true ? formData.boothId : 0)
-      + '&Search=' + '' + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
+      + '&Search=' + formData.search + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
     this.callAPIService.setHttp('get', 'ClientMasterWebApi/VoterCRM/GetCallCenterUser?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -319,6 +326,21 @@ export class AddSupervisorComponent implements OnInit {
     this.paginationNo = pageNo;
     this.getCallCenterUser();
     this.clearForm();
+  }
+
+  onKeyUpSearchData() {
+    this.subject.next();
+  }
+  
+  searchUserSuperData(flag: any) {
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.filterForm.value.search
+        this.paginationNo = 1;
+        this.getCallCenterUser();
+      }
+      );
   }
 
   clearDropdownData(flag: any) {
@@ -444,6 +466,7 @@ export class AddSupervisorComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.toastrService.success(res.responseData.msg);
+        this.clearForm();
         this.getCallCenterUser();
       } else {
       }

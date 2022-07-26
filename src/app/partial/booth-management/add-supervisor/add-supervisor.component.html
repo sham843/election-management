@@ -183,32 +183,43 @@
                 <div class="card-header">
                     <form [formGroup]="filterForm">
                         <div class="row g-2">
-                            <div class="col-sm">
+                            <div class="col-sm-4">
                                 <ngx-select [allowClear]="true" [items]="clientNameArray" (select)="clearFilter('client');getElectionName('filterFlag');getCallCenterUser()"
                                     (remove)="clearFilter('client')" formControlName="clientId" optionValueField="clientId"
                                     optionTextField="clientName" placeholder="select Client">
                                 </ngx-select>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-sm-4">
                                 <ngx-select [allowClear]="true" [items]="electionNameArrayForFilter" formControlName="electionId" 
                                 optionValueField="electionId" optionTextField="electionName" (select)="clearFilter('election');getConstituencyName('filterFlag');getCallCenterUser()"
                                 (remove)="clearFilter('election')" placeholder="Select Election"
                                 [disabled]="!filterForm.value.clientId || electionNameArrayForFilter?.length == 0">
                             </ngx-select>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-sm-4">
                                 <ngx-select [allowClear]="true" [items]="constituencyNameArrayForFilter" formControlName="constituencyId"
                                 (select)="clearFilter('constituency');ClientWiseBoothList('filterFlag');getCallCenterUser()" optionValueField="constituencyId" optionTextField="constituencyName"
                                  (remove)="clearFilter('constituency')" placeholder="Select Constituency" 
                                 [disabled]="!filterForm.value.electionId">
                                 </ngx-select>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-sm-4">
                                 <ngx-select [allowClear]="true" [items]="clientWiseBoothListArrayForFilter" formControlName="boothId"
-                            optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth" (select)="clearFilter('booth');getCallCenterUser()"
-                            [disabled]="!this.filterForm.value.constituencyId" (remove)="clearFilter('booth')">
-                        </ngx-select>
+                                    optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
+                                    (select)="clearFilter('booth');getCallCenterUser()" [disabled]="!this.filterForm.value.constituencyId"
+                                    (remove)="clearFilter('booth')">
+                                </ngx-select>
                             </div>
+
+                            <div class="col-sm input-group">
+                                <input class="form-control" type="text" placeholder="Search By Name/Mobile No." formControlName="search"
+                                    (keyup)="onKeyUpSearchData()" />
+                                <button type="button" class="btn btn-light border btn-sm" (click)="clearFilter('search')"
+                                    *ngIf="filterForm.value.search"><i class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!filterForm.value.search" class="btn btn-sm border btn-light"><i
+                                        class="fas fa-search"></i></button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
