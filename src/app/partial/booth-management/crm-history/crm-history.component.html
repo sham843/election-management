@@ -1208,8 +1208,8 @@
                     <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
                     #searchAddress>
                 </div>
-                <agm-map [latitude]="addLatitude" [longitude]="addLongitude" (mapClick)="markerAddressDragEnd($event)">
-                    <div *ngIf="this.commonService.checkDataType(voterProfileData?.latitude) == true">
+                <agm-map [latitude]="addLatitude || 19.0898177" [longitude]="addLongitude || 76.5240298" (mapClick)="markerAddressDragEnd($event)">
+                    <div *ngIf="this.commonService.checkDataType(voterProfileData?.latitude) == true || addLatitude">
                         <agm-marker [latitude]="addLatitude" [longitude]="addLongitude" (dragEnd)="markerAddressDragEnd($event)"
                             [markerDraggable]="true" (markerClick)="clickedAddressMarker(infowindow)">
                             <agm-info-window #infowindow>
