@@ -15,10 +15,13 @@
                                 <div class="card shadow-none border mb-3">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <span class="votername">{{voterProfileData?.marathiName}}</span>
-                                        <button type="submit" class="btn btn-light btn-sm text-main"
-                                            (click)="disableDiv = false">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
+                                        <div>
+                                            <span *ngIf="disableDiv == false">(Edit Mode)</span>
+                                            <button type="submit" class="btn btn-light btn-sm text-main" (click)="disableDiv = false">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        
                                     </div>
                                     <div class="card-body pt-1 position-relative bg-transparent" style="z-index:0">
                                         <img *ngIf="voterProfileData?.doNotCall == 1 || voterProfileData?.isNotCall == 1" src="assets/images/do-not-call.jpg" class="donotcall">
@@ -104,7 +107,13 @@
                                                         <label class="form-label">Agent Name</label>
                                                         <div class="form-data"> {{voterProfileData?.agentName}} </div>
                                                     </div>
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-4" *ngIf="voterProfileData?.address">
+                                                        <label class="form-label">Address</label>
+                                                        <div class="form-data">
+                                                            {{voterProfileData?.address}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
                                                         <label class="form-label">Migrated</label>
                                                         <div class="form-data">
                                                             {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
@@ -310,6 +319,24 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="row align-items-end g-2 mt-1">
+                                                    <label class="form-label">Address</label>
+                                                    <div class="row gx-1">
+                                                        <div class="col-sm">
+                                                            <input class="form-control" type="text" autocapitalize="off" placeholder="Address" spellcheck="off"
+                                                                formControlName="area" [ngClass]="{ 'is-invalid': submittedVP && v.area.errors }">
+                                                            <div *ngIf="submittedVP && v.area.errors" class="invalid-feedback">Please Enter Valid Address</div>
+                                                        </div>
+                                                        <div class="col-sm-auto">
+                                                            <button type="submit" class="btn btn-light text-main" data-bs-toggle="modal"
+                                                                data-bs-target="#MapSelectModalForAddress">
+                                                                <i class="fas fa-map"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="card-header">
                                                 General Information
@@ -386,11 +413,17 @@
                                                             </thead>
                                                             <tbody>
                                                                 <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index"
-                                                                    [class.active]="familyMember.voterId == HighlightRow"
-                                                                    (click)="editFamilyMemberData(familyMember)">
+                                                                    [class.active]="familyMember.voterId == HighlightRow">
                                                                     <td>{{familyMember?.voterNo}}</td>
-                                                                    <td>{{familyMember?.englishName}} <span
-                                                                            *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                    <td *ngIf="familyMember?.voterId != this.voterListData.VoterId">
+                                                                        <a (click)="editFamilyMemberData(familyMember)" class="text-main">{{familyMember?.englishName}}
+                                                                            <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td *ngIf="familyMember?.voterId == this.voterListData.VoterId">
+                                                                         <span>{{familyMember?.englishName}}
+                                                                            <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                        </span>
                                                                     </td>
                                                                     <td>{{familyMember?.mobileNo1 ?
                                                                         familyMember?.mobileNo1 : '-'}}</td>
@@ -965,7 +998,6 @@
     </div>
 </div>
 
-
 <!-- Modal to select voters for family  -->
 <div class="modal fade" id="SelectFamilyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="SelectFamilyModalLabel" aria-hidden="true">
@@ -993,7 +1025,6 @@
                                 <th>Voter Name (Age)</th>
                                 <th>House No</th>
                                 <th>Booth Name</th>
-                                <th>Occupation</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -1004,7 +1035,6 @@
                                 <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
                                 <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
                                 <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
-                                <td>{{familyChild?.occupation ? familyChild?.occupation : '-'}}</td>
                                 <td>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault12"
@@ -1137,23 +1167,51 @@
 </div>
 
 
-<!-- Modal to select Map Address   -->
+<!-- Modal to select Map Migrated Address   -->
 <div class="modal fade" id="MapSelectModal" tabindex="-1" aria-labelledby="MapSelectModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <p class="modal-title" id="MapSelectModalLabel">Address Details</p>
+                <p class="modal-title" id="MapSelectModalLabel">Migrated Address Details</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-20">
+                <div class="form-container mb-2">
+                    <input class="form-control" type="text" autocapitalize="off" [formControl]="searchMigratedAdd" spellcheck="off"
+                    #searchMigrated>
+                </div>
+                <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerMigratedDragEnd($event)">
+                    <div *ngIf="latitude">
+                        <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerMigratedDragEnd($event)"
+                            [markerDraggable]="true" (markerClick)="clickedMigratedMarker(infowindow)">
+                            <agm-info-window #infowindow>
+                                <strong>Address - {{searchMigratedAdd.value}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+                    </div>
+                </agm-map>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to select Map Address   -->
+<div class="modal fade" id="MapSelectModalForAddress" tabindex="-1" aria-labelledby="MapSelectModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="MapSelectModalLabel1">Address Details</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mt-20">
                 <div class="form-container mb-2">
                     <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off"
-                    #search>
+                    #searchAddress>
                 </div>
-                <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="markerDragEnd($event)">
-                    <div *ngIf="latitude">
-                        <agm-marker [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerDragEnd($event)"
-                            [markerDraggable]="true" (markerClick)="clickedMarker(infowindow)">
+                <agm-map [latitude]="addLatitude" [longitude]="addLongitude" (mapClick)="markerAddressDragEnd($event)">
+                    <div *ngIf="this.commonService.checkDataType(voterProfileData?.latitude) == true">
+                        <agm-marker [latitude]="addLatitude" [longitude]="addLongitude" (dragEnd)="markerAddressDragEnd($event)"
+                            [markerDraggable]="true" (markerClick)="clickedAddressMarker(infowindow)">
                             <agm-info-window #infowindow>
                                 <strong>Address - {{searchAdd.value}}</strong>
                             </agm-info-window>
