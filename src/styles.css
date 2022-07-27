@@ -676,14 +676,23 @@ g[shape-rendering="auto"]{
 }
 
 .divDisabled{
-    pointer-events: none;
+    pointer-events:none;
     opacity: 0.8;
+    cursor: not-allowed;
+    background-color: rgb(229, 229, 229) !important;
 }
 
-.divDisabled1{
+.divDisabled1{  
+    pointer-events:none;
+    opacity: 0.8;
+    cursor: not-allowed;
+    background-color: rgb(229, 229, 229) !important;
+} 
+
+/* .divDisabled1{
     pointer-events: none;
     opacity: 0.8;
-}
+} */
 .pac-container{
     z-index: 9999 !important;
 }

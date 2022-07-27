@@ -74,7 +74,7 @@
                             <label class="form-label required-field">Select Client</label>
                         <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="clientId"
                             optionValueField="clientId" optionTextField="clientName" (selectionChanges)="getNameByObj($event,'client')"
-                            (select)="clearDropdownData('clientId');getElectionName()" (remove)="clearDropdownData('clientId')"
+                            (select)="clearDropdownData('clientId');getElectionName('submitFlag')" (remove)="clearDropdownData('clientId')"
                             placeholder="Select Client" [ngClass]="{ 'is-invalid': submitted && f.clientId.errors }">
                         </ngx-select>
                             <div *ngIf="submitted && f.clientId.errors" class="invalid-feedback"> Client is Required </div>
@@ -82,7 +82,7 @@
                         <div class="col-sm">
                             <label class="form-label required-field">Select Election</label>
                             <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="electionId" 
-                                optionValueField="electionId" optionTextField="electionName" (select)="clearDropdownData('electionId');getConstituencyName()"
+                                optionValueField="electionId" optionTextField="electionName" (select)="clearDropdownData('electionId');getConstituencyName('submitFlag')"
                                 (remove)="clearDropdownData('electionId')" (selectionChanges)="getNameByObj($event,'election')"
                                 [ngClass]="{ 'is-invalid': submitted && f.electionId.errors }"
                                 [disabled]="!callCenterUserForm.value.clientId || electionNameArray?.length == 0" placeholder="Select Election">
@@ -93,7 +93,7 @@
                         <div class="mb-2">
                             <label class="form-label required-field">Select Constituency</label>
                        <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="constituencyId"
-                            (select)="clearDropdownData('constituencyId');ClientWiseBoothList()" optionValueField="constituencyId" optionTextField="constituencyName"
+                            (select)="clearDropdownData('constituencyId');ClientWiseBoothList('submitFlag')" optionValueField="constituencyId" optionTextField="constituencyName"
                              (remove)="clearDropdownData('constituencyId')" placeholder="Select Constituency" (selectionChanges)="getNameByObj($event,'constituency')"
                             [disabled]="!callCenterUserForm.value.electionId" [ngClass]="{ 'is-invalid': submitted && f.constituencyId.errors }">
                         </ngx-select>
@@ -180,37 +180,46 @@
         </div>
         <div class="col-sm-7">
             <div class="card">
-
-
                 <div class="card-header">
                     <form [formGroup]="filterForm">
                         <div class="row g-2">
-                            <div class="col-sm">
-                                <ngx-select [allowClear]="true" [items]="clientNameArray" (select)="getElectionName()"
-                                    (remove)="clearFilter('client')" formControlName="ClientId" optionValueField="clientId"
+                            <div class="col-sm-4">
+                                <ngx-select [allowClear]="true" [items]="clientNameArray" (select)="clearFilter('client');getElectionName('filterFlag');getCallCenterUser()"
+                                    (remove)="clearFilter('client')" formControlName="clientId" optionValueField="clientId"
                                     optionTextField="clientName" placeholder="select Client">
                                 </ngx-select>
                             </div>
-                            <div class="col-sm">
-                                <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" 
-                                optionValueField="electionId" optionTextField="electionName" (select)="getConstituencyName()"
+                            <div class="col-sm-4">
+                                <ngx-select [allowClear]="true" [items]="electionNameArrayForFilter" formControlName="electionId" 
+                                optionValueField="electionId" optionTextField="electionName" (select)="clearFilter('election');getConstituencyName('filterFlag');getCallCenterUser()"
                                 (remove)="clearFilter('election')" placeholder="Select Election"
-                                [disabled]="!filterForm.value.ClientId || electionNameArray?.length == 0">
+                                [disabled]="!filterForm.value.clientId || electionNameArrayForFilter?.length == 0">
                             </ngx-select>
                             </div>
-                            <div class="col-sm">
-                                <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
-                                (select)="ClientWiseBoothList()" optionValueField="constituencyId" optionTextField="constituencyName"
+                            <div class="col-sm-4">
+                                <ngx-select [allowClear]="true" [items]="constituencyNameArrayForFilter" formControlName="constituencyId"
+                                (select)="clearFilter('constituency');ClientWiseBoothList('filterFlag');getCallCenterUser()" optionValueField="constituencyId" optionTextField="constituencyName"
                                  (remove)="clearFilter('constituency')" placeholder="Select Constituency" 
-                                [disabled]="!filterForm.value.ElectionId">
+                                [disabled]="!filterForm.value.electionId">
                                 </ngx-select>
                             </div>
-                            <div class="col-sm">
-                                <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" formControlName="BoothId"
-                            optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
-                            [disabled]="!this.filterForm.value.ConstituencyId" (remove)="clearFilter('booth')">
-                        </ngx-select>
+                            <div class="col-sm-4">
+                                <ngx-select [allowClear]="true" [items]="clientWiseBoothListArrayForFilter" formControlName="boothId"
+                                    optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
+                                    (select)="clearFilter('booth');getCallCenterUser()" [disabled]="!this.filterForm.value.constituencyId"
+                                    (remove)="clearFilter('booth')">
+                                </ngx-select>
                             </div>
+
+                            <div class="col-sm input-group">
+                                <input class="form-control" type="text" placeholder="Search By Name/Mobile No." formControlName="search"
+                                    (keyup)="onKeyUpSearchData()" />
+                                <button type="button" class="btn btn-light border btn-sm" (click)="clearFilter('search')"
+                                    *ngIf="filterForm.value.search"><i class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!filterForm.value.search" class="btn btn-sm border btn-light"><i
+                                        class="fas fa-search"></i></button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -234,30 +243,29 @@
                                     <p class="text-muted small mb-0">({{callCenterUser?.mobileNo}})</p>
                                 </td>
                                 <!-- <td>{{callCenterUser?.gender == 1 ? 'Male' : 'Female'}}</td> -->
-                                <td>
+                                <td *ngIf="callCenterUser?.assignedBoothlist">
                                     <ul class="ps-3 mb-0" *ngFor="let assignedBooth of callCenterUser?.assignedBoothlist">
                                         <li>{{assignedBooth?.boothName}}({{assignedBooth?.electionName}} / {{assignedBooth?.constituencyName}})</li>
                                     </ul>
                                 </td>
+                                <td *ngIf="!callCenterUser?.assignedBoothlist">-</td>
                                 <td>
-                                    <!-- , 'disabled' : callCenterUser.UserId == null -->
                                     <div class="btn-group">
-                                        <button type="button" 
-                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
-                                            [ngClass]="{'text-danger':callCenterUser?.IsUserblock == 1 , 'text-primary' :callCenterUser?.IsUserblock == 0}"
-                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
-                                            (click)="callCenterUserObj = callCenterUser; callCenterUser?.IsUserblock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
-                                            {{callCenterUser?.IsUserblock == 1 ? 'Blocked' : 'Active'}}
+                                        <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1" title="Send Login Credentials"
+                                        data-bs-toggle="modal" data-bs-target="#sendUserCredential" (click)="sendUserCredentialObj = callCenterUser">
+                                            <i class="fas fa-paper-plane"></i>
                                         </button>
-                                        <!-- <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold"
-                                            [ngClass]="{'text-danger':callCenterUser?.IsUserBlock == 1 , 'text-main' :callCenterUser?.IsUserBlock == 0}"
-                                            (click)="blockUser(callCenterUser.UserId, callCenterUser.ClientId, callCenterUser.IsUserBlock)">
-                                            {{callCenterUser?.IsUserBlock == 1 ? 'Blocked' : 'Active'}}
-                                        </button> -->
+                                        <button type="button" title="Active/Block Supervisor"
+                                            class="btn btn-sm btn-light text-main rounded fw-bold mx-1"
+                                            [ngClass]="{'text-danger':callCenterUser?.isUserBlock == 1 , 'text-primary' :callCenterUser?.isUserBlock == 0}"
+                                            data-bs-toggle="modal" data-bs-target="#agentBlock"
+                                            (click)="callCenterUserObj = callCenterUser; callCenterUser?.isUserBlock == 0 ? modalTextChange ='Block' : modalTextChange ='Active'">
+                                            {{callCenterUser?.isUserBlock == 1 ? 'Blocked' : 'Active'}}
+                                        </button>
                                         <button type="button" title="Edit Supervisor" (click)="editCallCenterUserData(callCenterUser)" class="btn btn-sm btn-light text-edit me-1 rounded">
                                             <i class="far fa-edit"></i>
                                         </button>
-                                        <button type="button" title="Delete Supervisor" class="btn btn-sm btn-light text-danger rounded">
+                                        <button type="button" title="Delete Supervisor" (click)="deleteConfirmModel(callCenterUser?.clientId,callCenterUser?.userId)" class="btn btn-sm btn-light text-danger rounded">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </div>
@@ -298,3 +306,24 @@
             </div>
         </div>
     </div>
+
+       <!-- Modal for Send User Credentials -->
+       <div class="modal fade" id="sendUserCredential" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+       aria-labelledby="sendUserCredentialLabel" aria-hidden="true">
+       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <h5 class="modal-title" id="sendUserCredentialLabel">Send User Credentials</h5>
+                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body chartbox text-center">
+                   <i class="far fa-question-circle fa-5x text-success mb-3"></i>
+                   <h5 class="mb-3">Do you really want to send user website login Credentials?</h5>
+                   <button type="button" class="btn btn-sm btn-secondary me-2 px-4" data-bs-dismiss="modal"
+                       aria-label="Close">No</button>
+                   <button (click)="sendLoginCredential(sendUserCredentialObj)" type="button"
+                       class="btn btn-sm btn-main px-4" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+               </div>
+           </div>
+       </div>
+   </div>

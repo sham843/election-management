@@ -87,7 +87,14 @@ export class CrmHistoryComponent implements OnInit {
   cityName: any;
   addressName: any;
   geocoder: any;
-  @ViewChild('search') public searchElementRef!: ElementRef;
+  @ViewChild('searchMigrated') public searchElementRef!: ElementRef;
+  searchMigratedAdd = new FormControl('');
+
+  addLatitude: any = 19.0898177;
+  addLongitude: any = 76.5240298;
+  addPrevious: any;
+  addressNameforAddress: any;
+  @ViewChild('searchAddress') public searchElementRefAddress!: ElementRef;
   searchAdd = new FormControl('');
 
   familyHeadVoterId: any;
@@ -147,6 +154,7 @@ export class CrmHistoryComponent implements OnInit {
     this.getIsConflictDataFlag();
     this.getReligionList();
     this.getPoliticalPartyList();
+    this.searchMigratedAddress();
     this.searchAddress();
   }
 
@@ -586,7 +594,7 @@ export class CrmHistoryComponent implements OnInit {
       this.voterProfileForm.controls['migratedArea'].setValue('');
       this.voterProfileForm.controls['migratedArea'].clearValidators();
       this.voterProfileForm.controls['migratedArea'].updateValueAndValidity();
-      this.searchAdd.setValue('');
+      this.searchMigratedAdd.setValue('');
       this.latitude = '';
       this.longitude = '';
     }
@@ -649,7 +657,7 @@ export class CrmHistoryComponent implements OnInit {
       longitude: [''],
       nickName: ['', Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z.\\s]+$')],
       migrated: [''],
-      area: [''],
+      area: ['',Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)],
       leaderImportance: [''],
       // migratedLatitude: [''],
       // migratedLongitude: [''],
@@ -704,7 +712,8 @@ export class CrmHistoryComponent implements OnInit {
       migratedArea: data.migratedArea,
       head: data.head,
       dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : '',
-      leaderImportance: data.leaderImportance ? Math.round(data.leaderImportance) : 0,
+      // leaderImportance: data.leaderImportance ? Math.round(data.leaderImportance) : 0,
+      leaderImportance: data.leaderImportance ? data.leaderImportance : 0,
       comment: data.comment,
       voterMarking: data.voterMarking,
       migratedCity: data.migratedCity,
@@ -712,7 +721,7 @@ export class CrmHistoryComponent implements OnInit {
       longitude: data.longitude,
       nickName: data.nickName,
       migrated: data.migrated,
-      area: data.area,
+      area: data.address,
       // migratedLatitude: data.migratedLatitude,  
       // migratedLongitude: data.migratedLongitude, 
       occupation: data.occupation,
@@ -752,10 +761,14 @@ export class CrmHistoryComponent implements OnInit {
     this.postalVotingCheckBox(data.postalFlag == 1 ? true : false, 'edit');
     this.needSupportCheckBox(data.needSupportFlag == 1 ? true : false, 'edit');
     this.nameCorrectionCheckBox(data.isNameChange == 1 ? true : false, 'edit');
-    this.searchAdd.setValue(data.migratedArea);
+    this.searchMigratedAdd.setValue(data.migratedArea);
     this.latitude = data.migratedLatitude;
     this.longitude = data.migratedLongitude;
-    this.starvalue = this.voterProfileForm.value.leaderImportance;
+    this.commonService.checkDataType(data.latitude) == true ? this.searchAdd.setValue(data.address) : '';
+    this.addLatitude = data.latitude;
+    this.addLongitude = data.longitude;
+    // this.starvalue = this.voterProfileForm.value.leaderImportance;
+    this.starvalue = Math.round(this.voterProfileForm.value.leaderImportance);
   }
 
   onSubmitVoterProfile() {
@@ -785,8 +798,10 @@ export class CrmHistoryComponent implements OnInit {
         "familysize": isDeleteFamilyMember == 1 ? '0' : this.voterProfileFamilyData?.length == 1 ? '0' : (formData.head == 'yes') ? this.voterProfileFamilyData?.length.toString() : '0',
         "religionId": formData.religionId || 0,
         "partyAffection": '0.0',
+        // "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
+        //   formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '0.0',
         "leaderImportance": formData.leaderImportance == 1 ? '1.0' : formData.leaderImportance == 2 ? '2.0' : formData.leaderImportance == 3 ? '3.0' :
-          formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : '0.0',
+          formData.leaderImportance == 4 ? '4.0' : formData.leaderImportance == 5 ? '5.0' : this.voterProfileForm.value.leader == 'yes' ? this.voterProfileData.leaderImportance : '0.0',
         "watsApp1": formData.watsApp1 == true ? formData.mobileNo1 : (this.voterProfileData.watsApp1 && formData.watsApp1 == true ? this.voterProfileData.watsApp1 : ''),
         "watsApp2": formData.watsApp2 == true ? formData.mobileNo2 : (this.voterProfileData.watsApp2 && formData.watsApp2 == true ? this.voterProfileData.watsApp2 : ''),
         "facebookId": "",
@@ -805,13 +820,13 @@ export class CrmHistoryComponent implements OnInit {
         "oppCandidateId": 0,
         "feedback": "",
         "migratedCity": formData.migratedCity || '',
-        "latitude": this.latitude || 0,
-        "longitude": this.longitude || 0,
+        "latitude": formData.area == this.addressNameforAddress ? this.addLatitude || 0 : 0,
+        "longitude": formData.area == this.addressNameforAddress ? this.addLongitude || 0 : 0,
+        "area": formData.area || '',  //Passing area = Address
         "voterNo": this.voterProfileData.voterNo.toString(),
         "nickName": formData.nickName || '',
         "clientId": this.voterListData?.ClientId,
         "migrated": formData.migrated || '',
-        "area": formData.migratedArea ? formData.migratedArea : formData.area,
         "migratedLatitude": this.latitude ? this.latitude : this.voterProfileData.migratedLatitude || 0,
         "migratedLongitude": this.longitude ? this.longitude : this.voterProfileData.migratedLongitude || 0,
         "surveyDate": new Date(),
@@ -862,6 +877,7 @@ export class CrmHistoryComponent implements OnInit {
           this.spinner.hide();
           this.submittedVP = false;
           this.disableDiv = true;
+          this.searchAdd.setValue('');
           (this.voterProfileForm.value.head == 'yes' && this.voterListforFamilyChildArray?.length > 0) ? this.createFamilyTree() : '';
           (this.voterProfileData?.head == "yes" && this.voterProfileForm.value.head == 'no') ? this.getVoterprofileFamilyData() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
@@ -889,9 +905,9 @@ export class CrmHistoryComponent implements OnInit {
     }
   }
 
-  //.........................................Address to get Pincode Code Start Here ..................................................//
+  //.........................................Migrated Address to get Pincode Code Start Here ..................................................//
 
-  searchAddress() {
+  searchMigratedAddress() {
     this.mapsAPILoader.load().then(() => {
       this.geocoder = new google.maps.Geocoder();
       let autocomplete = new google.maps.places.Autocomplete(
@@ -905,23 +921,85 @@ export class CrmHistoryComponent implements OnInit {
           }
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
+          this.findMigratedAddressByCoordinates();
+        });
+      });
+    });
+  }
+
+  markerMigratedDragEnd($event: MouseEvent) {
+    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lng;
+    this.findMigratedAddressByCoordinates();
+  }
+
+  findMigratedAddressByCoordinates() {
+    this.geocoder.geocode({
+      'location': {
+        lat: this.latitude,
+        lng: this.longitude
+      }
+    }, (results: any) => {
+      this.findMigratedAddress(results[0]);
+    });
+  }
+
+  findMigratedAddress(results: any) {
+    if (results) {
+      this.addressName = results.formatted_address;
+      results.address_components.forEach((element: any) => {
+        if (element.types[0] == "locality") {
+          this.cityName = element.long_name;
+        }
+        this.searchMigratedAdd.setValue(this.addressName);
+        this.voterProfileForm.controls['migratedCity'].setValue(this.cityName);
+        this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
+      });
+    }
+  }
+
+  clickedMigratedMarker(infowindow: any) {
+    if (this.previous) {
+      this.previous.close();
+    }
+    this.previous = infowindow;
+  }
+
+  //.........................................Migrated Address to get Pincode Code End Here ....................................//
+
+  //......................................... Address Code Start Here ..................................................//
+
+  searchAddress() {
+    this.mapsAPILoader.load().then(() => {
+      this.geocoder = new google.maps.Geocoder();
+      let autocomplete = new google.maps.places.Autocomplete(
+        this.searchElementRefAddress.nativeElement
+      );
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          this.addLatitude = place.geometry.location.lat();
+          this.addLongitude = place.geometry.location.lng();
           this.findAddressByCoordinates();
         });
       });
     });
   }
 
-  markerDragEnd($event: MouseEvent) {
-    this.latitude = $event.coords.lat;
-    this.longitude = $event.coords.lng;
+  markerAddressDragEnd($event: MouseEvent) {
+    this.addLatitude = $event.coords.lat;
+    this.addLongitude = $event.coords.lng;
     this.findAddressByCoordinates();
   }
 
   findAddressByCoordinates() {
     this.geocoder.geocode({
       'location': {
-        lat: this.latitude,
-        lng: this.longitude
+        lat: this.addLatitude,
+        lng: this.addLongitude
       }
     }, (results: any) => {
       this.findAddress(results[0]);
@@ -930,26 +1008,21 @@ export class CrmHistoryComponent implements OnInit {
 
   findAddress(results: any) {
     if (results) {
-      this.addressName = results.formatted_address;
-      results.address_components.forEach((element: any) => {
-        if (element.types[0] == "locality") {
-          this.cityName = element.long_name;
-        }
-        this.searchAdd.setValue(this.addressName);
-        this.voterProfileForm.controls['migratedCity'].setValue(this.cityName);
-        this.voterProfileForm.controls['migratedArea'].setValue(this.addressName);
-      });
+      this.addressNameforAddress = results.formatted_address;
+      this.searchAdd.setValue(this.addressNameforAddress);
+      this.voterProfileForm.controls['area'].setValue(this.addressNameforAddress);
     }
   }
 
-  clickedMarker(infowindow: any) {
-    if (this.previous) {
-      this.previous.close();
+  clickedAddressMarker(infowindow: any) {
+    if (this.addPrevious) {
+      this.addPrevious.close();
     }
-    this.previous = infowindow;
+    this.addPrevious = infowindow;
   }
 
-  //.........................................Address to get Pincode Code End Here ....................................//
+//.........................................Address code End Here ....................................//
+
 
   //.........................................Please tick wrong mobile Start Here ....................................//
 

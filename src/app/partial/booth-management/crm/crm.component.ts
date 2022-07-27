@@ -65,7 +65,7 @@ export class CrmComponent implements OnInit {
   genderArray = [{ id: 1, name: 'Male' }, { id: 2, name: 'Female' }, { id: 3, name: 'Other' }];
   mobileNoAvailableArray = [{ id: 1, name: 'Yes' }, { id: 2, name: 'No' }];
   bussinessArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
-  ratingStarArray = [{ id: 1, name: '1 Star' }, { id: 2, name: '2 Star' }, { id: 3, name: '3 Star' }, { id: 4, name: '4 Star' }, { id: 5, name: '5 Star' }];
+  ratingStarArray = [{ id: 1.0, name: '1 Star' }, { id: 2.0, name: '2 Star' }, { id: 3.0, name: '3 Star' }, { id: 4.0, name: '4 Star' }, { id: 5.0, name: '5 Star' },];
   yuvakArray = [{ id: 1, name: 'Yes' }, { id: 0, name: 'No' }];
   ageArray = [{ id: 1, name: '18-40' }, { id: 2, name: '40-60' }, { id: 3, name: '60 and Above' }];
   familySizeArray = [{ id: 1, name: '1-5' }, { id: 2, name: '5-10' }, { id: 3, name: '10 and Above' }];
