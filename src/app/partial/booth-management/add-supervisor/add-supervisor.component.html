@@ -243,13 +243,13 @@
                                     <p class="text-muted small mb-0">({{callCenterUser?.mobileNo}})</p>
                                 </td>
                                 <!-- <td>{{callCenterUser?.gender == 1 ? 'Male' : 'Female'}}</td> -->
-                                <td>
+                                <td *ngIf="callCenterUser?.assignedBoothlist">
                                     <ul class="ps-3 mb-0" *ngFor="let assignedBooth of callCenterUser?.assignedBoothlist">
                                         <li>{{assignedBooth?.boothName}}({{assignedBooth?.electionName}} / {{assignedBooth?.constituencyName}})</li>
                                     </ul>
                                 </td>
+                                <td *ngIf="!callCenterUser?.assignedBoothlist">-</td>
                                 <td>
-                                    <!-- , 'disabled' : callCenterUser.UserId == null -->
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1" title="Send Login Credentials"
                                         data-bs-toggle="modal" data-bs-target="#sendUserCredential" (click)="sendUserCredentialObj = callCenterUser">
