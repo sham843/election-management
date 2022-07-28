@@ -44,16 +44,13 @@ export class CrmHistoryComponent implements OnInit {
   voterProfileForm!: FormGroup | any;
   submittedVP: boolean = false;
   nameCorrectionDivHide: boolean = false;
-  disableDiv: boolean = true;
+  disableDiv: boolean = false;
   expiredDisableDiv: boolean = false;
   prominentleaderArray: any;
   VoterCastListArray: any;
   religionListArray: any;
   politicalPartyArray: any;
 
-  voterListforFamilyChildArray: any[] = [];
-  changedVoterListforFamilyChildArray: any[] = [];
-  searchFamilyChield = new FormControl('');
   subjectSearchFamilyC: Subject<any> = new Subject();
   checkFamilyMemberClearFlag: boolean = false;
   headCheckArray = ['yes', 'no'];
@@ -105,7 +102,6 @@ export class CrmHistoryComponent implements OnInit {
   wrongMobileNumberArray: any[] = [];
   checkWrongMobileNflag: boolean = true;
 
-  familyMembersFilter: any = { englishName: '' };
   isConflictCheckFlag: any;
   conflictDataArray: any;
   conflictRecordDelObj: any;
@@ -115,6 +111,18 @@ export class CrmHistoryComponent implements OnInit {
   gold: string = 'gold';
 
   copyVoterProfileFamilyData: any[] = [];
+
+  voterListforFamilyChildArray: any[] = [];
+  getFamilyChildArray: any[] = [];
+  submitedFamilyChildArray: any[] = [];
+  getTotal: any;
+  paginationNo: number = 1;
+  pageSize: number = 10;
+  subject: Subject<any> = new Subject();
+  searchFamilyMember = new FormControl('');
+  checkflagFamilyMember: boolean = true;
+  checkPageRefreshFlag: boolean = true;
+  finalSubmitFMemberCheckFlag: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -156,6 +164,7 @@ export class CrmHistoryComponent implements OnInit {
     this.getPoliticalPartyList();
     this.searchMigratedAddress();
     this.searchAddress();
+    this.searchFMemberData('false');
   }
 
   defaultFeedbackForm() {
@@ -265,6 +274,7 @@ export class CrmHistoryComponent implements OnInit {
         flag == 'refreshFlag' ? this.refreshUrlTab() : '';
         this.editVoterProfileData(this.voterProfileData);
         this.getContactlist(this.voterProfileData);
+        this.finalSubmitFMemberCheckFlag = false; this.getFamilyChildArray = []; this.submitedFamilyChildArray = [];
       } else {
         this.spinner.hide();
       }
@@ -408,49 +418,84 @@ export class CrmHistoryComponent implements OnInit {
   //.......... get Voter for Family Child List Code Start...............//
 
   getVoterListforFamilyChild() {  // select family memember Model Api
-    if (this.voterListforFamilyChildArray?.length == 0) {
       this.spinner.show();
       let obj = 'ClientId=' + this.voterListData.ClientId + '&UserId=' + (this.voterListData?.AgentId > 0 ? this.voterListData?.AgentId : this.commonService.loggedInUserId()) + '&VoterId=' + this.voterListData.VoterId +
-        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + 0 + '&Search=' + this.searchFamilyChield.value.trim() + '&LastName=' + this.voterProfileData?.lastName ;
+        '&ElectionId=' + this.voterListData.ElectionId + '&ConstituencyId=' + this.voterListData.ConstituencyId + '&BoothId=' + 0 + '&Search=' + this.searchFamilyMember.value.trim() + '&LastName=' + this.voterProfileData?.lastName 
+        + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize;
       this.callAPIService.setHttp('get', 'VoterCRM/GetVoterListforFamilyChild?' + obj, false, false, false, 'electionMicroServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
-          this.voterListforFamilyChildArray = res.responseData;
-          this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
+          this.voterListforFamilyChildArray = res.responseData.responseData1;
+          this.getTotal = res.responseData.responseData2.totalPages * this.pageSize;
+
+           if(this.getFamilyChildArray.length == 0 && this.checkPageRefreshFlag){
+            this.voterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
+            if (ele.isMember == 1 ) { this.getFamilyChildArray.push(ele); }
+          })
+          this.submitedFamilyChildArray = JSON.parse(JSON.stringify(this.getFamilyChildArray));
+        }
+        this.checkPageRefreshFlag = false;
+          // this.getFamilyChildArray = Object.values(this.getFamilyChildArray.reduce((acc,cur)=>Object.assign(acc,{[cur.voterId]:cur}),{}))
         } else {
-          this.spinner.hide();
-          this.voterListforFamilyChildArray = [];
+          this.spinner.hide(); this.voterListforFamilyChildArray = [];
         }
       }, (error: any) => {
         this.spinner.hide();
         this.router.navigate(['../../500'], { relativeTo: this.route });
       })
-    } else {
-      this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
-    }
   }
 
-  onCheckChangeChildVoterDetail(event: any, data: any) {
-    this.changedVoterListforFamilyChildArray.find((ele: any) => { //Add checked flag for Check Condition
-      if (ele.voterId == data.voterId && event.target.checked == true) {
-        ele.isMember = 1;
-      } else { if (ele.voterId == data.voterId) { ele.isMember = 0; } }
-    })
+  onClickPagintionFMember(pageNo: number) {
+    this.paginationNo = pageNo;
+    this.getVoterListforFamilyChild();
+  }
+
+  onKeyUpFMemberSearchData() {
+    this.subject.next();
+  }
+  
+  searchFMemberData(flag: any) {
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchFamilyMember.value;
+        this.paginationNo = 1;
+        this.getVoterListforFamilyChild();
+      }
+      );
+  }
+
+  clearSearchFamilyMember(){
+    this.searchFamilyMember.setValue('');
+    this.paginationNo = 1;
+    this.getVoterListforFamilyChild();
+  }
+
+  AddFamilyMember(data: any) { //add with check unique data
+    this.checkflagFamilyMember = true;
+    if (this.getFamilyChildArray.length <= 0) {
+      this.getFamilyChildArray.push(data); this.checkflagFamilyMember = false;
+    } else {
+      this.getFamilyChildArray.map((ele: any) => {
+        ele.voterId == data.voterId ? (this.toastrService.error('Member is Already Added'),this.checkflagFamilyMember = false) : '';
+      })
+    }
+    this.checkflagFamilyMember && this.getFamilyChildArray.length >= 1 ? this.getFamilyChildArray.push(data) : '';
   }
 
   submitFamilyTree() {
-    this.voterListforFamilyChildArray = [];
-    this.voterListforFamilyChildArray = this.changedVoterListforFamilyChildArray;
-    this.familyMembersFilter.englishName = '';
+    this.finalSubmitFMemberCheckFlag = true ;
+    this.submitedFamilyChildArray = JSON.parse(JSON.stringify(this.getFamilyChildArray));  
     this.addSelectedFamilyMember();
   }
 
+  deleteFamilyMember(index:any){
+    this.getFamilyChildArray.splice(index,1);
+  }
+
   clearFamilyTree() {
-    this.voterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
-    this.changedVoterListforFamilyChildArray = [];
-    this.changedVoterListforFamilyChildArray = JSON.parse(JSON.stringify(this.voterListforFamilyChildArray));
-    this.familyMembersFilter.englishName = '';
+    this.getFamilyChildArray = JSON.parse(JSON.stringify(this.submitedFamilyChildArray));
   }
 
   addSelectedFamilyMember() { // Add Selected Family Member in Table Local-Side Code
@@ -460,14 +505,14 @@ export class CrmHistoryComponent implements OnInit {
     })
     this.voterProfileFamilyData = [];
     familyHeadObj ? this.voterProfileFamilyData.push(familyHeadObj) : ''; // Push Family Head Obj
-    this.voterListforFamilyChildArray.find((ele: any) => { // Push selected Family Member Obj
-      if (ele.isMember == 1) { this.voterProfileFamilyData.push(ele) }
+
+    this.submitedFamilyChildArray.find((ele: any) => { // Push selected Family Member Obj
+      this.voterProfileFamilyData.push(ele);
     })
   }
 
   createFamilyTree() {
-    this.voterListforFamilyChildArray.map((ele: any) => { //get value in obj1 (checked = true) 
-      if (ele.isMember == 1) {
+    this.submitedFamilyChildArray.map((ele: any) => { //get value in obj1 (checked = true) 
         let obj1 = {
           "childVoterId": ele.voterId,
           "voter_uid": ele.voterId,
@@ -476,7 +521,6 @@ export class CrmHistoryComponent implements OnInit {
           "boothId": ele.boothId
         }
         this.childVoterDetailArray.push(obj1);
-      }
     })
 
     let obj = {
@@ -551,7 +595,7 @@ export class CrmHistoryComponent implements OnInit {
   }
 
   familyHeadRadiobtn() {
-    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true, this.voterListforFamilyChildArray = []
+    this.voterProfileForm.value.head == 'yes' ? (this.headhideDiv = true, this.voterListforFamilyChildArray = [],this.getFamilyChildArray = [],this.checkPageRefreshFlag = true
       ,this.voterProfileFamilyData = this.copyVoterProfileFamilyData) : this.headhideDiv = false;
   }
 
@@ -878,12 +922,13 @@ export class CrmHistoryComponent implements OnInit {
           this.submittedVP = false;
           this.disableDiv = true;
           this.searchAdd.setValue('');
-          (this.voterProfileForm.value.head == 'yes' && this.voterListforFamilyChildArray?.length > 0) ? this.createFamilyTree() : '';
-          (this.voterProfileData?.head == "yes" && this.voterProfileForm.value.head == 'no') ? this.getVoterprofileFamilyData() : '';
+          (this.voterProfileForm.value.head == 'yes' && this.finalSubmitFMemberCheckFlag) ? this.createFamilyTree() : '';
+          (this.voterProfileData?.head == "yes" && !this.finalSubmitFMemberCheckFlag) ? this.getVoterprofileFamilyData() : '';
           this.voterProfileForm.value.comment ? this.getVPPoliticalInfluenceData() : '';
           this.voterProfileForm.controls['isNameChange'].setValue('');
           this.toastrService.success(res.statusMessage);
           this.getVoterProfileData('refreshFlag');
+          this.finalSubmitFMemberCheckFlag = false; this.getFamilyChildArray = []; this.submitedFamilyChildArray = [];
         } else {
           this.toastrService.error(res.statusMessage);
           this.spinner.hide();
@@ -1089,7 +1134,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       })
     }
-    this.checkWrongMobileNflag && this.wrongMobileNumberArray.length >= 1 ? this.wrongMobileNumberArray.push(obj) : '';
+    this.checkWrongMobileNflag && this.wrongMobileNumberArray.length >= 1 ? (this.wrongMobileNumberArray.push(obj),alert("111")): '';
   }
 
   //.........................................Please tick wrong mobile End Here ....................................// 

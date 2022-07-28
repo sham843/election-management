@@ -74,3 +74,11 @@ agm-map {
     opacity: 0.3;
     top: 48%;
 }
+.table-height {
+  height: 300px;
+  overflow-y: auto;
+}
+.table-height thead{
+  position: sticky;
+  top: -1px;
+}

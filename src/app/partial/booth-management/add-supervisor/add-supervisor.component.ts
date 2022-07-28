@@ -109,9 +109,9 @@ export class AddSupervisorComponent implements OnInit {
     this.callCenterUserForm = this.fb.group({
       id: [0],
       mobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
-      fName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
-      mName: ['', Validators.pattern(/^\S*$/)],
-      lName: ['', [Validators.required, Validators.pattern(/^\S*$/)]],
+      fName: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]],
+      mName: ['', [Validators.maxLength(50), Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]],
+      lName: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]],
       gender: [1, Validators.required],
       clientId: ['', Validators.required],
       electionId: [''],
@@ -214,9 +214,10 @@ export class AddSupervisorComponent implements OnInit {
   }
 
   getCallCenterUser() {
+   let clientIdData = this.commonService.getlocalStorageData().ClientId;
     this.spinner.show();
     let formData = this.filterForm.value;
-    let obj = 'ClientId=' + (this.commonService.checkDataType(formData.clientId) == true ? formData.clientId : 0) + '&UserId=' + this.commonService.loggedInUserId()
+    let obj = 'ClientId=' + (clientIdData != 0 ? clientIdData : this.commonService.checkDataType(formData.clientId) == true ? formData.clientId : 0) + '&UserId=' + this.commonService.loggedInUserId()
       + '&ElectionId=' + (this.commonService.checkDataType(formData.electionId) == true ? formData.electionId : 0)
       + '&ConstituencyId=' + (this.commonService.checkDataType(formData.constituencyId) == true ? formData.constituencyId : 0) + '&BoothId=' + (this.commonService.checkDataType(formData.boothId) == true ? formData.boothId : 0)
       + '&Search=' + formData.search + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize

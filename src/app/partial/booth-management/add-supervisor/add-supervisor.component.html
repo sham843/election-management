@@ -23,6 +23,7 @@
                                 <div *ngIf="submitted && f.fName.errors" class="invalid-feedback">
                                     <span *ngIf="f.fName.errors.required">First Name is Required</span>
                                     <span *ngIf="f.fName.errors.pattern">Enter Valid First Name</span>
+                                    <span *ngIf="f.fName.errors?.maxlength">Please enter only 50 Characters.</span>
                                 </div>
                             </div>
                             <div class="col-sm">
@@ -30,7 +31,8 @@
                                 <input class="form-control" type="text" placeholder="Middle Name" formControlName="mName"
                                     [ngClass]="{ 'is-invalid': submitted && f.mName.errors }">
                                     <div *ngIf="submitted && f.mName.errors" class="invalid-feedback">
-                                        Enter Valid Middle Name
+                                        <span *ngIf="f.mName.errors.pattern">Enter Valid Middle Name</span>
+                                        <span *ngIf="f.mName.errors?.maxlength">Please enter only 50 Characters.</span>
                                     </div>
                             </div>
                             <div class="col-sm">
@@ -40,6 +42,7 @@
                                     <div *ngIf="submitted && f.lName.errors" class="invalid-feedback">
                                         <span *ngIf="f.lName.errors.required">Last Name is Required</span>
                                         <span *ngIf="f.lName.errors.pattern">Enter Valid Last Name</span>
+                                        <span *ngIf="f.lName.errors?.maxlength">Please enter only 50 Characters.</span>
                                     </div>
                             </div>
                         </div>

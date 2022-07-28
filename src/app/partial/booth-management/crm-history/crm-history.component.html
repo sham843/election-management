@@ -1001,7 +1001,7 @@
 <!-- Modal to select voters for family  -->
 <div class="modal fade" id="SelectFamilyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="SelectFamilyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <p class="modal-title" id="SelectFamilyModalLabel">Select Family Members</p>
@@ -1009,47 +1009,90 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-container">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Search By Voter Name"
-                            [(ngModel)]="familyMembersFilter.englishName" (keyup)="commonService.removeSpaceAtBegining($event)">
-                        <button type="button" class="btn btn-light">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Voter No.</th>
-                                <th>Voter Name (Age)</th>
-                                <th>House No</th>
-                                <th>Booth Name</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="let familyChild  of voterListforFamilyChildArray | filterBy: familyMembersFilter">
-                                <td>{{familyChild?.voterNo}}</td>
-                                <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
-                                <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
-                                <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="flexCheckDefault12"
-                                            [checked]="familyChild?.isMember == 1"
-                                            (change)="onCheckChangeChildVoterDetail($event, familyChild)">
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="mt-2 text-end" *ngIf="voterListforFamilyChildArray?.length == 0">
-                        <div class="alert alert-danger text-center py-2">No Data Found..!
+                <div class="row">
+                    <div class="col-sm-6 border-end chartbox">
+                        <div class="form-container p-1">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" placeholder="Search By Voter Name" [formControl]="searchFamilyMember"
+                                    (keyup)="onKeyUpFMemberSearchData()" />
+                                <button type="button" class="btn btn-light border btn-sm" (click)="clearSearchFamilyMember()"
+                                    *ngIf="searchFamilyMember.value"><i class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!searchFamilyMember.value" class="btn btn-sm border btn-light"><i
+                                        class="fas fa-search"></i></button>
+                            </div>
                         </div>
+                        <div class="table-height">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Voter No.</th>
+                                        <th>Voter Name (Age)</th>
+                                        <th>House No</th>
+                                        <th>Booth Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <tr *ngFor="let familyChild  of voterListforFamilyChildArray | paginate: {id: 'familyMemberId',itemsPerPage: pageSize, 
+                                            currentPage: paginationNo, totalItems:getTotal}; let i = index" [class.active]="familyChild.voterNo == HighlightRow">
+                                        <td>{{familyChild?.voterNo}}</td>
+                                        <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
+                                        <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
+                                        <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1" 
+                                            title="Add Family Member" (click)="AddFamilyMember(familyChild)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-2 text-end" *ngIf="voterListforFamilyChildArray?.length == 0">
+                            <div class="alert alert-danger text-center py-2">No Data Found..!
+                            </div>
+                        </div>
+                        <pagination-controls id="familyMemberId" *ngIf="voterListforFamilyChildArray?.length != 0" previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintionFMember($event)">
+                        </pagination-controls>
+                    </div>
+                    <div class="col-sm-6 chartbox ">
+                        <h6 class="mb-4 mt-2">Added Family Members</h6>
+                        <div class="card card-body bg-light">
+                            <div class="table-height border ">
+                                <table class="table table-hover mb-0 bg-white">
+                                    <thead>
+                                        <tr>
+                                            <th>Voter No.</th>
+                                            <th>Voter Name (Age)</th>
+                                            <th>Booth Name</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr *ngFor="let familyMember  of getFamilyChildArray;let i= index">
+                                            <td>{{familyMember?.voterNo}}</td>
+                                            <td>{{familyMember?.englishName}} ({{familyMember?.age}})</td>
+                                            <td>{{familyMember?.boothName ? familyMember?.boothName : '-'}}</td>
+                                            <td>
+                                                <button type="button" title="Delete Member" (click)="deleteFamilyMember(i)" class="btn btn-sm btn-light text-danger rounded">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2 text-end" *ngIf="getFamilyChildArray?.length == 0">
+                                    <div class="alert alert-danger text-center py-2">No Data Found..!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
                     </div>
                 </div>
+                
             </div>
             <div class="modal-footer">
                 <!-- d-flex w-100 justify-content-between -->
@@ -1060,7 +1103,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Modal to select voters for family  -->
 <div class="modal fade" id="MigrationDetailsModal" tabindex="-1" aria-labelledby="MigrationDetailsModalLabel"
