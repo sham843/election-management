@@ -44,7 +44,7 @@ export class CrmHistoryComponent implements OnInit {
   voterProfileForm!: FormGroup | any;
   submittedVP: boolean = false;
   nameCorrectionDivHide: boolean = false;
-  disableDiv: boolean = false;
+  disableDiv: boolean = true;
   expiredDisableDiv: boolean = false;
   prominentleaderArray: any;
   VoterCastListArray: any;
