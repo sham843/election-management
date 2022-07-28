@@ -541,9 +541,7 @@
                                                                                 titlecase) : '-'}}</div>
 
                                                                             <div class="col-sm-2">
-                                                                                {{boothFamilyDetails?.migratedCity
-                                                                                ?(boothFamilyDetails?.migratedCity |
-                                                                                titlecase) : '-'}}</div>
+                                                                                {{boothFamilyDetails?.areaName ? boothFamilyDetails?.areaName : '-'}}</div>
                                                                                 <div class="col-sm-1">
                                                                                     <button class="btn btn-light btn-sm text-main"
                                                                                     (click)="openDialogVoterCallEntries(boothFamilyDetails)">

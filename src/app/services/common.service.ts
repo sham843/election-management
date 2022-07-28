@@ -245,11 +245,20 @@ export class CommonService {
         return temp
     }
 
-    ageCalculator(date:any){ // year count from DOB
-        let showAge;
-          const convertAge = new Date(date);
-          const timeDiff = Math.abs(Date.now() - convertAge.getTime());
-          showAge = Math.floor((timeDiff / (1000 * 3600 * 24))/365);
-          return showAge ;
-        }
+    // ageCalculator(date:any){ // year count from DOB
+    //     let showAge;
+    //       const convertAge = new Date(date);
+    //       const timeDiff = Math.abs(Date.now() - convertAge.getTime());
+    //       showAge = Math.floor((timeDiff / (1000 * 3600 * 24))/365);
+    //       return showAge ;
+    //     }
+
+    isOver18() { // find Date toDay date to 18 year 
+        let year = new Date().getFullYear() - 18;
+        let month = new Date().getMonth() + 1;
+        let date = new Date().getDate();
+        let fullDate = month + '-' + date + '-' + year;
+        let asd = this.setDate(new Date(fullDate));
+        return asd;
+    }
 }

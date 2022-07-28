@@ -38,7 +38,8 @@ export class CrmHistoryComponent implements OnInit {
   getLengthVoterProfileFamilyData:any;
   VPCommentData: any;
   posNegativeInfData: any;
-  max = new Date();
+  
+  max = new Date(this.commonService.isOver18().toString());
   min = new Date('01-01-1901');
 
   voterProfileForm!: FormGroup | any;
@@ -123,6 +124,7 @@ export class CrmHistoryComponent implements OnInit {
   checkflagFamilyMember: boolean = true;
   checkPageRefreshFlag: boolean = true;
   finalSubmitFMemberCheckFlag: boolean = false;
+  familyHeadName: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -403,6 +405,7 @@ export class CrmHistoryComponent implements OnInit {
         this.voterProfileFamilyData.find((ele: any) => { //get FamilyHead Name & VoterId 
           if (ele.familyHead == 1) {
             this.familyHeadVoterId = ele.voterId;
+            this.familyHeadName = ele.englishName;
           }
         })
       } else {
@@ -561,18 +564,18 @@ export class CrmHistoryComponent implements OnInit {
     checkflag == true ? this.nameCorrectionDivHide = true : this.nameCorrectionDivHide = false;
     this.isNameCorrectionId = checkflag == true ? 1 : 0;
     if (checkflag == true) {
-      this.voterProfileForm.controls["elName"].setValidators([Validators.required, Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["elName"].setValidators([Validators.required, Validators.maxLength(50), Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]);
       this.voterProfileForm.controls["elName"].updateValueAndValidity();
-      this.voterProfileForm.controls["efName"].setValidators([Validators.required, Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["efName"].setValidators([Validators.required, Validators.maxLength(50), Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]);
       this.voterProfileForm.controls["efName"].updateValueAndValidity();
-      this.voterProfileForm.controls["emName"].setValidators([Validators.pattern(/^\S*$/)]);
+      this.voterProfileForm.controls["emName"].setValidators([Validators.maxLength(50), Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]);
       this.voterProfileForm.controls["emName"].updateValueAndValidity();
 
-      this.voterProfileForm.controls["mlName"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["mlName"].setValidators([Validators.required,Validators.maxLength(50),Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["mlName"].updateValueAndValidity();
-      this.voterProfileForm.controls["mfName"].setValidators([Validators.required]);
+      this.voterProfileForm.controls["mfName"].setValidators([Validators.required,Validators.maxLength(50),Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["mfName"].updateValueAndValidity();
-      this.voterProfileForm.controls["mmName"].setValidators();
+      this.voterProfileForm.controls["mmName"].setValidators([Validators.maxLength(50),Validators.pattern(/^\S*$/)]);
       this.voterProfileForm.controls["mmName"].updateValueAndValidity();
     } else {
       this.voterProfileForm.controls['elName'].setValue('');

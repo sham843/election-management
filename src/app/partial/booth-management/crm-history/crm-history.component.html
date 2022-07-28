@@ -218,16 +218,30 @@
                                                         <input class="form-control" type="text" placeholder="आडनाव"
                                                             formControlName="mlName"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.mlName.errors }">
+                                                            <div *ngIf="submittedVP && v.mlName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.mlName.errors.required">Last Name is Required</span>
+                                                                <span *ngIf="v.mlName.errors.pattern">Enter Valid Last Name</span>
+                                                                <span *ngIf="v.mlName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
                                                     </div>
                                                     <div class="col-sm">
                                                         <input class="form-control" type="text" placeholder="नाव"
                                                             formControlName="mfName"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.mfName.errors }">
+                                                            <div *ngIf="submittedVP && v.mfName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.mfName.errors.required">First Name is Required</span>
+                                                                <span *ngIf="v.mfName.errors.pattern">Enter Valid First Name</span>
+                                                                <span *ngIf="v.mfName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
                                                     </div>
                                                     <div class="col-sm">
                                                         <input class="form-control" type="text" placeholder="मधले नाव"
                                                             formControlName="mmName"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.mmName.errors }">
+                                                            <div *ngIf="submittedVP && v.mmName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.mmName.errors.pattern">Enter Valid Middle Name</span>
+                                                                <span *ngIf="v.mmName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -238,16 +252,30 @@
                                                         <input class="form-control" type="text" placeholder="Last Name"
                                                             formControlName="elName"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.elName.errors }">
+                                                            <div *ngIf="submittedVP && v.elName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.elName.errors.required">Last Name is Required</span>
+                                                                <span *ngIf="v.elName.errors.pattern">Enter Valid Last Name</span>
+                                                                <span *ngIf="v.elName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
                                                     </div>
                                                     <div class="col-sm">
                                                         <input class="form-control" type="text" placeholder="First Name"
                                                             formControlName="efName"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.efName.errors }">
+                                                            <div *ngIf="submittedVP && v.efName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.efName.errors.required">First Name is Required</span>
+                                                                <span *ngIf="v.efName.errors.pattern">Enter Valid First Name</span>
+                                                                <span *ngIf="v.efName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
                                                     </div>
                                                     <div class="col-sm">
                                                         <input class="form-control" type="text"
                                                             placeholder="Middle Name" formControlName="emName"
                                                             [ngClass]="{ 'is-invalid': submittedVP && v.emName.errors }">
+                                                            <div *ngIf="submittedVP && v.emName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.emName.errors.pattern">Enter Valid Middle Name</span>
+                                                                <span *ngIf="v.emName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1058,37 +1086,41 @@
                             (pageChange)="onClickPagintionFMember($event)">
                         </pagination-controls>
                     </div>
-                    <div class="col-sm-6 chartbox ">
+                    <div class="col-sm-6 chartbox">
                         <h6 class="mb-4 mt-2">Added Family Members</h6>
-                        <div class="card card-body bg-light">
-                            <div class="table-height border ">
-                                <table class="table table-hover mb-0 bg-white">
-                                    <thead>
-                                        <tr>
-                                            <th>Voter No.</th>
-                                            <th>Voter Name (Age)</th>
-                                            <th>Booth Name</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                            <tr *ngFor="let familyMember  of getFamilyChildArray;let i= index">
-                                            <td>{{familyMember?.voterNo}}</td>
-                                            <td>{{familyMember?.englishName}} ({{familyMember?.age}})</td>
-                                            <td>{{familyMember?.boothName ? familyMember?.boothName : '-'}}</td>
-                                            <td>
-                                                <button type="button" title="Delete Member" (click)="deleteFamilyMember(i)" class="btn btn-sm btn-light text-danger rounded">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="mt-2 text-end" *ngIf="getFamilyChildArray?.length == 0">
-                                    <div class="alert alert-danger text-center py-2">No Family Member Available..!
+                        <div class="card bg-light">
+                            <div class="card-header">{{familyHeadName ? familyHeadName : ''}} <small *ngIf="familyHeadName">(Head)</small></div>
+                            <div class="card-body p-2">
+                                <div class="table-height border ">
+                                    <table class="table table-hover mb-0 bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th>Voter No.</th>
+                                                <th>Voter Name (Age)</th>
+                                                <th>Booth Name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr *ngFor="let familyMember  of getFamilyChildArray;let i= index">
+                                                <td>{{familyMember?.voterNo}}</td>
+                                                <td>{{familyMember?.englishName}} ({{familyMember?.age}})</td>
+                                                <td>{{familyMember?.boothName ? familyMember?.boothName : '-'}}</td>
+                                                <td>
+                                                    <button type="button" title="Delete Member" (click)="deleteFamilyMember(i)" class="btn btn-sm btn-light text-danger rounded">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-2 text-end" *ngIf="getFamilyChildArray?.length == 0">
+                                        <div class="alert alert-danger text-center py-2">No Family Member Available..!
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>  
                     </div>
                 </div>
