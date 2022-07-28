@@ -1,10 +1,21 @@
 <div class="container-fluid">
-    <div class="row" id="pageheader">
-        <div class="col-sm-2">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-6 mb-2">
             <span class="page-name">Assign Agents to Booth
             </span>
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm-6">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" formControlName="Search" placeholder="Search..."
+                    (keyup)="onKeyUpFilter()"/>
+                <button type="button" class="btn btn-light border btn-sm"
+                    (click)="clearFilter('search');filterClientHaveSubEleOrNonSubEle()" *ngIf="filterForm.value.Search"><i
+                        class="fas fa-times"></i></button>
+                <button type="button" *ngIf="!filterForm.value.Search"
+                    class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="col-sm-12">
             <form [formGroup]="filterForm">
                 <div class="row g-2">
                     <div class="col-sm">
@@ -22,7 +33,6 @@
                             [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
                             (select)="clientAgentWithBoothArray =[]; clearFilter('constituencyId');filterConstituencyName()"
                             formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
-                            
                             placeholder="Select Election">
                         </ngx-select>
                     </div>
@@ -51,17 +61,6 @@
                             optionTextField="BoothNickName" (select)="paginationNo = 1; filterClientHaveSubEleOrNonSubEle()"
                             [disabled]="filterAssembleListArray?.AssemblyId == 0 || !this.filterForm.value.AssemblyId" placeholder="Select Booth">
                         </ngx-select>
-                    </div>
-                    <div class="col-sm">
-                        <div class="input-group">
-                            <input type="text" class="form-control" formControlName="Search" placeholder="Search..."
-                                (keyup)="onKeyUpFilter()"/>
-                            <button type="button" class="btn btn-light border btn-sm"
-                                (click)="clearFilter('search');filterClientHaveSubEleOrNonSubEle()" *ngIf="filterForm.value.Search"><i
-                                    class="fas fa-times"></i></button>
-                            <button type="button" *ngIf="!filterForm.value.Search"
-                                class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
-                        </div>
                     </div>
                 </div>
             </form>

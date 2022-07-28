@@ -1,14 +1,14 @@
 <div class="container-fluid">
   <div class="row mx-0 px-0" id="pageheader">
-    <div class="col-sm-2">
+    <div class="col-sm-auto">
       <span class="page-name">
         Booth Analytics
       </span>
     </div>
-    <div class="col-sm-10 text-end">
+    <div class="col-sm text-end">
       <form [formGroup]="filterForm">
         <div class="row g-2 justify-content-end">
-          <div class="col-sm-3">
+          <div class="col-sm">
             <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
               (remove)="clearFilter('clientId');HideVoterListLink = false;"
               (select)="HighlightRow=0; boothDataHide =false;clearFilter('electionId'); getElectionName();HideVoterListLink = false; this.IsPartyCheck = 0"
@@ -16,7 +16,7 @@
               placeholder="Select Leader">
             </ngx-select>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm">
             <ngx-select [allowClear]="electionFlag" [items]="electionNameArray" (remove)="clearFilter('electionId')"
               (select)="HighlightRow=0; boothDataHide =false; clearFilter('constituencyId');  getConstituencyName()"
               formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
@@ -24,7 +24,7 @@
               placeholder="Select Election">
             </ngx-select>
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm">
             <ngx-select [allowClear]="constituencyFlag" [items]="constituencyNameArray"
               (remove)="clearFilter('constituencyId')" (select)="clearFilter('VillageId'); getVillageName();"
               formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
