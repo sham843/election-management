@@ -25,50 +25,50 @@
                                     </div>
                                     <div class="card-body pt-1 position-relative bg-transparent" style="z-index:0">
                                         <img *ngIf="voterProfileData?.doNotCall == 1 || voterProfileData?.isNotCall == 1" src="assets/images/do-not-call.jpg" class="donotcall">
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0" *ngIf="voterProfileData?.voterPhoto">
+                                        <div class="d-block d-lg-flex">
+                                            <div class="flex-shrink-0 text-center" *ngIf="voterProfileData?.voterPhoto">
                                                 <img src="{{voterProfileData?.voterPhoto}}" alt="Profile"
                                                     class="profile-pic">
                                             </div>
-                                            <div class="flex-shrink-0" *ngIf="!voterProfileData?.voterPhoto">
+                                            <div class="flex-shrink-0 text-center" *ngIf="!voterProfileData?.voterPhoto">
                                                 <img src="assets/images/Profile-Photo.jpg" alt="Profile" class="profile-pic">
 
-                                                <div class="d-block mt-3" *ngIf="voterProfileData?.isVerified == 1">
-                                                    <div class="small bg-light-success d-flex align-items-center text-success px-2 py-1 rounded">
+                                                <div class="mt-3" *ngIf="voterProfileData?.isVerified == 1">
+                                                    <span class="small bg-light-success d-flex align-items-center text-success px-2 py-1 rounded mx-auto">
                                                         <span class="fa-stack me-2">
                                                             <i class="fas fa-certificate fa-stack-2x text-info"></i>
                                                             <i class="fas fa-check fa-stack-1x fa-inverse"></i>
                                                         </span>
                                                         Verified
-                                                    </div>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1 ms-3">
+                                            <div class="flex-grow-1 ms-lg-3 ms-0">
                                                 <div class="row mb-2 g-2">
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-2 col-6">
                                                         <label class="form-label">Age</label>
                                                         <div class="form-data">{{voterProfileData?.age ?
                                                             voterProfileData?.age : '-'}}</div>
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-2 col-6">
                                                         <label class="form-label">Gender</label>
                                                         <div class="form-data">{{voterProfileData?.gender == 'M' ?
                                                             'Male' : 'Female'}}</div>
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-2 col-6">
                                                         <label class="form-label">House No.</label>
                                                         <div class="form-data">{{voterProfileData?.houseNo ?
                                                             voterProfileData?.houseNo : '-'}}</div>
                                                     </div>
-                                                    <div class="col-sm-2">
-                                                        <label class="form-label">Booth Name</label>
-                                                        <div class="form-data">{{voterProfileData?.boothName}}</div>
-                                                    </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-2 col-6">
                                                         <label class="form-label">Voter No</label>
                                                         <div class="form-data">{{voterProfileData?.voterNo}}</div>
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">Booth Name</label>
+                                                        <div class="form-data">{{voterProfileData?.boothName}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-6">
                                                         <label class="form-label">Family Head</label>
                                                         <div class="form-data"> {{voterProfileData?.head == 'yes' ?
                                                             'Yes' : 'No'}} ({{voterProfileData?.familySize}} Members)
@@ -428,55 +428,57 @@
                                                     </div>
 
                                                     <div class="col-sm-12" *ngIf="voterProfileForm.value.head == 'yes' || (getLengthVoterProfileFamilyData > 1 && voterProfileData?.head == 'no')">
-                                                        <table class="table table-hover mb-0 mt-2">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Voter No</th>
-                                                                    <th>Name</th>
-                                                                    <th>Mobile No</th>
-                                                                    <th>Occupation</th>
-                                                                    <th>House No</th>
-                                                                    <th>Migration</th>
-                                                                    <!-- <th>Action</th>   -->
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index"
-                                                                    [class.active]="familyMember.voterId == HighlightRow">
-                                                                    <td>{{familyMember?.voterNo}}</td>
-                                                                    <td *ngIf="familyMember?.voterId != this.voterListData.VoterId">
-                                                                        <a (click)="editFamilyMemberData(familyMember)" class="text-main">{{familyMember?.englishName}}
-                                                                            <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
-                                                                        </a>
-                                                                    </td>
-                                                                    <td *ngIf="familyMember?.voterId == this.voterListData.VoterId">
-                                                                         <span>{{familyMember?.englishName}}
-                                                                            <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>{{familyMember?.mobileNo1 ?
-                                                                        familyMember?.mobileNo1 : '-'}}</td>
-                                                                    <td>{{familyMember?.occupation ?
-                                                                        familyMember?.occupation : '-'}}</td>
-                                                                    <td>{{familyMember?.houseNo ? familyMember?.houseNo
-                                                                        : '-'}}</td>
-                                                                    <td>{{familyMember?.migrated == 'yes' ? 'Yes' :
-                                                                        'No'}}</td>
-                                                                    <!-- <td>
-                                                            <button type="submit" class="btn btn-light btn-sm text-main"
-                                                                data-bs-toggle="modal" ;
-                                                                data-bs-target="#MigrationDetailsModal">
-                                                                <i class="fas fa-suitcase-rolling"></i>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover mb-0 mt-2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Voter No</th>
+                                                                        <th>Name</th>
+                                                                        <th>Mobile No</th>
+                                                                        <th>Occupation</th>
+                                                                        <th>House No</th>
+                                                                        <th>Migration</th>
+                                                                        <!-- <th>Action</th>   -->
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index"
+                                                                        [class.active]="familyMember.voterId == HighlightRow">
+                                                                        <td>{{familyMember?.voterNo}}</td>
+                                                                        <td *ngIf="familyMember?.voterId != this.voterListData.VoterId">
+                                                                            <a (click)="editFamilyMemberData(familyMember)" class="text-main">{{familyMember?.englishName}}
+                                                                                <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td *ngIf="familyMember?.voterId == this.voterListData.VoterId">
+                                                                             <span>{{familyMember?.englishName}}
+                                                                                <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>{{familyMember?.mobileNo1 ?
+                                                                            familyMember?.mobileNo1 : '-'}}</td>
+                                                                        <td>{{familyMember?.occupation ?
+                                                                            familyMember?.occupation : '-'}}</td>
+                                                                        <td>{{familyMember?.houseNo ? familyMember?.houseNo
+                                                                            : '-'}}</td>
+                                                                        <td>{{familyMember?.migrated == 'yes' ? 'Yes' :
+                                                                            'No'}}</td>
+                                                                        <!-- <td>
+                                                                <button type="submit" class="btn btn-light btn-sm text-main"
+                                                                    data-bs-toggle="modal" ;
+                                                                    data-bs-target="#MigrationDetailsModal">
+                                                                    <i class="fas fa-suitcase-rolling"></i>
+                                                                </button>
+                                                            </td> -->
+                                                                        <!-- <td>
+                                                                <button type="button" class="btn btn-light btn-sm text-main">
+                                                                <i class="fas fa-edit"></i>
                                                             </button>
-                                                        </td> -->
-                                                                    <!-- <td>
-                                                            <button type="button" class="btn btn-light btn-sm text-main">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        </td> -->
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                            </td> -->
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row align-items-center g-2">
@@ -906,6 +908,7 @@
 
                         <p class="mb-1 fw-bold small mt-3">Feedbacks</p>
                         <div class="table-feedbacks mb-3">
+                            <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead>
                                     <tr>
@@ -949,6 +952,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
                             <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length == 0">
                                 <div class="alert alert-danger text-center py-2">No Data Found..!</div>
                             </div>
@@ -1058,33 +1062,35 @@
                                         class="fas fa-search"></i></button>
                             </div>
                         </div>
-                        <div class="table-height">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Voter No.</th>
-                                        <th>Voter Name (Age)</th>
-                                        <th>House No</th>
-                                        <th>Booth Name</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <tr *ngFor="let familyChild  of voterListforFamilyChildArray | paginate: {id: 'familyMemberId',itemsPerPage: pageSize, 
-                                            currentPage: paginationNo, totalItems:getTotal}; let i = index" [class.active]="familyChild.voterNo == HighlightRow">
-                                        <td>{{familyChild?.voterNo}}</td>
-                                        <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
-                                        <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
-                                        <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1" 
-                                            title="Add Family Member" (click)="AddFamilyMember(familyChild)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="table-responsive">
+                            <div class="table-height">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Voter No.</th>
+                                            <th>Voter Name (Age)</th>
+                                            <th>House No</th>
+                                            <th>Booth Name</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr *ngFor="let familyChild  of voterListforFamilyChildArray | paginate: {id: 'familyMemberId',itemsPerPage: pageSize, 
+                                                currentPage: paginationNo, totalItems:getTotal}; let i = index" [class.active]="familyChild.voterNo == HighlightRow">
+                                            <td>{{familyChild?.voterNo}}</td>
+                                            <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
+                                            <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
+                                            <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1" 
+                                                title="Add Family Member" (click)="AddFamilyMember(familyChild)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         
                         <div class="mt-2 text-end" *ngIf="voterListforFamilyChildArray?.length == 0">
