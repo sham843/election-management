@@ -141,7 +141,7 @@
                                             <span class="text-danger"><i class="fas fa-square-full me-2"></i> Other
                                                 Entered no.</span>
                                         </span>
-                                        <div class="d-flex flex-wrap">
+                                        <div class="d-flex flex-wrap mb-3">
                                             <div class="form-check form-check-inline"
                                                 *ngIf="contactlistArray?.mobileNo1?.length > 9">
                                                 <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
@@ -166,9 +166,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div
-                                            *ngIf="this.contactlistArray?.mobileNo1?.length > 9 || this.contactlistArray?.mobileNo2?.length > 9 ||  this.contactlistArray?.otherMobileNo?.length > 9">
-                                            <button type="submit" class="btn btn-main float-end"
+                                        <div class="d-flex justify-content-between" *ngIf="this.contactlistArray?.mobileNo1?.length > 9 || this.contactlistArray?.mobileNo2?.length > 9 ||  this.contactlistArray?.otherMobileNo?.length > 9">
+                                            <button type="submit" class="btn btn-success"
+                                                (click)="updateContactlist()">Verify</button>
+                                            <button type="submit" class="btn btn-danger"
                                                 (click)="updateContactlist()">Remove</button>
                                         </div>
                                     </div>
@@ -856,6 +857,14 @@
                                                         id="chkDoNotCall11" formControlName="NotToCall">
                                                     <label class="form-check-label" for="chkDoNotCall11">Do Not Call</label>
                                                 </div>
+                                            </div>
+                                            <div class="mb-0">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                      Direct Call to Candidate
+                                                    </label>
+                                                  </div>
                                             </div>
 
                                             <div class="col-sm-12" *ngIf="!doNotCallHideDiv">
