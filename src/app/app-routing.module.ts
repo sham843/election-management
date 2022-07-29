@@ -49,9 +49,12 @@ const routes: Routes = [
       { path: 'agent-setting', loadChildren: () => import('./partial/settings/agent-setting/agent-setting.module').then(m => m.AgentSettingModule), data: { title: 'Agent Setting', allowedRoles: ['1','2'] }  },
       { path: 'prominent-leader', loadChildren: () => import('./partial/settings/prominent-leader/prominent-leader.module').then(m => m.ProminentLeaderModule), data: { title: 'Prominent Leader', allowedRoles: ['1','2'] }   },
       { path: 'election-geofence-report', loadChildren: () => import('./partial/election-management/election-geofence-report/election-geofence-report.module').then(m => m.ElectionGeofenceReportModule), data: { title: 'Election Geofence Report', allowedRoles: ['1','2'] }},
+      { path: 'surname-wise-report', loadChildren: () => import('./partial/booth-management/Reports/surname-wise-report/surname-wise-report.module').then(m => m.SurnameWiseReportModule), data: { title: 'Surname Wise Report', allowedRoles: ['1','2'] }  },
     ]
   },
   { path: '500', component: ServerErrorComponent },
+  
+  
 
   { path: '**', component: PageNotFoundComponent },
 ];
