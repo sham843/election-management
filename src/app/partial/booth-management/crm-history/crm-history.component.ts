@@ -1137,7 +1137,7 @@ export class CrmHistoryComponent implements OnInit {
         }
       })
     }
-    this.checkWrongMobileNflag && this.wrongMobileNumberArray.length >= 1 ? (this.wrongMobileNumberArray.push(obj),alert("111")): '';
+    this.checkWrongMobileNflag && this.wrongMobileNumberArray.length >= 1 ? (this.wrongMobileNumberArray.push(obj)): '';
   }
 
   //.........................................Please tick wrong mobile End Here ....................................// 
