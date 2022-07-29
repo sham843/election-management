@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder} from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
-import { DateTimeAdapter } from 'ng-pick-datetime';
 
 @Component({
   selector: 'app-surname-wise-report',
@@ -28,6 +27,12 @@ export class SurnameWiseReportComponent implements OnInit {
   }
   dataNotFound: boolean = false;
   surNamewiseCountArray: any;
+  surNamewiseVoterListArray: any;
+  getTotal: any;
+  paginationNo: number = 1;
+  pageSize: number = 10;
+  subject: Subject<any> = new Subject();
+  searchSurName = new FormControl('');
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -51,6 +56,7 @@ export class SurnameWiseReportComponent implements OnInit {
   ngOnInit(): void {
     this.defaultMainFilterForm();
     this.getClientName();
+    this.searchSurNameData('false');
   }
 
   defaultMainFilterForm() {
@@ -239,6 +245,54 @@ export class SurnameWiseReportComponent implements OnInit {
       this.spinner.hide();
       this.router.navigate(['../500'], { relativeTo: this.route });
     })
+  }
+
+  getSurNamewiseVoterList() {
+    this.nullishFilterForm(); 
+    this.spinner.show(); 
+    let obj = this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&VillageId=' + this.filterForm.value.village + '&BoothId=' + this.filterForm.value.getBoothId
+    + '&SurName=' + this.filterForm.value.village + '&pageno=' + this.paginationNo
+    + '&pagesize=' + this.pageSize + '&Search=' + this.searchSurName.value.trim()
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetDashbord-GetSurNamewiseVoterList?UserId=' + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.surNamewiseVoterListArray = res.responseData.responseData1;
+        this.getTotal = res.responseData.responseData2.totalPages * this.pageSize;
+       } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
+  }
+
+  onClickPagintionSurName(pageNo: number) {
+    this.paginationNo = pageNo;
+    this.getSurNamewiseVoterList();
+  }
+
+  onKeyUpSurNameSearchData() {
+    this.subject.next();
+  }
+  
+  searchSurNameData(flag: any) {
+    this.subject
+      .pipe(debounceTime(700))
+      .subscribe(() => {
+        this.searchSurName.value;
+        this.paginationNo = 1;
+        this.getSurNamewiseVoterList();
+      }
+      );
+  }
+
+  clearSearchSurName(){
+    this.searchSurName.setValue('');
+    this.paginationNo = 1;
+    this.getSurNamewiseVoterList();
   }
 
 }

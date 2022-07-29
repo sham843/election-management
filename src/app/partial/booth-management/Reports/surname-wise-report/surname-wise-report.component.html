@@ -114,8 +114,13 @@
                            
                         </div>
                         <div class="col-sm-4 border-end">
-                            <div class="form-container mb-2">
-                                <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group mb-2">
+                                <input class="form-control" type="text" placeholder="Search" [formControl]="searchSurName"
+                                    (keyup)="onKeyUpSurNameSearchData()" />
+                                <button type="button" class="btn btn-light border btn-sm" (click)="clearSearchSurName()"
+                                    *ngIf="searchSurName.value"><i class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!searchSurName.value" class="btn btn-sm border btn-light"><i
+                                        class="fas fa-search"></i></button>
                             </div>
 
                             <div class="list-group">
