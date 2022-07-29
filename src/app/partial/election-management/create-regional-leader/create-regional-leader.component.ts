@@ -251,7 +251,7 @@ export class CreateRegionalLeaderComponent implements OnInit {
     this.callAPIService.setHttp('get', 'Web_Send_Client_Login_Credential?ClientId=' + ClientId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        this.toastrService.success(res.data1[0].Msg);
+        // this.toastrService.success(res.data1[0].Msg);
       }
     }, (error: any) => {
       this.spinner.hide();
