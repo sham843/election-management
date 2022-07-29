@@ -27,6 +27,7 @@ export class SurnameWiseReportComponent implements OnInit {
     VillageId: 0, BoothId: 0, flag: 0
   }
   dataNotFound: boolean = false;
+  surNamewiseCountArray: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -124,7 +125,7 @@ export class SurnameWiseReportComponent implements OnInit {
   }
 
   getVillageData() {
-    // this.boothSummary(); // when Select ConstituencyName then Call 
+    this.getSurNamewiseCounts(); // when Select ConstituencyName then Call 
     // this.boothWiseSummaryCount(); // when Select ConstituencyName then Call 
     this.nullishFilterForm();
     let obj = 'ClientId=' + this.filterForm.value.ClientId + '&UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId;
@@ -164,6 +165,54 @@ export class SurnameWiseReportComponent implements OnInit {
     })
   }
 
+  clearTopFilter(flag: any) {
+    if (flag == 'clientId') {
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: 0,
+        ConstituencyId: 0,
+        village: 0,
+        getBoothId: 0
+      });
+      this.dataNotFound = false;
+    } else if (flag == 'electionId') {
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: 0,
+        ConstituencyId: 0,
+        village: 0,
+        getBoothId: 0
+      });
+      this.dataNotFound = false;
+    } else if (flag == 'constituencyId') {
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: this.filterForm.value.ElectionId,
+        ConstituencyId: 0,
+        village: 0,
+        getBoothId: 0
+      });
+      this.dataNotFound = false;
+    } else if (flag == 'village') {
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: this.filterForm.value.ElectionId,
+        ConstituencyId: this.filterForm.value.ConstituencyId,
+        village: 0,
+        getBoothId: 0
+      });
+      this.ClientWiseBoothList();
+    } else if (flag == 'boothId') {
+      this.filterForm.patchValue({
+        ClientId: this.filterForm.value.ClientId,
+        ElectionId: this.filterForm.value.ElectionId,
+        ConstituencyId: this.filterForm.value.ConstituencyId,
+        // village: 0,
+      });
+    }
+  }
+
+
   nullishFilterForm() { //Check all value null || undefind || empty 
     let fromData = this.filterForm.value;
     fromData.ClientId ?? this.filterForm.controls['ClientId'].setValue(0);
@@ -171,6 +220,25 @@ export class SurnameWiseReportComponent implements OnInit {
     fromData.ConstituencyId ?? this.filterForm.controls['ConstituencyId'].setValue(0);
     fromData.village ?? this.filterForm.controls['village'].setValue(0);
     fromData.getBoothId ?? this.filterForm.controls['getBoothId'].setValue(0);
+  }
+
+  getSurNamewiseCounts() {
+    this.nullishFilterForm(); 
+    this.spinner.show(); 
+    let obj = this.commonService.loggedInUserId() + '&ClientId=' + this.filterForm.value.ClientId + '&ElectionId=' + this.filterForm.value.ElectionId + '&ConstituencyId=' + this.filterForm.value.ConstituencyId
+    + '&VillageId=' + this.filterForm.value.village + '&BoothId=' + this.filterForm.value.getBoothId
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetDashbord-GetSurNamewiseCounts?UserId=' + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.spinner.hide();
+        this.surNamewiseCountArray = res.responseData;
+       } else {
+        this.spinner.hide();
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
   }
 
 }

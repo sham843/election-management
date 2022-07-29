@@ -4,7 +4,7 @@
             <span class="page-name">Surname Wise Report
             </span>
         </div>
-        <div class="col-sm text-end">
+        <!-- <div class="col-sm text-end">
             <div class="row g-2">
                 <div class="col-sm">
                     <select class="form-select">
@@ -32,8 +32,54 @@
                     </select>
                 </div>
             </div>
+        </div> -->
+      <div class="col-sm text-end">
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
+                            optionValueField="clientId" optionTextField="clientName" (select)="clearTopFilter('electionId');
+                             getElectionName(); dataNotFound = false;" (remove)="clearTopFilter('clientId')"
+                            placeholder="Select Leader">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId"
+                            optionValueField="electionId" (select)="getConstituencyName(); dataNotFound = false;"
+                            optionTextField="electionName" (remove)="clearTopFilter('electionId')"
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0" placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
+                            (select)="getVillageData();dataNotFound = true;getSurNamewiseCounts()"
+                            optionValueField="constituencyId" optionTextField="constituencyName"
+                            (remove)="clearTopFilter('constituencyId')" placeholder="Select Constituency"
+                            [disabled]="!this.filterForm.value.ElectionId">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="villageDropdown" formControlName="village"
+                            optionValueField="villageId"
+                            (select)="this.filterForm.value.getBoothId = 0;ClientWiseBoothList()"
+                            (remove)="clearTopFilter('village')" optionTextField="villageName"
+                            [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" formControlName="getBoothId"
+                            optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
+                            [disabled]="!this.filterForm.value.ConstituencyId" (remove)="clearTopFilter('boothId')">
+                        </ngx-select>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+
+    <ng-container *ngIf="!dataNotFound">
+        <div class="alert alert-danger text-center py-2 mb-0">Select above filters to show Data....!</div>
+    </ng-container>
 
     <div class="row chartbox">
         <div class="col-sm-12">
@@ -41,28 +87,31 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-4 border-end">
-                            <table class="table table-hoder">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Surname</th>
-                                        <th>Voter Counter</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Ponteshwar</td>
-                                        <td>123</td>
-                                        <td>
-                                            <button class="btn btn-light text-dark">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-height">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Surname</th>
+                                            <th>Voter Counter</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let surName of surNamewiseCountArray; let i = index">
+                                            <td>{{i+1}}</td>
+                                            <td>{{surName.surname}}</td>
+                                            <td>{{surName.totalCount}}</td>
+                                            <td>
+                                                <button class="btn btn-light text-dark">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                           
                         </div>
                         <div class="col-sm-4 border-end">
                             <div class="form-container mb-2">
