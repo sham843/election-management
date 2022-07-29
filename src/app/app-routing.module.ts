@@ -40,7 +40,7 @@ const routes: Routes = [
       { path: 'crm', loadChildren: () => import('./partial/booth-management/crm/crm.module').then(m => m.CrmModule) ,data:{ title:'CRM',allowedRoles:['1','2','6'] }},
       { path: 'crm-history/:id', loadChildren: () => import('./partial/booth-management/crm-history/crm-history.module').then(m => m.CrmHistoryModule) ,data:{ title:'CRM History',allowedRoles:['1','2','6'] }},
   
-      { path: 'voters-profile/:id', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2'] } },
+      { path: 'voters-profile/:id', loadChildren: () => import('./partial/profile/voters-profile/voters-profile.module').then(m => m.VotersProfileModule) ,data:{ title:'Voters Profile',allowedRoles:['1','2', '6'] } },
       { path: 'restricted-mobile', loadChildren: () => import('./partial/settings/restricted-mobile/restricted-mobile.module').then(m => m.RestrictedMobileModule),data:{ title:'Restricted Mobile',allowedRoles:['1','2'] } },
       { path: 'my-profile', loadChildren: () => import('./my-profile/my-profile.module').then(m => m.MyProfileModule),data:{ title:'My Profile',allowedRoles:['1','2','6'] } },
       { path: 'notifications', loadChildren: () => import('./partial/booth-management/notifications/notifications.module').then(m => m.NotificationsModule), data: { title: 'Notifications', allowedRoles: ['1','2'] } },
