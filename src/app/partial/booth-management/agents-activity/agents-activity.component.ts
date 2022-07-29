@@ -158,10 +158,11 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         this.clientNameArray = res.data1;
 
-        if (this.clientNameArray.length == 1 || this.agentInfo) {
+        if (this.clientNameArray?.length == 1 && !this.agentInfo) {
           this.filterForm.controls['ClientId'].setValue(this.clientNameArray[0].id); // Id men's agent Id
-          this. getAllAgentList();
+          this.getAllAgentList();
         }
+        this.agentInfo ? (this.filterForm.controls['ClientId'].setValue(this.agentInfo.ClientId),this.getAllAgentList()) : '';
 
         if (this.commonService.loggedInSubUserTypeId() == 1) {
           this.clientDropDownDis = false;
@@ -199,7 +200,8 @@ export class AgentsActivityComponent implements OnInit, OnDestroy {
             this.filterForm.controls['AgentId'].setValue(element.AgentId);
           }
         });
-        (this.allAgentLists.length == 1 || this.agentInfo) ? (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId),  this.defaultAgentActivityDivHide = true) : '';
+        (this.allAgentLists.length == 1 && !this.agentInfo) ? (this.filterForm.controls['AgentId'].setValue(this.allAgentLists[0].AgentId),  this.defaultAgentActivityDivHide = true) : '';
+        this.agentInfo ? (this.filterForm.controls['AgentId'].setValue(this.agentInfo.BoothAgentId),this.defaultAgentActivityDivHide = true) : '' ;
         // if(this.agentInfo){// this.agentInfo.SubUserTypeId == 3 ? this.getAgentByBooths() : this.areaSubAgentByAgentId(); // }
         this.areaSubAgentByAgentId();
       } else {

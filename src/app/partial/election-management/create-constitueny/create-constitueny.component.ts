@@ -127,7 +127,6 @@ export class CreateConstituenyComponent implements OnInit {
   get f() { return this.createConstituencyForm?.controls };
 
   getElection() {
-    this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_GetElection?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
@@ -136,12 +135,10 @@ export class CreateConstituenyComponent implements OnInit {
         this.SubElectionName = res.data1;
 
       } else {
-        this.spinner.hide();
         this.electionName = [];
         // //this.toastrService.error("Data is not available");
       }
     }, (error: any) => {
-      this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
@@ -158,22 +155,18 @@ export class CreateConstituenyComponent implements OnInit {
 
   getConstituency() {
     let data = this.filterForm.value;
-    this.spinner.show();
     let eleId: any;
     data.ElectionNameId == undefined || data.ElectionNameId == "" || data.ElectionNameId == null ? eleId = 0 : eleId = data.ElectionNameId
     this.callAPIService.setHttp('get', 'Web_Election_GetConstituency?ElectionId=' + eleId + '&UserId=' + this.commonService.loggedInUserId() + '&Search=' + data.Search + '&nopage=' + this.paginationNo, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        this.spinner.hide();
         this.constituencynName = res.data1;
         this.total = res.data2[0].TotalCount;
       } else {
-        this.spinner.hide();
         this.constituencynName = [];
         // //this.toastrService.error("Data is not available");
       }
     }, (error: any) => {
-      this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
@@ -232,7 +225,7 @@ export class CreateConstituenyComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
 
-        if (res.data1[0].Id != 0) {// call geoface 
+        if (res.data1[0].Id != 0 && this.geoFanceselData) {// call geoface  
           if (this.geoFanceselData.latitude != "" && this.geoFanceselData.longitude != "") {
             this.geoFanceselData['constituencyId'] = res.data1[0].Id;
             this.geoFanceselData
@@ -290,19 +283,15 @@ export class CreateConstituenyComponent implements OnInit {
 
   GetConstituencyName(ElectionId: any) {
     // if(typeof(ElectionId) == 'number'){
-    this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Election_Get_ConstituencyName?UserId=' + this.commonService.loggedInUserId() + '&ElectionId=' + ElectionId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        this.spinner.hide();
         this.constituencyArray = res.data1;
       } else {
-        this.spinner.hide();
         this.constituencyArray = [];
         this.toastrService.error("Constituency Name is not available");
       }
     }, (error: any) => {
-      this.spinner.hide();
       if (error.status == 500) {
         this.router.navigate(['../500'], { relativeTo: this.route });
       }
@@ -566,12 +555,10 @@ export class CreateConstituenyComponent implements OnInit {
     this.callAPIService.setHttp('post', 'ClientMasterWebApi/ConstituencyGeofence/Create', false,  this.geoFanceselData, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.statusCode == '200') {
-        this.spinner.hide();
         // this.toastrService.success(res.statusMessage);
         this.geoFanceselData="";
       } else {
         this.toastrService.error(res.statusMessage);
-        this.spinner.hide();
       }
     }, (error: any) => {
       if (error.status == 500) {
